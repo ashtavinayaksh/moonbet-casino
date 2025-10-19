@@ -21,7 +21,7 @@ const Transactions = () => {
         }
 
         const response = await fetch(
-          `http://localhost:4001/api/wallet/${userId}/transactions`
+          `http://98.81.197.98/wallet-service/api/wallet/${userId}/transactions`
         );
 
         if (!response.ok) {

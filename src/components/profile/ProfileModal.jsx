@@ -38,32 +38,48 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
   }, [isOpen, userData]);
 
   const fetchProfileData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+  try {
+    const userId =
+      userData?._id ||
+      localStorage.getItem("userId")
 
-      setProfileData({
-        username: userData?.username || "Guest User",
-        publicId: "ZZAV5JBCE0LC8VACZKBX5...",
-        memberSince: new Date(
-          userData?.createdAt || Date.now()
-        ).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        rank: "Unranked",
-        nextRank: "Bronze I",
-        remainingToNextRank: 2687.05,
-        totalToNextRank: 5000,
-        totalBets: 841,
-        totalWagered: 1312.95,
-        avatarLevel: Math.floor(Math.random() * 10) + 1,
-      });
-    } catch (error) {
-      console.error("Failed to fetch profile data:", error);
+    const response = await fetch(
+      `http://98.81.197.98/auth-service/api/auth/profile/${userId}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch profile data");
     }
-  };
+
+    const data = await response.json();
+
+    setProfileData({
+      username: data.username || "Guest User",
+      publicId: data._id.toUpperCase(),
+      memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      rank: "Unranked", // static for now
+      nextRank: "Bronze I",
+      remainingToNextRank: 0,
+      totalToNextRank: 5000,
+      totalBets: 0,
+      totalWagered: 0,
+      avatarLevel: Math.floor(Math.random() * 10) + 1,
+      email: data.email,
+      displayName: data.displayName,
+      kycStatus: data.kycStatus,
+      roles: data.roles,
+      emailVerified: data.emailVerified,
+    });
+  } catch (error) {
+    console.error("❌ Failed to fetch profile data:", error);
+    toast.error("Unable to load profile data");
+  }
+};
+
 
   const progressPercentage =
     ((profileData.totalToNextRank - profileData.remainingToNextRank) /
@@ -184,6 +200,13 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                     <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
                       {profileData.username}
                     </h3>
+                    <p className="text-gray-400 text-xs sm:text-sm">
+  {profileData.emailVerified ? "✅ Verified" : "❌ Not Verified"}
+</p>
+<p className="text-gray-400 text-xs sm:text-sm">
+  KYC Status: {profileData.kycStatus}
+</p>
+
                     <p className="text-gray-400 text-xs sm:text-sm">
                       Member since: {profileData.memberSince}
                     </p>

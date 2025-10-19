@@ -135,7 +135,7 @@ const EmailVerificationPopup = ({
     }
 
     // ✅ Call the real API
-    const response = await fetch("http://localhost:4000/api/auth/verify-email", {
+    const response = await fetch("http://98.81.197.98/auth-service/api/auth/verify-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

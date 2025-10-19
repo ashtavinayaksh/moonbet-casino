@@ -40,7 +40,7 @@ const Settings = () => {
 
     try {
       setIsLoading(true)
-      const response = await fetch(`http://localhost:4000/api/auth/profile/${userId}`, {
+      const response = await fetch(`http://98.81.197.98/auth-service/api/auth/profile/${userId}`, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",

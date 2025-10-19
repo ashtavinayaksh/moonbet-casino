@@ -1,147 +1,93 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+// src/pages/GamePage.jsx
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-
-// Icon Components
-const TheaterModeIcon = ({ isActive }) => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <rect x="2" y="7" width="20" height="10" rx="2" />
-    {isActive && <path d="M2 7h20M2 17h20" />}
-  </svg>
-);
-
-const FullScreenIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path
-      d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const StarIcon = ({ filled }) => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill={filled ? "currentColor" : "none"}
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path
-      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const SettingsIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <circle cx="12" cy="12" r="3" />
-    <path
-      d="M12 1v6m0 6v6m-8-8h6m6 0h6m-4.22-6.78l-4.24 4.24m-4.24 4.24l-4.24 4.24m12.48 0l-4.24-4.24m-4.24-4.24L3.76 3.76"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const GamePage = () => {
-  const { gameId } = useParams();
+  const { gameId } = useParams(); // actually the game name
   const iframeRef = useRef(null);
-
-  const [theaterMode, setTheaterMode] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [gameData, setGameData] = useState(null);
+  const [iframeUrl, setIframeUrl] = useState("");
+  const [loading, setLoading] = useState(true);
   const [isRealPlay, setIsRealPlay] = useState(true);
 
-  // Fullscreen functionality
-  const handleFullScreen = () => {
-    if (iframeRef.current) {
-      if (iframeRef.current.requestFullscreen) {
-        iframeRef.current.requestFullscreen();
-      } else if (iframeRef.current.webkitRequestFullscreen) {
-        iframeRef.current.webkitRequestFullscreen();
-      } else if (iframeRef.current.mozRequestFullScreen) {
-        iframeRef.current.mozRequestFullScreen();
-      } else if (iframeRef.current.msRequestFullscreen) {
-        iframeRef.current.msRequestFullscreen();
-      }
-    }
-  };
-
-  // Listen for Escape key to exit full screen and reset iframe position
   useEffect(() => {
-    const handleEscapeKey = (event) => {
-      if (event.key === "Escape") {
-        document.exitFullscreen && document.exitFullscreen();
-        iframeRef.current.style.position = "relative"; // Reset position
+    const fetchGameUrl = async () => {
+      try {
+        // Step 1: Get all games
+        const res = await fetch("http://98.81.197.98/wallet-service/api/games");
+        const data = await res.json();
+        const game = data?.games?.items?.find(
+          (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
+        );
+
+        if (!game) {
+          toast.error("Game not found!");
+          return;
+        }
+
+        setGameData(game);
+
+        // Step 2: Call init-demo API with that UUID
+        const initRes = await fetch(
+          `http://98.81.197.98/wallet-service/api/games/${game.uuid}/init-demo`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              device: "desktop",
+              language: "en",
+              return_url: window.location.origin,
+            }),
+          }
+        );
+
+        const initData = await initRes.json();
+        if (initData.success && initData.data?.url) {
+          setIframeUrl(initData.data.url);
+        } else {
+          throw new Error("Failed to initialize demo game");
+        }
+      } catch (error) {
+        console.error("Error loading game:", error);
+        toast.error(error.message || "Unable to load game");
+      } finally {
+        setLoading(false);
       }
     };
 
-    window.addEventListener("keydown", handleEscapeKey);
+    fetchGameUrl();
+  }, [gameId]);
 
-    return () => {
-      window.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, []);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-white text-xl">
+        Loading Game...
+      </div>
+    );
+  }
 
-  // Toggle for favorite
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
-
-  const gameData = {
-    name: "Blackjack",
-    provider: "Evolution",
-    gameUrl:
-      "https://demo.endorphina.network/games-wgl/endorphina2/Jetsetter/index.html?session=50E6A8678E184620A19D743C649A58F6&sign=f3d3014d077bcb4b2d6f9c120e0ace20&launch=https%3A%2F%2Fdemo.endorphina.network%2Forganic%2Fwebsocket%2Flaunch&exit=https%3A%2F%2Fdemo.endorphina.network%2Forganic%2Fwebsocket%2Fclose%3Fsession%3D50E6A8678E184620A19D743C649A58F6%26sign%3Df3d3014d077bcb4b2d6f9c120e0ace20%26exit%3Dhttps%253A%252F%252Fedemo.endorphina.com%252Fsession%252Fback%253Flink%253Dhttps%253A%252F%252Fstaging.slotegrator.com%252Fapi%252Findex.php%252Fv1%252Fclient%252Fexit%252FK25MZ3pkdE8zYmp5amZnUFVZYnJuYVBzNkRKczJnRk81M0hTSEZES3B4OWF5NHRpUUZCNlNPS0hMc2tyNExBSQ%25253D%25253D%252F79ef7f28db9d41a0baec81ddce788447%252F033067ce41ed3603550ac827a381f23b2058142d&profile=nofullscreen_money.xml&resetSettings=true",
-  };
+  if (!iframeUrl) {
+    return (
+      <div className="flex items-center justify-center h-screen text-red-400 text-xl">
+        Failed to load game.
+      </div>
+    );
+  }
 
   return (
-    <div className="h-auto md:h-screen flex flex-col bg-[#000] overflow-hidden">
-      {/* Game Container */}
-      <div className="flex-1 flex flex-col">
-        {/* Game Iframe Container */}
-        <div className="relative bg-black flex-1 sm:h-[50vh] md:h-[60vh] lg:h-[70vh] xl:h-[80vh] 2xl:h-[85vh]">
-          <div className="h-[80vh] md:h-full flex items-center justify-center px-8 py-4">
-            <div className="w-[90%] h-[90%] mt-[4rem] bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10">
-              <iframe
-                ref={iframeRef}
-                src={gameData.gameUrl}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={gameData.name}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Control Bar */}
-        {/* Bottom Control Bar with Glassmorphism */}
+    <div className="h-screen bg-black flex flex-col">
+      <div className="flex-1 flex items-center justify-center">
+        <iframe
+          ref={iframeRef}
+          src={iframeUrl}
+          className="w-full h-full border-none"
+          allowFullScreen
+          title={gameData?.name || "Game"}
+        />
+      </div>
+      {/* Bottom Control Bar with Glassmorphism */}
         <div
           className="relative bg-white/5 backdrop-blur-xl border-t border-white/20"
           style={{
@@ -183,31 +129,6 @@ const GamePage = () => {
 
             {/* Right Side - Control Buttons */}
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-              {/* Full Screen Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleFullScreen}
-                className="p-1.5 sm:p-2 md:p-2.5 rounded-lg transition-all bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white backdrop-blur-sm border border-white/10"
-                title="Full Screen"
-              >
-                <FullScreenIcon />
-              </motion.button>
-
-              {/* Theater Mode Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setTheaterMode(!theaterMode)}
-                className={`p-1.5 sm:p-2 md:p-2.5 rounded-lg transition-all backdrop-blur-sm border ${
-                  theaterMode
-                    ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-white shadow-lg shadow-[#F07730]/40 border-[#F07730]/50"
-                    : "bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border-white/10"
-                }`}
-                title="Theater Mode"
-              >
-                <TheaterModeIcon isActive={theaterMode} />
-              </motion.button>
 
               {/* Screenshot Button */}
               <motion.button
@@ -229,21 +150,6 @@ const GamePage = () => {
                   <circle cx="8.5" cy="8.5" r="1.5" />
                   <path d="M21 15l-5-5L5 21" />
                 </svg>
-              </motion.button>
-
-              {/* Favorite Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleFavorite}
-                className={`p-1.5 sm:p-2 md:p-2.5 rounded-lg transition-all backdrop-blur-sm border ${
-                  isFavorite
-                    ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-white shadow-lg shadow-yellow-500/40 border-yellow-400/50"
-                    : "bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border-white/10"
-                }`}
-                title="Add to Favorites"
-              >
-                <StarIcon filled={isFavorite} />
               </motion.button>
 
               {/* Divider - Hidden on small screens */}
@@ -292,7 +198,6 @@ const GamePage = () => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };
