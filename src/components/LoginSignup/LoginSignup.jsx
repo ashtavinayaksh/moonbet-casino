@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
+import axios from "axios";
 
 // Icon Components
 const GoogleIcon = () => (
@@ -97,7 +98,7 @@ const LoginSignup = ({
 
   const handleLoginSubmit = async () => {
   try {
-    const { data } = await api.post(
+    const { data } = await axios.post(
       "/auth-service/api/auth/login",
       loginData
     );
