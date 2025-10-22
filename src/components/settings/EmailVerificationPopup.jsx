@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
+import axios from "axios";
 
 const EmailVerificationPopup = ({
   isOpen,
@@ -140,7 +141,7 @@ const handleVerify = async () => {
     }
 
     // ✅ Call backend verify-email API via Axios
-    const { data } = await api.post("/auth-service/api/auth/verify-email", {
+    const { data } = await axios.post("/auth-service/api/auth/verify-email", {
       email,
       otp: parseInt(otpString, 10),
     });

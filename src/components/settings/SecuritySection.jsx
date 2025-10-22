@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import EmailVerificationPopup from "./EmailVerificationPopup";
 import api from "../../api/axios";
+import axios from "axios";
 
 const SecuritySection = ({
   userData,
@@ -107,7 +108,7 @@ const SecuritySection = ({
       }
 
       // ✅ Call send-otp API via Axios
-      const { data } = await api.post("/auth-service/api/auth/send-otp", {
+      const { data } = await axios.post("/auth-service/api/auth/send-otp", {
         email,
       });
 
@@ -226,7 +227,7 @@ const SecuritySection = ({
       }
 
       // ✅ Call change-password API via Axios
-      const { data } = await api.post(
+      const { data } = await axios.post(
         "/auth-service/api/auth/change-password",
         {
           username,

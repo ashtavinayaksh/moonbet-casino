@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import axios from "axios";
 
 const Transactions = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,7 @@ const Transactions = () => {
 
         setIsLoading(true);
 
-        const { data } = await api.get(
+        const { data } = await axios.get(
           `/wallet-service/api/wallet/${userId}/transactions`,
           {
             headers: {

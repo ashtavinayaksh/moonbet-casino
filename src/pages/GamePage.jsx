@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import axios from "axios";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
@@ -17,7 +18,7 @@ const GamePage = () => {
     const fetchGameUrl = async () => {
       try {
         // 🕹 Step 1: Fetch all games
-        const { data } = await api.get("/wallet-service/api/games");
+        const { data } = await axios.get("/wallet-service/api/games");
 
         const game = data?.games?.items?.find(
           (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
@@ -31,7 +32,7 @@ const GamePage = () => {
         setGameData(game);
 
         // 🎮 Step 2: Initialize demo game
-        const { data: initData } = await api.post(
+        const { data: initData } = await axios.post(
           `/wallet-service/api/games/${game.uuid}/init-demo`,
           {
             device: "desktop",

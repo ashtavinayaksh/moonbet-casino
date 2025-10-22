@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import MoonBetButton from "../ui-elements/MoonBetButton";
 import api from "../../api/axios";
+import axios from "axios";
 
 const SlotsSection = () => {
   const scrollContainerRef = useRef(null);
@@ -15,7 +16,7 @@ const SlotsSection = () => {
 useEffect(() => {
   const fetchGames = async () => {
     try {
-      const { data } = await api.get("/wallet-service/api/games");
+      const { data } = await axios.get("/wallet-service/api/games");
 
       if (data?.games?.items) {
         setGames(data.games.items);

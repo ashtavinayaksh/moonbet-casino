@@ -145,7 +145,7 @@ const LoginSignup = ({
 
 const handleSignupSubmit = async () => {
   try {
-    const { data } = await api.post(
+    const { data } = await axios.post(
       "/auth-service/api/auth/register",
       signupData
     );

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; // ✅ FIX: added import
 import api from "../../api/axios";
+import axios from "axios";
 
 const ProfileModal = ({ isOpen, onClose, userData }) => {
   const [profileData, setProfileData] = useState({
@@ -51,7 +52,7 @@ const fetchProfileData = async (setProfileData, userData) => {
     }
 
     // ✅ Fetch profile data securely
-    const { data } = await api.get(`/auth-service/api/auth/profile/${userId}`, {
+    const { data } = await axios.get(`/auth-service/api/auth/profile/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

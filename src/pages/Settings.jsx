@@ -9,6 +9,7 @@ import ConnectedWalletsSection from "../components/settings/ConnectedWalletsSect
 import LoginSignup from "../components/LoginSignup/LoginSignup";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import axios from "axios";
 
 const Settings = () => {
   // Loading state
@@ -45,7 +46,7 @@ const Settings = () => {
       try {
         setIsLoading(true);
 
-        const { data } = await api.get(`/auth-service/api/auth/profile/${userId}`, {
+        const { data } = await axios.get(`/auth-service/api/auth/profile/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

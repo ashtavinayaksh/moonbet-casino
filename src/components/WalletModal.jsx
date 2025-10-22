@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import WithdrawalConfirmationPopup from "./WithdrawalConfirmationPopup";
 import { toast } from "react-toastify";
 import api from "../api/axios";
+import axios from "axios";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -48,7 +49,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
     if (!userId || !token) return;
 
-    api
+    axios
       .get(`/wallet-service/api/wallet/${userId}/balance`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -62,7 +63,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
   if (isOpen) {
-    api
+    axios
       .get(`/wallet-service/api/wallet/coins`)
       .then(({ data }) => {
         if (Array.isArray(data)) {
@@ -77,7 +78,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
   if (showDepositModal) {
-    api
+    axios
       .get(`/wallet-service/api/wallet/coins`)
       .then(({ data }) => {
         if (Array.isArray(data)) {
@@ -93,7 +94,7 @@ const WalletModal = ({ isOpen, onClose }) => {
   // Fetch withdraw coins
   useEffect(() => {
   if (showWithdrawModal) {
-    api
+    axios
       .get(`/wallet-service/api/wallet/coins`)
       .then(({ data }) => {
         if (Array.isArray(data)) {
@@ -113,7 +114,7 @@ useEffect(() => {
   if (selectedDepositCoin?.symbol) {
     const currency = selectedDepositCoin.symbol.toUpperCase();
 
-    api
+    axios
       .get(
         `/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
       )
@@ -244,7 +245,7 @@ const handleWithdraw = async () => {
   };
 
   try {
-    const { data } = await api.post(
+    const { data } = await axios.post(
       `/wallet-service/api/wallet/${userId}/withdrawOtp`,
       payload
     );
@@ -274,7 +275,7 @@ const handleWithdraw = async () => {
 
   try {
     // Step 1: Verify OTP
-    await api.post(`/wallet-service/api/wallet/verify-otp`, {
+    await axios.post(`/wallet-service/api/wallet/verify-otp`, {
       requestId: otpRequestId,
       otp: otpCode,
     });
@@ -288,7 +289,7 @@ const handleWithdraw = async () => {
       amount: parseFloat(withdrawAmount),
     };
 
-    await api.post(
+    await axios.post(
       `/wallet-service/api/wallet/${userId}/withdraw`,
       withdrawData
     );
