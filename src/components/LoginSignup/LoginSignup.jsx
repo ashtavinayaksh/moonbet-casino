@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import api from "../../api/axios";
 
 // Icon Components
 const GoogleIcon = () => (
@@ -96,42 +97,30 @@ const LoginSignup = ({
 
   const handleLoginSubmit = async () => {
   try {
-    const res = await fetch("https://mapi.examtree.ai/auth-service/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginData),
-    });
+    const { data } = await api.post(
+      "/auth-service/api/auth/login",
+      loginData
+    );
 
-    const data = await res.json();
-
-    if (res.ok) {
+    if (data?.token) {
       // ✅ Save only token and essential user fields
       localStorage.setItem("token", data.token);
 
       if (data.user) {
-        const { username, email, kycStatus, id } = data.user;
-
-        // Save individually for easy access later
-        // localStorage.setItem("userId", _id);
-        // localStorage.setItem("username", username);
-        // localStorage.setItem("email", email);
-        // localStorage.setItem("kycStatus", kycStatus);
-
-        // Or also keep a compact object if you prefer a single entry
+        const { id, username, email, kycStatus } = data.user;
         localStorage.setItem(
           "user",
           JSON.stringify({ id, username, email, kycStatus })
         );
       }
 
-      // ✅ Success toast
       toast.success("You have logged in successfully", {
         position: "top-right",
         autoClose: 3000,
         closeOnClick: true,
       });
 
-      // ✅ Trigger login success callback after short delay
+      // ✅ Trigger login success callback
       setTimeout(() => {
         if (onLoginSuccess) onLoginSuccess(data);
       }, 500);
@@ -142,55 +131,48 @@ const LoginSignup = ({
       });
     }
   } catch (err) {
-    toast.error("Network error. Please try again.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
     console.error("Login error:", err);
+    toast.error(
+      err.response?.data?.message || "Network error. Please try again.",
+      {
+        position: "top-right",
+        autoClose: 3000,
+      }
+    );
   }
 };
 
+const handleSignupSubmit = async () => {
+  try {
+    const { data } = await api.post(
+      "/auth-service/api/auth/register",
+      signupData
+    );
 
-  const handleSignupSubmit = async () => {
-    try {
-      const res = await fetch("https://mapi.examtree.ai/auth-service/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(signupData),
-      });
-      const data = await res.json();
+    toast.success("Account created successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
 
-      if (res.ok) {
-        // ✅ Show success toast
-        toast.success("Account created successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-
-        // ✅ Call success callback after short delay
-        setTimeout(() => {
-          if (onSignupSuccess) onSignupSuccess(data);
-        }, 500);
-      } else {
-        // ❌ Show error toast
-        toast.error(data.message || "Signup failed", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
-    } catch (err) {
-      // ❌ Show network error toast
-      toast.error("Network error. Please try again.", {
+    setTimeout(() => {
+      if (onSignupSuccess) onSignupSuccess(data);
+    }, 500);
+  } catch (err) {
+    console.error("Signup error:", err);
+    toast.error(
+      err.response?.data?.message || "Signup failed. Please try again.",
+      {
         position: "top-right",
         autoClose: 3000,
-      });
-      console.error("Signup error:", err);
-    }
-  };
+      }
+    );
+  }
+};
+
 
   const handleForgotPasswordSubmit = () => {
     console.log("Forgot Password:", forgotPasswordData);

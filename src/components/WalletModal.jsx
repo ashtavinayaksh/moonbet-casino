@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
 import WithdrawalConfirmationPopup from "./WithdrawalConfirmationPopup";
 import { toast } from "react-toastify";
+import api from "../api/axios";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -41,81 +42,98 @@ const WalletModal = ({ isOpen, onClose }) => {
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
   useEffect(() => {
-    if (isOpen) {
-      fetch(`https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/balance`)
-        .then((res) => res.json())
-        .then((data) => {
-          setWalletBalance(data);
-        })
-        .catch((err) => console.error("Error fetching wallet balance:", err));
-    }
-  }, [isOpen]);
+  if (isOpen) {
+    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) return;
+
+    api
+      .get(`/wallet-service/api/wallet/${userId}/balance`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(({ data }) => setWalletBalance(data))
+      .catch((err) =>
+        console.error("❌ Error fetching wallet balance:", err)
+      );
+  }
+}, [isOpen]);
+
 
   useEffect(() => {
-    if (isOpen) {
-      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
-        .then((res) => res.json())
-        .then((data) => {
-          if (Array.isArray(data)) {
-            setCoinList(data);
-            setSelectedCoin(data[0]);
-          }
-        })
-        .catch((err) => console.error("Error fetching coins:", err));
-    }
-  }, [isOpen]);
+  if (isOpen) {
+    api
+      .get(`/wallet-service/api/wallet/coins`)
+      .then(({ data }) => {
+        if (Array.isArray(data)) {
+          setCoinList(data);
+          setSelectedCoin(data[0]);
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching coins:", err));
+  }
+}, [isOpen]);
+
 
   useEffect(() => {
-    if (showDepositModal) {
-      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
-        .then((res) => res.json())
-        .then((data) => {
-          if (Array.isArray(data)) {
-            setDepositCoinList(data);
-            setSelectedDepositCoin(data[0]);
-          }
-        })
-        .catch((err) => console.error("Error fetching deposit coins:", err));
-    }
-  }, [showDepositModal]);
+  if (showDepositModal) {
+    api
+      .get(`/wallet-service/api/wallet/coins`)
+      .then(({ data }) => {
+        if (Array.isArray(data)) {
+          setDepositCoinList(data);
+          setSelectedDepositCoin(data[0]);
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching deposit coins:", err));
+  }
+}, [showDepositModal]);
+
 
   // Fetch withdraw coins
   useEffect(() => {
-    if (showWithdrawModal) {
-      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
-        .then((res) => res.json())
-        .then((data) => {
-          if (Array.isArray(data)) {
-            setWithdrawCoinList(data);
-            setSelectedWithdrawCoin(data[0]);
-          }
-        })
-        .catch((err) => console.error("Error fetching withdraw coins:", err));
-    }
-  }, [showWithdrawModal]);
+  if (showWithdrawModal) {
+    api
+      .get(`/wallet-service/api/wallet/coins`)
+      .then(({ data }) => {
+        if (Array.isArray(data)) {
+          setWithdrawCoinList(data);
+          setSelectedWithdrawCoin(data[0]);
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching withdraw coins:", err));
+  }
+}, [showWithdrawModal]);
 
-  useEffect(() => {
-    const userId = "68eb94c22a7983ea19b0bd6a";
-    if (selectedDepositCoin?.symbol) {
-      const currency = selectedDepositCoin.symbol.toUpperCase();
-      fetch(
-        `https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
+useEffect(() => {
+  const userId =
+    JSON.parse(localStorage.getItem("user") || "{}").id ||
+    "68eb94c22a7983ea19b0bd6a";
+
+  if (selectedDepositCoin?.symbol) {
+    const currency = selectedDepositCoin.symbol.toUpperCase();
+
+    api
+      .get(
+        `/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
       )
-        .then((res) => res.json())
-        .then(async (data) => {
-          setDepositAddress(data.payAddress || "");
-          if (data.payAddress) {
-            const qr = await QRCode.toDataURL(data.payAddress, {
-              width: 256,
-              margin: 2,
-              color: { dark: "#000000", light: "#FFFFFF" },
-            });
-            setQrCodeData(qr);
-          }
-        })
-        .catch((err) => console.error("Error fetching deposit address:", err));
-    }
-  }, [selectedDepositCoin]);
+      .then(async ({ data }) => {
+        setDepositAddress(data.payAddress || "");
+        if (data.payAddress) {
+          const qr = await QRCode.toDataURL(data.payAddress, {
+            width: 256,
+            margin: 2,
+            color: { dark: "#000000", light: "#FFFFFF" },
+          });
+          setQrCodeData(qr);
+        }
+      })
+      .catch((err) =>
+        console.error("❌ Error fetching deposit address:", err)
+      );
+  }
+}, [selectedDepositCoin]);
+
 
   useEffect(() => {
     if (walletAddress) {
@@ -226,33 +244,22 @@ const handleWithdraw = async () => {
   };
 
   try {
-    console.log("📤 Sending withdraw OTP payload:", payload);
-
-    const res = await fetch(
-      `http://localhost:4001/api/wallet/${userId}/withdrawOtp`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
+    const { data } = await api.post(
+      `/wallet-service/api/wallet/${userId}/withdrawOtp`,
+      payload
     );
 
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message || "Failed to send withdrawal OTP");
-
-    // ✅ Save requestId for verification
     setOtpRequestId(data.requestId);
-
     toast.success("OTP sent to your registered email. Please verify to continue.");
-
-    // ✅ Open OTP confirmation modal
     setShowWithdrawConfirmation(true);
   } catch (err) {
     console.error("❌ Withdraw OTP error:", err);
-    toast.error(err.message || "Failed to send OTP. Please try again.");
+    toast.error(
+      err.response?.data?.message || "Failed to send OTP. Please try again."
+    );
   }
 };
+
 
 
   const handleConfirmWithdraw = async (otpCode) => {
@@ -261,47 +268,30 @@ const handleWithdraw = async () => {
     return;
   }
 
+  const userId =
+    JSON.parse(localStorage.getItem("user") || "{}").id ||
+    "68eb94c22a7983ea19b0bd6a";
+
   try {
     // Step 1: Verify OTP
-    const verifyResponse = await fetch("https://mapi.examtree.ai/wallet-service/api/wallet/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        requestId: otpRequestId,
-        otp: otpCode,
-      }),
+    await api.post(`/wallet-service/api/wallet/verify-otp`, {
+      requestId: otpRequestId,
+      otp: otpCode,
     });
-
-    const verifyData = await verifyResponse.json();
-    if (!verifyResponse.ok) {
-      throw new Error(verifyData.message || "OTP verification failed");
-    }
 
     toast.success("✅ OTP verified successfully. Processing withdrawal...");
 
     // Step 2: Proceed with actual withdrawal
-    const userId =
-      JSON.parse(localStorage.getItem("user") || "{}").id ||
-      "68eb94c22a7983ea19b0bd6a";
-
     const withdrawData = {
       currency: selectedWithdrawCoin.symbol.toUpperCase(),
       address: withdrawAddress,
       amount: parseFloat(withdrawAmount),
     };
 
-    const response = await fetch(
-      `https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/withdraw`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(withdrawData),
-      }
+    await api.post(
+      `/wallet-service/api/wallet/${userId}/withdraw`,
+      withdrawData
     );
-
-    const data = await response.json();
-
-    if (!response.ok) throw new Error(data.message || "Withdrawal failed");
 
     toast.success("💸 Withdrawal request submitted successfully!");
     setShowWithdrawConfirmation(false);
@@ -310,9 +300,12 @@ const handleWithdraw = async () => {
     setWithdrawAmount("");
   } catch (err) {
     console.error("❌ Withdrawal verification error:", err);
-    toast.error(err.message || "Failed to verify OTP or withdraw funds.");
+    toast.error(
+      err.response?.data?.message || "Failed to verify OTP or withdraw funds."
+    );
   }
 };
+
 
 
   const modalVariants = {

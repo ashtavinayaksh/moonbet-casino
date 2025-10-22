@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom"; // ✅ FIX: added import
+import api from "../../api/axios";
 
 const ProfileModal = ({ isOpen, onClose, userData }) => {
   const [profileData, setProfileData] = useState({
@@ -37,25 +38,29 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
     }
   }, [isOpen, userData]);
 
-  const fetchProfileData = async () => {
+const fetchProfileData = async (setProfileData, userData) => {
   try {
-    const userId =
-      userData?._id ||
-      localStorage.getItem("userId")
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const userId = userData?._id || storedUser.id;
+    const token = localStorage.getItem("token");
 
-    const response = await fetch(
-      `https://mapi.examtree.ai/auth-service/api/auth/profile/${userId}`
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch profile data");
+    if (!userId || !token) {
+      console.warn("⚠️ No userId or token found — user not logged in");
+      toast.info("Please log in to view profile");
+      return;
     }
 
-    const data = await response.json();
+    // ✅ Fetch profile data securely
+    const { data } = await api.get(`/auth-service/api/auth/profile/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    // ✅ Set formatted profile data
     setProfileData({
       username: data.username || "Guest User",
-      publicId: data._id.toUpperCase(),
+      publicId: data._id?.toUpperCase() || "",
       memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -76,7 +81,9 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
     });
   } catch (error) {
     console.error("❌ Failed to fetch profile data:", error);
-    toast.error("Unable to load profile data");
+    toast.error(
+      error.response?.data?.message || "Unable to load profile data"
+    );
   }
 };
 

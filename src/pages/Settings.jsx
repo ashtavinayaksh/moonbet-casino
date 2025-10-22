@@ -7,6 +7,8 @@ import VerificationSection from "../components/settings/VerificationSection";
 import SecuritySection from "../components/settings/SecuritySection";
 import ConnectedWalletsSection from "../components/settings/ConnectedWalletsSection";
 import LoginSignup from "../components/LoginSignup/LoginSignup";
+import { toast } from "react-toastify";
+import api from "../api/axios";
 
 const Settings = () => {
   // Loading state
@@ -26,57 +28,55 @@ const Settings = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-  const fetchProfile = async () => {
-    const token = localStorage.getItem("token");
-    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-    console.log("userId:", userId);
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = user.id;
 
-    // If user not logged in, show Login modal
-    if (!userId || !token) {
-      // setShowLoginModal(true);
-      setIsLoading(false);
-      return;
-    }
+      console.log("userId:", userId);
 
-    try {
-      setIsLoading(true)
-      const response = await fetch(`https://mapi.examtree.ai/auth-service/api/auth/profile/${userId}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
+      // If user not logged in
+      if (!userId || !token) {
+        setShowLoginModal(true);
+        setIsLoading(false);
+        return;
       }
 
-      const data = await response.json();
-      console.log("user are:", data);
+      try {
+        setIsLoading(true);
 
-      setUserData({
-        username: data.username || "",
-        email: data.email || "",
-        displayName: data.displayName || "",
-        memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        emailVerified: data.emailVerified, // Update when email verification available
-      });
+        const { data } = await api.get(`/auth-service/api/auth/profile/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      setIsLoading(false);
-      setShowLoginModal(false);
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-      setShowLoginModal(true);
-      setIsLoading(false);
-    }
-  };
+        console.log("User profile:", data);
 
-  fetchProfile();
-}, []);
+        setUserData({
+          username: data.username || "",
+          email: data.email || "",
+          displayName: data.displayName || "",
+          memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+          emailVerified: data.emailVerified || false,
+        });
+
+        setShowLoginModal(false);
+      } catch (error) {
+        console.error("❌ Error fetching user profile:", error);
+        toast.error(error.response?.data?.message || "Failed to fetch profile");
+        setShowLoginModal(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   // Simulate loading data
   useEffect(() => {
