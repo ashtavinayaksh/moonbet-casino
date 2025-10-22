@@ -7,6 +7,10 @@
     {
       "source": "/auth-service/:path*",
       "destination": "https://mapi.examtree.ai/auth-service/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
