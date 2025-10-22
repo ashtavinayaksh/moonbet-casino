@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import api from "../api/axios";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
@@ -15,9 +16,9 @@ const GamePage = () => {
   useEffect(() => {
     const fetchGameUrl = async () => {
       try {
-        // Step 1: Get all games
-        const res = await fetch("https://mapi.examtree.ai/wallet-service/api/games");
-        const data = await res.json();
+        // 🕹 Step 1: Fetch all games
+        const { data } = await api.get("/wallet-service/api/games");
+
         const game = data?.games?.items?.find(
           (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
         );
@@ -29,29 +30,24 @@ const GamePage = () => {
 
         setGameData(game);
 
-        // Step 2: Call init-demo API with that UUID
-        const initRes = await fetch(
-          `https://mapi.examtree.ai/wallet-service/api/games/${game.uuid}/init-demo`,
+        // 🎮 Step 2: Initialize demo game
+        const { data: initData } = await api.post(
+          `/wallet-service/api/games/${game.uuid}/init-demo`,
           {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              device: "desktop",
-              language: "en",
-              return_url: window.location.origin,
-            }),
+            device: "desktop",
+            language: "en",
+            return_url: window.location.origin,
           }
         );
 
-        const initData = await initRes.json();
         if (initData.success && initData.data?.url) {
           setIframeUrl(initData.data.url);
         } else {
           throw new Error("Failed to initialize demo game");
         }
       } catch (error) {
-        console.error("Error loading game:", error);
-        toast.error(error.message || "Unable to load game");
+        console.error("❌ Error loading game:", error);
+        toast.error(error.response?.data?.message || error.message || "Unable to load game");
       } finally {
         setLoading(false);
       }
@@ -59,6 +55,54 @@ const GamePage = () => {
 
     fetchGameUrl();
   }, [gameId]);
+
+  // useEffect(() => {
+  //   const fetchGameUrl = async () => {
+  //     try {
+  //       // Step 1: Get all games
+  //       const res = await fetch("https://mapi.examtree.ai/wallet-service/api/games");
+  //       const data = await res.json();
+  //       const game = data?.games?.items?.find(
+  //         (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
+  //       );
+
+  //       if (!game) {
+  //         toast.error("Game not found!");
+  //         return;
+  //       }
+
+  //       setGameData(game);
+
+  //       // Step 2: Call init-demo API with that UUID
+  //       const initRes = await fetch(
+  //         `https://mapi.examtree.ai/wallet-service/api/games/${game.uuid}/init-demo`,
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({
+  //             device: "desktop",
+  //             language: "en",
+  //             return_url: window.location.origin,
+  //           }),
+  //         }
+  //       );
+
+  //       const initData = await initRes.json();
+  //       if (initData.success && initData.data?.url) {
+  //         setIframeUrl(initData.data.url);
+  //       } else {
+  //         throw new Error("Failed to initialize demo game");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error loading game:", error);
+  //       toast.error(error.message || "Unable to load game");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchGameUrl();
+  // }, [gameId]);
 
   if (loading) {
     return (
