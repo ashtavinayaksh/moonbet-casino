@@ -42,7 +42,7 @@ const WalletModal = ({ isOpen, onClose }) => {
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
   useEffect(() => {
     if (isOpen) {
-      fetch(`http://98.81.197.98/wallet-service/api/wallet/${userId}/balance`)
+      fetch(`https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/balance`)
         .then((res) => res.json())
         .then((data) => {
           setWalletBalance(data);
@@ -53,7 +53,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      fetch("http://98.81.197.98/wallet-service/api/wallet/coins")
+      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -67,7 +67,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (showDepositModal) {
-      fetch("http://98.81.197.98/wallet-service/api/wallet/coins")
+      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -82,7 +82,7 @@ const WalletModal = ({ isOpen, onClose }) => {
   // Fetch withdraw coins
   useEffect(() => {
     if (showWithdrawModal) {
-      fetch("http://98.81.197.98/wallet-service/api/wallet/coins")
+      fetch("https://mapi.examtree.ai/wallet-service/api/wallet/coins")
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {
@@ -99,7 +99,7 @@ const WalletModal = ({ isOpen, onClose }) => {
     if (selectedDepositCoin?.symbol) {
       const currency = selectedDepositCoin.symbol.toUpperCase();
       fetch(
-        `http://98.81.197.98/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
+        `https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
       )
         .then((res) => res.json())
         .then(async (data) => {
@@ -263,7 +263,7 @@ const handleWithdraw = async () => {
 
   try {
     // Step 1: Verify OTP
-    const verifyResponse = await fetch("http://98.81.197.98/wallet-service/api/wallet/verify-otp", {
+    const verifyResponse = await fetch("https://mapi.examtree.ai/wallet-service/api/wallet/verify-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -291,7 +291,7 @@ const handleWithdraw = async () => {
     };
 
     const response = await fetch(
-      `http://98.81.197.98/wallet-service/api/wallet/${userId}/withdraw`,
+      `https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/withdraw`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -16,7 +16,7 @@ const GamePage = () => {
     const fetchGameUrl = async () => {
       try {
         // Step 1: Get all games
-        const res = await fetch("http://98.81.197.98/wallet-service/api/games");
+        const res = await fetch("https://mapi.examtree.ai/wallet-service/api/games");
         const data = await res.json();
         const game = data?.games?.items?.find(
           (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
@@ -31,7 +31,7 @@ const GamePage = () => {
 
         // Step 2: Call init-demo API with that UUID
         const initRes = await fetch(
-          `http://98.81.197.98/wallet-service/api/games/${game.uuid}/init-demo`,
+          `https://mapi.examtree.ai/wallet-service/api/games/${game.uuid}/init-demo`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

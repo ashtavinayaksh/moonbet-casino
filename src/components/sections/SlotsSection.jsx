@@ -13,7 +13,7 @@ const SlotsSection = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const res = await fetch("http://98.81.197.98/wallet-service/api/games");
+        const res = await fetch("https://mapi.examtree.ai/wallet-service/api/games");
         const data = await res.json();
         if (data?.games?.items) {
           setGames(data.games.items);

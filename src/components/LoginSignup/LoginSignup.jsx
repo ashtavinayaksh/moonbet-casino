@@ -96,7 +96,7 @@ const LoginSignup = ({
 
   const handleLoginSubmit = async () => {
   try {
-    const res = await fetch("http://98.81.197.98/auth-service/api/auth/login", {
+    const res = await fetch("https://mapi.examtree.ai/auth-service/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginData),
@@ -153,7 +153,7 @@ const LoginSignup = ({
 
   const handleSignupSubmit = async () => {
     try {
-      const res = await fetch("http://98.81.197.98/auth-service/api/auth/register", {
+      const res = await fetch("https://mapi.examtree.ai/auth-service/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(signupData),

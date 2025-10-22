@@ -44,7 +44,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
       localStorage.getItem("userId")
 
     const response = await fetch(
-      `http://98.81.197.98/auth-service/api/auth/profile/${userId}`
+      `https://mapi.examtree.ai/auth-service/api/auth/profile/${userId}`
     );
 
     if (!response.ok) {

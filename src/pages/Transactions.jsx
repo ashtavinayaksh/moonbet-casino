@@ -21,7 +21,7 @@ const Transactions = () => {
         }
 
         const response = await fetch(
-          `http://98.81.197.98/wallet-service/api/wallet/${userId}/transactions`
+          `https://mapi.examtree.ai/wallet-service/api/wallet/${userId}/transactions`
         );
 
         if (!response.ok) {

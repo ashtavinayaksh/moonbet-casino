@@ -104,7 +104,7 @@ const SecuritySection = ({
     }
 
     // ✅ Call your real API
-    const response = await fetch("http://98.81.197.98/auth-service/api/auth/send-otp", {
+    const response = await fetch("https://mapi.examtree.ai/auth-service/api/auth/send-otp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -230,7 +230,7 @@ const SecuritySection = ({
       return;
     }
 
-    const response = await fetch("http://98.81.197.98/auth-service/api/auth/change-password", {
+    const response = await fetch("https://mapi.examtree.ai/auth-service/api/auth/change-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
