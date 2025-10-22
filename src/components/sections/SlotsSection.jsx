@@ -2,7 +2,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import MoonBetButton from "../ui-elements/MoonBetButton";
+import api from "../../api/axios";
 
 const SlotsSection = () => {
   const scrollContainerRef = useRef(null);
@@ -10,22 +12,29 @@ const SlotsSection = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const res = await fetch("https://mapi.examtree.ai/wallet-service/api/games");
-        const data = await res.json();
-        if (data?.games?.items) {
-          setGames(data.games.items);
-        }
-      } catch (error) {
-        console.error("Error fetching games:", error);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchGames = async () => {
+    try {
+      const { data } = await api.get("/wallet-service/api/games");
+
+      if (data?.games?.items) {
+        setGames(data.games.items);
+      } else {
+        setGames([]); // fallback if API returns no games
       }
-    };
-    fetchGames();
-  }, []);
+    } catch (error) {
+      console.error("❌ Error fetching games:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to load games list"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchGames();
+}, []);
+
 
   const handlePlayNow = (gameName) => {
     // Replace spaces with dashes for clean URLs

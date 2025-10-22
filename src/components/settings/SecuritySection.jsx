@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import EmailVerificationPopup from "./EmailVerificationPopup";
+import api from "../../api/axios";
 
 const SecuritySection = ({
   userData,
@@ -91,44 +92,37 @@ const SecuritySection = ({
   );
 
   const handleSendVerification = async () => {
-  setIsLoading(true);
+    setIsLoading(true);
 
-  try {
-    const email =
-      userData?.email || localStorage.getItem("email") || null;
+    try {
+      const email =
+        userData?.email ||
+        JSON.parse(localStorage.getItem("user") || "{}")?.email ||
+        localStorage.getItem("email");
 
-    if (!email) {
-      toast.error("Email not found. Please log in again.");
+      if (!email) {
+        toast.error("Email not found. Please log in again.");
+        setIsLoading(false);
+        return;
+      }
+
+      // ✅ Call send-otp API via Axios
+      const { data } = await api.post("/auth-service/api/auth/send-otp", {
+        email,
+      });
+
+      toast.success(data.message || "Verification code sent to your email!");
+      setShowEmailVerificationPopup(true);
+    } catch (error) {
+      console.error("❌ Error sending verification:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to send verification email. Please try again."
+      );
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    // ✅ Call your real API
-    const response = await fetch("https://mapi.examtree.ai/auth-service/api/auth/send-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to send verification email");
-    }
-
-    // ✅ Success
-    toast.success("Verification code sent to your email!");
-    setShowEmailVerificationPopup(true);
-  } catch (error) {
-    console.error("Error sending verification:", error);
-    toast.error(error.message || "Failed to send verification email. Please try again.");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   const handleEmailVerification = async (otp) => {
     try {
@@ -196,71 +190,69 @@ const SecuritySection = ({
   };
 
   const handlePasswordSubmit = async () => {
-  const { currentPassword, newPassword, confirmPassword } = passwordData;
+    const { currentPassword, newPassword, confirmPassword } = passwordData;
 
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    toast.error("Please fill in all password fields");
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    toast.error("New passwords do not match");
-    return;
-  }
-
-  // ✅ Enforce backend’s strong password rule early on frontend
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,15}$/;
-  if (!passwordRegex.test(newPassword)) {
-    toast.error(
-      "Password must be 12–15 characters long, include uppercase, lowercase, number, and special character."
-    );
-    return;
-  }
-
-  setIsUpdatingPassword(true);
-
-  try {
-    const username =
-      userData?.username ||
-      JSON.parse(localStorage.getItem("user") || "{}")?.username;
-
-    if (!username) {
-      toast.error("Username not found. Please log in again.");
-      setIsUpdatingPassword(false);
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all password fields");
       return;
     }
 
-    const response = await fetch("https://mapi.examtree.ai/auth-service/api/auth/change-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username,
-        oldPassword: currentPassword,
-        newPassword,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Failed to change password");
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match");
+      return;
     }
 
-    toast.success("Password changed successfully ✅");
-    setShowPasswordForm(false);
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-  } catch (error) {
-    console.error("Change password error:", error);
-    toast.error(error.message || "Failed to change password");
-  } finally {
-    setIsUpdatingPassword(false);
-  }
-};
+    // ✅ Match backend password policy
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,15}$/;
+    if (!passwordRegex.test(newPassword)) {
+      toast.error(
+        "Password must be 12–15 characters long and include uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
 
+    setIsUpdatingPassword(true);
+
+    try {
+      const username =
+        userData?.username ||
+        JSON.parse(localStorage.getItem("user") || "{}")?.username;
+
+      if (!username) {
+        toast.error("Username not found. Please log in again.");
+        setIsUpdatingPassword(false);
+        return;
+      }
+
+      // ✅ Call change-password API via Axios
+      const { data } = await api.post(
+        "/auth-service/api/auth/change-password",
+        {
+          username,
+          oldPassword: currentPassword,
+          newPassword,
+        }
+      );
+
+      toast.success(data.message || "Password changed successfully ✅");
+
+      setShowPasswordForm(false);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.error("❌ Change password error:", error);
+      toast.error(
+        error.response?.data?.error ||
+          "Failed to change password. Please try again."
+      );
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
 
   const PasswordField = ({
     name,

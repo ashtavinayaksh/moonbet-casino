@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import api from "../../api/axios";
 
 const EmailVerificationPopup = ({
   isOpen,
@@ -116,7 +117,7 @@ const EmailVerificationPopup = ({
     }
   };
 
-  const handleVerify = async () => {
+const handleVerify = async () => {
   const otpString = otp.join("");
 
   if (otpString.length !== 6) {
@@ -127,37 +128,33 @@ const EmailVerificationPopup = ({
   setIsLoading(true);
 
   try {
-    const email = userEmail || localStorage.getItem("email");
+    const email =
+      userEmail ||
+      JSON.parse(localStorage.getItem("user") || "{}").email ||
+      localStorage.getItem("email");
+
     if (!email) {
       toast.error("Email not found. Please log in again.");
       setIsLoading(false);
       return;
     }
 
-    // ✅ Call the real API
-    const response = await fetch("https://mapi.examtree.ai/auth-service/api/auth/verify-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp: parseInt(otpString, 10) }),
+    // ✅ Call backend verify-email API via Axios
+    const { data } = await api.post("/auth-service/api/auth/verify-email", {
+      email,
+      otp: parseInt(otpString, 10),
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Invalid OTP. Please try again.");
-    }
-
-    // ✅ Success: close popup and show success toast
-    toast.success("Email verified successfully!");
+    toast.success(data.message || "Email verified successfully!");
     handleClose();
 
-    // Optionally refresh user data or reload page
+    // ✅ Refresh user data or reload page after short delay
     setTimeout(() => window.location.reload(), 1000);
   } catch (error) {
-    console.error("Verification error:", error);
-    toast.error(error.message || "Invalid OTP. Please try again.");
+    console.error("❌ Verification error:", error);
+    toast.error(
+      error.response?.data?.message || "Invalid OTP. Please try again."
+    );
   } finally {
     setIsLoading(false);
   }
