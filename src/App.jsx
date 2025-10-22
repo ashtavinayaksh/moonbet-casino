@@ -16,6 +16,7 @@ import LoginSignup from "./components/LoginSignup/LoginSignup";
 import GamePage from "./pages/GamePage";
 import { ToastContainer, toast } from "react-toastify";
 import "./styles/toastify-custom.css"; // Your custom styles
+import AuthTest from "./pages/AuthTest";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -126,6 +127,7 @@ function App() {
             <Route path="bets" element={<Bets />} />
             <Route path="bet-history" element={<Bets />} />
             <Route path="game/:gameId" element={<GamePage />} />
+            <Route path="authtest" element={<AuthTest />} />
           </Route>
         </Routes>
       </AuthModalHandler>
