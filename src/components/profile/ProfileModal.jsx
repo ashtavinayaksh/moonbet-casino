@@ -39,7 +39,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
     }
   }, [isOpen, userData]);
 
-const fetchProfileData = async (setProfileData, userData) => {
+const fetchProfileData = async () => {
   try {
     const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
     const userId = userData?._id || storedUser.id;
