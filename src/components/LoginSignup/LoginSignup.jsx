@@ -96,15 +96,32 @@ const LoginSignup = ({
     setForgotPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const handleLoginSubmit = async () => {
+  const { email, password } = loginData;
+
+  // ✅ Validate email
+  if (!validateEmail(email)) {
+    toast.error("Please enter a valid email address.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
+  // ✅ Validate password length
+  if (password.length < 12 || password.length > 15) {
+    toast.error("Password must be between 12 and 15 characters.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
   try {
-    const { data } = await axios.post(
-      "/auth-service/api/auth/login",
-      loginData
-    );
+    const { data } = await axios.post("/auth-service/api/auth/login", loginData);
 
     if (data?.token) {
-      // ✅ Save only token and essential user fields
       localStorage.setItem("token", data.token);
       window.dispatchEvent(new Event("tokenChanged"));
 
@@ -119,10 +136,8 @@ const LoginSignup = ({
       toast.success("You have logged in successfully", {
         position: "top-right",
         autoClose: 3000,
-        closeOnClick: true,
       });
 
-      // ✅ Trigger login success callback
       setTimeout(() => {
         if (onLoginSuccess) onLoginSuccess(data);
       }, 500);
@@ -135,7 +150,7 @@ const LoginSignup = ({
   } catch (err) {
     console.error("Login error:", err);
     toast.error(
-      err.response?.data?.message || "Network error. Please try again.",
+      err.response?.data?.message || "Invalid credentials. Please try again.",
       {
         position: "top-right",
         autoClose: 3000,
@@ -144,7 +159,49 @@ const LoginSignup = ({
   }
 };
 
-const handleSignupSubmit = async () => {
+  const handleSignupSubmit = async () => {
+  const { email, username, password, confirmPassword, agreeTerms } = signupData;
+
+  if (!validateEmail(email)) {
+    toast.error("Please enter a valid email address.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
+  if (!username.trim()) {
+    toast.error("Username is required.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
+  if (password.length < 12 || password.length > 15) {
+    toast.error("Password must be between 12 and 15 characters.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    toast.error("Passwords do not match.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
+  if (!agreeTerms) {
+    toast.error("You must agree to the Terms and confirm you're 18+.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
+
   try {
     const { data } = await axios.post(
       "/auth-service/api/auth/register",
@@ -154,10 +211,6 @@ const handleSignupSubmit = async () => {
     toast.success("Account created successfully!", {
       position: "top-right",
       autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
     });
 
     setTimeout(() => {

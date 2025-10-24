@@ -1,5 +1,5 @@
 // src/components/settings/AccountSection.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const AccountSection = ({ userData, onUpdate }) => {
@@ -8,7 +8,16 @@ const AccountSection = ({ userData, onUpdate }) => {
     username: userData?.username || "",
     email: userData?.email || "",
   });
-  // console.log("user are:",userData);
+  // console.log("user data tech are:",userData);
+  useEffect(() => {
+  if (userData) {
+    setFormData({
+      username: userData.username || "",
+      email: userData.email || "",
+    });
+  }
+}, [userData]);
+
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
