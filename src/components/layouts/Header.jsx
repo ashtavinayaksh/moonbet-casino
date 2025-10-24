@@ -19,6 +19,27 @@ const Header = ({
   const location = useLocation();
   const walletDropdownRef = useRef(null);
 
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
+
+useEffect(() => {
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+    setHasToken(!!token);
+  };
+
+  // Watch for login/logout actions — custom event
+  window.addEventListener("tokenChanged", checkToken);
+
+  // Optional: also handle cross-tab changes
+  window.addEventListener("storage", checkToken);
+
+  return () => {
+    window.removeEventListener("tokenChanged", checkToken);
+    window.removeEventListener("storage", checkToken);
+  };
+}, []);
+
+
   // Add currencies data
   const currencies = [
     {
@@ -337,6 +358,7 @@ const Header = ({
 
           {/* Right Section - Balance, Coins, and Profile */}
           {/* Center Section - Balance and Coins */}
+          {hasToken && (
           <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
             {/* Balance Display with Dropdown */}
             <div
@@ -489,7 +511,7 @@ const Header = ({
                 />
               </span>
             </button>
-          </div>
+          </div>)}
 
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">

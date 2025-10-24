@@ -82,6 +82,7 @@ const handleSignupSuccess = (userData) => {
 
   const handleLogout = () => {
    localStorage.removeItem("token");
+   window.dispatchEvent(new Event("tokenChanged"));
   localStorage.removeItem("user");
   localStorage.removeItem("userId");
   localStorage.removeItem("username");

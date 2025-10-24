@@ -106,6 +106,7 @@ const LoginSignup = ({
     if (data?.token) {
       // ✅ Save only token and essential user fields
       localStorage.setItem("token", data.token);
+      window.dispatchEvent(new Event("tokenChanged"));
 
       if (data.user) {
         const { id, username, email, kycStatus } = data.user;
