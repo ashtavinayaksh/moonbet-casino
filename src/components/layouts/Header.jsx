@@ -74,67 +74,69 @@ useEffect(() => {
     {
       symbol: "BTC",
       name: "Bitcoin",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "₿",
       color: "bg-orange-400",
     },
     {
       symbol: "ETH",
       name: "Ethereum",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "Ξ",
       color: "bg-blue-500",
     },
     {
       symbol: "LTC",
       name: "Litecoin",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "Ł",
       color: "bg-blue-800",
     },
     {
       symbol: "USDT",
       name: "Tether",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "₮",
       color: "bg-green-500",
     },
     {
       symbol: "SOL",
       name: "Solana",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "◎",
       color: "bg-purple-500",
     },
     {
       symbol: "DOGE",
       name: "Dogecoin",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "Ð",
       color: "bg-yellow-500",
     },
     {
       symbol: "BCH",
       name: "Bitcoin Cash",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "฿",
       color: "bg-green-400",
     },
     {
       symbol: "XRP",
       name: "Ripple",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "✕",
       color: "bg-gray-600",
     },
     {
       symbol: "TRX",
       name: "Tron",
-      balance: "0.00000000",
+      balance: "0.00000",
       icon: "⟠",
       color: "bg-red-500",
     },
   ];
+  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Enhanced menu items with gradient colors
   const menuItems = [
@@ -359,14 +361,19 @@ useEffect(() => {
               >
                 {/* Coin logo */}
                 <img
-                  src="/icons/sol.svg"
-                  alt="Solana"
-                  className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                />
+  src={
+    selectedCurrency
+      ? `/node_modules/cryptocurrency-icons/svg/color/${selectedCurrency.symbol.toLowerCase()}.svg`
+      : "/icons/default-coin.svg"
+  }
+  alt={selectedCurrency?.name || "Currency"}
+  className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
+/>
+
 
                 {/* Balance text */}
                 <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                  0.00000
+                  {selectedCurrency.balance || 0.0000}
                 </span>
 
                 {/* Dropdown arrow */}
@@ -413,39 +420,55 @@ useEffect(() => {
                         />
                       </svg>
                       <input
-                        type="text"
-                        placeholder="Search Currencies"
-                        className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 
-                       rounded-lg focus:outline-none focus:border-green-500/50 
-                       text-xs sm:text-sm text-white placeholder-gray-400"
-                      />
+  type="text"
+  placeholder="Search Currencies"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 
+  rounded-lg focus:outline-none focus:border-green-500/50 
+  text-xs sm:text-sm text-white placeholder-gray-400"
+/>
+
                     </div>
                   </div>
 
                   <div className="max-h-60 sm:max-h-80 overflow-y-auto wallet-scrollbar">
-                    {currencies.map((currency) => (
-                      <div
-                        key={currency.symbol}
-                        className="flex items-center justify-between p-2 sm:p-3 hover:bg-white/5 
-                       cursor-pointer transition-all"
-                        onClick={() => setWalletDropdownOpen(false)}
-                      >
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <div
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} 
-                            flex items-center justify-center text-white text-xs sm:text-sm font-bold`}
-                          >
-                            {currency.icon}
-                          </div>
-                          <span className="text-white font-medium text-xs sm:text-sm">
-                            {currency.symbol}
-                          </span>
-                        </div>
-                        <span className="text-gray-400 font-mono text-xs sm:text-sm">
-                          {currency.balance}
-                        </span>
-                      </div>
-                    ))}
+{currencies
+  .filter((currency) =>
+    currency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    currency.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  .map((currency) => (
+  <div
+    key={currency.symbol}
+    onClick={() => {
+      setSelectedCurrency(currency);
+      setWalletDropdownOpen(false);
+    }}
+    className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
+      ${
+        selectedCurrency.symbol === currency.symbol
+          ? "bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 shadow-inner"
+          : "hover:bg-white/5 border border-transparent"
+      }`}
+  >
+    <div className="flex items-center gap-2 sm:gap-3">
+      <div
+        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} 
+        flex items-center justify-center text-white text-xs sm:text-sm font-bold`}
+      >
+        {currency.icon}
+      </div>
+      <span className="text-white font-medium text-xs sm:text-sm">
+        {currency.symbol}
+      </span>
+    </div>
+    <span className="text-gray-400 font-mono text-xs sm:text-sm">
+      {currency.balance}
+    </span>
+  </div>
+))}
+
                   </div>
 
                   <div className="p-2 sm:p-3 border-t border-white/10">
