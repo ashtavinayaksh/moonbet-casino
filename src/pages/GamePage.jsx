@@ -14,48 +14,94 @@ const GamePage = () => {
   const [loading, setLoading] = useState(true);
   const [isRealPlay, setIsRealPlay] = useState(true);
 
+  // Utility to toggle fullscreen
+const toggleFullScreen = (iframeRef) => {
+  const iframe = iframeRef.current;
+  if (!iframe) return;
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    iframe.requestFullscreen?.() ||
+      iframe.webkitRequestFullscreen?.() ||
+      iframe.mozRequestFullScreen?.() ||
+      iframe.msRequestFullscreen?.();
+  }
+};
+
+
   useEffect(() => {
-    const fetchGameUrl = async () => {
-      try {
-        // 🕹 Step 1: Fetch all games
-        const { data } = await axios.get("/wallet-service/api/games");
+  const fetchGameUrl = async () => {
+    try {
+      // 🕹 Step 1: Fetch all games
+      const { data } = await axios.get("/wallet-service/api/games");
 
-        const game = data?.games?.items?.find(
-          (g) => g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
-        );
+      const game = data?.games?.items?.find(
+        (g) =>
+          g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
+      );
 
-        if (!game) {
-          toast.error("Game not found!");
-          return;
-        }
-
-        setGameData(game);
-
-        // 🎮 Step 2: Initialize demo game
-        const { data: initData } = await axios.post(
-          `/wallet-service/api/games/${game.uuid}/init-demo`,
-          {
-            device: "desktop",
-            language: "en",
-            return_url: window.location.origin,
-          }
-        );
-
-        if (initData.success && initData.data?.url) {
-          setIframeUrl(initData.data.url);
-        } else {
-          throw new Error("Failed to initialize demo game");
-        }
-      } catch (error) {
-        console.error("❌ Error loading game:", error);
-        toast.error(error.response?.data?.message || error.message || "Unable to load game");
-      } finally {
-        setLoading(false);
+      if (!game) {
+        toast.error("Game not found!");
+        return;
       }
-    };
 
-    fetchGameUrl();
-  }, [gameId]);
+      setGameData(game);
+
+      // 🎮 Step 2: Initialize depending on play mode
+      let initUrl;
+      let payload;
+
+      if (isRealPlay) {
+        // Real Play payload
+        initUrl = `/wallet-service/api/games/${game.uuid}/init`;
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        payload = {
+          player_id: user.id || "68eb94c22a7983ea19b0bd6a",
+          player_name: user.username || "Guest Player",
+          currency: "USD",
+          device: "desktop",
+          language: "en",
+          email: user.email || "ashtavinayaksharma555@gmail.com",
+          return_url: `${window.location.origin}/game-return`,
+        };
+      } else {
+        // Fun Play payload
+        initUrl = `/wallet-service/api/games/${game.uuid}/init-demo`;
+        payload = {
+          device: "desktop",
+          language: "en",
+          return_url: window.location.origin,
+        };
+      }
+
+      const { data: initData } = await axios.post(initUrl, payload);
+
+      if (initData.success && initData.data?.url) {
+        setIframeUrl(initData.data.url);
+      } else {
+        throw new Error("Failed to initialize game session");
+      }
+    } catch (error) {
+      console.error("❌ Error loading game:", error);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to load game"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchGameUrl();
+}, [gameId, isRealPlay]);
+
+
+  useEffect(() => {
+  // Always scroll to the top when this page mounts or when a new game is loaded
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [gameId]);
+
 
   // useEffect(() => {
   //   const fetchGameUrl = async () => {
@@ -106,12 +152,32 @@ const GamePage = () => {
   // }, [gameId]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen text-white text-xl">
-        Loading Game...
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-black text-white text-xl">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+        className="text-transparent bg-clip-text bg-gradient-to-r from-[#F07730] via-[#EFD28E] to-[#F07730] text-2xl sm:text-3xl font-bold blur-[0.3px]"
+      >
+        {isRealPlay
+          ? "Loading for Real gamePlay..."
+          : "Loading for Fun Play..."}
+      </motion.div>
+
+      {/* Shimmer bar effect */}
+      <div className="mt-6 w-64 h-2 rounded-full bg-gradient-to-r from-[#F07730]/20 via-[#EFD28E]/30 to-[#F07730]/20 overflow-hidden">
+        <motion.div
+          className="h-full w-1/3 bg-gradient-to-r from-[#F07730] via-[#EFD28E] to-[#F07730]"
+          animate={{ x: ["-100%", "100%"] }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
+        />
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+
 
   if (!iframeUrl) {
     return (
@@ -123,15 +189,21 @@ const GamePage = () => {
 
   return (
     <div className="h-screen bg-black flex flex-col">
-      <div className="flex-1 flex items-center justify-center">
-        <iframe
-          ref={iframeRef}
-          src={iframeUrl}
-          className="w-full h-full border-none"
-          allowFullScreen
-          title={gameData?.name || "Game"}
-        />
-      </div>
+      <div className="iframe-wrapper" style={{
+  flex: 1,
+  overflowY: "auto",        // enables parent scroll
+  overflowX: "hidden",
+  position: "relative"
+}}>
+  <iframe
+    ref={iframeRef}
+    src={iframeUrl}
+    title={gameData?.name || "Game"}
+    className="w-full h-[88vh] border-none pointer-events-auto"
+    allowFullScreen
+  />
+</div>
+
       {/* Bottom Control Bar with Glassmorphism */}
         <div
           className="relative bg-white/5 backdrop-blur-xl border-t border-white/20"
@@ -175,72 +247,106 @@ const GamePage = () => {
             {/* Right Side - Control Buttons */}
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
 
-              {/* Screenshot Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-1.5 sm:p-2 md:p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all text-gray-300 hover:text-white backdrop-blur-sm border border-white/10"
-                title="Screenshot"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  className="sm:w-6 sm:h-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15l-5-5L5 21" />
-                </svg>
-              </motion.button>
+  {/* Screenshot Button */}
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="p-1.5 sm:p-2 md:p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all text-gray-300 hover:text-white backdrop-blur-sm border border-white/10"
+    title="Screenshot"
+  >
+    <svg
+      width="20"
+      height="20"
+      className="sm:w-6 sm:h-6"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <path d="M21 15l-5-5L5 21" />
+    </svg>
+  </motion.button>
 
-              {/* Divider - Hidden on small screens */}
-              <div className="hidden md:block w-px h-8 bg-white/30 mx-1 md:mx-2"></div>
+  {/* 🆕 Fullscreen Button */}
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => toggleFullScreen(iframeRef)}
+    className="p-1.5 sm:p-2 md:p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all text-gray-300 hover:text-white backdrop-blur-sm border border-white/10"
+    title="Fullscreen"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="sm:w-6 sm:h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 8V4h4M4 16v4h4m12-4v4h-4m4-12V4h-4"
+      />
+    </svg>
+  </motion.button>
 
-              {/* Play Mode Toggle */}
-              <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
-                <span className="hidden sm:inline text-[10px] sm:text-xs md:text-sm text-gray-400 font-medium">
-                  Fun Play
-                </span>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsRealPlay(!isRealPlay)}
-                  className={`relative w-10 h-5 sm:w-12 sm:h-6 md:w-14 md:h-7 rounded-full transition-all backdrop-blur-sm border ${
-                    isRealPlay
-                      ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/40 border-blue-400/50"
-                      : "bg-white/20 border-white/10"
-                  }`}
-                >
-                  <motion.div
-                    animate={{
-                      x: isRealPlay
-                        ? window.innerWidth < 640
-                          ? 20
-                          : window.innerWidth < 768
-                          ? 24
-                          : 28
-                        : 2,
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 30,
-                    }}
-                    className="absolute top-0.5 sm:top-1 w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 bg-white rounded-full shadow-lg"
-                  />
-                </motion.button>
-                <span
-                  className={`hidden text-[10px] sm:text-xs md:text-sm font-semibold ${
-                    isRealPlay ? "text-blue-400" : "text-gray-400"
-                  }`}
-                >
-                  Real Play
-                </span>
-              </div>
-            </div>
+  {/* Divider */}
+  <div className="hidden md:block w-px h-8 bg-white/30 mx-1 md:mx-2"></div>
+
+  {/* Play Mode Toggle */}
+  <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
+    <span
+      className={`text-[10px] sm:text-xs md:text-sm font-semibold transition-colors duration-300 ${
+        !isRealPlay ? "text-blue-400" : "text-gray-400"
+      }`}
+    >
+      Fun Play
+    </span>
+
+    <motion.button
+      whileTap={{ scale: 0.95 }}
+      onClick={() => {
+        setLoading(true);
+        setIsRealPlay(!isRealPlay);
+      }}
+      className={`relative w-12 h-6 sm:w-14 sm:h-7 md:w-16 md:h-8 rounded-full transition-all backdrop-blur-sm border ${
+        isRealPlay
+          ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/40 border-blue-400/50"
+          : "bg-white/20 border-white/10"
+      }`}
+    >
+      <motion.div
+        animate={{
+          x: isRealPlay
+            ? window.innerWidth < 640
+              ? 24
+              : window.innerWidth < 768
+              ? 28
+              : 32
+            : 2,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 30,
+        }}
+        className="absolute top-0.5 sm:top-1 w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5 bg-white rounded-full shadow-lg"
+      />
+    </motion.button>
+
+    <span
+      className={`text-[10px] sm:text-xs md:text-sm font-semibold transition-colors duration-300 ${
+        isRealPlay ? "text-blue-400" : "text-gray-400"
+      }`}
+    >
+      Real Play
+    </span>
+  </div>
+</div>
+
           </div>
         </div>
     </div>
