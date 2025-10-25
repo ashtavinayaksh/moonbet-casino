@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import EmailVerificationPopup from "./EmailVerificationPopup";
+import TwoFactorAuthPopup from "./TwoFactorAuthPopup";
 import api from "../../api/axios";
 import axios from "axios";
 
@@ -24,25 +25,32 @@ const SecuritySection = ({
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [showTwoFactorPopup, setShowTwoFactorPopup] = useState(false);
   const [showEmailVerificationPopup, setShowEmailVerificationPopup] =
     useState(false);
   console.log("emailVerified are:", emailVerified);
 
   // Handle 2FA toggle with API call
   const handle2FAToggle = async () => {
-    setEnable2FA(!enable2FA);
-    setIs2FAUpdating(true);
+  // User is turning 2FA ON
+  if (!enable2FA) {
+    setShowTwoFactorPopup(true);
+    return; // Wait until user finishes the popup flow
+  }
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      // Add your actual API call here
-    } catch (error) {
-      setEnable2FA(enable2FA);
-      console.error("Failed to update 2FA setting:", error);
-    } finally {
-      setIs2FAUpdating(false);
-    }
-  };
+  // User is turning 2FA OFF
+  setIs2FAUpdating(true);
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setEnable2FA(false);
+    toast.info("Two-Factor Authentication disabled");
+  } catch (error) {
+    console.error("Failed to disable 2FA:", error);
+    toast.error("Failed to disable 2FA. Please try again.");
+  } finally {
+    setIs2FAUpdating(false);
+  }
+};
 
   // Toggle Switch Component
   const ToggleSwitch = ({
@@ -520,10 +528,13 @@ const PasswordField = React.memo(function PasswordField({
               </p>
             </div>
             <ToggleSwitch
-              enabled={enable2FA}
-              onChange={handle2FAToggle}
-              isLoading={is2FAUpdating}
-            />
+  enabled={enable2FA}
+  onChange={() => {
+    if (!enable2FA) setShowTwoFactorPopup(true);
+    else handle2FAToggle();
+  }}
+  isLoading={is2FAUpdating}
+/>
           </div>
         </div>
       </div>
@@ -536,6 +547,20 @@ const PasswordField = React.memo(function PasswordField({
         userEmail={userData.email}
         resendCooldown={60}
       />
+      {/* Two Factor Auth Popup */}
+<TwoFactorAuthPopup
+  isOpen={showTwoFactorPopup}
+  onClose={() => setShowTwoFactorPopup(false)}
+  onComplete={(success) => {
+    if (success) {
+      setEnable2FA(true);
+      setShowTwoFactorPopup(false);
+    }
+  }}
+  userEmail={userData?.email}
+  userId={userData?.id?.toLowerCase()}
+/>
+
     </motion.div>
   );
 };
