@@ -318,11 +318,16 @@ const fetchProfileData = async () => {
                     View Full Stats
                   </button>
                   <button
-                    onClick={() => navigate("/settings")}
-                    className="flex-1 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
-                  >
-                    Edit Profile
-                  </button>
+  onClick={(e) => {
+    e.stopPropagation();     
+    onClose?.();          
+    navigate("/settings");      
+  }}
+  className="flex-1 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
+>
+  Edit Profile
+</button>
+
                 </div>
               </div>
             </div>

@@ -55,6 +55,7 @@ const Settings = () => {
         console.log("User profile:", data);
 
         setUserData({
+          id: data._id?.toUpperCase() || "ayrtykhvb1",
           username: data.username || "",
           email: data.email || "",
           displayName: data.displayName || "",
@@ -214,7 +215,7 @@ const Settings = () => {
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-gray-400 text-sm">Public ID:</span>
             <code className="text-white font-mono text-xs md:text-sm bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 break-all">
-              {userData.publicId}
+              {userData.id}
             </code>
             <button
               onClick={handleCopy}
