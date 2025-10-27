@@ -36,36 +36,36 @@ const TwoFactorAuthPopup = ({
    *  STEP 1: Enable 2FA -> get QR + secret
    *  ----------------------------- */
   const fetchTwoFactorData = async () => {
-    try {
-      setIsLoading(true);
-      const { data } = await axios.post(
-        "/auth-service/api/auth/enable-2fa",
-        { userId }
-      );
+  try {
+    setIsLoading(true);
 
-      // Expecting something like: { secret: "BASE32SECRET", qr: "data:image/png;base64,..." }
-      if (!data) throw new Error("Invalid backend response");
+    const { data } = await axios.post("/auth-service/api/auth/enable-2fa", { userId });
 
-      if (data.qr) {
-        // Backend already returns QR as image
-        setQrCodeUrl(data.qr.startsWith("data:")
-          ? data.qr
-          : `data:image/png;base64,${data.qr}`);
-      } else if (data.qrCodeUrl) {
-        setQrCodeUrl(data.qrCodeUrl);
-      }
+    console.log("Backend 2FA Response:", data);
 
-      if (data.secret) setSecretKey(data.secret);
+    // ✅ These are the actual fields returned by your backend
+    const qrDataUrl = data.qrCodeDataUrl;
+    const secret = data.secret;
 
-      toast.success("Scan the QR code with your Authenticator app!");
-    } catch (err) {
-      console.error("2FA setup error:", err);
-      toast.error("Failed to initialize Two-Factor setup");
-      onClose();
-    } finally {
-      setIsLoading(false);
+    if (!qrDataUrl || !secret) {
+      throw new Error("Missing QR code or secret in backend response");
     }
-  };
+
+    // ✅ Set them directly
+    setQrCodeUrl(qrDataUrl);
+    setSecretKey(secret);
+
+    console.log("✅ QR Loaded:", qrDataUrl.substring(0, 60) + "...");
+    toast.success("Scan this QR code with your Authenticator app!");
+  } catch (err) {
+    console.error("❌ 2FA setup error:", err);
+    toast.error("Failed to generate Two-Factor QR code");
+    onClose();
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   /** -----------------------------
    *  STEP 2: Verify token

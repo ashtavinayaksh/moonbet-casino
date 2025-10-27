@@ -1,6 +1,6 @@
 // src/pages/GamePage.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../api/axios";
@@ -8,11 +8,12 @@ import axios from "axios";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
+  const navigate = useNavigate();
   const iframeRef = useRef(null);
   const [gameData, setGameData] = useState(null);
   const [iframeUrl, setIframeUrl] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isRealPlay, setIsRealPlay] = useState(true);
+  const [isRealPlay, setIsRealPlay] = useState(false);
 
   // Utility to toggle fullscreen
 const toggleFullScreen = (iframeRef) => {
@@ -52,9 +53,16 @@ const toggleFullScreen = (iframeRef) => {
       let payload;
 
       if (isRealPlay) {
+        const token = localStorage.getItem("token");
+          const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+          if (!token || !user?.id) {
+            toast.warning("Please log in to play for real money!");
+            navigate("/"); // ✅ redirect to homepage
+            return;
+          }
         // Real Play payload
         initUrl = `/wallet-service/api/games/${game.uuid}/init`;
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
         payload = {
           player_id: user.id || "68eb94c22a7983ea19b0bd6a",
           player_name: user.username || "Guest Player",
@@ -94,13 +102,58 @@ const toggleFullScreen = (iframeRef) => {
   };
 
   fetchGameUrl();
-}, [gameId, isRealPlay]);
+}, [gameId, isRealPlay, navigate]);
 
 
   useEffect(() => {
   // Always scroll to the top when this page mounts or when a new game is loaded
   window.scrollTo({ top: 0, behavior: "smooth" });
 }, [gameId]);
+
+useEffect(() => {
+  if (!isRealPlay) return;
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  if (!user?.id) return;
+
+  const fetchBalance = async () => {
+    try {
+      const res = await axios.get(`/wallet-service/api/wallet/${user.id}/balance`);
+      if (res.data?.balance !== undefined) {
+        console.log("💰 Updated balance:", res.data.balance);
+        localStorage.setItem("balance", res.data.balance);
+        // Optionally update a global balance state if you use Recoil/Context
+      }
+    } catch (err) {
+      console.error("❌ Error fetching balance:", err.message);
+    }
+  };
+
+  // fetch immediately + every 10s
+  fetchBalance();
+  const interval = setInterval(fetchBalance, 10000);
+
+  return () => clearInterval(interval);
+}, [isRealPlay]);
+
+
+const handlePlayToggle = () => {
+    if (isRealPlay) {
+      // switching back to Fun play
+      setLoading(true);
+      setIsRealPlay(false);
+    } else {
+      // switching to Real play → check login first
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.warning("Please log in to play for real money!");
+        navigate("/");
+        return;
+      }
+      setLoading(true);
+      setIsRealPlay(true);
+    }
+  };
 
 
   // useEffect(() => {
@@ -308,10 +361,7 @@ const toggleFullScreen = (iframeRef) => {
 
     <motion.button
       whileTap={{ scale: 0.95 }}
-      onClick={() => {
-        setLoading(true);
-        setIsRealPlay(!isRealPlay);
-      }}
+      onClick={handlePlayToggle}
       className={`relative w-12 h-6 sm:w-14 sm:h-7 md:w-16 md:h-8 rounded-full transition-all backdrop-blur-sm border ${
         isRealPlay
           ? "bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/40 border-blue-400/50"
