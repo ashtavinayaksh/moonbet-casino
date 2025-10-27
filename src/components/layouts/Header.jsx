@@ -7,6 +7,7 @@ import { OrbitControls, Float } from "@react-three/drei";
 import WalletSettingsModal from "../WalletSettingsModal";
 import WalletModal from "../WalletModal";
 import LoginTrigger from "../LoginSignup/LoginTrigger";
+import axios from "axios";
 
 // 3D Rotating Coin Component
 const RotatingCoin = () => {
@@ -45,6 +46,10 @@ const Header = ({
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [walletSettingsOpen, setWalletSettingsOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [currencies, setCurrencies] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [walletBalance, setWalletBalance] = useState("0.00");
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
   const location = useLocation();
   const walletDropdownRef = useRef(null);
@@ -69,74 +74,149 @@ useEffect(() => {
   };
 }, []);
 
+useEffect(() => {
+  const fetchWalletBalance = async () => {
+    try {
+      // Replace with dynamic user ID if available in localStorage later
+      const response = await axios.get(
+        "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
+      );
+
+      if (response.data && response.data.totalUsd) {
+        setWalletBalance(response.data.totalUsd.toFixed(2));
+      } else {
+        setWalletBalance("0.00");
+      }
+    } catch (error) {
+      console.error("Failed to fetch wallet balance:", error);
+      setWalletBalance("0.00");
+    }
+  };
+
+  if (hasToken) {
+    fetchWalletBalance();
+  }
+}, [hasToken]);
+
+
   // Currencies with neon colors
-  const currencies = [
-    {
-      symbol: "BTC",
-      name: "Bitcoin",
-      balance: "0.00000",
-      icon: "₿",
-      color: "bg-orange-400",
-    },
-    {
-      symbol: "ETH",
-      name: "Ethereum",
-      balance: "0.00000",
-      icon: "Ξ",
-      color: "bg-blue-500",
-    },
-    {
-      symbol: "LTC",
-      name: "Litecoin",
-      balance: "0.00000",
-      icon: "Ł",
-      color: "bg-blue-800",
-    },
-    {
-      symbol: "USDT",
-      name: "Tether",
-      balance: "0.00000",
-      icon: "₮",
-      color: "bg-green-500",
-    },
-    {
-      symbol: "SOL",
-      name: "Solana",
-      balance: "0.00000",
-      icon: "◎",
-      color: "bg-purple-500",
-    },
-    {
-      symbol: "DOGE",
-      name: "Dogecoin",
-      balance: "0.00000",
-      icon: "Ð",
-      color: "bg-yellow-500",
-    },
-    {
-      symbol: "BCH",
-      name: "Bitcoin Cash",
-      balance: "0.00000",
-      icon: "฿",
-      color: "bg-green-400",
-    },
-    {
-      symbol: "XRP",
-      name: "Ripple",
-      balance: "0.00000",
-      icon: "✕",
-      color: "bg-gray-600",
-    },
-    {
-      symbol: "TRX",
-      name: "Tron",
-      balance: "0.00000",
-      icon: "⟠",
-      color: "bg-red-500",
-    },
-  ];
-  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const currencies = [
+  //   {
+  //     symbol: "BTC",
+  //     name: "Bitcoin",
+  //     balance: "0.00000",
+  //     icon: "₿",
+  //     color: "bg-orange-400",
+  //   },
+  //   {
+  //     symbol: "ETH",
+  //     name: "Ethereum",
+  //     balance: "0.00000",
+  //     icon: "Ξ",
+  //     color: "bg-blue-500",
+  //   },
+  //   {
+  //     symbol: "LTC",
+  //     name: "Litecoin",
+  //     balance: "0.00000",
+  //     icon: "Ł",
+  //     color: "bg-blue-800",
+  //   },
+  //   {
+  //     symbol: "USDT",
+  //     name: "Tether",
+  //     balance: "0.00000",
+  //     icon: "₮",
+  //     color: "bg-green-500",
+  //   },
+  //   {
+  //     symbol: "SOL",
+  //     name: "Solana",
+  //     balance: "0.00000",
+  //     icon: "◎",
+  //     color: "bg-purple-500",
+  //   },
+  //   {
+  //     symbol: "DOGE",
+  //     name: "Dogecoin",
+  //     balance: "0.00000",
+  //     icon: "Ð",
+  //     color: "bg-yellow-500",
+  //   },
+  //   {
+  //     symbol: "BCH",
+  //     name: "Bitcoin Cash",
+  //     balance: "0.00000",
+  //     icon: "฿",
+  //     color: "bg-green-400",
+  //   },
+  //   {
+  //     symbol: "XRP",
+  //     name: "Ripple",
+  //     balance: "0.00000",
+  //     icon: "✕",
+  //     color: "bg-gray-600",
+  //   },
+  //   {
+  //     symbol: "TRX",
+  //     name: "Tron",
+  //     balance: "0.00000",
+  //     icon: "⟠",
+  //     color: "bg-red-500",
+  //   },
+  // ];
+//   const [currencies, setCurrencies] = useState([]);
+// const [selectedCurrency, setSelectedCurrency] = useState(null);
+// const [searchQuery, setSearchQuery] = useState("");
+
+useEffect(() => {
+  const fetchCurrencies = async () => {
+    try {
+      const { data } = await axios.get(
+        "/wallet-service/api/wallet/coins"
+      );
+
+      // Map server data + assign color/icon dynamically
+      const colorMap = {
+        BTC: "bg-orange-400",
+        ETH: "bg-blue-500",
+        USDTTRC20: "bg-green-500",
+        SOL: "bg-purple-500",
+        BNBMAINNET: "bg-yellow-400",
+        XRP: "bg-gray-500",
+        ADA: "bg-blue-400",
+        DOGECOIN: "bg-yellow-500",
+        TRX: "bg-red-500",
+        LTC: "bg-blue-800",
+        DOT: "bg-pink-500",
+        MATICMAINNET: "bg-indigo-500",
+        AVAX: "bg-red-400",
+        XLM: "bg-cyan-400",
+        BCH: "bg-green-400",
+      };
+
+      const formatted = data.map((coin) => ({
+        ...coin,
+        color: colorMap[coin.symbol] || "bg-gray-700",
+        iconPath: `/node_modules/cryptocurrency-icons/svg/color/${coin.symbol
+          .replace("MAINNET", "")
+          .replace("TRC20", "")
+          .replace("COIN", "")
+          .toLowerCase()}.svg`,
+      }));
+
+      setCurrencies(formatted);
+      setSelectedCurrency(formatted[0]);
+    } catch (err) {
+      console.error("Error fetching currencies:", err);
+    }
+  };
+
+  fetchCurrencies();
+}, []);
+
+  // const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
+  // const [searchQuery, setSearchQuery] = useState("");
 
   // Enhanced menu items with gradient colors
   const menuItems = [
@@ -363,17 +443,16 @@ useEffect(() => {
                 <img
   src={
     selectedCurrency
-      ? `/node_modules/cryptocurrency-icons/svg/color/${selectedCurrency.symbol.toLowerCase()}.svg`
+      ? selectedCurrency.iconPath
       : "/icons/default-coin.svg"
   }
   alt={selectedCurrency?.name || "Currency"}
   className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
 />
 
-
                 {/* Balance text */}
                 <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                  {selectedCurrency.balance || 0.0000}
+                  ${walletBalance}
                 </span>
 
                 {/* Dropdown arrow */}
@@ -433,41 +512,54 @@ useEffect(() => {
                   </div>
 
                   <div className="max-h-60 sm:max-h-80 overflow-y-auto wallet-scrollbar">
-{currencies
-  .filter((currency) =>
-    currency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    currency.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+                  {currencies
+  .filter(
+    (currency) =>
+      currency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      currency.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   )
   .map((currency) => (
-  <div
-    key={currency.symbol}
-    onClick={() => {
-      setSelectedCurrency(currency);
-      setWalletDropdownOpen(false);
-    }}
-    className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
-      ${
-        selectedCurrency.symbol === currency.symbol
-          ? "bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 shadow-inner"
-          : "hover:bg-white/5 border border-transparent"
-      }`}
-  >
-    <div className="flex items-center gap-2 sm:gap-3">
-      <div
-        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} 
-        flex items-center justify-center text-white text-xs sm:text-sm font-bold`}
-      >
-        {currency.icon}
+    <div
+      key={currency.symbol}
+      onClick={() => {
+        setSelectedCurrency(currency);
+        setWalletDropdownOpen(false);
+      }}
+      className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
+        ${
+          selectedCurrency?.symbol === currency.symbol
+            ? "bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 shadow-inner"
+            : "hover:bg-white/5 border border-transparent"
+        }`}
+    >
+      <div className="flex items-center gap-2 sm:gap-3">
+        <div
+          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} flex items-center justify-center`}
+        >
+          <img
+            src={currency.iconPath}
+            alt={currency.name}
+            className="w-5 h-5 object-contain"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/icons/default-coin.svg";
+            }}
+          />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-white font-medium text-xs sm:text-sm">
+            {currency.name}
+          </span>
+          <span className="text-gray-400 text-[11px] sm:text-xs">
+            {currency.symbol}
+          </span>
+        </div>
       </div>
-      <span className="text-white font-medium text-xs sm:text-sm">
-        {currency.symbol}
+      <span className="text-gray-400 font-mono text-xs sm:text-sm">
+        0.00000
       </span>
     </div>
-    <span className="text-gray-400 font-mono text-xs sm:text-sm">
-      {currency.balance}
-    </span>
-  </div>
-))}
+  ))}
 
                   </div>
 
