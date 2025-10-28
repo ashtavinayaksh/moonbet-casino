@@ -170,53 +170,75 @@ useEffect(() => {
 // const [searchQuery, setSearchQuery] = useState("");
 
 useEffect(() => {
-  const fetchCurrencies = async () => {
+  const fetchWalletData = async () => {
     try {
-      const { data } = await axios.get(
-        "/wallet-service/api/wallet/coins"
-      );
+      const [coinsRes, balanceRes] = await Promise.all([
+        axios.get("/wallet-service/api/wallet/coins"),
+        axios.get("/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"),
+      ]);
 
-      // Map server data + assign color/icon dynamically
+      const coins = coinsRes.data || [];
+      const walletBalances = balanceRes.data?.balances || [];
+      const selectedCurrency = localStorage.getItem("preferredCurrency") || "USD";
+      // 🔹 Fetch conversion rate
+      const fxRes = await axios.get(
+        `https://open.er-api.com/v6/latest/USD`
+      );
+      const rate = fxRes.data?.rates?.[selectedCurrency] || 1;
+      const symbols = { USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", BRL: "R$" };
+
+      const convertedTotal = balanceRes.data?.totalUsd
+        ? (balanceRes.data.totalUsd * rate).toFixed(2)
+        : "0.00";
+
       const colorMap = {
         BTC: "bg-orange-400",
         ETH: "bg-blue-500",
-        USDTTRC20: "bg-green-500",
+        USDT: "bg-green-500",
         SOL: "bg-purple-500",
-        BNBMAINNET: "bg-yellow-400",
+        BNB: "bg-yellow-400",
         XRP: "bg-gray-500",
         ADA: "bg-blue-400",
-        DOGECOIN: "bg-yellow-500",
+        DOGE: "bg-yellow-500",
         TRX: "bg-red-500",
         LTC: "bg-blue-800",
         DOT: "bg-pink-500",
-        MATICMAINNET: "bg-indigo-500",
+        MATIC: "bg-indigo-500",
         AVAX: "bg-red-400",
         XLM: "bg-cyan-400",
         BCH: "bg-green-400",
       };
 
-      const formatted = data.map((coin) => ({
-        ...coin,
-        color: colorMap[coin.symbol] || "bg-gray-700",
-        iconPath: `/node_modules/cryptocurrency-icons/svg/color/${coin.symbol
-          .replace("MAINNET", "")
-          .replace("TRC20", "")
-          .replace("COIN", "")
-          .toLowerCase()}.svg`,
-      }));
+      const merged = coins.map((coin) => {
+        const match = walletBalances.find(
+          (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
+        );
+        return {
+          ...coin,
+          color: colorMap[coin.symbol] || "bg-gray-700",
+          balance: match ? match.amount.toFixed(5) : "0.00000",
+          iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol
+            .replace("MAINNET", "")
+            .replace("TRC20", "")
+            .replace("COIN", "")
+            .toLowerCase()}.svg`,
+        };
+      });
 
-      setCurrencies(formatted);
-      setSelectedCurrency(formatted[0]);
+      setCurrencies(merged);
+      setSelectedCurrency(merged[0]);
+      setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
     } catch (err) {
-      console.error("Error fetching currencies:", err);
+      console.error("Error fetching wallet or coins:", err);
+      setWalletBalance("0.00 USD");
     }
   };
 
-  fetchCurrencies();
-}, []);
+  if (hasToken) fetchWalletData();
+  window.addEventListener("currencyChanged", fetchWalletData);
+  return () => window.removeEventListener("currencyChanged", fetchWalletData);
+}, [hasToken]);
 
-  // const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
-  // const [searchQuery, setSearchQuery] = useState("");
 
   // Enhanced menu items with gradient colors
   const menuItems = [
@@ -452,7 +474,7 @@ useEffect(() => {
 
                 {/* Balance text */}
                 <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                  ${walletBalance}
+                  {walletBalance}
                 </span>
 
                 {/* Dropdown arrow */}
@@ -556,7 +578,7 @@ useEffect(() => {
         </div>
       </div>
       <span className="text-gray-400 font-mono text-xs sm:text-sm">
-        0.00000
+        {currency.balance}
       </span>
     </div>
   ))}

@@ -177,15 +177,21 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  // Handle currency change
-                  console.log("Currency changed to:", selectedCurrency);
-                  onClose();
-                }}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl transition-all transform hover:scale-105"
-              >
-                Save Changes
-              </button>
+  onClick={() => {
+    // Save preference globally
+    localStorage.setItem("preferredCurrency", selectedCurrency);
+
+    // Notify Header or others to re-fetch / convert
+    window.dispatchEvent(new Event("currencyChanged"));
+
+    console.log("Currency changed to:", selectedCurrency);
+    onClose();
+  }}
+  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl transition-all transform hover:scale-105"
+>
+  Save Changes
+</button>
+
             </div>
           </div>
         </div>
