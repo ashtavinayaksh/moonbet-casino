@@ -66,7 +66,7 @@ const toggleFullScreen = (iframeRef) => {
         payload = {
           player_id: user.id || "68eb94c22a7983ea19b0bd6a",
           player_name: user.username || "Guest Player",
-          currency: "SOL",
+          currency: "USD",
           device: "desktop",
           language: "en",
           email: user.email || "ashtavinayaksharma555@gmail.com",
