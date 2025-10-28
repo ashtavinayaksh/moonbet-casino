@@ -19,7 +19,7 @@ const Homepage = () => {
       <HomeGamesSection />
       {/* <CasinoWheel2 /> */}
       <SlotsSection />
-      <GameBetsSection userId="user123" />
+      <GameBetsSection />
       <HomeFAQSection />
     </div>
   );
