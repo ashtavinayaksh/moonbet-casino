@@ -56,48 +56,47 @@ const Header = ({
 
   const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
 
-useEffect(() => {
-  const checkToken = () => {
-    const token = localStorage.getItem("token");
-    setHasToken(!!token);
-  };
+  useEffect(() => {
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      setHasToken(!!token);
+    };
 
-  // Watch for login/logout actions — custom event
-  window.addEventListener("tokenChanged", checkToken);
+    // Watch for login/logout actions — custom event
+    window.addEventListener("tokenChanged", checkToken);
 
-  // Optional: also handle cross-tab changes
-  window.addEventListener("storage", checkToken);
+    // Optional: also handle cross-tab changes
+    window.addEventListener("storage", checkToken);
 
-  return () => {
-    window.removeEventListener("tokenChanged", checkToken);
-    window.removeEventListener("storage", checkToken);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("tokenChanged", checkToken);
+      window.removeEventListener("storage", checkToken);
+    };
+  }, []);
 
-useEffect(() => {
-  const fetchWalletBalance = async () => {
-    try {
-      // Replace with dynamic user ID if available in localStorage later
-      const response = await axios.get(
-        "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
-      );
+  useEffect(() => {
+    const fetchWalletBalance = async () => {
+      try {
+        // Replace with dynamic user ID if available in localStorage later
+        const response = await axios.get(
+          "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
+        );
 
-      if (response.data && response.data.totalUsd) {
-        setWalletBalance(response.data.totalUsd.toFixed(2));
-      } else {
+        if (response.data && response.data.totalUsd) {
+          setWalletBalance(response.data.totalUsd.toFixed(2));
+        } else {
+          setWalletBalance("0.00");
+        }
+      } catch (error) {
+        console.error("Failed to fetch wallet balance:", error);
         setWalletBalance("0.00");
       }
-    } catch (error) {
-      console.error("Failed to fetch wallet balance:", error);
-      setWalletBalance("0.00");
+    };
+
+    if (hasToken) {
+      fetchWalletBalance();
     }
-  };
-
-  if (hasToken) {
-    fetchWalletBalance();
-  }
-}, [hasToken]);
-
+  }, [hasToken]);
 
   // Currencies with neon colors
   // const currencies = [
@@ -165,95 +164,104 @@ useEffect(() => {
   //     color: "bg-red-500",
   //   },
   // ];
-//   const [currencies, setCurrencies] = useState([]);
-// const [selectedCurrency, setSelectedCurrency] = useState(null);
-// const [searchQuery, setSearchQuery] = useState("");
+  //   const [currencies, setCurrencies] = useState([]);
+  // const [selectedCurrency, setSelectedCurrency] = useState(null);
+  // const [searchQuery, setSearchQuery] = useState("");
 
-useEffect(() => {
-  const fetchWalletData = async () => {
-    try {
-      const [coinsRes, balanceRes] = await Promise.all([
-        axios.get("/wallet-service/api/wallet/coins"),
-        axios.get("/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"),
-      ]);
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      try {
+        const [coinsRes, balanceRes] = await Promise.all([
+          axios.get("/wallet-service/api/wallet/coins"),
+          axios.get(
+            "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
+          ),
+        ]);
 
-      const coins = coinsRes.data || [];
-      const walletBalances = balanceRes.data?.balances || [];
-      const selectedCurrency = localStorage.getItem("preferredCurrency") || "USD";
-      // 🔹 Fetch conversion rate
-      const fxRes = await axios.get(
-        `https://open.er-api.com/v6/latest/USD`
-      );
-      const rate = fxRes.data?.rates?.[selectedCurrency] || 1;
-      const symbols = { USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", BRL: "R$" };
-
-      const convertedTotal = balanceRes.data?.totalUsd
-        ? (balanceRes.data.totalUsd * rate).toFixed(2)
-        : "0.00";
-
-      const colorMap = {
-        BTC: "bg-orange-400",
-        ETH: "bg-blue-500",
-        USDT: "bg-green-500",
-        SOL: "bg-purple-500",
-        BNB: "bg-yellow-400",
-        XRP: "bg-gray-500",
-        ADA: "bg-blue-400",
-        DOGE: "bg-yellow-500",
-        TRX: "bg-red-500",
-        LTC: "bg-blue-800",
-        DOT: "bg-pink-500",
-        MATIC: "bg-indigo-500",
-        AVAX: "bg-red-400",
-        XLM: "bg-cyan-400",
-        BCH: "bg-green-400",
-      };
-
-      const merged = coins.map((coin) => {
-        const match = walletBalances.find(
-          (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
-        );
-        return {
-          ...coin,
-          color: colorMap[coin.symbol] || "bg-gray-700",
-          balance: match ? match.amount.toFixed(5) : "0.00000",
-          iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol
-            .replace("MAINNET", "")
-            .replace("TRC20", "")
-            .replace("COIN", "")
-            .toLowerCase()}.svg`,
+        const coins = coinsRes.data || [];
+        const walletBalances = balanceRes.data?.balances || [];
+        const selectedCurrency =
+          localStorage.getItem("preferredCurrency") || "USD";
+        // 🔹 Fetch conversion rate
+        const fxRes = await axios.get(`https://open.er-api.com/v6/latest/USD`);
+        const rate = fxRes.data?.rates?.[selectedCurrency] || 1;
+        const symbols = {
+          USD: "$",
+          EUR: "€",
+          GBP: "£",
+          CAD: "CA$",
+          AUD: "A$",
+          BRL: "R$",
         };
-      });
 
-      setCurrencies(merged);
-      setSelectedCurrency(merged[0]);
-      setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
-    } catch (err) {
-      console.error("Error fetching wallet or coins:", err);
-      setWalletBalance("0.00 USD");
-    }
-  };
+        const convertedTotal = balanceRes.data?.totalUsd
+          ? (balanceRes.data.totalUsd * rate).toFixed(2)
+          : "0.00";
 
-  if (hasToken) fetchWalletData();
-  window.addEventListener("currencyChanged", fetchWalletData);
-  return () => window.removeEventListener("currencyChanged", fetchWalletData);
-}, [hasToken]);
+        const colorMap = {
+          BTC: "bg-orange-400",
+          ETH: "bg-blue-500",
+          USDT: "bg-green-500",
+          SOL: "bg-purple-500",
+          BNB: "bg-yellow-400",
+          XRP: "bg-gray-500",
+          ADA: "bg-blue-400",
+          DOGE: "bg-yellow-500",
+          TRX: "bg-red-500",
+          LTC: "bg-blue-800",
+          DOT: "bg-pink-500",
+          MATIC: "bg-indigo-500",
+          AVAX: "bg-red-400",
+          XLM: "bg-cyan-400",
+          BCH: "bg-green-400",
+        };
 
+        const merged = coins.map((coin) => {
+          const match = walletBalances.find(
+            (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
+          );
+          return {
+            ...coin,
+            color: colorMap[coin.symbol] || "bg-gray-700",
+            balance: match ? match.amount.toFixed(5) : "0.00000",
+            iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol
+              .replace("MAINNET", "")
+              .replace("TRC20", "")
+              .replace("COIN", "")
+              .toLowerCase()}.svg`,
+          };
+        });
+
+        setCurrencies(merged);
+        setSelectedCurrency(merged[0]);
+        setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
+      } catch (err) {
+        console.error("Error fetching wallet or coins:", err);
+        setWalletBalance("0.00 USD");
+      }
+    };
+
+    if (hasToken) fetchWalletData();
+    window.addEventListener("currencyChanged", fetchWalletData);
+    return () => window.removeEventListener("currencyChanged", fetchWalletData);
+  }, [hasToken]);
 
   // Enhanced menu items with gradient colors
   const menuItems = [
     {
       id: "home",
       label: "Home",
-      icon: "🏠",
+      icon: "/icons/home.svg",
       path: "/",
-      gradient: "from-blue-500 to-purple-500",
+      className:
+        "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
     },
     {
       id: "games",
       label: "Games",
       icon: "🎮",
-      gradient: "from-pink-500 to-purple-500",
+      className:
+        "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       submenu: [
         { path: "/game/honeypot", label: "HoneyPot", icon: "🍯" },
         { path: "/game/coinflip", label: "CoinFlip", icon: "🪙" },
@@ -269,7 +277,8 @@ useEffect(() => {
       id: "casino",
       label: "Casino",
       icon: "🎰",
-      gradient: "from-yellow-500 to-orange-500",
+      className:
+        "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       submenu: [
         { path: "/casino/slots", label: "Slots", icon: "🎰" },
         { path: "/casino/blackjack", label: "Blackjack", icon: "♠️" },
@@ -278,35 +287,36 @@ useEffect(() => {
         { path: "/casino/baccarat", label: "Baccarat", icon: "👑" },
       ],
     },
-    {
-      id: "promotions",
-      label: "Promotions",
-      icon: "🎁",
-      path: "/promotions",
-      gradient: "from-green-500 to-teal-500",
-    },
-    {
-      id: "vip",
-      label: "VIP Club",
-      icon: "💎",
-      path: "/vip",
-      gradient: "from-purple-500 to-pink-500",
-    },
-    {
-      id: "chat",
-      label: "Live Chat",
-      icon: "💬",
-      path: "/chat",
-      gradient: "from-blue-500 to-cyan-500",
-    },
+
+    // {
+    //   id: "promotions",
+    //   label: "Promotions",
+    //   icon: "🎁",
+    //   path: "/promotions",
+    //   gradient: "from-green-500 to-teal-500",
+    // },
+    // {
+    //   id: "vip",
+    //   label: "VIP Club",
+    //   icon: "💎",
+    //   path: "/vip",
+    //   gradient: "from-purple-500 to-pink-500",
+    // },
+    // {
+    //   id: "chat",
+    //   label: "Live Chat",
+    //   icon: "💬",
+    //   path: "/chat",
+    //   gradient: "from-blue-500 to-cyan-500",
+    // },
   ];
 
   const accountItems = [
-    { path: "/profile", label: "My Profile", icon: "👤" },
-    { path: "/wallet", label: "Wallet", icon: "💳" },
+    { path: "#", label: "My Profile", icon: "👤" },
+    { path: "#", label: "Wallet", icon: "💳" },
     { path: "/bet-history", label: "Bet History", icon: "📊" },
     { path: "/transactions", label: "Transactions", icon: "💸" },
-    { path: "/bonuses", label: "My Bonuses", icon: "🎁" },
+    // { path: "/bonuses", label: "My Bonuses", icon: "🎁" },
     { path: "/settings", label: "Settings", icon: "⚙️" },
   ];
 
@@ -448,236 +458,264 @@ useEffect(() => {
           {/* Right Section - Balance, Coins, and Profile */}
           {/* Center Section - Balance and Coins */}
           {hasToken && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
-            {/* Balance Display with Dropdown */}
-            <div
-              className="relative flex justify-center sm:justify-start"
-              ref={walletDropdownRef}
-            >
-              {/* Wallet Button */}
-              <button
-                onClick={() => setWalletDropdownOpen(!walletDropdownOpen)}
-                className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 
+            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
+              {/* Balance Display with Dropdown */}
+              <div
+                className="relative flex justify-center sm:justify-start"
+                ref={walletDropdownRef}
+              >
+                {/* Wallet Button */}
+                <button
+                  onClick={() => setWalletDropdownOpen(!walletDropdownOpen)}
+                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 
                rounded-xl backdrop-blur-[2px] bg-[#000]/80 text-white 
                transition-all duration-300 max-w-[150px] sm:max-w-none"
-              >
-                {/* Coin logo */}
-                <img
-  src={
-    selectedCurrency
-      ? selectedCurrency.iconPath
-      : "/icons/default-coin.svg"
-  }
-  alt={selectedCurrency?.name || "Currency"}
-  className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
-/>
-
-                {/* Balance text */}
-                <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                  {walletBalance}
-                </span>
-
-                {/* Dropdown arrow */}
-                <svg
-                  className={`w-3 sm:w-4 h-3 sm:h-4 text-white/70 transition-transform duration-200 ${
-                    walletDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                  {/* Coin logo */}
+                  <img
+                    src={
+                      selectedCurrency
+                        ? selectedCurrency.iconPath
+                        : "/icons/default-coin.svg"
+                    }
+                    alt={selectedCurrency?.name || "Currency"}
+                    className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
                   />
-                </svg>
-              </button>
 
-              {/* Wallet Dropdown */}
-              {walletDropdownOpen && (
-                <div
-                  className="walletbtnnn absolute left-[80%] sm:left-1/2 md:left-1/2 -translate-x-1/2 mt-10 w-[90vw] sm:w-80 bg-[#1A1D24]/95
+                  {/* Balance text */}
+                  <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
+                    {walletBalance}
+                  </span>
+
+                  {/* Dropdown arrow */}
+                  <svg
+                    className={`w-3 sm:w-4 h-3 sm:h-4 text-white/70 transition-transform duration-200 ${
+                      walletDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Wallet Dropdown */}
+                {walletDropdownOpen && (
+                  <div
+                    className="walletbtnnn absolute left-[80%] sm:left-1/2 md:left-1/2 -translate-x-1/2 mt-10 w-[90vw] sm:w-80 bg-[#1A1D24]/95
                  border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
-                  style={{
-                    backdropFilter: "blur(20px)",
-                    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8)",
-                  }}
-                >
-                  <div className="p-3 sm:p-4 border-b border-white/10">
-                    <div className="relative">
-                      <svg
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                      <input
-  type="text"
-  placeholder="Search Currencies"
-  value={searchQuery}
-  onChange={(e) => setSearchQuery(e.target.value)}
-  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 
+                    style={{
+                      backdropFilter: "blur(20px)",
+                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    <div className="p-3 sm:p-4 border-b border-white/10">
+                      <div className="relative">
+                        <svg
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                        <input
+                          type="text"
+                          placeholder="Search Currencies"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 
   rounded-lg focus:outline-none focus:border-green-500/50 
   text-xs sm:text-sm text-white placeholder-gray-400"
-/>
-
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="max-h-60 sm:max-h-80 overflow-y-auto wallet-scrollbar">
-                  {currencies
-  .filter(
-    (currency) =>
-      currency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      currency.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  .map((currency) => (
-    <div
-      key={currency.symbol}
-      onClick={() => {
-        setSelectedCurrency(currency);
-        setWalletDropdownOpen(false);
-      }}
-      className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
+                    <div className="max-h-60 sm:max-h-80 overflow-y-auto wallet-scrollbar">
+                      {currencies
+                        .filter(
+                          (currency) =>
+                            currency.name
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase()) ||
+                            currency.symbol
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase())
+                        )
+                        .map((currency) => (
+                          <div
+                            key={currency.symbol}
+                            onClick={() => {
+                              setSelectedCurrency(currency);
+                              setWalletDropdownOpen(false);
+                            }}
+                            className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
         ${
           selectedCurrency?.symbol === currency.symbol
             ? "bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 shadow-inner"
             : "hover:bg-white/5 border border-transparent"
         }`}
-    >
-      <div className="flex items-center gap-2 sm:gap-3">
-        <div
-          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} flex items-center justify-center`}
-        >
-          <img
-            src={currency.iconPath}
-            alt={currency.name}
-            className="w-5 h-5 object-contain"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/icons/default-coin.svg";
-            }}
-          />
-        </div>
-        <div className="flex flex-col">
-          <span className="text-white font-medium text-xs sm:text-sm">
-            {currency.name}
-          </span>
-          <span className="text-gray-400 text-[11px] sm:text-xs">
-            {currency.symbol}
-          </span>
-        </div>
-      </div>
-      <span className="text-gray-400 font-mono text-xs sm:text-sm">
-        {currency.balance}
-      </span>
-    </div>
-  ))}
+                          >
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div
+                                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} flex items-center justify-center`}
+                              >
+                                <img
+                                  src={currency.iconPath}
+                                  alt={currency.name}
+                                  className="w-5 h-5 object-contain"
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "/icons/default-coin.svg";
+                                  }}
+                                />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-white font-medium text-xs sm:text-sm">
+                                  {currency.name}
+                                </span>
+                                <span className="text-gray-400 text-[11px] sm:text-xs">
+                                  {currency.symbol}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-gray-400 font-mono text-xs sm:text-sm">
+                              {currency.balance}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
 
-                  </div>
-
-                  <div className="p-2 sm:p-3 border-t border-white/10">
-                    <button
-                      onClick={() => {
-                        setWalletDropdownOpen(false);
-                        setWalletSettingsOpen(true);
-                      }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 
+                    <div className="p-2 sm:p-3 border-t border-white/10">
+                      <button
+                        onClick={() => {
+                          setWalletDropdownOpen(false);
+                          setWalletSettingsOpen(true);
+                        }}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 
                      bg-white/5 hover:bg-white/10 rounded-lg transition-all text-xs sm:text-sm"
-                    >
-                      <svg
-                        className="w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      <span className="text-gray-300">Wallet Settings</span>
-                    </button>
+                        <svg
+                          className="w-4 h-4 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        <span className="text-gray-300">Wallet Settings</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            {/* Coins/Chips Display - Wallet Button */}
-            <button
-              onClick={() => setWalletModalOpen(true)}
-              className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#000]/80 transition-all hover:scale-[1.02]"
-            >
-              <span className="text-xl">
-                <img
-                  src="/icons/wallet.svg" // 👈 your image path
-                  alt="Wallet Icon"
-                  className="w-6 h-6 object-contain"
-                />
-              </span>
-            </button>
-          </div>
+              {/* Coins/Chips Display - Wallet Button */}
+              <button
+                onClick={() => setWalletModalOpen(true)}
+                className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#000]/80 transition-all hover:scale-[1.02]"
+              >
+                <span className="text-xl">
+                  <img
+                    src="/icons/wallet.svg" // 👈 your image path
+                    alt="Wallet Icon"
+                    className="w-6 h-6 object-contain"
+                  />
+                </span>
+              </button>
+            </div>
           )}
 
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">
             {/* Search - Desktop only */}
-            <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
+            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
               <img
                 src="/icons/search.svg" // 👈 replace with your image path
                 alt="User Avatar"
                 className="w-full h-full object-cover"
               />
-            </button>
+            </button> */}
             {/* gift - Desktop only */}
-            <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors relative">
+            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors relative">
               <img
                 src="/icons/gift.svg" // 👈 replace with your image path
                 alt="User Avatar"
                 className="w-full h-full object-cover"
               />
-            </button>
+            </button> */}
 
             {/* win - Desktop only */}
-            <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
+            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
               <img
                 src="/icons/win.svg" // 👈 replace with your image path
                 alt="User Avatar"
                 className="w-full h-full object-cover"
               />
-            </button>
+            </button> */}
 
             {/* Profile Avatar */}
             {/* Trigger Button */}
             <LoginTrigger
               buttonText={
-                <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
-                  <img
-                    src="/icons/login.svg" // 👈 replace with your image path
-                    alt="User Avatar"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-[150px] h-[36px] 
+                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
+                 text-black font-[600] text-[16px] 
+                 font-['Neue_Plack',sans-serif]
+                 rounded-lg shadow-md 
+                 transition-all duration-300
+                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
+                 flex items-center justify-center"
+                >
+                  LOGIN/REGISTER
+                </motion.button>
               }
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             />
+            {/* Register Button */}
+            {/* {!hasToken && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-[129px] h-[36px]
+             bg-transparent 
+             border-2
+             bg-[linear-gradient(#1A1D24,#1A1D24)_padding-box,linear-gradient(90deg,#F07730,#EFD28E)_border-box]
+             text-white font-[600] text-[16px]
+             font-['Neue_Plack',sans-serif]
+             rounded-lg shadow-md
+             flex items-center justify-center
+             transition-all duration-300
+             hover:shadow-lg hover:shadow-[#F07730]/30"
+            >
+              Register
+            </motion.button>
+            )} */}
           </div>
         </div>
       </motion.header>
@@ -705,7 +743,7 @@ useEffect(() => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-hidden`}
         >
-          <div className="h-full overflow-y-auto custom-scrollbar">
+          <div className="h-full custom-scrollbar">
             {/* Main Menu */}
             <div className="p-4">
               <AnimatePresence mode="wait">
@@ -855,20 +893,25 @@ useEffect(() => {
                             className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
                           ></div>
 
-                          <motion.span
-                            whileHover={{ rotate: 360 }}
-                            transition={{ duration: 0.5 }}
-                            className="text-xl relative z-10"
-                          >
-                            {item.icon}
-                          </motion.span>
+                          <span className="text-xl flex items-center justify-center">
+                            {typeof item.icon === "string" &&
+                            item.icon.startsWith("/") ? (
+                              <img
+                                src={item.icon}
+                                alt={item.label}
+                                className="w-4 h-4 object-contain"
+                              />
+                            ) : (
+                              item.icon
+                            )}
+                          </span>
                           <AnimatePresence>
                             {!sidebarCollapsed && (
                               <motion.span
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="text-white font-medium relative z-10"
+                                className="text-gray font-medium relative z-10"
                               >
                                 {item.label}
                               </motion.span>
@@ -997,7 +1040,7 @@ useEffect(() => {
                   exit={{ opacity: 0, y: 20 }}
                   className="p-4 border-t border-white/10"
                 >
-                  <div className="flex items-center justify-center gap-3">
+                  {/* <div className="flex items-center justify-center gap-3">
                     {["twitter", "telegram", "discord"].map((social) => (
                       <motion.button
                         key={social}
@@ -1012,7 +1055,7 @@ useEffect(() => {
                         </span>
                       </motion.button>
                     ))}
-                  </div>
+                  </div> */}
                 </motion.div>
               )}
             </AnimatePresence>

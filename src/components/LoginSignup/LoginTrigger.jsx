@@ -127,12 +127,12 @@ const handleSignupSuccess = (userData) => {
         {/* Profile Avatar Button */}
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className={`${className} flex items-center justify-center w-9 h-9 rounded-full bg-[#20263a] hover:bg-[#2a324a] transition-all text-white`}
+          className={`${className} w-14 h-14 rounded-full overflow-hidden flex items-center justify-center`}
         >
           <img
-            src="/icons/user.svg"
-            alt="User"
-            className="w-5 h-5 opacity-90 invert brightness-0"
+            src="/icons/login.svg" // :point_left: replace with your image path
+            alt="User Avatar"
+            className="w-full h-full object-cover"
           />
         </button>
 
