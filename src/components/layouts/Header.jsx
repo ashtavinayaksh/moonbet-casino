@@ -173,148 +173,66 @@ const Header = ({
 
   useEffect(() => {
     const fetchWalletData = async () => {
-      try {
-        const [coinsRes, balanceRes] = await Promise.all([
-          axios.get("/wallet-service/api/wallet/coins"),
-          axios.get(`/wallet-service/api/wallet/${userId}/balance`),
-        ]);
-
-        const coins = coinsRes.data || [];
-        const walletBalances = balanceRes.data?.balances || [];
-        const selectedCurrency =
-          localStorage.getItem("preferredCurrency") || "USD";
-        // 🔹 Fetch conversion rate
-        const fxRes = await axios.get(`https://open.er-api.com/v6/latest/USD`);
-        const rate = fxRes.data?.rates?.[selectedCurrency] || 1;
-        const symbols = {
-          USD: "$",
-          EUR: "€",
-          GBP: "£",
-          CAD: "CA$",
-          AUD: "A$",
-          BRL: "R$",
-        };
-
-        const convertedTotal = balanceRes.data?.totalUsd
-          ? (balanceRes.data.totalUsd * rate).toFixed(2)
-          : "0.00";
-
-        const colorMap = {
-          BTC: "bg-orange-400",
-          ETH: "bg-blue-500",
-          USDT: "bg-green-500",
-          SOL: "bg-purple-500",
-          BNB: "bg-yellow-400",
-          XRP: "bg-gray-500",
-          ADA: "bg-blue-400",
-          DOGE: "bg-yellow-500",
-          TRX: "bg-red-500",
-          LTC: "bg-blue-800",
-          DOT: "bg-pink-500",
-          MATIC: "bg-indigo-500",
-          AVAX: "bg-red-400",
-          XLM: "bg-cyan-400",
-          BCH: "bg-green-400",
-        };
-
-        const merged = coins.map((coin) => {
-          const match = walletBalances.find(
-            (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
-          );
-          return {
-            ...coin,
-            color: colorMap[coin.symbol] || "bg-gray-700",
-            balance: match ? match.amount.toFixed(5) : "0.00000",
-            iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol
-              .replace("MAINNET", "")
-              .replace("TRC20", "")
-              .replace("COIN", "")
-              .toLowerCase()}.svg`,
-          };
-        });
-
-        setCurrencies(merged);
-        // 🔹 Force USD as default on first load (better UX)
-        // 🔹 Default to BTC initially (not USD)
-        const preferred = localStorage.getItem("preferredCurrency");
-        let initialCurrency;
-
-        // If user already selected something before → respect that
-        if (preferred && merged.find((c) => c.symbol === preferred)) {
-          initialCurrency = merged.find((c) => c.symbol === preferred);
-        } else {
-          // Otherwise default to BTC if available, else first coin
-          initialCurrency =
-            merged.find((c) => c.symbol === "BTC") || merged[0] || null;
-
-          if (initialCurrency) {
-            localStorage.setItem("preferredCurrency", initialCurrency.symbol);
-          }
-        }
-
-        setSelectedCurrency(initialCurrency);
-
-        // 🔹 Convert BTC balance to USD on first load
-        // ✅ On first load: always show BTC with USD converted value
-if (initialCurrency && initialCurrency.symbol === "BTC") {
   try {
-    const cryptoBalance = parseFloat(initialCurrency.balance || 0);
-    const priceRes = await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
-    );
-    const usdPrice = priceRes.data?.bitcoin?.usd || 0;
-    const convertedUsd = cryptoBalance * usdPrice;
-    setWalletBalance(`$${convertedUsd.toFixed(2)}`);
-  } catch (err) {
-    console.error("BTC conversion failed:", err);
-    setWalletBalance("$0.00");
-  }
-} else if (initialCurrency) {
-  // ✅ For all other coins, show their USD converted value too
-  try {
-    const cryptoBalance = parseFloat(initialCurrency.balance || 0);
-    const priceRes = await axios.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${initialCurrency.name.toLowerCase()}&vs_currencies=usd`
-    );
-    const usdPrice =
-      priceRes.data?.[initialCurrency.name.toLowerCase()]?.usd || 0;
-    const convertedUsd = cryptoBalance * usdPrice;
-    setWalletBalance(`$${convertedUsd.toFixed(2)}`);
-  } catch (err) {
-    console.error("Conversion failed:", err);
-    setWalletBalance("$0.00");
-  }
-}
+    const [coinsRes, balanceRes] = await Promise.all([
+      axios.get("/wallet-service/api/wallet/coins"),
+      axios.get(`/wallet-service/api/wallet/${userId}/balance`),
+    ]);
 
+    const coins = coinsRes.data || [];
+    const walletBalances = balanceRes.data?.balances || [];
 
-
-        // 🔹 Set wallet balance using USD by default
-        const symbolMap = {
-          USD: "$",
-          EUR: "€",
-          GBP: "£",
-          CAD: "CA$",
-          AUD: "A$",
-          BRL: "R$",
-        };
-
-        // setSelectedCurrency(merged[0]);
-        // Only reset to USD if *no manual selection* was made yet
-        if (
-          !localStorage.getItem("preferredCurrency") ||
-          selectedCurrency === "USD"
-        ) {
-          setWalletBalance(
-            `${symbolMap[initialCurrency.symbol] || "$"}${
-              balanceRes.data?.totalUsd?.toFixed(2) || "0.00"
-            }`
-          );
-        }
-      } catch (err) {
-        console.error("Error fetching wallet or coins:", err);
-        setWalletBalance("0.00 USD");
-      }
+    // 🪙 merge coins and balances
+    const colorMap = {
+      BTC: "bg-orange-400",
+      ETH: "bg-blue-500",
+      USDT: "bg-green-500",
+      SOL: "bg-purple-500",
+      BNB: "bg-yellow-400",
+      XRP: "bg-gray-500",
+      ADA: "bg-blue-400",
+      DOGE: "bg-yellow-500",
+      TRX: "bg-red-500",
+      LTC: "bg-blue-800",
+      DOT: "bg-pink-500",
+      MATIC: "bg-indigo-500",
+      AVAX: "bg-red-400",
+      XLM: "bg-cyan-400",
+      BCH: "bg-green-400",
     };
+
+    const merged = coins.map((coin) => {
+      const match = walletBalances.find(
+        (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
+      );
+      return {
+        ...coin,
+        color: colorMap[coin.symbol] || "bg-gray-700",
+        balance: match ? match.amount.toFixed(5) : "0.00000",
+        iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol.toLowerCase()}.svg`,
+      };
+    });
+
+    setCurrencies(merged);
+
+    // 🪙 Determine preferred or default currency
+    const preferred = localStorage.getItem("preferredCurrency");
+    let initialCurrency =
+      merged.find((c) => c.symbol === preferred) ||
+      merged.find((c) => c.symbol === "BTC") ||
+      merged[0];
+
+    setSelectedCurrency(initialCurrency);
+    localStorage.setItem("preferredCurrency", initialCurrency.symbol);
+
+    // 🧮 Show its balance directly (no USD conversion)
+    setWalletBalance(`${initialCurrency.balance} ${initialCurrency.symbol}`);
+  } catch (err) {
+    console.error("Error fetching wallet or coins:", err);
+    setWalletBalance("0.00000 BTC");
+  }
+};
+
 
     if (hasToken) fetchWalletData();
     // window.addEventListener("currencyChanged", fetchWalletData);
@@ -325,41 +243,38 @@ if (initialCurrency && initialCurrency.symbol === "BTC") {
   const handleCurrencySelect = async (currency) => {
   try {
     setSelectedCurrency(currency);
-
-    // 🪙 Get target gameCurrency from localStorage or default to "EUR"
-    const gameCurrency = localStorage.getItem("gameCurrency") || "EUR";
-
-    // 💾 Save new preferredCurrency locally
     localStorage.setItem("preferredCurrency", currency.symbol);
 
-    // 🔁 Call your backend conversion API
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = user.id;
+    // 🎯 Get target gameCurrency or fallback to USD
+    const gameCurrency = localStorage.getItem("gameCurrency") || "USD";
+    const symbolMap = { USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", BRL: "R$" };
 
-    const res = await axios.put(
-      `/wallet-service/api/games/convert/${userId}`,
-      {
-        preferredCurrency: currency.symbol,
-        gameCurrency: gameCurrency,
-      }
-    );
+    if (gameCurrency === currency.symbol) {
+      // if same currency selected → show its own balance
+      setWalletBalance(`${currency.balance} ${currency.symbol}`);
+    } else {
+      // 💱 Convert using CoinGecko to gameCurrency
+      const idsMap = {
+        BTC: "bitcoin",
+        ETH: "ethereum",
+        SOL: "solana",
+        USDT: "tether",
+        DOGE: "dogecoin",
+        XRP: "ripple",
+        LTC: "litecoin",
+        TRX: "tron",
+        BCH: "bitcoin-cash",
+      };
 
-    // ✅ Extract the converted balance and update UI
-    if (res.data?.success && res.data.data) {
-      const convertedBalances = res.data.data.balances || [];
-      const match = convertedBalances.find(
-        (b) => b.currency.toUpperCase() === currency.symbol.toUpperCase()
+      const id = idsMap[currency.symbol] || currency.name.toLowerCase();
+      const res = await axios.get(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=${gameCurrency.toLowerCase()}`
       );
 
-      if (match) {
-        const amount = Number(match.amount || 0).toFixed(2);
-        setWalletBalance(`${amount} ${currency.symbol}`);
-      }
+      const rate = res.data?.[id]?.[gameCurrency.toLowerCase()] || 1;
+      const convertedValue = parseFloat(currency.balance) * rate;
 
-      // Update localStorage in case user returns later
-      localStorage.setItem("preferredCurrency", currency.symbol);
-    } else {
-      console.warn("Conversion API failed:", res.data?.message);
+      setWalletBalance(`${symbolMap[gameCurrency] || ""}${convertedValue.toFixed(2)}`);
     }
   } catch (err) {
     console.error("Currency conversion failed:", err);
@@ -368,6 +283,7 @@ if (initialCurrency && initialCurrency.symbol === "BTC") {
     setWalletDropdownOpen(false);
   }
 };
+
 
 
   // Enhanced menu items with gradient colors
