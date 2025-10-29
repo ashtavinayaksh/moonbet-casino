@@ -63,11 +63,12 @@ const toggleFullScreen = (iframeRef) => {
             return;
           }
         // Real Play payload
+        // const preferredCurrency = localStorage.getItem("preferredCurrency") || "USD";
         initUrl = `/wallet-service/api/games/${game.uuid}/init`;
         payload = {
           player_id: user.id || "68eb94c22a7983ea19b0bd6a",
           player_name: user.username || "Guest Player",
-          currency: "USD",
+          currency: "EUR",
           device: "desktop",
           language: "en",
           email: user.email || "ashtavinayaksharma555@gmail.com",
