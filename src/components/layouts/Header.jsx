@@ -55,6 +55,8 @@ const Header = ({
   const walletDropdownRef = useRef(null);
 
   const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user.id;
 
   useEffect(() => {
     const checkToken = () => {
@@ -79,7 +81,7 @@ const Header = ({
       try {
         // Replace with dynamic user ID if available in localStorage later
         const response = await axios.get(
-          "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
+          `/wallet-service/api/wallet/${userId}/balance`
         );
 
         if (response.data && response.data.totalUsd) {
@@ -174,7 +176,7 @@ const Header = ({
         const [coinsRes, balanceRes] = await Promise.all([
           axios.get("/wallet-service/api/wallet/coins"),
           axios.get(
-            "/wallet-service/api/wallet/68f4849c321d58f1f8be302a/balance"
+            `/wallet-service/api/wallet/${userId}/balance`
           ),
         ]);
 
@@ -233,8 +235,14 @@ const Header = ({
         });
 
         setCurrencies(merged);
-        setSelectedCurrency(merged[0]);
-        setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
+        const preferred = localStorage.getItem("preferredCurrency");
+const initialCurrency = merged.find(c => c.symbol === preferred) || merged[0];
+setSelectedCurrency(initialCurrency);
+        // setSelectedCurrency(merged[0]);
+        // Only reset to USD if *no manual selection* was made yet
+if (!localStorage.getItem("preferredCurrency") || selectedCurrency === "USD") {
+  setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
+}
       } catch (err) {
         console.error("Error fetching wallet or coins:", err);
         setWalletBalance("0.00 USD");
@@ -242,9 +250,62 @@ const Header = ({
     };
 
     if (hasToken) fetchWalletData();
-    window.addEventListener("currencyChanged", fetchWalletData);
-    return () => window.removeEventListener("currencyChanged", fetchWalletData);
+    // window.addEventListener("currencyChanged", fetchWalletData);
+    // return () => window.removeEventListener("currencyChanged", fetchWalletData);
   }, [hasToken]);
+
+  // 👇 whenever a currency is selected from dropdown
+  const handleCurrencySelect = async (currency) => {
+  try {
+    setSelectedCurrency(currency);
+    localStorage.setItem("preferredCurrency", currency.symbol);
+
+    // 🔹 Fetch latest USD balance (for safety, in case totalUsd also used)
+    const balanceRes = await axios.get(
+      `/wallet-service/api/wallet/${userId}/balance`
+    );
+
+    const totalUsd = balanceRes.data?.totalUsd || 0;
+
+    // 🔹 If USD or fiat, just show converted fiat balance as before
+    if (["USD", "EUR", "GBP", "CAD", "AUD", "BRL"].includes(currency.symbol)) {
+      let rate = 1;
+      let symbol = "$";
+
+      if (currency.symbol !== "USD") {
+        const fxRes = await axios.get("https://open.er-api.com/v6/latest/USD");
+        rate = fxRes.data?.rates?.[currency.symbol] || 1;
+        const symbols = {
+          EUR: "€",
+          GBP: "£",
+          CAD: "CA$",
+          AUD: "A$",
+          BRL: "R$",
+        };
+        symbol = symbols[currency.symbol] || currency.symbol;
+      }
+
+      const convertedBalance = totalUsd * rate;
+      setWalletBalance(`${symbol}${convertedBalance.toFixed(2)}`);
+      return;
+    }
+
+    // 🔹 For crypto — fetch live USD price and convert
+    const priceRes = await axios.get(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${currency.name.toLowerCase()}&vs_currencies=usd`
+    );
+
+    const usdPrice = priceRes.data?.[currency.name.toLowerCase()]?.usd || 0;
+    const cryptoBalance = parseFloat(currency.balance || 0);
+    const convertedUsd = cryptoBalance * usdPrice;
+
+    setWalletBalance(`$${convertedUsd.toFixed(2)}`);
+  } catch (err) {
+    console.error("Currency conversion failed:", err);
+    setWalletBalance("$0.00");
+  }
+};
+
 
   // Enhanced menu items with gradient colors
   const menuItems = [
@@ -557,7 +618,7 @@ const Header = ({
                           <div
                             key={currency.symbol}
                             onClick={() => {
-                              setSelectedCurrency(currency);
+                              handleCurrencySelect(currency);
                               setWalletDropdownOpen(false);
                             }}
                             className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
