@@ -816,13 +816,15 @@ if (initialCurrency && initialCurrency.symbol === "BTC") {
                  hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
                  flex items-center justify-center"
                 >
-                  LOGIN/REGISTER
+                  LOGIN
                 </motion.button>
               }
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             />
             {/* Register Button */}
-            {/* {!hasToken && (
+            {!hasToken && (
+              <LoginTrigger
+              buttonText={
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -839,7 +841,11 @@ if (initialCurrency && initialCurrency.symbol === "BTC") {
             >
               Register
             </motion.button>
-            )} */}
+            }
+            defaultTab="register"
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+            />
+            )}
           </div>
         </div>
       </motion.header>
