@@ -67,6 +67,13 @@ const HomeGamesSection = () => {
       players: "1.2k",
       gradient: "from-yellow-500 to-orange-500",
     },
+    {
+      id: 8,
+      title: "WHEEL",
+      icon: "🎯",
+      players: "1.2k",
+      gradient: "from-yellow-500 to-orange-500",
+    },
   ];
 
   // Check scroll position
@@ -124,10 +131,26 @@ const HomeGamesSection = () => {
           className="flex justify-between items-center mb-10"
         >
           <div className="flex items-center gap-3">
-            <span className="text-2xl">👍</span>
-            <h2 className="text-2xl md:text-3xl lg:text-2xl font-bold text-white">
+            <span className="text-2xl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="22"
+                viewBox="0 0 23 22"
+                fill="none"
+              >
+                <path
+                  d="M12.2529 0C14.4557 0 16.2479 1.79235 16.248 3.99512V5.19141L15.5264 7.68652H20.7168C21.9757 7.68662 23 8.71076 23 9.96973C22.9999 10.7299 22.6259 11.4041 22.0527 11.8193C22.3397 12.2011 22.5098 12.6752 22.5098 13.1885C22.5098 13.9489 22.1358 14.6229 21.5625 15.0381C21.8494 15.4198 22.0195 15.8941 22.0195 16.4072C22.0195 17.1675 21.6464 17.8426 21.0732 18.2578C21.3599 18.6395 21.5303 19.114 21.5303 19.627C21.53 20.8856 20.5057 21.9099 19.2471 21.9102H12.0586C10.8747 21.9102 9.71203 21.6989 8.60352 21.2832L6.73828 20.584V8.79297C8.92389 6.44115 10.9239 4.19569 11.2842 3.61914V0.96875C11.2843 0.434861 11.719 0.000198252 12.2529 0ZM5.39062 7.24219V21.4697H0V7.24219H5.39062Z"
+                  fill="#CED5E3"
+                />
+              </svg>
+            </span>
+            <h3
+              className="text-[#CED5E3] font-[400] text-[18px] leading-[44px] 
+             font-['Neuropolitical'] not-italic uppercase"
+            >
               RECOMMENDED
-            </h2>
+            </h3>
           </div>
 
           <button className="hidden md:flex items-center">
@@ -165,7 +188,7 @@ const HomeGamesSection = () => {
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide pb-4"
           >
-            <div className="grid grid-flow-col auto-cols-[160px] sm:auto-cols-[180px] md:auto-cols-[200px] gap-4 md:gap-6">
+            <div className="grid grid-flow-col auto-cols-[100px] sm:auto-cols-[180px] md:auto-cols-[145px] gap-3 md:gap-3">
               {gamesData.map((game, index) => (
                 <motion.div
                   key={game.id}
@@ -176,7 +199,7 @@ const HomeGamesSection = () => {
                   whileHover={{ y: -8 }}
                   className="group cursor-pointer"
                 >
-                  <div className="relative h-48 md:h-56 rounded-2xl overflow-hidden">
+                  <div className="relative h-48 md:h-48 rounded-2xl overflow-hidden">
                     {/* Background Gradient */}
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${game.gradient} opacity-90`}
@@ -206,7 +229,7 @@ const HomeGamesSection = () => {
                       <span className="text-5xl md:text-6xl mb-3 group-hover:scale-110 transition-transform">
                         {game.icon}
                       </span>
-                      <h3 className="text-white font-bold text-base md:text-lg mb-2">
+                      <h3 className="text-white font-bold text-base mb-2">
                         {game.title}
                       </h3>
                       <p className="text-white/70 text-sm">

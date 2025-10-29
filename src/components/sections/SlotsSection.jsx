@@ -13,29 +13,28 @@ const SlotsSection = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-useEffect(() => {
-  const fetchGames = async () => {
-    try {
-      const { data } = await axios.get("/wallet-service/api/games");
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const { data } = await axios.get("/wallet-service/api/games");
 
-      if (data?.games?.items) {
-        setGames(data.games.items);
-      } else {
-        setGames([]); // fallback if API returns no games
+        if (data?.games?.items) {
+          setGames(data.games.items);
+        } else {
+          setGames([]); // fallback if API returns no games
+        }
+      } catch (error) {
+        console.error("❌ Error fetching games:", error);
+        toast.error(
+          error.response?.data?.message || "Failed to load games list"
+        );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("❌ Error fetching games:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to load games list"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchGames();
-}, []);
-
+    fetchGames();
+  }, []);
 
   const handlePlayNow = (gameName) => {
     // Replace spaces with dashes for clean URLs
@@ -51,7 +50,7 @@ useEffect(() => {
         {loading ? (
           <p className="text-center text-gray-400 py-10">Loading games...</p>
         ) : (
-          <div className="grid grid-flow-col auto-cols-[200px] gap-6 overflow-x-auto scrollbar-hide">
+          <div className="grid grid-flow-col auto-cols-[145px] gap-3 overflow-x-auto scrollbar-hide">
             {games.map((game, index) => (
               <motion.div
                 key={game.uuid}
@@ -68,8 +67,12 @@ useEffect(() => {
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="p-3">
-                    <h3 className="text-white font-semibold text-sm truncate">{game.name}</h3>
-                    <p className="text-gray-400 text-xs mt-1">{game.provider}</p>
+                    <h3 className="text-white font-semibold text-sm truncate">
+                      {game.name}
+                    </h3>
+                    <p className="text-gray-400 text-xs mt-1">
+                      {game.provider}
+                    </p>
                   </div>
 
                   <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
