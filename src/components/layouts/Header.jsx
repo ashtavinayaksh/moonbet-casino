@@ -235,13 +235,42 @@ const Header = ({
         });
 
         setCurrencies(merged);
-        const preferred = localStorage.getItem("preferredCurrency");
-const initialCurrency = merged.find(c => c.symbol === preferred) || merged[0];
+        // 🔹 Force USD as default on first load (better UX)
+const preferred = localStorage.getItem("preferredCurrency");
+let initialCurrency;
+
+// If user already selected something before → respect that
+if (preferred && merged.find(c => c.symbol === preferred)) {
+  initialCurrency = merged.find(c => c.symbol === preferred);
+} else {
+  // Otherwise default to USD — even if it’s not in API list
+  const usdCurrency = {
+    symbol: "USD",
+    name: "US Dollar",
+    iconPath: "/icons/usd.svg",
+    color: "bg-green-500",
+    balance: balanceRes.data?.totalUsd?.toFixed(2) || "0.00",
+  };
+  initialCurrency = usdCurrency;
+  localStorage.setItem("preferredCurrency", "USD");
+}
+
 setSelectedCurrency(initialCurrency);
+
+// 🔹 Set wallet balance using USD by default
+const symbolMap = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  CAD: "CA$",
+  AUD: "A$",
+  BRL: "R$",
+};
+
         // setSelectedCurrency(merged[0]);
         // Only reset to USD if *no manual selection* was made yet
 if (!localStorage.getItem("preferredCurrency") || selectedCurrency === "USD") {
-  setWalletBalance(`${symbols[selectedCurrency] || ""}${convertedTotal}`);
+  setWalletBalance(`${symbolMap[initialCurrency.symbol] || "$"}${balanceRes.data?.totalUsd?.toFixed(2) || "0.00"}`);
 }
       } catch (err) {
         console.error("Error fetching wallet or coins:", err);
