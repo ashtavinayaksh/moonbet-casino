@@ -43,98 +43,96 @@ const WalletModal = ({ isOpen, onClose }) => {
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
   useEffect(() => {
-  if (isOpen) {
-    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-    const token = localStorage.getItem("token");
+    if (isOpen) {
+      const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+      const token = localStorage.getItem("token");
 
-    if (!userId || !token) return;
+      if (!userId || !token) return;
 
-    axios
-      .get(`/wallet-service/api/wallet/${userId}/balance`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(({ data }) => setWalletBalance(data))
-      .catch((err) =>
-        console.error("❌ Error fetching wallet balance:", err)
-      );
-  }
-}, [isOpen]);
-
-
-  useEffect(() => {
-  if (isOpen) {
-    axios
-      .get(`/wallet-service/api/wallet/coins`)
-      .then(({ data }) => {
-        if (Array.isArray(data)) {
-          setCoinList(data);
-          setSelectedCoin(data[0]);
-        }
-      })
-      .catch((err) => console.error("❌ Error fetching coins:", err));
-  }
-}, [isOpen]);
-
+      axios
+        .get(`/wallet-service/api/wallet/${userId}/balance`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(({ data }) => setWalletBalance(data))
+        .catch((err) =>
+          console.error("❌ Error fetching wallet balance:", err)
+        );
+    }
+  }, [isOpen]);
 
   useEffect(() => {
-  if (showDepositModal) {
-    axios
-      .get(`/wallet-service/api/wallet/coins`)
-      .then(({ data }) => {
-        if (Array.isArray(data)) {
-          setDepositCoinList(data);
-          setSelectedDepositCoin(data[0]);
-        }
-      })
-      .catch((err) => console.error("❌ Error fetching deposit coins:", err));
-  }
-}, [showDepositModal]);
+    if (isOpen) {
+      axios
+        .get(`/wallet-service/api/wallet/coins`)
+        .then(({ data }) => {
+          if (Array.isArray(data)) {
+            setCoinList(data);
+            setSelectedCoin(data[0]);
+          }
+        })
+        .catch((err) => console.error("❌ Error fetching coins:", err));
+    }
+  }, [isOpen]);
 
+  useEffect(() => {
+    if (showDepositModal) {
+      axios
+        .get(`/wallet-service/api/wallet/coins`)
+        .then(({ data }) => {
+          if (Array.isArray(data)) {
+            setDepositCoinList(data);
+            setSelectedDepositCoin(data[0]);
+          }
+        })
+        .catch((err) => console.error("❌ Error fetching deposit coins:", err));
+    }
+  }, [showDepositModal]);
 
   // Fetch withdraw coins
   useEffect(() => {
-  if (showWithdrawModal) {
-    axios
-      .get(`/wallet-service/api/wallet/coins`)
-      .then(({ data }) => {
-        if (Array.isArray(data)) {
-          setWithdrawCoinList(data);
-          setSelectedWithdrawCoin(data[0]);
-        }
-      })
-      .catch((err) => console.error("❌ Error fetching withdraw coins:", err));
-  }
-}, [showWithdrawModal]);
+    if (showWithdrawModal) {
+      axios
+        .get(`/wallet-service/api/wallet/coins`)
+        .then(({ data }) => {
+          if (Array.isArray(data)) {
+            setWithdrawCoinList(data);
+            setSelectedWithdrawCoin(data[0]);
+          }
+        })
+        .catch((err) =>
+          console.error("❌ Error fetching withdraw coins:", err)
+        );
+    }
+  }, [showWithdrawModal]);
 
-useEffect(() => {
-  const userId =
-    JSON.parse(localStorage.getItem("user") || "{}").id ||
-    "68eb94c22a7983ea19b0bd6a";
+  useEffect(() => {
+    const userId =
+      JSON.parse(localStorage.getItem("user") || "{}").id ||
+      "68eb94c22a7983ea19b0bd6a";
 
-  if (selectedDepositCoin?.symbol) {
-    const currency = selectedDepositCoin.symbol.toUpperCase();
+    if (selectedDepositCoin?.symbol) {
+      const currency = selectedDepositCoin.symbol.toUpperCase();
 
-    axios
-      .get(
-        `/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
-      )
-      .then(async ({ data }) => {
-        setDepositAddress(data.payAddress || "");
-        if (data.payAddress) {
-          const qr = await QRCode.toDataURL(data.payAddress, {
-            width: 256,
-            margin: 2,
-            color: { dark: "#000000", light: "#FFFFFF" },
-          });
-          setQrCodeData(qr);
-        }
-      })
-      .catch((err) =>
-        console.error("❌ Error fetching deposit address:", err)
-      );
-  }
-}, [selectedDepositCoin]);
-
+      axios
+        .get(
+          `/wallet-service/api/wallet/${userId}/deposit-address?currency=${currency}`
+        )
+        .then(async ({ data }) => {
+          setDepositAddress(data.payAddress || "");
+          if (data.payAddress) {
+            const qr = await QRCode.toDataURL(data.payAddress, {
+              width: 256,
+              margin: 2,
+              color: { dark: "#000000", light: "#FFFFFF" },
+            });
+            setQrCodeData(qr);
+          }
+        })
+        .catch((err) =>
+          console.error("❌ Error fetching deposit address:", err)
+        );
+    }
+  }, [selectedDepositCoin]);
 
   useEffect(() => {
     if (walletAddress) {
@@ -228,86 +226,84 @@ useEffect(() => {
     }
   };
 
-const handleWithdraw = async () => {
-  if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
-    toast.error("Please fill all fields");
-    return;
-  }
+  const handleWithdraw = async () => {
+    if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-  const userId =
-    JSON.parse(localStorage.getItem("user") || "{}").id ||
-    "68eb94c22a7983ea19b0bd6a";
+    const userId =
+      JSON.parse(localStorage.getItem("user") || "{}").id ||
+      "68eb94c22a7983ea19b0bd6a";
 
-  const payload = {
-    currency: selectedWithdrawCoin.symbol.toUpperCase(),
-    amount: parseFloat(withdrawAmount),
-    address: withdrawAddress,
-  };
-
-  try {
-    const { data } = await axios.post(
-      `/wallet-service/api/wallet/${userId}/withdrawOtp`,
-      payload
-    );
-
-    setOtpRequestId(data.requestId);
-    toast.success("OTP sent to your registered email. Please verify to continue.");
-    setShowWithdrawConfirmation(true);
-  } catch (err) {
-    console.error("❌ Withdraw OTP error:", err);
-    toast.error(
-      err.response?.data?.message || "Failed to send OTP. Please try again."
-    );
-  }
-};
-
-
-
-  const handleConfirmWithdraw = async (otpCode) => {
-  if (!otpCode || !otpRequestId) {
-    toast.error("Missing OTP or request ID");
-    return;
-  }
-
-  const userId =
-    JSON.parse(localStorage.getItem("user") || "{}").id ||
-    "68eb94c22a7983ea19b0bd6a";
-
-  try {
-    // Step 1: Verify OTP
-    await axios.post(`/wallet-service/api/wallet/verify-otp`, {
-      requestId: otpRequestId,
-      otp: otpCode,
-    });
-
-    toast.success("✅ OTP verified successfully. Processing withdrawal...");
-
-    // Step 2: Proceed with actual withdrawal
-    const withdrawData = {
+    const payload = {
       currency: selectedWithdrawCoin.symbol.toUpperCase(),
-      address: withdrawAddress,
       amount: parseFloat(withdrawAmount),
+      address: withdrawAddress,
     };
 
-    await axios.post(
-      `/wallet-service/api/wallet/${userId}/withdraw`,
-      withdrawData
-    );
+    try {
+      const { data } = await axios.post(
+        `/wallet-service/api/wallet/${userId}/withdrawOtp`,
+        payload
+      );
 
-    toast.success("💸 Withdrawal request submitted successfully!");
-    setShowWithdrawConfirmation(false);
-    setShowWithdrawModal(false);
-    setWithdrawAddress("");
-    setWithdrawAmount("");
-  } catch (err) {
-    console.error("❌ Withdrawal verification error:", err);
-    toast.error(
-      err.response?.data?.message || "Failed to verify OTP or withdraw funds."
-    );
-  }
-};
+      setOtpRequestId(data.requestId);
+      toast.success(
+        "OTP sent to your registered email. Please verify to continue."
+      );
+      setShowWithdrawConfirmation(true);
+    } catch (err) {
+      console.error("❌ Withdraw OTP error:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to send OTP. Please try again."
+      );
+    }
+  };
 
+  const handleConfirmWithdraw = async (otpCode) => {
+    if (!otpCode || !otpRequestId) {
+      toast.error("Missing OTP or request ID");
+      return;
+    }
 
+    const userId =
+      JSON.parse(localStorage.getItem("user") || "{}").id ||
+      "68eb94c22a7983ea19b0bd6a";
+
+    try {
+      // Step 1: Verify OTP
+      await axios.post(`/wallet-service/api/wallet/verify-otp`, {
+        requestId: otpRequestId,
+        otp: otpCode,
+      });
+
+      toast.success("✅ OTP verified successfully. Processing withdrawal...");
+
+      // Step 2: Proceed with actual withdrawal
+      const withdrawData = {
+        currency: selectedWithdrawCoin.symbol.toUpperCase(),
+        address: withdrawAddress,
+        amount: parseFloat(withdrawAmount),
+      };
+
+      await axios.post(
+        `/wallet-service/api/wallet/${userId}/withdraw`,
+        withdrawData
+      );
+
+      toast.success("💸 Withdrawal request submitted successfully!");
+      setShowWithdrawConfirmation(false);
+      setShowWithdrawModal(false);
+      setWithdrawAddress("");
+      setWithdrawAmount("");
+    } catch (err) {
+      console.error("❌ Withdrawal verification error:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to verify OTP or withdraw funds."
+      );
+    }
+  };
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -389,7 +385,7 @@ const handleWithdraw = async () => {
                 </button>
               </div>
 
-              <div className="flex gap-2 p-6">
+              <div className="flex gap-2 p-4">
                 <button
                   onClick={() => setDepositTab("crypto")}
                   className={`flex-1 py-3 px-4 rounded-full font-medium transition-all ${
@@ -420,7 +416,7 @@ const handleWithdraw = async () => {
 
                   <div
                     onClick={() => setShowDepositDropdown(!showDepositDropdown)}
-                    className="bg-[#0F1116] rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
+                    className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
@@ -497,7 +493,7 @@ const handleWithdraw = async () => {
                   <label className="text-gray-400 text-sm mb-2 block">
                     Address
                   </label>
-                  <div className="bg-[#0F1116] rounded-lg p-4 flex items-center gap-3 border border-white/10">
+                  <div className="bg-[#0F1116] rounded-lg p-2 flex items-center gap-3 border border-white/10">
                     <span className="text-white text-sm font-mono flex-1 truncate">
                       {depositAddress || "Fetching address..."}
                     </span>
@@ -549,7 +545,7 @@ const handleWithdraw = async () => {
                       <img
                         src={qrCodeData}
                         alt="QR Code"
-                        className="w-48 h-48"
+                        className="w-36 h-36"
                       />
                     )}
                   </div>
@@ -651,7 +647,7 @@ const handleWithdraw = async () => {
                     onClick={() =>
                       setShowWithdrawDropdown(!showWithdrawDropdown)
                     }
-                    className="bg-[#0F1116] rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
+                    className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
@@ -821,7 +817,7 @@ const handleWithdraw = async () => {
             className="fixed inset-0 flex items-center justify-center z-[101] p-4"
           >
             <div className="bg-[#1A1D24] rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl border border-white/10">
-              <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-[#F07730]/10 to-[#EFD28E]/10">
+              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r ">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg flex items-center justify-center">
                     <svg
@@ -867,7 +863,7 @@ const handleWithdraw = async () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 py-3 rounded-full font-medium transition-all ${
+                    className={`px-4 py-2 rounded-full font-medium transition-all ${
                       activeTab === tab
                         ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-black"
                         : "bg-white/5 text-gray-400 hover:text-white"
@@ -993,7 +989,7 @@ const handleWithdraw = async () => {
 
                       <div
                         onClick={() => setShowCoinDropdown(!showCoinDropdown)}
-                        className="bg-[#0F1116] rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
+                        className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">

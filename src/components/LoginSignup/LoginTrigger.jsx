@@ -129,7 +129,11 @@ const handleSignupSuccess = (userData) => {
           onClick={() => setDropdownOpen(!dropdownOpen)}
           className={`${className} flex items-center justify-center w-9 h-9 rounded-full bg-[#20263a] hover:bg-[#2a324a] transition-all text-white`}
         >
-          <img src="/vite.svg" alt="User" className="w-5 h-5 opacity-90" />
+          <img
+            src="/icons/user.svg"
+            alt="User"
+            className="w-5 h-5 opacity-90 invert brightness-0"
+          />
         </button>
 
         {/* Dropdown Menu */}
@@ -143,7 +147,11 @@ const handleSignupSuccess = (userData) => {
               onClick={handleProfileClick}
               className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all w-full text-left"
             >
-              <img src="/vite.svg" alt="" className="w-4 h-4" />
+              <img
+                src="/icons/user.svg"
+                alt=""
+                className="w-4 h-4 invert brightness-0"
+              />
               <span>Profile</span>
             </button>
 
@@ -151,7 +159,11 @@ const handleSignupSuccess = (userData) => {
               to="/bets"
               className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
             >
-              <img src="/vite.svg" alt="" className="w-4 h-4" />
+              <img
+                src="/icons/crypto.svg"
+                alt=""
+                className="w-4 h-4 invert brightness-0"
+              />
               <span>Bets</span>
             </Link>
 
@@ -159,14 +171,22 @@ const handleSignupSuccess = (userData) => {
               to="/transactions"
               className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
             >
-              <img src="/vite.svg" alt="" className="w-4 h-4" />
+              <img
+                src="/icons/transaction.svg"
+                alt=""
+                className="w-4 h-4 invert brightness-0"
+              />
               <span>Transactions</span>
             </Link>
             <Link
               to="/settings"
               className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
             >
-              <img src="/vite.svg" alt="" className="w-4 h-4" />
+              <img
+                src="/icons/setting.svg"
+                alt=""
+                className="w-4 h-4 invert brightness-0"
+              />
               <span>Settings</span>
             </Link>
 
@@ -176,7 +196,11 @@ const handleSignupSuccess = (userData) => {
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-red-400 hover:bg-red-500/10 transition-all"
             >
-              <img src="/vite.svg" alt="" className="w-4 h-4" />
+              <img
+                src="/icons/power-button.svg"
+                alt=""
+                className="w-4 h-4 invert brightness-0"
+              />
               <span>Logout</span>
             </button>
           </div>
