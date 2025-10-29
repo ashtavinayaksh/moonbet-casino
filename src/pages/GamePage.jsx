@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
+import GameBetsSection from "../components/sections/GameBetsSection";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
@@ -241,6 +242,7 @@ const handlePlayToggle = () => {
   }
 
   return (
+    <>
     <div className="h-screen bg-black flex flex-col">
       <div className="iframe-wrapper" style={{
   flex: 1,
@@ -400,6 +402,10 @@ const handlePlayToggle = () => {
           </div>
         </div>
     </div>
+    <div className="bg-black">
+        <GameBetsSection />
+      </div>
+      </>
   );
 };
 
