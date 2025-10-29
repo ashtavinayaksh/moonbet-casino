@@ -7,60 +7,55 @@ const GameBetsSection = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [bets, setBets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAll, setShowAll] = useState(false); // NEW state
+  const [showAll, setShowAll] = useState(false);
 
-  const myBetsData = [
-    {
-      id: 1,
-      game: "Dice",
-      user: "You",
-      betAmount: "0.1 SOL",
-      multiplier: "2.0",
-      payout: "+0.2 SOL",
-      color: "green",
-      time: "1 hour ago",
-    },
-    {
-      id: 2,
-      game: "Crash",
-      user: "You",
-      betAmount: "0.15 SOL",
-      multiplier: "3.45",
-      payout: "+0.52 SOL",
-      color: "green",
-      time: "2 hours ago",
-    },
-    {
-      id: 3,
-      game: "Slots",
-      user: "You",
-      betAmount: "0.05 SOL",
-      multiplier: "0.0",
-      payout: "-0.05 SOL",
-      color: "red",
-      time: "3 hours ago",
-    },
-  ];
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user.id || "68f90703350b2308ed5e5be9";
 
-  // ✅ Fetch bets when tab changes or on mount
   useEffect(() => {
     loadBets();
   }, [activeTab]);
 
   const loadBets = async () => {
     setIsLoading(true);
-    setShowAll(false); // reset when reloading
+    setShowAll(false);
+
     try {
       if (activeTab === "all") {
+        // 🌍 Load global bets (unchanged)
         const res = await axios.get("/wallet-service/api/games/bets");
         if (res.data?.success && Array.isArray(res.data.data)) {
           setBets(res.data.data);
         } else {
           setBets([]);
         }
-      } else if (activeTab === "my") {
-        // placeholder for user-specific data
-        setBets(myBetsData);
+      } else if (activeTab === "my" && token) {
+        // 👤 Load user-specific bets
+        const res = await axios.get(
+          `/wallet-service/api/games/bets/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.data?.success && Array.isArray(res.data.data)) {
+          // Transform server format → UI format
+          const formatted = res.data.data.map((b) => ({
+            game: b.game || "football",
+            user: "You",
+            betAmount: b.amount,
+            multiplier: "-", // if not provided
+            payout: b.payout,
+            color: b.type === "win" || b.type === "refund" ? "green" : "red",
+            time: new Date(b.createdAt).toLocaleString(),
+          }));
+          setBets(formatted);
+        } else {
+          setBets([]);
+        }
       }
     } catch (err) {
       console.error("Error fetching bets:", err);
@@ -74,7 +69,6 @@ const GameBetsSection = () => {
     setActiveTab(tab);
   };
 
-  // ✅ Limit displayed bets to 10 if showAll = false
   const displayedBets = showAll ? bets : bets.slice(0, 6);
 
   return (
@@ -118,22 +112,25 @@ const GameBetsSection = () => {
             )}
           </button>
 
-          <button
-            className={`px-4 sm:px-6 py-2 sm:py-3 font-semibold text-sm sm:text-base transition-all relative whitespace-nowrap ${
-              activeTab === "my"
-                ? "text-white"
-                : "text-gray-400 hover:text-white"
-            }`}
-            onClick={() => handleTabClick("my")}
-          >
-            My Bets
-            {activeTab === "my" && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F07730] to-[#EFD28E]"
-              />
-            )}
-          </button>
+          {/* 👇 Show "My Bets" only if logged in */}
+          {token && (
+            <button
+              className={`px-4 sm:px-6 py-2 sm:py-3 font-semibold text-sm sm:text-base transition-all relative whitespace-nowrap ${
+                activeTab === "my"
+                  ? "text-white"
+                  : "text-gray-400 hover:text-white"
+              }`}
+              onClick={() => handleTabClick("my")}
+            >
+              My Bets
+              {activeTab === "my" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F07730] to-[#EFD28E]"
+                />
+              )}
+            </button>
+          )}
         </div>
 
         {/* Bets Table */}
@@ -181,7 +178,7 @@ const GameBetsSection = () => {
                     <div className="text-white text-xs lg:text-sm">{bet.game}</div>
                     <div className="text-gray-300 text-xs lg:text-sm truncate">{bet.user}</div>
                     <div className="text-white text-xs lg:text-sm">{bet.betAmount}</div>
-                    <div className="text-cyan-400 text-xs lg:text-sm">{bet.multiplier || "-"}</div>
+                    <div className="text-cyan-400 text-xs lg:text-sm">{bet.multiplier}</div>
                     <div
                       className={`text-xs lg:text-sm ${
                         bet.color === "green" ? "text-green-400" : "text-red-400"
