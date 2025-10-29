@@ -433,18 +433,18 @@ const LoginSignup = ({
 
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <GoogleIcon />
                         <span className="text-white text-sm font-medium">
                           Google
                         </span>
                       </button>
-                      <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
                         <span className="text-white text-sm font-medium">
                           Wallet
                         </span>
-                      </button>
+                      </button> */}
                     </div>
 
                     <div className="relative my-6">
@@ -529,18 +529,18 @@ const LoginSignup = ({
 
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <GoogleIcon />
                         <span className="text-white text-sm font-medium">
                           Google
                         </span>
                       </button>
-                      <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
                         <span className="text-white text-sm font-medium">
                           Wallet
                         </span>
-                      </button>
+                      </button> */}
                     </div>
 
                     {/* Referral Code */}
