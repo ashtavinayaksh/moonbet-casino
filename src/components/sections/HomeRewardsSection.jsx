@@ -224,7 +224,7 @@ const HomeRewardsSection = () => {
                   </motion.p>
 
                   {/* Button with Animation */}
-                  <motion.div
+                  {/* <motion.div
                     className="flex justify-start"
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -240,11 +240,23 @@ const HomeRewardsSection = () => {
                       onClick={() =>
                         console.log(`${reward.buttonText} clicked`)
                       }
-                    >
-                      {reward.buttonText}
-                    </MoonBetButton>
-                  </motion.div>
+                    ></MoonBetButton>
+                  </motion.div> */}
 
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-[176px] h-[44px] 
+                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
+                 text-[#000] font-[600] text-[16px] 
+                 font-['Neue_Plack',sans-serif]
+                 rounded-lg shadow-md 
+                 transition-all duration-300
+                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
+                 flex items-center justify-center"
+                  >
+                    {reward.buttonText}
+                  </motion.button>
                   {/* Hover Glow Effect with Animation */}
                   <motion.div
                     className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#F07730]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"

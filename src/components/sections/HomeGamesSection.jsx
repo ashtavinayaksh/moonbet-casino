@@ -120,7 +120,7 @@ const HomeGamesSection = () => {
   };
 
   return (
-    <section className="w-full py-16 md:py-20 bg-[#0A0B0D] relative">
+    <section className="w-full py-16 md:py-20 bg-[#000] relative">
       <div className="container max-w-7xl mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -154,11 +154,20 @@ const HomeGamesSection = () => {
           </div>
 
           <button className="hidden md:flex items-center">
-            <MoonBetButton
-              onClick={() => console.log(`${reward.buttonText} clicked`)}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-[176px] h-[44px] 
+                             bg-gradient-to-r from-[#424242] to-[#6B6B6B]
+                             text-[#fff] font-[600] text-[16px] 
+                             font-['Neue_Plack',sans-serif]
+                             rounded-lg shadow-md 
+                             transition-all duration-300
+                             hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
+                             flex items-center justify-center"
             >
-              To the Casino
-            </MoonBetButton>
+              To The Casino
+            </motion.button>
           </button>
         </motion.div>
 

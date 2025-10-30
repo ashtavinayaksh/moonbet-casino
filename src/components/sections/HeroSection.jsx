@@ -245,7 +245,7 @@ const HeroSection = () => {
 
           {/* Cards Container */}
           <div
-            className="overflow-hidden translate-y-[-33%]"
+            className="overflow-hidden translate-y-[-30%]"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >

@@ -58,7 +58,7 @@ const Layout = () => {
           className="flex-1 pb-16 lg:pb-0 min-h-[calc(100vh-64px)]"
         >
           {/* Glass morphism container for content */}
-          <div className="p-2 lg:p-6 md:p-4">
+          <div className="p-2 lg:p-6 md:p-4 bg-black">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}

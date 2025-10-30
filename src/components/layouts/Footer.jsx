@@ -101,15 +101,14 @@ const Footer = () => {
 
   return (
     <footer className="relative w-full bg-black overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[800px]">
-      {/* Background Image Container */}
+      {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img
           src="/home-assets/footer-bg-2.png"
-          alt=""
+          alt="footer background"
           className="w-full h-full object-cover object-center opacity-100"
         />
-        {/* Neon Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-no-repeat bg-center filter blur-[2px] pointer-events-none" />
       </div>
 
       {/* Footer Content */}
@@ -120,35 +119,67 @@ const Footer = () => {
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <div className="max-w-[1366px] mx-auto px-4 sm:px-6 w-full flex flex-col h-full">
-          {/* Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-8 md:gap-12 pt-5">
-            {/* Brand Column - Mobile Centered */}
+        <div className="max-w-[1366px] mx-auto px-4 sm:px-6 w-full flex flex-col h-full pt-6">
+          {/* ================= TOP LOGO ROW ================= */}
+          <div className="flex items-center justify-center md:justify-between w-full mb-6">
+            {/* Logo */}
+            <img
+              src="/icons/logo.svg"
+              alt="MoonBet Logo"
+              className="w-40 sm:w-48 md:w-52 lg:w-56 object-contain"
+            />
+
+            {/* Back to top button */}
+            <motion.button
+              className="flex items-center gap-2 text-white/90 text-xs sm:text-sm md:text-base font-medium hover:text-orange-400 transition-all duration-300 
+                    absolute right-10 sm:static"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              <span className="hidden sm:inline">Back to top</span>
+              <motion.span
+                className="p-1 flex items-center justify-center rounded-md bg-white/10 border border-white/20"
+                whileHover={{ boxShadow: "0 0 12px rgba(255, 107, 0, 0.5)" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 25 25"
+                  fill="none"
+                >
+                  <path
+                    d="M13.7071 1.29289C13.3166 0.902369 12.6834 0.902369 12.2929 1.29289L5.92893 7.65685C5.53841 8.04738 5.53841 8.68054 5.92893 9.07107C6.31946 9.46159 6.95262 9.46159 7.34315 9.07107L13 3.41421L18.6569 9.07107C19.0474 9.46159 19.6805 9.46159 20.0711 9.07107C20.4616 8.68054 20.4616 8.04738 20.0711 7.65685L13.7071 1.29289ZM13 24L14 24L14 2L13 2L12 2L12 24L13 24Z"
+                    fill="white"
+                  />
+                </svg>
+              </motion.span>
+            </motion.button>
+          </div>
+
+          {/* ================= MAIN CONTENT GRID ================= */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_2fr] gap-8 md:gap-12 pt-2">
+            {/* Left: Description, Email, Social Links */}
             <motion.div
-              className="flex flex-col lg:pr-10 text-center lg:text-left items-center lg:items-start mb-6 md:mb-0"
+              className="flex flex-col justify-start lg:pr-10 text-center lg:text-left items-center lg:items-start space-y-6 md:space-y-8"
               variants={itemVariants}
             >
-              {/* Logo - Responsive Size */}
-              <div className="flex items-center gap-3 mb-4 md:mb-5">
-                <img
-                  src="/icons/logo.svg"
-                  alt="MoonBet Logo"
-                  className="w-40 sm:w-48 md:w-52 lg:w-60 object-contain"
-                />
-              </div>
-
-              {/* Description - Better Mobile Typography */}
-              <p className="text-xs sm:text-sm leading-relaxed text-white/70 max-w-[280px] sm:max-w-[320px] mb-3 md:mb-2 px-4 sm:px-0">
+              {/* Description */}
+              <p className="text-xs sm:text-sm leading-relaxed text-white/70 max-w-[320px] lg:pt-[20px]">
                 Moonbet operates as a decentralized crypto casino on the Solana
-                blockchain. Built by crypto natives for players 18+
+                blockchain. Built by crypto natives for players 18+.
               </p>
 
-              {/* Email - Mobile Friendly */}
+              {/* Email */}
               <motion.div
-                className="flex items-center gap-2 mt-2 mb-4"
+                className="flex items-center gap-2 mt-2"
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="text-base sm:text-lg text-orange-500">✉</span>
+                <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-orange-500 transition-all duration-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.5)]">
+                  ✉
+                </span>
+
                 <a
                   href="mailto:support@moonbet.games"
                   className="text-xs sm:text-sm text-white/80 hover:text-orange-500 transition-colors duration-300"
@@ -157,13 +188,14 @@ const Footer = () => {
                 </a>
               </motion.div>
 
-              {/* Social Links - Better Mobile Spacing */}
-              <div className="flex gap-3 sm:gap-4 mt-2 md:mt-3">
+              {/* Social Links */}
+              <div className="flex gap-3 sm:gap-4 mt-3">
                 {socialIcons.map((social, index) => (
                   <motion.a
                     key={index}
                     href={social.url}
                     target="_blank"
+                    rel="noreferrer"
                     className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 transition-all duration-300 hover:text-white"
                     variants={glowVariants}
                     initial="initial"
@@ -177,125 +209,85 @@ const Footer = () => {
               </div>
             </motion.div>
 
-            {/* Footer Links Section - Mobile Optimized Grid */}
-            <div className="col-span-1 md:col-span-1 lg:col-span-3">
-              {/* Mobile: 2 columns, Tablet: 3 columns, Desktop: 3 columns */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
-                {/* About Us Column */}
-                <motion.div
-                  className="flex flex-col gap-3 md:gap-5 lg:pt-[85px] text-left"
-                  variants={itemVariants}
-                >
-                  <h3 className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                    About Us
-                  </h3>
-                  <ul className="flex flex-col gap-2 md:gap-3">
-                    {footerLinks.aboutUs.slice(0, 3).map((link, index) => (
-                      <li key={index}>
-                        <Link
-                          to={link.path}
-                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                    {/* Hide extra links on mobile, show on tablet+ */}
-                    <div className="hidden sm:flex flex-col gap-2 md:gap-3">
-                      {footerLinks.aboutUs.slice(3).map((link, index) => (
-                        <li key={index + 3}>
-                          <Link
-                            to={link.path}
-                            className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </div>
-                  </ul>
-                </motion.div>
+            {/* Right: Footer Links (About / Support / Moonbet) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 lg:pt-[20px]">
+              {/* About Us */}
+              <motion.div
+                className="flex flex-col gap-3 md:gap-3 text-left"
+                variants={itemVariants}
+              >
+                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                  About Us
+                </p>
+                <ul className="flex flex-col gap-2 md:gap-3">
+                  {footerLinks.aboutUs.map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.path}
+                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
 
-                {/* Support Column */}
-                <motion.div
-                  className="flex flex-col gap-3 md:gap-5 lg:pt-[85px] text-left"
-                  variants={itemVariants}
-                >
-                  <h3 className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                    Support
-                  </h3>
-                  <ul className="flex flex-col gap-2 md:gap-3">
-                    {footerLinks.support.map((link, index) => (
-                      <li key={index}>
-                        <Link
-                          to={link.path}
-                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
+              {/* Support */}
+              <motion.div
+                className="flex flex-col gap-3 md:gap-3 text-left"
+                variants={itemVariants}
+              >
+                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                  Support
+                </p>
+                <ul className="flex flex-col gap-2 md:gap-3">
+                  {footerLinks.support.map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.path}
+                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
 
-                {/* Moonbet Column - Full width on mobile */}
-                <motion.div
-                  className="flex flex-col gap-3 md:gap-5 lg:pt-[85px] text-left col-span-2 sm:col-span-1"
-                  variants={itemVariants}
-                >
-                  <h3 className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                    Moonbet
-                  </h3>
-                  <ul className="flex flex-col gap-2 md:gap-3">
-                    {footerLinks.moonbet.map((link, index) => (
-                      <li key={index}>
-                        <Link
-                          to={link.path}
-                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </div>
-
-              {/* Mobile Only - Show hidden About Us links */}
-              <div className="mt-6 sm:hidden">
-                <motion.div
-                  className="flex flex-col gap-3 text-left"
-                  variants={itemVariants}
-                >
-                  <h3 className="text-sm font-semibold text-white mb-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                    More
-                  </h3>
-                  <ul className="flex flex-col gap-2">
-                    {footerLinks.aboutUs.slice(3).map((link, index) => (
-                      <li key={index}>
-                        <Link
-                          to={link.path}
-                          className="text-xs text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </div>
+              {/* Moonbet */}
+              <motion.div
+                className="flex flex-col gap-3 md:gap-3 text-left"
+                variants={itemVariants}
+              >
+                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                  Moonbet
+                </p>
+                <ul className="flex flex-col gap-2 md:gap-3">
+                  {footerLinks.moonbet.map((link, index) => (
+                    <li key={index}>
+                      <Link
+                        to={link.path}
+                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             </div>
           </div>
 
           {/* Spacer for astronauts - Responsive Heights */}
           <div className="flex-1 min-h-[100px] sm:min-h-[150px] md:min-h-[200px] lg:min-h-[300px]" />
 
-          {/* Bottom Section - Mobile Optimized */}
+          {/* ================= BOTTOM SECTION ================= */}
           <motion.div
             className="flex flex-col sm:flex-row justify-between items-center py-6 md:py-8 gap-4 mb-20 sm:mb-16 md:mb-12 lg:mb-0"
             variants={itemVariants}
           >
-            {/* BeGambleAware - Mobile Stack */}
+            {/* BeGambleAware */}
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <motion.div
                 className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10 w-full sm:w-auto justify-center sm:justify-start"
@@ -312,16 +304,16 @@ const Footer = () => {
                   18+
                 </span>
               </motion.div>
-
-              {/* Copyright - Centered on Mobile */}
-            </div>
-            <div className="text-xs sm:text-sm text-white/60 text-center sm:text-center hidden md:block">
-              ©MoonBet {currentYear}
             </div>
 
-            {/* Contact Button - Full Width on Mobile */}
+            {/* Copyright */}
+            <div className="text-xs sm:text-sm text-white/60 text-center hidden md:block">
+              © MoonBet {new Date().getFullYear()}
+            </div>
+
+            {/* Contact Button */}
             <motion.button
-              className="hidden md:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10 w-full sm:w-auto justify-center sm:justify-start"
+              className="hidden md:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10 justify-center sm:justify-start"
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 0 20px rgba(255, 107, 0, 0.3)",
@@ -333,36 +325,6 @@ const Footer = () => {
           </motion.div>
         </div>
       </motion.div>
-
-      {/* Back to Top Button - Hide on Mobile */}
-      <motion.button
-        className="hidden lg:flex absolute top-20 right-6 items-center gap-3 text-white/90 text-base font-medium z-20"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        aria-label="Back to top"
-      >
-        <span>Back to top</span>
-        <motion.span
-          className="p-1.5 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 overflow-hidden relative"
-          whileHover={{
-            boxShadow: "0 0 25px rgba(255, 107, 0, 0.6)",
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 25 25"
-            fill="none"
-          >
-            <path
-              d="M13.7071 1.29289C13.3166 0.902369 12.6834 0.902369 12.2929 1.29289L5.92893 7.65685C5.53841 8.04738 5.53841 8.68054 5.92893 9.07107C6.31946 9.46159 6.95262 9.46159 7.34315 9.07107L13 3.41421L18.6569 9.07107C19.0474 9.46159 19.6805 9.46159 20.0711 9.07107C20.4616 8.68054 20.4616 8.04738 20.0711 7.65685L13.7071 1.29289ZM13 24L14 24L14 2L13 2L12 2L12 24L13 24Z"
-              fill="white"
-            />
-          </svg>
-        </motion.span>
-      </motion.button>
     </footer>
   );
 };
