@@ -51,7 +51,7 @@
       var(--color-casino-darker)
     );
     min-height: 100vh;
-    font-family: "Neue Plak", system-ui, -apple-system, sans-serif;
+    font-family: "Neue Plak", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -62,7 +62,7 @@
   h4,
   h5,
   h6 {
-    font-family: "Neuropolitical", "Neue Plak", system-ui, sans-serif;
+    font-family: "Neuropolitical", sans-serif;
     letter-spacing: 0.025em;
   }
 }
@@ -670,6 +670,25 @@
   padding: 1px; /* border thickness */
   border-radius: 8px;
   background: linear-gradient(39deg, #f07730 0%, #f474fb00 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wallet-btn3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 8px;
+  background: linear-gradient(
+    120deg,
+    /* angle */ rgba(255, 255, 255, 0.14) 0%,
+    /* light highlight */ rgba(255, 255, 255, 0.1) 50%,
+    /* soft middle */ rgba(30, 30, 30, 0.4) 100% /* darker edge */
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

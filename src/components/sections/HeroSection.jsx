@@ -167,8 +167,7 @@ const HeroSection = () => {
         className="absolute top-0 left-0 right-0 z-20"
         style={{
           background:
-            "linear-gradient(0deg, rgba(30, 30, 30, 0.15) 0%, rgba(75, 75, 75, 0.15) 100%)",
-          backdropFilter: "blur(6px)",
+            "linear-gradient(0deg, rgb(30 30 30 / 55%) 0%, rgb(75 75 75 / 35%) 100%)",
         }}
       >
         <div className="relative px-2 sm:px-3 md:px-4 py-2 sm:py-3">
@@ -204,6 +203,8 @@ const HeroSection = () => {
               style={{
                 background: "linear-gradient(90deg, #7F0577 0%, #F474FB 100%)",
                 border: "1.5px solid #222223",
+                zIndex: 1,
+                borderRadius: "8px",
               }}
             >
               Recent Wins
@@ -212,7 +213,7 @@ const HeroSection = () => {
 
           {/* Cards Container - Scrollable */}
           <div
-            className="overflow-x-hidden"
+            className="overflow-x-hidden translate-y-[-33%]"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -290,7 +291,7 @@ const HeroSection = () => {
                     stiffness: 100,
                   }}
                   whileHover={{ scale: 1.05, y: -3 }}
-                  className="flex flex-col items-center cursor-pointer flex-shrink-0"
+                  className="flex flex-col items-center cursor-pointer"
                 >
                   {/* Game Card */}
                   <div className="relative">
@@ -306,7 +307,7 @@ const HeroSection = () => {
                   </div>
 
                   {/* Win Amount */}
-                  <motion.div className="mt-1">
+                  <motion.div className="amount-space">
                     <span className="text-white text-[11px] md:text-xs font-semibold">
                       {win.amount}
                     </span>
