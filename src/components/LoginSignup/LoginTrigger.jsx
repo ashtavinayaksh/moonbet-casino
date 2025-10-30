@@ -93,6 +93,8 @@ const handleSignupSuccess = (userData) => {
   localStorage.removeItem("username");
   localStorage.removeItem("email");
   localStorage.removeItem("kycStatus");
+  localStorage.clear();
+  window.dispatchEvent(new Event("tokenChanged"));
     setIsLoggedIn(false);
     setDropdownOpen(false);
     toast.info("You have been logged out successfully", {

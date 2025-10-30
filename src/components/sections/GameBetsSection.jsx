@@ -174,45 +174,52 @@ const GameBetsSection = () => {
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-white/5">
-            <AnimatePresence mode="popLayout">
-              {isLoading ? (
-                <div className="p-8 text-center text-gray-400">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#F07730]"></div>
-                </div>
-              ) : displayedBets.length === 0 ? (
-                <div className="p-8 text-center text-gray-400">
-                  No bets to display
-                </div>
-              ) : (
-                displayedBets.map((bet, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3, delay: index * 0.03 }}
-                    className="grid md:grid-cols-6 grid-cols-2 gap-2 lg:gap-4 p-3 lg:p-4 hover:bg-white/5 transition-colors"
-                  >
-                    <div className="text-white text-xs lg:text-sm">{bet.game}</div>
-                    <div className="text-gray-300 text-xs lg:text-sm truncate">{bet.user}</div>
-                    <div className="text-white text-xs lg:text-sm">{bet.betAmount}</div>
-                    <div className="text-cyan-400 text-xs lg:text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none">
-  <path d="M8.07136 0.292974C7.68084 -0.0975504 7.04767 -0.0975504 6.65715 0.292974L0.293189 6.65694C-0.0973349 7.04746 -0.0973348 7.68062 0.29319 8.07115C0.683714 8.46167 1.31688 8.46167 1.7074 8.07115L7.36426 2.41429L13.0211 8.07115C13.4116 8.46167 14.0448 8.46167 14.4353 8.07115C14.8258 7.68062 14.8258 7.04746 14.4353 6.65694L8.07136 0.292974ZM7.36426 12.9167L8.36426 12.9167L8.36426 1.00008L7.36426 1.00008L6.36426 1.00008L6.36426 12.9167L7.36426 12.9167Z" fill="white"/>
-</svg></div>
-                    <div
-                      className={`text-xs lg:text-sm ${
-                        bet.color === "green" ? "text-green-400" : "text-red-400"
-                      }`}
-                    >
-                      {bet.payout}
-                    </div>
-                    <div className="text-gray-500 text-xs lg:text-sm">{bet.time}</div>
-                  </motion.div>
-                ))
-              )}
-            </AnimatePresence>
+          {/* Table Body */}
+<div className="divide-y divide-transparent">
+  <AnimatePresence mode="popLayout">
+    {isLoading ? (
+      <div className="p-8 text-center text-gray-400">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#F07730]"></div>
+      </div>
+    ) : displayedBets.length === 0 ? (
+      <div className="p-8 text-center text-gray-400">No bets to display</div>
+    ) : (
+      displayedBets.map((bet, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 10 }}
+          style={{borderRadius: "8px"}}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className={`grid md:grid-cols-6 grid-cols-2 gap-2 lg:gap-4 p-3 lg:p-4 transition-all duration-300 
+  ${index % 2 === 0
+    ? "bg-gradient-to-b from-[#FFFFFF30] via-[#FFFFFF05] to-[#FFFFFF30]" // Custom gradient for the even index
+    : "bg-gradient-to-r from-[#0A0A0A] via-[#161616] to-[#0A0A0A]"} // Custom gradient for the odd index
+  hover:bg-[#222]/50 
+  border-radius: 8px; 
+  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);`}
+
+        >
+          <div className="text-white text-xs lg:text-sm font-medium">{bet.game}</div>
+          <div className="text-gray-300 text-xs lg:text-sm truncate">{bet.user}</div>
+          <div className="text-white text-xs lg:text-sm">{bet.betAmount}</div>
+          <div className="text-gray-400 text-xs lg:text-sm">{bet.multiplier}</div>
+          <div
+            className={`text-xs lg:text-sm font-semibold ${
+              bet.color === "green" ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {bet.payout}
           </div>
+          <div className="text-gray-500 text-xs lg:text-sm">{bet.time}</div>
+        </motion.div>
+      ))
+    )}
+  </AnimatePresence>
+</div>
+
         </motion.div>
 
         {/* View More / Show Less Button */}
