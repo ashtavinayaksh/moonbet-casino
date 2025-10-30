@@ -1,163 +1,195 @@
 // src/components/sections/HeroSection.jsx
-import React, { useRef, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const HeroSection = () => {
-  const scrollRef = useRef(null);
-  const controls = useAnimation();
-
   // Recent wins data with game cards
-  const recentWinsData = [
+  const initialWinsData = [
     {
       id: 1,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 2,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 3,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 4,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 5,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 6,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 7,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 8,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 9,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 10,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 11,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 12,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 13,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 14,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 15,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 16,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 17,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
     {
       id: 18,
       gameImage: "/games/golden.svg",
       amount: "$0.16",
       username: "6z...CfcH",
+      icon: "/icons/moon.svg",
     },
   ];
 
-  // Duplicate data for seamless loop
-  const duplicatedData = [...recentWinsData, ...recentWinsData];
-  const mobileWinsData = recentWinsData.slice(0, 7);
-  const duplicatedMobileData = [...mobileWinsData, ...mobileWinsData];
+  const [recentWinsData, setRecentWinsData] = useState(initialWinsData);
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Auto-scroll animation
-  useEffect(() => {
-    const animateScroll = async () => {
-      await controls.start({
-        x: [0, -1920], // Adjust based on total width
-        transition: {
-          x: {
-            duration: 40,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop",
-          },
-        },
-      });
+  // Generate new winner data
+  const generateNewWinner = () => {
+    const randomAmount = (Math.random() * 10 + 0.1).toFixed(2);
+    const randomUsername = `${Math.random()
+      .toString(36)
+      .substring(2, 4)}...${Math.random()
+      .toString(36)
+      .substring(2, 6)
+      .toUpperCase()}`;
+
+    return {
+      id: Date.now(),
+      gameImage: "/games/golden.svg",
+      amount: `$${randomAmount}`,
+      username: randomUsername,
+      icon: "/icons/moon.svg",
     };
-    animateScroll();
-  }, [controls]);
-
-  // Pause on hover
-  const handleMouseEnter = () => {
-    controls.stop();
   };
 
-  const handleMouseLeave = () => {
-    controls.start({
-      x: [null, -1920],
-      transition: {
-        x: {
-          duration: 40,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        },
-      },
-    });
+  // Auto update winners with push/pop animation
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setRecentWinsData((prevData) => {
+        const newWinner = generateNewWinner();
+        const newData = [newWinner, ...prevData.slice(0, -1)];
+        return newData;
+      });
+    }, 6000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  // Mobile data (first 7)
+  const mobileWinsData = recentWinsData.slice(0, 7);
+
+  // Animation variants for cards
+  const cardVariants = {
+    enter: {
+      x: -100,
+      opacity: 0,
+      scale: 0.8,
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: {
+      x: 100,
+      opacity: 0,
+      scale: 0.8,
+    },
   };
 
   return (
@@ -172,7 +204,7 @@ const HeroSection = () => {
       >
         <div className="relative px-2 sm:px-3 md:px-4 py-2 sm:py-3">
           {/* Recent Wins Label positioned above cards */}
-             <motion.div
+          <motion.div
             className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -211,117 +243,123 @@ const HeroSection = () => {
             </span>
           </motion.div>
 
-          {/* Cards Container - Scrollable */}
+          {/* Cards Container */}
           <div
-            className="overflow-x-hidden translate-y-[-33%]"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className="overflow-hidden translate-y-[-33%]"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
-            {/* Mobile View - Show 7 cards with auto-scroll */}
-            <motion.div
-              className="sm:hidden flex gap-1.5"
-              animate={controls}
-              initial={{ x: 0 }}
-            >
-              {duplicatedMobileData.map((win, index) => (
-                <motion.div
-                  key={`mobile-${index}`}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{
-                    delay: (index % 7) * 0.05,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{ scale: 1.05, y: -3 }}
-                  className="flex flex-col items-center cursor-pointer flex-shrink-0"
-                >
-                  {/* Game Card */}
-                  <div className="relative">
-                    <motion.div
-                      className="relative w-[50px] h-[60px] xs:w-[60px] xs:h-[70px] rounded-lg overflow-hidden"
-                      style={{
-                        backdropFilter: "blur(10px)",
-                      }}
-                      whileHover={{
-                        boxShadow: "0 8px 16px rgba(147, 51, 234, 0.3)",
-                      }}
-                    >
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <img
-                          src={win.gameImage}
-                          alt="Game"
-                          className="w-8 h-8 xs:w-10 xs:h-10 object-contain"
-                        />
-                      </div>
+            {/* Mobile View - Show 7 cards */}
+            <div className="sm:hidden flex gap-1.5">
+              <AnimatePresence mode="popLayout">
+                {mobileWinsData.map((win, index) => (
+                  <motion.div
+                    key={win.id}
+                    layout
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    variants={cardVariants}
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                    }}
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    className="flex flex-col items-center cursor-pointer flex-shrink-0"
+                  >
+                    {/* Game Card */}
+                    <div className="relative">
+                      <motion.div
+                        className="relative w-[50px] h-[60px] xs:w-[60px] xs:h-[70px] rounded-lg overflow-hidden"
+                        style={{
+                          backdropFilter: "blur(10px)",
+                        }}
+                        whileHover={{
+                          boxShadow: "0 8px 16px rgba(147, 51, 234, 0.3)",
+                        }}
+                      >
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <img
+                            src={win.gameImage}
+                            alt="Game"
+                            className="w-8 h-8 xs:w-10 xs:h-10 object-contain"
+                          />
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Win Amount */}
+                    <motion.div className="mt-0.5">
+                      <span className="text-white text-[10px] xs:text-[11px] font-semibold">
+                        {win.amount}
+                      </span>
                     </motion.div>
-                  </div>
 
-                  {/* Win Amount */}
-                  <motion.div className="mt-0.5">
-                    <span className="text-white text-[10px] xs:text-[11px] font-semibold">
-                      {win.amount}
-                    </span>
-                  </motion.div>
-
-                  {/* Username */}
-                  <motion.div>
-                    <span className="text-gray-400 text-[8px] xs:text-[9px]">
-                      {win.username}
-                    </span>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Desktop View - Show all cards with auto-scroll */}
-            <motion.div
-              className="hidden sm:flex gap-1.5 md:gap-2"
-              animate={controls}
-              initial={{ x: 0 }}
-            >
-              {duplicatedData.map((win, index) => (
-                <motion.div
-                  key={`desktop-${index}`}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{
-                    delay: (index % 18) * 0.03,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{ scale: 1.05, y: -3 }}
-                  className="flex flex-col items-center cursor-pointer"
-                >
-                  {/* Game Card */}
-                  <div className="relative">
-                    <motion.div className="relative w-[60px] h-[70px] md:w-[70px] md:h-[80px] lg:w-[75px] lg:h-[85px] rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <img
-                          src={win.gameImage}
-                          alt="Game"
-                          className="md:w-120 md:h-170 object-contain"
-                        />
-                      </div>
+                    {/* Username with Icon */}
+                    <motion.div className="flex items-center gap-1">
+                      <img src={win.icon} alt="icon" className="w-3 h-3" />
+                      <span className="text-gray-400 text-[8px] xs:text-[9px]">
+                        {win.username}
+                      </span>
                     </motion.div>
-                  </div>
-
-                  {/* Win Amount */}
-                  <motion.div className="amount-space">
-                    <span className="text-white text-[11px] md:text-xs font-semibold">
-                      {win.amount}
-                    </span>
                   </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
 
-                  {/* Username */}
-                  <motion.div>
-                    <span className="text-gray-400 text-[9px] md:text-[10px]">
-                      {win.username}
-                    </span>
+            {/* Desktop View - Show all cards */}
+            <div className="hidden sm:flex gap-1.5 md:gap-2">
+              <AnimatePresence mode="popLayout">
+                {recentWinsData.map((win, index) => (
+                  <motion.div
+                    key={win.id}
+                    layout
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    variants={cardVariants}
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                    }}
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    className="flex flex-col items-center cursor-pointer flex-shrink-0"
+                  >
+                    {/* Game Card */}
+                    <div className="relative">
+                      <motion.div className="relative w-[60px] h-[70px] md:w-[70px] md:h-[80px] lg:w-[75px] lg:h-[85px] rounded-lg overflow-hidden">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <img
+                            src={win.gameImage}
+                            alt="Game"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Win Amount */}
+                    <motion.div className="mt-1">
+                      <span className="text-[#D3D3D3] text-[11px] md:text-xs font-semibold">
+                        {win.amount}
+                      </span>
+                    </motion.div>
+
+                    {/* Username with Icon */}
+                    <motion.div className="flex items-center gap-1">
+                      <img
+                        src={win.icon}
+                        alt="icon"
+                        className="w-3 h-3 md:w-4 md:h-4"
+                      />
+                      <span className="text-gray-400 text-[9px] md:text-[10px]">
+                        {win.username}
+                      </span>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              ))}
-            </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

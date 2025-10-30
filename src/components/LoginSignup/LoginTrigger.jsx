@@ -12,6 +12,7 @@ export const LoginTrigger = ({
   onLoginSuccess,
   onSignupSuccess,
   className = "",
+  forceOpen = false,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(defaultTab);
@@ -19,6 +20,10 @@ export const LoginTrigger = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false); // ADD THIS LINE (Line 19)
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+  if (forceOpen) setIsModalOpen(true);
+}, [forceOpen]);
 
   // Check login state
   useEffect(() => {

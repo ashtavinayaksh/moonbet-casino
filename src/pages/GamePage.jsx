@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
 import GameBetsSection from "../components/sections/GameBetsSection";
+import { LoginTrigger } from "../components/LoginSignup/LoginTrigger";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
@@ -15,6 +16,12 @@ const GamePage = () => {
   const [iframeUrl, setIframeUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [isRealPlay, setIsRealPlay] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
+  const [preferredCurrency, setPreferredCurrency] = useState(
+  localStorage.getItem("preferredCurrency") || "BTC"
+);
+
 
   // Utility to toggle fullscreen
 const toggleFullScreen = (iframeRef) => {
@@ -29,6 +36,21 @@ const toggleFullScreen = (iframeRef) => {
       iframe.msRequestFullscreen?.();
   }
 };
+
+useEffect(() => {
+  // Whenever another component updates preferredCurrency in localStorage
+  const handleCurrencyChange = () => {
+    const newCurrency = localStorage.getItem("preferredCurrency") || "BTC";
+    setPreferredCurrency(newCurrency);
+  };
+
+  window.addEventListener("currencyChanged", handleCurrencyChange);
+
+  return () => {
+    window.removeEventListener("currencyChanged", handleCurrencyChange);
+  };
+}, []);
+
 
 
   useEffect(() => {
@@ -59,7 +81,7 @@ const toggleFullScreen = (iframeRef) => {
 
           if (!token || !user?.id) {
             toast.warning("Please log in to play for real money!");
-            navigate("/"); // ✅ redirect to homepage
+            setShowLogin(true);
             return;
           }
         // Real Play payload
@@ -104,7 +126,7 @@ const toggleFullScreen = (iframeRef) => {
   };
 
   fetchGameUrl();
-}, [gameId, isRealPlay, navigate]);
+}, [gameId, isRealPlay, preferredCurrency, navigate]);
 
 
   useEffect(() => {
@@ -140,22 +162,22 @@ useEffect(() => {
 
 
 const handlePlayToggle = () => {
-    if (isRealPlay) {
-      // switching back to Fun play
-      setLoading(true);
-      setIsRealPlay(false);
-    } else {
-      // switching to Real play → check login first
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.warning("Please log in to play for real money!");
-        navigate("/");
-        return;
-      }
-      setLoading(true);
-      setIsRealPlay(true);
+  if (isRealPlay) {
+    // Switching back to Fun play
+    setLoading(true);
+    setIsRealPlay(false);
+  } else {
+    // Switching to Real play → check login first
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.warning("Please log in to play for real money!");
+      setShowLogin(true); // 👈 open login popup instead of navigating
+      return;
     }
-  };
+    setLoading(true);
+    setIsRealPlay(true);
+  }
+};
 
 
   // useEffect(() => {
@@ -406,6 +428,24 @@ const handlePlayToggle = () => {
     <div className="bg-black">
         <GameBetsSection />
       </div>
+      {!hasToken || showLogin && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <LoginTrigger
+      buttonText=""
+      defaultTab="login"
+      forceOpen={true} // 👈 triggers modal immediately
+      onLoginSuccess={() => {
+        setShowLogin(false);
+        setIsRealPlay(true);
+      }}
+      onSignupSuccess={() => {
+        setShowLogin(false);
+        setIsRealPlay(true);
+      }}
+      className=""
+    />
+  </div>
+)}
       </>
   );
 };

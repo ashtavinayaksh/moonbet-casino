@@ -8,6 +8,7 @@ import WalletSettingsModal from "../WalletSettingsModal";
 import WalletModal from "../WalletModal";
 import LoginTrigger from "../LoginSignup/LoginTrigger";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // 3D Rotating Coin Component
 const RotatingCoin = () => {
@@ -291,6 +292,7 @@ const Header = ({
       localStorage.setItem("preferredCurrency", preferredCurrency);
       localStorage.setItem("gameCurrency", betCurrency);
 
+      window.dispatchEvent(new Event("preferredCurrencyUpdated"));
       console.log(
         `💱 Converted ${preferredCurrency} → ${betCurrency}, Balance: ${amount}`
       );
@@ -417,6 +419,30 @@ const Header = ({
     if (onCloseMobileSidebar) {
       onCloseMobileSidebar();
     }
+  };
+
+  const handleLogout = () => {
+     localStorage.removeItem("token");
+     window.dispatchEvent(new Event("tokenChanged"));
+    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("kycStatus");
+    window.dispatchEvent(new Event("tokenChanged"));
+      // setIsLoggedIn(false);
+      // setDropdownOpen(false);
+      toast.info("You have been logged out successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setTimeout(() => {
+    window.location.reload();
+  }, 1200);
   };
 
   // Handle click outside for wallet dropdown
@@ -1050,7 +1076,7 @@ const Header = ({
                       ))}
         
                       {/* Logout Button */}
-        
+                      {hasToken && (
                       <motion.button
                         whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                         whileTap={{ scale: 0.98 }}
@@ -1073,6 +1099,7 @@ const Header = ({
                               style={{
                                 textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
                               }}
+                              onClick={handleLogout}
                             >
                               Logout
                             </motion.span>
@@ -1086,10 +1113,12 @@ const Header = ({
                           </div>
                         )}
                       </motion.button>
+                      )}
                     </div>
                   </div>
         
                   {/* Social Links - Only show when expanded */}
+                  {hasToken && (
                   <AnimatePresence>
                     {!sidebarCollapsed && (
                       <motion.div
@@ -1100,15 +1129,15 @@ const Header = ({
                       >
                         {/* User Profile */}
                         <div className="flex items-center gap-3 p-2 mb-3">
-  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-    <span className="text-xs text-white font-semibold">
-      {userName ? userName.charAt(0).toUpperCase() : ''}
-    </span>
-  </div>
-  <div className="flex-1">
-    <p className="text-sm text-white font-medium ">{userName}</p>
-  </div>
-</div>
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                        <span className="text-xs text-white font-semibold">
+                          {userName ? userName.charAt(0).toUpperCase() : ''}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-white font-medium ">{userName}</p>
+                      </div>
+                      </div>
 
         
                         {/* Language Selector */}
@@ -1153,6 +1182,7 @@ const Header = ({
                       </motion.div>
                     )}
                   </AnimatePresence>
+                  )}
                 </motion.aside>
       </div>
 
