@@ -51,6 +51,23 @@ useEffect(() => {
   };
 }, []);
 
+useEffect(() => {
+  // ✅ When preferredCurrency is updated via conversion API
+  const handlePreferredCurrencyUpdate = () => {
+    const newCurrency = localStorage.getItem("preferredCurrency") || "USD";
+    console.log("💱 preferredCurrency updated → restarting game init:", newCurrency);
+    setPreferredCurrency(newCurrency);
+
+    // ✅ Force reload game init with the new currency
+    // This will trigger the useEffect that depends on preferredCurrency
+  };
+
+  window.addEventListener("preferredCurrencyUpdated", handlePreferredCurrencyUpdate);
+
+  return () => {
+    window.removeEventListener("preferredCurrencyUpdated", handlePreferredCurrencyUpdate);
+  };
+}, []);
 
 
   useEffect(() => {

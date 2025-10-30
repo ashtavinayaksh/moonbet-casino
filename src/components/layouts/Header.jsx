@@ -245,18 +245,11 @@ const Header = ({
   const handleCurrencySelect = async (currency) => {
   try {
     setSelectedCurrency(currency);
-
-    // ✅ Store preferredCurrency
     localStorage.setItem("preferredCurrency", currency.symbol);
 
-    // ✅ Ensure gameCurrency exists (default to EUR)
-    let gameCurrency = localStorage.getItem("gameCurrency");
-    if (!gameCurrency) {
-      gameCurrency = "EUR";
-      localStorage.setItem("gameCurrency", gameCurrency);
-    }
+    let gameCurrency = localStorage.getItem("gameCurrency") || "USD";
+    localStorage.setItem("gameCurrency", gameCurrency);
 
-    // ✅ Get logged-in user
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const userId = user.id;
     if (!userId) {
@@ -265,10 +258,8 @@ const Header = ({
       return;
     }
 
-    // ✅ Show temporary loading
     setWalletBalance("Updating...");
 
-    // ✅ Hit your backend conversion API
     const res = await axios.put(
       `/wallet-service/api/games/convert/${userId}`,
       {
@@ -278,23 +269,25 @@ const Header = ({
     );
 
     if (res.data?.success && res.data.data) {
-      const { balances, betCurrency, preferredCurrency } = res.data.data;
-
-      // ✅ Find new preferredCurrency balance
+      const { balances, betCurrency, preferredCurrency, rate } = res.data.data;
       const match = balances.find(
         (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
       );
 
       const amount = match ? Number(match.amount).toFixed(2) : "0.00";
-      setWalletBalance(`${amount} ${betCurrency}`);
 
-      // ✅ Persist in localStorage
+      // ✅ Store in localStorage to persist across reloads
+      localStorage.setItem("convertedValue", amount);
       localStorage.setItem("preferredCurrency", preferredCurrency);
       localStorage.setItem("gameCurrency", betCurrency);
+      localStorage.setItem("conversionRate", rate);
 
+      setWalletBalance(`${amount} ${betCurrency}`);
+
+      // ✅ Notify GamePage that currency changed
       window.dispatchEvent(new Event("preferredCurrencyUpdated"));
       console.log(
-        `💱 Converted ${preferredCurrency} → ${betCurrency}, Balance: ${amount}`
+        `💱 Converted ${preferredCurrency} → ${betCurrency} @ rate ${rate}`
       );
     } else {
       console.warn("⚠️ Conversion API failed:", res.data?.message);
@@ -308,6 +301,21 @@ const Header = ({
   }
 };
 
+useEffect(() => {
+  // Restore currency & converted value on reload
+  const preferred = localStorage.getItem("preferredCurrency");
+  const gameCurrency = localStorage.getItem("gameCurrency");
+  const convertedValue = localStorage.getItem("convertedValue");
+
+  if (preferred && gameCurrency && convertedValue) {
+    const currencyObj = currencies.find(
+      (c) => c.symbol.toUpperCase() === preferred.toUpperCase()
+    );
+    if (currencyObj) setSelectedCurrency(currencyObj);
+
+    setWalletBalance(`${convertedValue} ${gameCurrency}`);
+  }
+}, [currencies]);
 
 
 
@@ -578,7 +586,9 @@ const Header = ({
 
                   {/* Balance text */}
                   <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                    {walletBalance}
+                    {selectedCurrency
+    ? `${selectedCurrency.icon || ""} ${walletBalance}`
+    : walletBalance}
                   </span>
 
                   {/* Dropdown arrow */}
