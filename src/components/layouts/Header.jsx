@@ -244,46 +244,68 @@ const Header = ({
   const handleCurrencySelect = async (currency) => {
   try {
     setSelectedCurrency(currency);
+
+    // ✅ Store preferredCurrency
     localStorage.setItem("preferredCurrency", currency.symbol);
 
-    // 🎯 Get target gameCurrency or fallback to USD
-    const gameCurrency = localStorage.getItem("gameCurrency") || "USD";
-    const symbolMap = { USD: "$", EUR: "€", GBP: "£", CAD: "CA$", AUD: "A$", BRL: "R$" };
+    // ✅ Ensure gameCurrency exists (default to EUR)
+    let gameCurrency = localStorage.getItem("gameCurrency");
+    if (!gameCurrency) {
+      gameCurrency = "EUR";
+      localStorage.setItem("gameCurrency", gameCurrency);
+    }
 
-    if (gameCurrency === currency.symbol) {
-      // if same currency selected → show its own balance
-      setWalletBalance(`${currency.balance} ${currency.symbol}`);
-    } else {
-      // 💱 Convert using CoinGecko to gameCurrency
-      const idsMap = {
-        BTC: "bitcoin",
-        ETH: "ethereum",
-        SOL: "solana",
-        USDT: "tether",
-        DOGE: "dogecoin",
-        XRP: "ripple",
-        LTC: "litecoin",
-        TRX: "tron",
-        BCH: "bitcoin-cash",
-      };
+    // ✅ Get logged-in user
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const userId = user.id;
+    if (!userId) {
+      console.error("❌ No user ID found in localStorage");
+      setWalletBalance("0.00");
+      return;
+    }
 
-      const id = idsMap[currency.symbol] || currency.name.toLowerCase();
-      const res = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=${gameCurrency.toLowerCase()}`
+    // ✅ Show temporary loading
+    setWalletBalance("Updating...");
+
+    // ✅ Hit your backend conversion API
+    const res = await axios.put(
+      `/wallet-service/api/games/convert/${userId}`,
+      {
+        preferredCurrency: currency.symbol,
+        gameCurrency: gameCurrency,
+      }
+    );
+
+    if (res.data?.success && res.data.data) {
+      const { balances, betCurrency, preferredCurrency } = res.data.data;
+
+      // ✅ Find new preferredCurrency balance
+      const match = balances.find(
+        (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
       );
 
-      const rate = res.data?.[id]?.[gameCurrency.toLowerCase()] || 1;
-      const convertedValue = parseFloat(currency.balance) * rate;
+      const amount = match ? Number(match.amount).toFixed(2) : "0.00";
+      setWalletBalance(`${amount} ${betCurrency}`);
 
-      setWalletBalance(`${symbolMap[gameCurrency] || ""}${convertedValue.toFixed(2)}`);
+      // ✅ Persist in localStorage
+      localStorage.setItem("preferredCurrency", preferredCurrency);
+      localStorage.setItem("gameCurrency", betCurrency);
+
+      console.log(
+        `💱 Converted ${preferredCurrency} → ${betCurrency}, Balance: ${amount}`
+      );
+    } else {
+      console.warn("⚠️ Conversion API failed:", res.data?.message);
+      setWalletBalance("0.00");
     }
   } catch (err) {
-    console.error("Currency conversion failed:", err);
+    console.error("❌ Currency conversion failed:", err.message);
     setWalletBalance("0.00");
   } finally {
     setWalletDropdownOpen(false);
   }
 };
+
 
 
 
