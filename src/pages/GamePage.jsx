@@ -7,11 +7,13 @@ import api from "../api/axios";
 import axios from "axios";
 import GameBetsSection from "../components/sections/GameBetsSection";
 import { LoginTrigger } from "../components/LoginSignup/LoginTrigger";
+import { useAuthStore } from "../store/useAuthStore";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
   const navigate = useNavigate();
   const iframeRef = useRef(null);
+  const { isLoggedIn } = useAuthStore();
   const [gameData, setGameData] = useState(null);
   const [iframeUrl, setIframeUrl] = useState("");
   const [loading, setLoading] = useState(true);
@@ -21,6 +23,18 @@ const GamePage = () => {
   const [preferredCurrency, setPreferredCurrency] = useState(
   localStorage.getItem("preferredCurrency") || "BTC"
 );
+
+// React to login/logout instantly
+useEffect(() => {
+  if (!isLoggedIn) {
+    // 👇 if logged out while playing Real
+    if (isRealPlay) {
+      toast.info("You have logged out — switching to Fun Play...");
+      setIsRealPlay(false);
+      setLoading(true);
+    }
+  }
+}, [isLoggedIn]);
 
 
   // Utility to toggle fullscreen
