@@ -435,7 +435,7 @@ const LoginSignup = ({
 
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
                         <div className="col-span-2 flex justify-center mb-4">
   <GoogleLogin
     onSuccess={async (credentialResponse) => {
@@ -558,7 +558,7 @@ const LoginSignup = ({
 
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
-                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
                         <div className="col-span-2 flex justify-center mb-4">
   <GoogleLogin
     onSuccess={async (credentialResponse) => {
