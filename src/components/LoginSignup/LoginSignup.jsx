@@ -1,5 +1,7 @@
 // src/components/LoginSignup/LoginSignup.jsx - Updated with Forgot Password
 import React, { useState, useEffect } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
@@ -434,10 +436,37 @@ const LoginSignup = ({
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
-                        <GoogleIcon />
-                        <span className="text-white text-sm font-medium">
-                          Google
-                        </span>
+                        <div className="col-span-2 flex justify-center mb-4">
+  <GoogleLogin
+    onSuccess={async (credentialResponse) => {
+      try {
+        const { credential } = credentialResponse;
+        const decoded = jwtDecode(credential);
+        console.log("✅ Google user:", decoded);
+
+        const { data } = await axios.post(
+          "/auth-service/api/auth/google",
+          { token: credential }
+        );
+
+        if (data?.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          window.dispatchEvent(new Event("tokenChanged"));
+
+          toast.success("Signed in with Google!");
+          if (onLoginSuccess) onLoginSuccess(data);
+        }
+      } catch (err) {
+        console.error("Google login failed:", err);
+        toast.error("Google login failed");
+      }
+    }}
+    onError={() => toast.error("Google Sign-In failed")}
+    useOneTap
+  />
+</div>
+
                       </button>
                       {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
@@ -530,10 +559,37 @@ const LoginSignup = ({
                     {/* Social Buttons */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
-                        <GoogleIcon />
-                        <span className="text-white text-sm font-medium">
-                          Google
-                        </span>
+                        <div className="col-span-2 flex justify-center mb-4">
+  <GoogleLogin
+    onSuccess={async (credentialResponse) => {
+      try {
+        const { credential } = credentialResponse;
+        const decoded = jwtDecode(credential);
+        console.log("✅ Google user:", decoded);
+
+        const { data } = await axios.post(
+          "/auth-service/api/auth/google",
+          { token: credential }
+        );
+
+        if (data?.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          window.dispatchEvent(new Event("tokenChanged"));
+
+          toast.success("Signed in with Google!");
+          if (onLoginSuccess) onLoginSuccess(data);
+        }
+      } catch (err) {
+        console.error("Google login failed:", err);
+        toast.error("Google login failed");
+      }
+    }}
+    onError={() => toast.error("Google Sign-In failed")}
+    useOneTap
+  />
+</div>
+
                       </button>
                       {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
