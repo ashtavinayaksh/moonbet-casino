@@ -30,14 +30,14 @@ const HomeGamesSection = () => {
     },
     {
       id: 3,
-      title: "ROULETTE",
+      title: "MINES",
       icon: "🎡",
       players: "3.1k",
       gradient: "from-red-500 to-pink-500",
     },
     {
       id: 4,
-      title: "BLACKJACK",
+      title: "DICES",
       badge: "LIVE",
       badgeColor: "bg-blue-500",
       icon: "🃏",
@@ -208,7 +208,7 @@ const HomeGamesSection = () => {
                   whileHover={{ y: -8 }}
                   className="group cursor-pointer"
                 >
-                  <div className="relative h-48 md:h-48 rounded-2xl overflow-hidden">
+                  <div className="relative h-38 md:h-48 rounded-2xl overflow-hidden">
                     {/* Background Gradient */}
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${game.gradient} opacity-90`}
@@ -225,25 +225,25 @@ const HomeGamesSection = () => {
                     </div>
 
                     {/* Badge */}
-                    {game.badge && (
+                    {/* {game.badge && (
                       <span
                         className={`absolute top-3 right-3 px-2 py-1 ${game.badgeColor} text-white text-xs font-bold rounded-full animate-pulse`}
                       >
                         {game.badge}
                       </span>
-                    )}
+                    )} */}
 
                     {/* Content */}
                     <div className="relative h-full flex flex-col items-center justify-center p-4">
                       <span className="text-5xl md:text-6xl mb-3 group-hover:scale-110 transition-transform">
                         {game.icon}
                       </span>
-                      <h3 className="text-white font-bold text-base mb-2">
+                      <h3 className="text-[#CED5E3] font-[400] text-[14px] leading-[24px] mb-2">
                         {game.title}
                       </h3>
-                      <p className="text-white/70 text-sm">
+                      {/* <p className="text-white/70 text-sm">
                         {game.players} playing
-                      </p>
+                      </p> */}
                     </div>
 
                     {/* Hover Overlay */}

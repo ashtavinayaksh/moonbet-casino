@@ -125,7 +125,7 @@ const HomeRewardsSection = () => {
   return (
     <motion.section
       ref={sectionRef}
-      className="w-full py-16 md:py-20 relative overflow-hidden"
+      className="w-full py-16 md:py-10 relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}

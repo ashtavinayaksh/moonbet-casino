@@ -160,12 +160,17 @@ const GameBetsSection = () => {
           className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden"
         >
           {/* Header */}
-          <div className="hidden md:grid grid-cols-6 gap-2 lg:gap-4 p-3 lg:p-4 border-b border-white/10 bg-black/30">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-2 lg:gap-4 p-3 lg:p-4 border-b border-white/10 bg-black/3">
             {["Game", "User", "Bet Amount", "Multiplier", "Payout", "Time"].map(
               (h) => (
                 <div
                   key={h}
-                  className="text-gray-400 text-xs lg:text-sm font-medium"
+                  className={`text-gray-400 text-xs lg:text-sm font-medium 
+        ${
+          ["User", "Bet Amount", "Multiplier", "Time"].includes(h)
+            ? "hidden md:block"
+            : ""
+        }`}
                 >
                   {h}
                 </div>
@@ -203,9 +208,9 @@ const GameBetsSection = () => {
 
         >
           <div className="text-white text-xs lg:text-sm font-medium">{bet.game}</div>
-          <div className="text-gray-300 text-xs lg:text-sm truncate">{bet.user}</div>
-          <div className="text-white text-xs lg:text-sm">{bet.betAmount}</div>
-          <div className="text-gray-400 text-xs lg:text-sm">{bet.multiplier}</div>
+          <div className="hidden md:block text-gray-300 text-xs lg:text-sm truncate">{bet.user}</div>
+          <div className="hidden md:block text-white text-xs lg:text-sm">{bet.betAmount}</div>
+          <div className="hidden md:block text-gray-400 text-xs lg:text-sm">{bet.multiplier}</div>
           <div
             className={`text-xs lg:text-sm font-semibold ${
               bet.color === "green" ? "text-green-400" : "text-red-400"
@@ -213,7 +218,7 @@ const GameBetsSection = () => {
           >
             {bet.payout}
           </div>
-          <div className="text-gray-500 text-xs lg:text-sm">{bet.time}</div>
+          <div className="hidden md:block text-gray-500 text-xs lg:text-sm">{bet.time}</div>
         </motion.div>
       ))
     )}

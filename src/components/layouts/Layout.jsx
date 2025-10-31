@@ -55,7 +55,7 @@ const Layout = () => {
             paddingTop: 64, // Height of header
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="flex-1 pb-16 lg:pb-0 min-h-[calc(100vh-64px)]"
+          className="flex-1 pb-0 md:pb-16 lg:pb-0 min-h-[calc(100vh-64px)]"
         >
           {/* Glass morphism container for content */}
           <div className="p-2 lg:p-6 md:p-4 bg-black">

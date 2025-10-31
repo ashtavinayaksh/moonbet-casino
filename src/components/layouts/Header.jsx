@@ -1019,7 +1019,7 @@ useEffect(() => {
                                 {location.pathname === item.path && (
                                   <motion.div
                                     layoutId="activeIndicator"
-                                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-purple-500 rounded-r"
+                                    className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r"
                                   />
                                 )}
         

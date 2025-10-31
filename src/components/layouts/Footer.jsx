@@ -210,7 +210,7 @@ const Footer = () => {
             </motion.div>
 
             {/* Right: Footer Links (About / Support / Moonbet) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 lg:pt-[20px]">
+            <div className="grid grid-cols-2  justify-items-center sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 lg:pt-[20px]">
               {/* About Us */}
               <motion.div
                 className="flex flex-col gap-3 md:gap-3 text-left"
@@ -257,7 +257,7 @@ const Footer = () => {
 
               {/* Moonbet */}
               <motion.div
-                className="flex flex-col gap-3 md:gap-3 text-left"
+                className="hidden md:block  flex-col gap-3 md:gap-3 text-left"
                 variants={itemVariants}
               >
                 <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">

@@ -38,7 +38,7 @@ const HomeFAQSection = () => {
   };
 
   return (
-    <section className="w-full py-20 bg-[#0A0B0D]">
+    <section className="w-full py-10 bg-[#000]">
       <div className="container max-w-4xl mx-auto px-4">
         {/* Section Title */}
         <motion.div
