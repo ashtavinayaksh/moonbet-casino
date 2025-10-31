@@ -144,13 +144,35 @@ const Layout = () => {
           border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+         ::-webkit-scrollbar-thumb {
+          border-radius: 8px;
+          background: var(
+            --hover-bar,
+            linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.3) 0%,
+              rgba(255, 255, 255, 0.05) 50%,
+              rgba(255, 255, 255, 0.3) 100%
+            )
+          );
+          box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25);
+          backdrop-filter: blur(2px);
           border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #9333ea, #f43f5e);
+          border-radius: 8px;
+          background: var(
+            --hover-bar,
+            linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0.3) 0%,
+              rgba(255, 255, 255, 0.05) 50%,
+              rgba(255, 255, 255, 0.3) 100%
+            )
+          );
+          box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.25);
+          backdrop-filter: blur(2px);
         }
 
         /* Prevent text selection on UI elements */

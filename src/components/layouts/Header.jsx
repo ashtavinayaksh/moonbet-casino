@@ -317,8 +317,6 @@ useEffect(() => {
   }
 }, [currencies]);
 
-
-
   // Enhanced menu items with gradient colors
   const menuItems = [
     {
@@ -352,9 +350,13 @@ useEffect(() => {
       className:
         "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       submenu: [
-        { path: "/casino/slots", label: "Slots", icon: "🎰" },
-        { path: "/casino/blackjack", label: "Live casino", icon: "♠️" },
-        { path: "/casino/roulette", label: "Games", icon: "🎯" },
+        { path: "/casino/roulette", label: "Games", icon: "/icons/games.svg" },
+        { path: "/casino/slots", label: "Slots", icon: "/icons/slots.svg" },
+        {
+          path: "/casino/blackjack",
+          label: "Live casino",
+          icon: "/icons/live -casino.svg",
+        },
       ],
     },
     {
@@ -364,17 +366,38 @@ useEffect(() => {
       className:
         "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       submenu: [
-        { path: "/game/honeypot", label: "HoneyPot", icon: "🍯" },
-        { path: "/game/blackjack", label: "Blackjack", icon: "🪙" },
-        { path: "/game/67", label: "67", icon: "📈" },
-        { path: "/game/mines", label: "Mines", icon: "💣" },
-        { path: "/game/dice", label: "Dices", icon: "🎲" },
-        { path: "/game/bacarrat", label: "Bacarrat", icon: "🎱" },
+        { path: "/game/dice", label: "Dices", icon: "/icons/dices.svg" },
+        {
+          path: "/game/honeypot",
+          label: "HoneyPot",
+          icon: "/icons/honeyPot.svg",
+        },
+        {
+          path: "/game/blackjack",
+          label: "Blackjack",
+          icon: "/icons/blackjack.svg",
+        },
+        { path: "/game/67", label: "67", icon: "/icons/67.svg" },
+        {
+          path: "/game/bacarrat",
+          label: "Bacarrat",
+          icon: "/icons/Bacarrat.svg",
+        },
+        { path: "/game/mines", label: "Mines", icon: "/icons/mines.svg" },
       ],
+    },
+    {
+      id: "leaderboard",
+      label: "Leaderboard",
+      icon: "/icons/leaderboard.svg",
+      className:
+        "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
     },
   ];
 
   const accountItems = [
+    { path: "/providers", label: "Providers", icon: "/icons/rewards.svg" },
+    { path: "#", label: "Affiliates", icon: "/icons/rewards.svg" },
     { path: "#", label: "Rewards", icon: "/icons/rewards.svg" },
     { path: "#", label: "Live Support", icon: "/icons/live-support.svg" },
     {
@@ -382,8 +405,6 @@ useEffect(() => {
       label: "Language: English",
       icon: "/icons/language.svg",
     },
-    // { path: "/transactions", label: "Transactions", icon: "💸" },
-    // { path: "/bonuses", label: "My Bonuses", icon: "🎁" },
     // { path: "/settings", label: "Settings", icon: "⚙️" },
   ];
 
@@ -839,15 +860,16 @@ useEffect(() => {
 
         {/* Desktop Sidebar with Glassmorphism */}
         <motion.aside
-                  initial={false}
-                  animate={{
-                    width: sidebarCollapsed ? 80 : 256,
-                    x: 0,
-                  }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-hidden`}
-                >
+          initial={false}
+          animate={{
+            width: sidebarCollapsed ? 80 : 256,
+            x: 0,
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto overflow-x-hidden`}
+        >
                      {/* Main Menu */}
+                         {/* Main Menu */}
           <div className="p-3">
             <div className="space-y-1">
               {menuItems.map((item) => (
@@ -1041,6 +1063,7 @@ useEffect(() => {
           </div>
 
           {/* Game Menu */}
+
           <div className="p-3 border-t border-gray-800">
             <div className="space-y-1">
               {gamesItems.map((item) => (
@@ -1072,7 +1095,12 @@ useEffect(() => {
                               <img
                                 src={item.icon}
                                 alt={item.label}
-                                className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                className={`w-5 h-5 object-contain transition-all duration-300
+    ${
+      location.pathname === item.path
+        ? "opacity-100 brightness-0 invert" // :point_left: stays white when active
+        : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+    }`}
                               />
                             ) : (
                               item.icon
@@ -1138,7 +1166,7 @@ useEffect(() => {
                                 <Link
                                   key={subItem.path}
                                   to={subItem.path}
-                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
+                                  className={`group  flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
                                 ${
                                   location.pathname === subItem.path
                                     ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
@@ -1146,8 +1174,21 @@ useEffect(() => {
                                 }`}
                                   onClick={closeSidebar}
                                 >
-                                  <span className="opacity-60 text-sm">
+                                  {/* <span className="opacity-60 text-sm">
                                     {subItem.icon}
+                                  </span> */}
+                                  <span className="text-lg flex items-center justify-center submenu">
+                                    {typeof item.icon === "string" &&
+                                    item.icon.startsWith("/") ? (
+                                      <img
+                                        src={subItem.icon}
+                                        alt={subItem.label}
+                                        className="w-5 h-5 object-contain opacity-70 transition-all duration-300
+                 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                      />
+                                    ) : (
+                                      item.icon
+                                    )}
                                   </span>
                                   <span
                                     className="text-sm font-['Neue_Plak']"
@@ -1260,8 +1301,12 @@ useEffect(() => {
                         <img
                           src={item.icon}
                           alt={item.label}
-                          className="w-5 h-5 object-contain opacity-70 transition-all duration-300
-                 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                          className={`w-5 h-5 object-contain transition-all duration-300
+    ${
+      location.pathname === item.path
+        ? "opacity-100 brightness-0 invert" // :point_left: stays white when active
+        : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+    }`}
                         />
                       ) : (
                         item.icon
@@ -1343,7 +1388,7 @@ useEffect(() => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-800 bg-[#0A0B0D]/95"
+                        className="relative bottom-0 left-0 right-0 p-3 border-t border-gray-800 bg-[#0A0B0D]/95"
                       >
                         {/* User Profile */}
                            {/* User Profile */}
@@ -1447,7 +1492,7 @@ useEffect(() => {
           className="fixed left-0 top-16 bottom-0 w-64 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-50"
         >
           <div className="overflow-y-auto h-full custom-scrollbar pb-20">
-            {/* Main Menu */}
+                 {/* Main Menu */}
             <div className="p-4">
               <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">
                 Main Menu
@@ -1460,7 +1505,7 @@ useEffect(() => {
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           onClick={() => toggleSubmenu(item.id)}
-                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-300 hover:bg-white/10 relative overflow-hidden group"
+                          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-300 hover:bg-white/10 relative overflow-hidden group test"
                         >
                           <div
                             className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
@@ -1536,8 +1581,17 @@ useEffect(() => {
                         <div
                           className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
                         ></div>
-                        <span className="text-xl relative z-10">
-                          {item.icon}
+                        <span className="text-lg flex items-center justify-center">
+                          {typeof item.icon === "string" &&
+                          item.icon.startsWith("/") ? (
+                            <img
+                              src={item.icon}
+                              alt={item.label}
+                              className="w-5 h-5 object-contain opacity-70"
+                            />
+                          ) : (
+                            item.icon
+                          )}
                         </span>
                         <span className="text-white font-medium relative z-10">
                           {item.label}
@@ -1566,7 +1620,18 @@ useEffect(() => {
                     }`}
                     onClick={closeMobileSidebar}
                   >
-                    <span className="text-xl opacity-80">{item.icon}</span>
+                    <span className="text-lg flex items-center justify-center">
+                      {typeof item.icon === "string" &&
+                      item.icon.startsWith("/") ? (
+                        <img
+                          src={item.icon}
+                          alt={item.label}
+                          className="w-5 h-5 object-contain opacity-70"
+                        />
+                      ) : (
+                        item.icon
+                      )}
+                    </span>
                     <span className="text-white font-medium">{item.label}</span>
                   </Link>
                 ))}

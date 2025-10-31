@@ -195,17 +195,17 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen bg-black overflow-hidden">
       {/* Recent Wins Section - Dark background strip */}
-      <div
-        className="absolute top-0 left-0 right-0 z-20"
-        style={{
-          background:
-            "linear-gradient(0deg, rgb(30 30 30 / 55%) 0%, rgb(75 75 75 / 35%) 100%)",
-        }}
-      >
-        <div className="relative px-2 sm:px-3 md:px-4 py-2 sm:py-3">
+      <div className="absolute top-0 left-0 right-0 z-20">
+        <div
+          className="relative px-2 sm:px-3 md:px-4 py-2 sm:py-3"
+          style={{
+            background:
+              "linear-gradient(0deg, rgb(30 30 30 / 55%) 0%, rgb(75 75 75 / 35%) 100%)",
+          }}
+        >
           {/* Recent Wins Label positioned above cards */}
           <motion.div
-            className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2"
+            className="absolute flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2 "
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -213,14 +213,14 @@ const HeroSection = () => {
             <span
               className="flex items-center gap-2 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-md whitespace-nowrap"
               style={{
-                background: "linear-gradient(90deg, #7F0577 0%, #F474FB 100%)",
-                border: "1.5px solid #222223",
+                background: "#4B4B4B",
+                border: "3.5px solid #222223",
                 zIndex: 1,
                 borderRadius: "8px",
               }}
             >
               <motion.span
-                className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5"
+                className="relative flex h-1 w-1 sm:h-1.5 sm:w-1.5"
                 animate={{
                   scale: [1, 1.3, 1],
                 }}
@@ -231,13 +231,13 @@ const HeroSection = () => {
                 }}
               >
                 <span
-                  className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-white"
+                  className="relative inline-flex rounded-full h-1 w-1 sm:h-1.5 sm:w-1.5 bg-[#F07730]"
                   style={{
                     opacity: 0.8,
-                    boxShadow: "0 0 8px 0 #FFF",
+                    boxShadow: "0 0 8px 0 #F07730",
                   }}
                 ></span>
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F07730] opacity-50"></span>
               </motion.span>
               Recent Wins
             </span>
@@ -245,7 +245,7 @@ const HeroSection = () => {
 
           {/* Cards Container */}
           <div
-            className="overflow-hidden translate-y-[-30%]"
+            className="overflow-hidden"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -282,7 +282,7 @@ const HeroSection = () => {
                           <img
                             src={win.gameImage}
                             alt="Game"
-                            className="w-8 h-8 xs:w-10 xs:h-10 object-contain"
+                            className="w-20 h-20 xs:w-10 xs:h-10 object-contain"
                           />
                         </div>
                       </motion.div>
