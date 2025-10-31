@@ -93,7 +93,7 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
               <h3 className="text-gray-400 text-sm font-medium mb-4">Currency</h3>
 
               {/* Currency Grid */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {currencies.map((currency) => (
                   <button
                     key={currency.code}
