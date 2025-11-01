@@ -317,7 +317,7 @@ useEffect(() => {
   }
 }, [currencies]);
 
-  // Enhanced menu items with gradient colors
+    // Enhanced menu items with gradient colors
   const menuItems = [
     {
       id: "home",
@@ -350,13 +350,16 @@ useEffect(() => {
       className:
         "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       submenu: [
-        { path: "/casino/roulette", label: "Games", icon: "/icons/games.svg" },
         { path: "/casino/slots", label: "Slots", icon: "/icons/slots.svg" },
         {
-          path: "/casino/blackjack",
-          label: "Live casino",
-          icon: "/icons/live -casino.svg",
+          path: "/casino/roulette",
+          label: "Blackjack",
+          icon: "/icons/blackjack.svg",
         },
+        { path: "#", label: "Roulette", icon: "/icons/roulette.svg" },
+        { path: "#", label: "Bacarrat", icon: "/icons/bacarrat-menu.svg" },
+        { path: "#", label: "Game Shows", icon: "/icons/game-shows.svg" },
+        { path: "#", label: "Live Casino", icon: "/icons/live-casino.svg" },
       ],
     },
     {
@@ -381,7 +384,7 @@ useEffect(() => {
         {
           path: "/game/bacarrat",
           label: "Bacarrat",
-          icon: "/icons/Bacarrat.svg",
+          icon: "/icons/bacarrat-menu.svg",
         },
         { path: "/game/mines", label: "Mines", icon: "/icons/mines.svg" },
       ],
@@ -396,8 +399,8 @@ useEffect(() => {
   ];
 
   const accountItems = [
-    { path: "/providers", label: "Providers", icon: "/icons/rewards.svg" },
-    { path: "#", label: "Affiliates", icon: "/icons/rewards.svg" },
+    { path: "/providers", label: "Providers", icon: "/icons/providers.svg" },
+    { path: "/affiliate", label: "Affiliates", icon: "/icons/affiliates.svg" },
     { path: "#", label: "Rewards", icon: "/icons/rewards.svg" },
     { path: "#", label: "Live Support", icon: "/icons/live-support.svg" },
     {
@@ -405,7 +408,7 @@ useEffect(() => {
       label: "Language: English",
       icon: "/icons/language.svg",
     },
-    // { path: "/settings", label: "Settings", icon: "⚙️" },
+    // { path: "/settings", label: "Settings", icon: ":gear:" },
   ];
 
   // Toggle desktop sidebar collapse
@@ -1492,7 +1495,7 @@ useEffect(() => {
           className="fixed left-0 top-16 bottom-0 w-64 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-50"
         >
           <div className="overflow-y-auto h-full custom-scrollbar pb-20">
-                 {/* Main Menu */}
+            {/* Main Menu */}
             <div className="p-4">
               <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">
                 Main Menu
@@ -1573,8 +1576,8 @@ useEffect(() => {
                         to={item.path}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 hover:bg-white/10 relative overflow-hidden group ${
                           location.pathname === item.path
-                            ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20"
-                            : ""
+                            ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                            : "text-[rgb(168,168,168)]"
                         }`}
                         onClick={closeMobileSidebar}
                       >
@@ -1582,18 +1585,28 @@ useEffect(() => {
                           className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
                         ></div>
                         <span className="text-lg flex items-center justify-center">
-                          {typeof item.icon === "string" &&
-                          item.icon.startsWith("/") ? (
+                          {typeof item.icon === "string" && item.icon.startsWith("/") ? (
                             <img
                               src={item.icon}
                               alt={item.label}
-                              className="w-5 h-5 object-contain opacity-70"
+                              className={`w-5 h-5 object-contain transition-all duration-300 ${
+                                location.pathname === item.path
+                                  ? "opacity-100 brightness-0 invert"
+                                  : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                              }`}
                             />
                           ) : (
-                            item.icon
+                            <span className={location.pathname === item.path ? "brightness-0 invert" : "group-hover:brightness-0 group-hover:invert"}>
+                              {item.icon}
+                            </span>
                           )}
                         </span>
-                        <span className="text-white font-medium relative z-10">
+
+                        <span className={`font-normal font-['Neue_Plak'] font-medium relative z-10 transition-colors duration-300 ${
+                          location.pathname === item.path 
+                            ? "text-white" 
+                            : "text-[rgb(168,168,168)] group-hover:text-white"
+                        }`}>
                           {item.label}
                         </span>
                       </Link>
@@ -1604,7 +1617,7 @@ useEffect(() => {
             </div>
 
             {/* Mobile Account Menu */}
-            <div className="p-4 border-t border-white/10">
+            <div className="p-4 relative customborder">
               <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">
                 Account
               </h3>
@@ -1613,32 +1626,48 @@ useEffect(() => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all hover:bg-white/10 ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 hover:bg-white/10 relative overflow-hidden group ${
                       location.pathname === item.path
-                        ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20"
-                        : ""
+                        ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                        : "text-[rgb(168,168,168)]"
                     }`}
                     onClick={closeMobileSidebar}
                   >
                     <span className="text-lg flex items-center justify-center">
-                      {typeof item.icon === "string" &&
-                      item.icon.startsWith("/") ? (
+                      {typeof item.icon === "string" && item.icon.startsWith("/") ? (
                         <img
                           src={item.icon}
                           alt={item.label}
-                          className="w-5 h-5 object-contain opacity-70"
+                          className={`w-5 h-5 object-contain transition-all duration-300 ${
+                            location.pathname === item.path
+                              ? "opacity-100 brightness-0 invert"
+                              : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                          }`}
                         />
                       ) : (
-                        item.icon
+                        <span className={`transition-all duration-300 ${
+                          location.pathname === item.path 
+                            ? "brightness-0 invert" 
+                            : "group-hover:brightness-0 group-hover:invert"
+                        }`}>
+                          {item.icon}
+                        </span>
                       )}
                     </span>
-                    <span className="text-white font-medium">{item.label}</span>
+
+                    <span className={`font-medium relative z-10 transition-colors duration-300 ${
+                      location.pathname === item.path 
+                        ? "text-white" 
+                        : "text-[rgb(168,168,168)] group-hover:text-white"
+                    }`}>
+                      {item.label}
+                    </span>
                   </Link>
                 ))}
 
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-red-500/20 to-pink-500/20 hover:from-red-500/30 hover:to-pink-500/30 transition-all duration-300">
+                <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] hover:from-red-500/30 hover:to-pink-500/30 transition-all duration-300">
                   <span className="text-xl">🚪</span>
-                  <span className="text-red-400 font-medium">Logout</span>
+                  <span className="text-[rgb(168,168,168)] font-medium">Logout</span>
                 </button>
               </div>
             </div>
