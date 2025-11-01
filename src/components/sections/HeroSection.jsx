@@ -1,6 +1,8 @@
 // src/components/sections/HeroSection.jsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import api from "../../api/axios";
 
 const HeroSection = () => {
   // Recent wins data with game cards
@@ -157,18 +159,74 @@ const HeroSection = () => {
 
   // Auto update winners with push/pop animation
   useEffect(() => {
-    if (isPaused) return;
+  let interval;
 
-    const interval = setInterval(() => {
-      setRecentWinsData((prevData) => {
-        const newWinner = generateNewWinner();
-        const newData = [newWinner, ...prevData.slice(0, -1)];
-        return newData;
-      });
-    }, 6000); // Update every 3 seconds
+  const getCurrencySymbol = (currency) => {
+    switch (currency?.toUpperCase()) {
+      case "USD":
+        return "$";
+      case "EUR":
+        return "€";
+      case "GBP":
+        return "£";
+      case "INR":
+        return "₹";
+      case "JPY":
+        return "¥";
+      case "BTC":
+        return "₿";
+      case "ETH":
+        return "Ξ";
+      case "SOL":
+        return "◎";
+      default:
+        return "";
+    }
+  };
 
-    return () => clearInterval(interval);
-  }, [isPaused]);
+  const parseAmountWithSymbol = (amountStr) => {
+    if (!amountStr) return "$0.00";
+
+    // Example formats from backend: "1.6 USD", "2.4 EURO", "0.3 EUR"
+    const parts = amountStr.trim().split(" ");
+    let amount = parts[0];
+    let currency = parts[1] || "USD";
+
+    const symbol = getCurrencySymbol(currency);
+    return `${symbol}${parseFloat(amount).toFixed(2)}`;
+  };
+
+  const fetchRecentWins = async () => {
+    try {
+      const { data } = await axios.get(
+        "/wallet-service/api/games/recent-wins?limit=20"
+      );
+
+      if (data?.success && Array.isArray(data.data)) {
+        const mapped = data.data.map((item, index) => ({
+          id: `${item.user}-${index}`,
+          gameImage: "/games/golden.svg",
+          amount: parseAmountWithSymbol(item.amount),
+          username: item.user || "Player***XXX",
+          icon: "/icons/moon.svg",
+          timeAgo: item.timeAgo,
+        }));
+        setRecentWinsData(mapped);
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch recent wins:", err);
+    }
+  };
+
+  // initial fetch
+  fetchRecentWins();
+
+  // refresh every 5 seconds
+  interval = setInterval(fetchRecentWins, 5000);
+
+  return () => clearInterval(interval);
+}, []);
+
 
   // Mobile data (first 7)
   const mobileWinsData = recentWinsData.slice(0, 7);
