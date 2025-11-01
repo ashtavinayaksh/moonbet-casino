@@ -1,10 +1,14 @@
 // src/components/sections/HeroSection.jsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import BetDetailsModal from "../ui-elements/BetDetailsModal";
 import axios from "axios";
-import api from "../../api/axios";
 
 const HeroSection = () => {
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBetData, setSelectedBetData] = useState(null);
+
   // Recent wins data with game cards
   const initialWinsData = [
     {
@@ -13,6 +17,16 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      // Additional data for modal
+      gameName: "Golden Slots",
+      provider: "Pragmatic Play",
+      betId: "e0b1a8dc-c888-47b",
+      date: "Nov 1, 2025",
+      time: "12:39:46",
+      multiplier: "2.00x",
+      payout: "$0.32",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 2,
@@ -20,6 +34,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Speed Baccarat",
+      provider: "Evolution Gaming",
+      betId: "f1c2b9dc-d999-58c",
+      date: "Nov 1, 2025",
+      time: "12:38:15",
+      multiplier: "1.50x",
+      payout: "$0.24",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 3,
@@ -27,6 +50,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Mega Roulette",
+      provider: "Pragmatic Play",
+      betId: "g2d3c0ed-e000-69d",
+      date: "Nov 1, 2025",
+      time: "12:37:30",
+      multiplier: "3.00x",
+      payout: "$0.48",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 4,
@@ -34,6 +66,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Lightning Blackjack",
+      provider: "Evolution Gaming",
+      betId: "h3e4d1fe-f111-70e",
+      date: "Nov 1, 2025",
+      time: "12:36:45",
+      multiplier: "2.50x",
+      payout: "$0.40",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 5,
@@ -41,6 +82,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Sweet Bonanza",
+      provider: "Pragmatic Play",
+      betId: "i4f5e2gf-g222-81f",
+      date: "Nov 1, 2025",
+      time: "12:35:00",
+      multiplier: "5.00x",
+      payout: "$0.80",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 6,
@@ -48,6 +98,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Crazy Time",
+      provider: "Evolution Gaming",
+      betId: "j5g6f3hg-h333-92g",
+      date: "Nov 1, 2025",
+      time: "12:34:15",
+      multiplier: "10.00x",
+      payout: "$1.60",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 7,
@@ -55,6 +114,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Gates of Olympus",
+      provider: "Pragmatic Play",
+      betId: "k6h7g4ih-i444-03h",
+      date: "Nov 1, 2025",
+      time: "12:33:30",
+      multiplier: "1.25x",
+      payout: "$0.20",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 8,
@@ -62,6 +130,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Monopoly Live",
+      provider: "Evolution Gaming",
+      betId: "l7i8h5ji-j555-14i",
+      date: "Nov 1, 2025",
+      time: "12:32:45",
+      multiplier: "4.00x",
+      payout: "$0.64",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 9,
@@ -69,6 +146,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Book of Dead",
+      provider: "Play'n GO",
+      betId: "m8j9i6kj-k666-25j",
+      date: "Nov 1, 2025",
+      time: "12:32:00",
+      multiplier: "2.00x",
+      payout: "$0.32",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 10,
@@ -76,6 +162,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Dream Catcher",
+      provider: "Evolution Gaming",
+      betId: "n9k0j7lk-l777-36k",
+      date: "Nov 1, 2025",
+      time: "12:31:15",
+      multiplier: "7.00x",
+      payout: "$1.12",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 11,
@@ -83,6 +178,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Wolf Gold",
+      provider: "Pragmatic Play",
+      betId: "o0l1k8ml-m888-47l",
+      date: "Nov 1, 2025",
+      time: "12:30:30",
+      multiplier: "1.75x",
+      payout: "$0.28",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 12,
@@ -90,6 +194,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Lightning Dice",
+      provider: "Evolution Gaming",
+      betId: "p1m2l9nm-n999-58m",
+      date: "Nov 1, 2025",
+      time: "12:29:45",
+      multiplier: "3.50x",
+      payout: "$0.56",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 13,
@@ -97,6 +210,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "The Dog House",
+      provider: "Pragmatic Play",
+      betId: "q2n3m0on-o000-69n",
+      date: "Nov 1, 2025",
+      time: "12:29:00",
+      multiplier: "6.00x",
+      payout: "$0.96",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 14,
@@ -104,6 +226,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Cash or Crash",
+      provider: "Evolution Gaming",
+      betId: "r3o4n1po-p111-70o",
+      date: "Nov 1, 2025",
+      time: "12:28:15",
+      multiplier: "8.00x",
+      payout: "$1.28",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 15,
@@ -111,6 +242,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Starburst",
+      provider: "NetEnt",
+      betId: "s4p5o2qp-q222-81p",
+      date: "Nov 1, 2025",
+      time: "12:27:30",
+      multiplier: "1.10x",
+      payout: "$0.18",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 16,
@@ -118,6 +258,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Gonzo's Quest",
+      provider: "NetEnt",
+      betId: "t5q6p3rq-r333-92q",
+      date: "Nov 1, 2025",
+      time: "12:26:45",
+      multiplier: "15.00x",
+      payout: "$2.40",
+      originalCurrency: "C$0.22",
+      isLive: false,
     },
     {
       id: 17,
@@ -125,6 +274,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Mega Ball",
+      provider: "Evolution Gaming",
+      betId: "u6r7q4sr-s444-03r",
+      date: "Nov 1, 2025",
+      time: "12:26:00",
+      multiplier: "100.00x",
+      payout: "$16.00",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
     {
       id: 18,
@@ -132,6 +290,15 @@ const HeroSection = () => {
       amount: "$0.16",
       username: "6z...CfcH",
       icon: "/icons/moon.svg",
+      gameName: "Aviator",
+      provider: "Spribe",
+      betId: "v7s8r5ts-t555-14s",
+      date: "Nov 1, 2025",
+      time: "12:25:15",
+      multiplier: "12.50x",
+      payout: "$2.00",
+      originalCurrency: "C$0.22",
+      isLive: true,
     },
   ];
 
@@ -147,6 +314,24 @@ const HeroSection = () => {
       .toString(36)
       .substring(2, 6)
       .toUpperCase()}`;
+    const randomMultiplier = (Math.random() * 20 + 1).toFixed(2);
+    const gameNames = [
+      "Speed Baccarat",
+      "Lightning Roulette",
+      "Crazy Time",
+      "Sweet Bonanza",
+      "Aviator",
+    ];
+    const providers = [
+      "Evolution Gaming",
+      "Pragmatic Play",
+      "Spribe",
+      "NetEnt",
+      "Play'n GO",
+    ];
+    const randomGame = gameNames[Math.floor(Math.random() * gameNames.length)];
+    const randomProvider =
+      providers[Math.floor(Math.random() * providers.length)];
 
     return {
       id: Date.now(),
@@ -154,7 +339,24 @@ const HeroSection = () => {
       amount: `$${randomAmount}`,
       username: randomUsername,
       icon: "/icons/moon.svg",
+      gameName: randomGame,
+      provider: randomProvider,
+      betId: Math.random().toString(36).substring(2, 15),
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      multiplier: `${randomMultiplier}x`,
+      payout: `$${(
+        parseFloat(randomAmount) * parseFloat(randomMultiplier)
+      ).toFixed(2)}`,
+      originalCurrency: `C$${(parseFloat(randomAmount) * 1.4).toFixed(2)}`,
+      isLive: Math.random() > 0.5,
     };
+  };
+
+  // Handle card click
+  const handleCardClick = (winData) => {
+    setSelectedBetData(winData);
+    setIsModalOpen(true);
   };
 
   // Auto update winners with push/pop animation
@@ -224,9 +426,8 @@ const HeroSection = () => {
   // refresh every 5 seconds
   interval = setInterval(fetchRecentWins, 5000);
 
-  return () => clearInterval(interval);
-}, []);
-
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   // Mobile data (first 7)
   const mobileWinsData = recentWinsData.slice(0, 7);
@@ -324,6 +525,7 @@ const HeroSection = () => {
                     }}
                     whileHover={{ scale: 1.05, y: -3 }}
                     className="flex flex-col items-center cursor-pointer flex-shrink-0"
+                    onClick={() => handleCardClick(win)}
                   >
                     {/* Game Card */}
                     <div className="relative">
@@ -382,6 +584,7 @@ const HeroSection = () => {
                     }}
                     whileHover={{ scale: 1.05, y: -3 }}
                     className="flex flex-col items-center cursor-pointer flex-shrink-0"
+                    onClick={() => handleCardClick(win)}
                   >
                     {/* Game Card */}
                     <div className="relative">
@@ -445,6 +648,13 @@ const HeroSection = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Bet Details Modal */}
+      <BetDetailsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        betData={selectedBetData}
+      />
 
       {/* Add custom scrollbar styles */}
       <style jsx>{`

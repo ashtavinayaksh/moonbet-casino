@@ -866,7 +866,7 @@ useEffect(() => {
             x: 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto overflow-x-hidden`}
+          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto overflow-x-hidden px-2`}
         >
                      {/* Main Menu */}
                          {/* Main Menu */}
@@ -1063,8 +1063,7 @@ useEffect(() => {
           </div>
 
           {/* Game Menu */}
-
-          <div className="p-3 border-t border-gray-800">
+          <div className="py-3 relative customborder">
             <div className="space-y-1">
               {gamesItems.map((item) => (
                 <div key={item.id}>
@@ -1073,7 +1072,7 @@ useEffect(() => {
                       <motion.button
                         whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                         onClick={() => toggleSubmenu(item.id)}
-                        className={`w-full flex items-center ${
+                        className={`w-full flex items-center rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] ${
                           sidebarCollapsed
                             ? "justify-center"
                             : "justify-between"
@@ -1096,11 +1095,11 @@ useEffect(() => {
                                 src={item.icon}
                                 alt={item.label}
                                 className={`w-5 h-5 object-contain transition-all duration-300
-    ${
-      location.pathname === item.path
-        ? "opacity-100 brightness-0 invert" // :point_left: stays white when active
-        : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-    }`}
+                                  ${
+                                    location.pathname === item.path
+                                      ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                      : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                  }`}
                               />
                             ) : (
                               item.icon
@@ -1159,14 +1158,14 @@ useEffect(() => {
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="ml-8 mt-1 overflow-hidden"
+                            className="mt-2.5 overflow-hidden"
                           >
-                            <div className="space-y-0.5">
+                            <div className="space-y-1.5">
                               {item.submenu.map((subItem) => (
                                 <Link
                                   key={subItem.path}
                                   to={subItem.path}
-                                  className={`group  flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
+                                  className={`group flex items-center gap-4 px-3 py-1.5 rounded-[8px] bg-white/15 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] transition-all
                                 ${
                                   location.pathname === subItem.path
                                     ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
@@ -1178,18 +1177,18 @@ useEffect(() => {
                                     {subItem.icon}
                                   </span> */}
                                   <span className="text-lg flex items-center justify-center submenu">
-                                    {typeof item.icon === "string" &&
-                                    item.icon.startsWith("/") ? (
-                                      <img
-                                        src={subItem.icon}
-                                        alt={subItem.label}
-                                        className="w-5 h-5 object-contain opacity-70 transition-all duration-300
+                                  {typeof item.icon === "string" &&
+                                  item.icon.startsWith("/") ? (
+                                    <img
+                                      src={subItem.icon}
+                                      alt={subItem.label}
+                                      className="w-5 h-5 object-contain opacity-70 transition-all duration-300
                  group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                      />
-                                    ) : (
-                                      item.icon
-                                    )}
-                                  </span>
+                                    />
+                                  ) : (
+                                    item.icon
+                                  )}
+                                </span>
                                   <span
                                     className="text-sm font-['Neue_Plak']"
                                     style={{
@@ -1211,10 +1210,12 @@ useEffect(() => {
                       whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                       className="relative group"
                     >
-                      <Link
+                       <Link
                         to={item.path}
-                        className={`flex items-center ${
-                          sidebarCollapsed ? "justify-center" : "gap-3"
+                        className={`flex items-centerjustify-center gap-3 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]${
+                          sidebarCollapsed
+                            ? " items-center justify-center gap-3 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+                            : "gap-3"
                         } px-3 py-2 rounded-lg transition-all duration-200
                       ${
                         location.pathname === item.path
@@ -1275,7 +1276,7 @@ useEffect(() => {
           </div>
 
           {/* Account Menu */}
-          <div className="p-3 border-t border-gray-800">
+          <div className="py-2 mt-1 relative customborder">
             <div className="space-y-1">
               {accountItems.map((item) => (
                 <motion.div
@@ -1299,15 +1300,15 @@ useEffect(() => {
                       {typeof item.icon === "string" &&
                       item.icon.startsWith("/") ? (
                         <img
-                          src={item.icon}
-                          alt={item.label}
-                          className={`w-5 h-5 object-contain transition-all duration-300
-    ${
-      location.pathname === item.path
-        ? "opacity-100 brightness-0 invert" // :point_left: stays white when active
-        : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-    }`}
-                        />
+                            src={item.icon}
+                            alt={item.label}
+                            className={`w-5 h-5 object-contain transition-all duration-300
+                              ${
+                                location.pathname === item.path
+                                  ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                  : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                              }`}
+                          />
                       ) : (
                         item.icon
                       )}
@@ -1388,10 +1389,9 @@ useEffect(() => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="relative bottom-0 left-0 right-0 p-3 border-t border-gray-800 bg-[#0A0B0D]/95"
+                        className="relative customborder left-0 right-0 p-3"
                       >
                         {/* User Profile */}
-                           {/* User Profile */}
                   <div className="flex flex-col items-center justify-center gap-2 p-4 mb-3">
                     {/* Profile Icon */}
                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[linear-gradient(180deg,#1B1B1B_0%,#0F172A_100%)] shadow-[0px_2px_4px_rgba(0,0,0,0.25)] flex items-center justify-center">
