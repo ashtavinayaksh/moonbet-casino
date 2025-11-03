@@ -134,7 +134,7 @@ const GameBetsSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden"
+          className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden px-5"
         >
           {/* Header */}
           <div className="grid grid-cols-2 md:grid-cols-6 gap-2 lg:gap-4 p-3 lg:p-4 border-b border-white/10 bg-black/3">
@@ -177,9 +177,9 @@ const GameBetsSection = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className={`grid md:grid-cols-6 grid-cols-2 gap-2 lg:gap-4 p-3 lg:p-4 ${
+                    className={`grid md:grid-cols-6 grid-cols-2 gap-2 lg:gap-4 p-3 lg:p-4 rounded-lg ${
                       index % 2 === 0
-                        ? "background: rgba(255, 255, 255, 0.15);"
+                        ? "[background:rgba(255,255,255,0.15)]"
                         : "bg-gradient-to-r from-[#0A0A0A] via-[#161616] to-[#0A0A0A]"
                     }`}
                   >

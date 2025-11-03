@@ -403,11 +403,11 @@ useEffect(() => {
     { path: "/affiliate", label: "Affiliates", icon: "/icons/affiliates.svg" },
     { path: "#", label: "Rewards", icon: "/icons/rewards.svg" },
     { path: "#", label: "Live Support", icon: "/icons/live-support.svg" },
-    {
-      path: "/bet-history",
-      label: "Language: English",
-      icon: "/icons/language.svg",
-    },
+    // {
+    //   path: "/bet-history",
+    //   label: "Language: English",
+    //   icon: "/icons/language.svg",
+    // },
     // { path: "/settings", label: "Settings", icon: ":gear:" },
   ];
 

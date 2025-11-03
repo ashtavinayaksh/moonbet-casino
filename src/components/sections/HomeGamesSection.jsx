@@ -197,7 +197,7 @@ const HomeGamesSection = () => {
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide pb-4"
           >
-            <div className="grid grid-flow-col auto-cols-[100px] sm:auto-cols-[180px] md:auto-cols-[145px] gap-3 md:gap-3">
+             <div className="grid grid-flow-col auto-cols-[87px] sm:auto-cols-[180px] md:auto-cols-[145px] gap-3 md:gap-3">
               {gamesData.map((game, index) => (
                 <motion.div
                   key={game.id}
@@ -208,7 +208,7 @@ const HomeGamesSection = () => {
                   whileHover={{ y: -8 }}
                   className="group cursor-pointer"
                 >
-                  <div className="relative h-38 md:h-48 rounded-2xl overflow-hidden">
+                  <div className="relative h-24 md:h-48 rounded-2xl overflow-hidden">
                     {/* Background Gradient */}
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${game.gradient} opacity-90`}

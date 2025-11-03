@@ -19,6 +19,7 @@ import "./styles/toastify-custom.css"; // Your custom styles
 import AuthTest from "./pages/AuthTest";
 import "react-toastify/dist/ReactToastify.css";
 import AffiliateProgram from "./pages/AffiliateProgram";
+import Leaderboard from "./pages/Leaderboard";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -121,6 +122,7 @@ function App() {
             <Route path="game/:gameId" element={<GamePage />} />
             <Route path="authtest" element={<AuthTest />} />
             <Route path="/affiliate" element={<AffiliateProgram />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Route>
         </Routes>
       </AuthModalHandler>
