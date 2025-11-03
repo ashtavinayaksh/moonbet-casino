@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 
 const AffiliateProgram = () => {
@@ -9,9 +10,10 @@ const AffiliateProgram = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("Date");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Mock data - replace with actual data from your backend
-  const [stats] = useState({
+  const [stats, setStats] = useState({
     totalReferrals: 0,
     totalWagered: 0.0,
     totalEarnings: 0.0,
@@ -20,12 +22,68 @@ const AffiliateProgram = () => {
 
   const [referrals] = useState([]);
 
-  // Handle setting the referral code
-  const handleSetCode = () => {
-    if (referralCode.trim()) {
-      const link = `https://rainbet.com?r=${referralCode}`;
-      setGeneratedLink(link);
-      setIsCodeSet(true);
+  // Generate random referral code
+  const generateReferralCode = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
+    for (let i = 0; i < 8; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
+  };
+
+  const handleGenerateCode = async () => {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem("token"); // JWT from login
+      if (!token) {
+        alert("You must be logged in to generate a referral code.");
+        return;
+      }
+
+      const payload = {
+        userId: "68f4849c321d58f1f8be302a",
+        username: "raja12qw",
+      };
+
+      const { data } = await axios.post(
+        "/referral-service/api/referral/generate",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data?.success) {
+        const info = data.data;
+        setReferralCode(info.referralCode);
+        setGeneratedLink(info.referralLink);
+        setIsCodeSet(true);
+
+        // Update statistics if available
+        if (info.statistics) {
+          setStats({
+            totalReferrals: info.statistics.totalReferrals || 0,
+            totalWagered: info.statistics.totalPoints || 0,
+            totalEarnings: info.statistics.totalCommission || 0,
+            pendingIncome: info.statistics.pendingCommission || 0,
+          });
+        }
+      } else {
+        alert(data?.message || "Failed to generate referral code.");
+      }
+    } catch (error) {
+      console.error("Referral API error:", error);
+      alert(
+        error.response?.data?.message ||
+          "Error generating referral code. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +116,6 @@ const AffiliateProgram = () => {
   // Typography styles
   const titleStyle = {
     color: "#C1C1C1",
-    fontFamily:
-      'Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     fontSize: "24px",
     fontStyle: "normal",
     fontWeight: 800,
@@ -68,8 +124,6 @@ const AffiliateProgram = () => {
 
   const subHeadingStyle = {
     color: "#C1C1C1",
-    fontFamily:
-      'Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     fontSize: "18px",
     fontStyle: "normal",
     fontWeight: 400,
@@ -79,7 +133,7 @@ const AffiliateProgram = () => {
   const h2Style = {
     color: "#E5EAF2",
     textAlign: "center",
-    fontFamily: 'Neuropolitical, "Arial Black", sans-serif',
+    fontFamily: "Neuropolitical, sans-serif",
     fontSize: "26px",
     fontStyle: "normal",
     fontWeight: 400,
@@ -126,81 +180,162 @@ const AffiliateProgram = () => {
                 </div>
 
                 <p style={subHeadingStyle}>
-                  Share Rainbet with your friends and earn as they play
+                  Share Moonbet with your friends and earn as they play
                 </p>
 
-                {/* Referral Code Section */}
+                {/* Referral Code Section - Modified */}
                 <AnimatePresence mode="wait">
                   {!isCodeSet ? (
                     <motion.div
-                      key="input"
+                      key="generate"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex flex-col sm:flex-row gap-3"
                     >
-                      <input
-                        type="text"
-                        placeholder="Insert your code"
-                        value={referralCode}
-                        onChange={(e) => setReferralCode(e.target.value)}
-                        style={{
-                          ...subHeadingStyle,
-                          background: "rgba(0, 0, 0, 0.3)",
-                          border: "1px solid rgba(255, 255, 255, 0.2)",
-                          borderRadius: "12px",
-                          padding: "14px 20px",
-                        }}
-                        className="flex-1 focus:outline-none focus:border-[#10B981]/50 transition-all duration-200"
-                        onKeyPress={(e) => e.key === "Enter" && handleSetCode()}
-                      />
                       <button
-                        onClick={handleSetCode}
-                        className="w-[176px] h-[44px] 
-                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
-                 text-[#000] font-[600] text-[16px] 
-                 font-['Neue_Plack',sans-serif]
-                 rounded-lg shadow-md 
-                 transition-all duration-300
-                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
-                 flex items-center justify-center"
+                        onClick={handleGenerateCode}
+                        className="w-full sm:w-auto px-8 py-3.5
+                                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
+                                 text-[#000] font-[600] text-[16px] 
+                                 font-['Neue_Plack',sans-serif]
+                                 rounded-lg shadow-md 
+                                 transition-all duration-300
+                                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
+                                 hover:scale-[1.02] active:scale-[0.98]
+                                 flex items-center justify-center gap-2"
                         style={{
                           fontFamily: "Avenir, -apple-system, sans-serif",
                         }}
                       >
-                        Set Code
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        Generate Referral Code
                       </button>
                     </motion.div>
                   ) : (
                     <motion.div
-                      key="link"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex flex-col sm:flex-row gap-3"
+                      key="display"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="space-y-4"
                     >
-                      <div
-                        style={{
-                          ...subHeadingStyle,
-                          background: "rgba(0, 0, 0, 0.5)",
-                          border: "1px solid rgba(255, 255, 255, 0.2)",
-                          borderRadius: "12px",
-                          padding: "14px 20px",
-                        }}
-                        className="flex-1 flex items-center overflow-hidden"
-                      >
-                        <span className="truncate">{generatedLink}</span>
+                      {/* Display the referral code */}
+                      <div className="flex flex-col sm:flex-row items-center gap-3">
+                        <div
+                          style={{
+                            ...subHeadingStyle,
+                            background: "rgba(0, 0, 0, 0.5)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            borderRadius: "12px",
+                            padding: "14px 20px",
+                          }}
+                          className="flex items-center gap-3"
+                        >
+                          <span className="text-gray-400">Code:</span>
+                          <span className="text-[#F07730] font-bold text-xl">
+                            {referralCode}
+                          </span>
+                        </div>
                       </div>
+
+                      {/* Display the link with copy button */}
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <div
+                          style={{
+                            ...subHeadingStyle,
+                            background: "rgba(0, 0, 0, 0.5)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            borderRadius: "12px",
+                            padding: "14px 20px",
+                          }}
+                          className="flex-1 flex items-center overflow-hidden"
+                        >
+                          <span className="truncate text-sm">
+                            {generatedLink}
+                          </span>
+                        </div>
+                        <button
+                          onClick={handleCopy}
+                          className="px-8 py-3.5 bg-gradient-to-r from-[#F07730] to-[#F07730] text-white font-bold 
+                                   rounded-xl hover:shadow-lg hover:shadow-[#F07730]/25 transition-all duration-200
+                                   hover:scale-[1.02] active:scale-[0.98] min-w-[100px]
+                                   flex items-center justify-center gap-2"
+                          style={{
+                            fontFamily: "Avenir, -apple-system, sans-serif",
+                          }}
+                        >
+                          {copied ? (
+                            <>
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                              Copied!
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                />
+                              </svg>
+                              Copy
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      {/* Generate New Code Button */}
                       <button
-                        onClick={handleCopy}
-                        className="px-8 py-3.5 bg-gradient-to-r from-[#F07730] to-[#F07730] text-white font-bold 
-                                 rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-200
-                                 hover:scale-[1.02] active:scale-[0.98] min-w-[100px]"
+                        onClick={handleGenerateCode}
+                        className="text-gray-400 hover:text-white text-sm transition-colors duration-200 flex items-center gap-1"
                         style={{
                           fontFamily: "Avenir, -apple-system, sans-serif",
                         }}
                       >
-                        {copied ? "Copied!" : "Copy"}
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                        Generate new code
                       </button>
                     </motion.div>
                   )}

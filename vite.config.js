@@ -23,13 +23,19 @@ export default defineConfig({
     // ✅ Local Proxy to bypass CORS in dev mode
     proxy: {
       '/wallet-service': {
-        target: 'https://mapi.examtree.ai',
+        target: 'https://api.moonbet.games',
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path,
       },
       '/auth-service': {
-        target: 'https://mapi.examtree.ai',
+        target: 'https://api.moonbet.games',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path,
+      },
+      '/referral-service': {
+        target: 'https://api.moonbet.games',
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path,
