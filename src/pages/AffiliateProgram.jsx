@@ -108,7 +108,7 @@ const AffiliateProgram = () => {
                 {/* Title with icon */}
                 <div className="flex items-center gap-4">
                   <svg
-                    className="w-8 h-8 text-[#10B981]"
+                    className="w-8 h-8 text-[#F07730]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -193,7 +193,7 @@ const AffiliateProgram = () => {
                       </div>
                       <button
                         onClick={handleCopy}
-                        className="px-8 py-3.5 bg-gradient-to-r from-[#10B981] to-[#059669] text-white font-bold 
+                        className="px-8 py-3.5 bg-gradient-to-r from-[#F07730] to-[#F07730] text-white font-bold 
                                  rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-200
                                  hover:scale-[1.02] active:scale-[0.98] min-w-[100px]"
                         style={{
@@ -351,7 +351,7 @@ const AffiliateProgram = () => {
               </p>
               <div className="flex items-center gap-3">
                 <svg
-                  className="w-6 h-6 text-[#10B981]"
+                  className="w-6 h-6 text-[#F07730]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

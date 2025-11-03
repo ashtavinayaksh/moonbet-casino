@@ -179,7 +179,7 @@ const GameBetsSection = () => {
                     transition={{ duration: 0.3 }}
                     className={`grid md:grid-cols-6 grid-cols-2 gap-2 lg:gap-4 p-3 lg:p-4 ${
                       index % 2 === 0
-                        ? "bg-gradient-to-b from-[#FFFFFF30] via-[#FFFFFF05] to-[#FFFFFF30]"
+                        ? "background: rgba(255, 255, 255, 0.15);"
                         : "bg-gradient-to-r from-[#0A0A0A] via-[#161616] to-[#0A0A0A]"
                     }`}
                   >
