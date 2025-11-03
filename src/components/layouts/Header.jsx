@@ -1281,66 +1281,141 @@ useEffect(() => {
           {/* Account Menu */}
           <div className="py-2 mt-1 relative customborder">
             <div className="space-y-1">
-              {accountItems.map((item) => (
-                <motion.div
-                  key={item.path}
-                  whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                  className="relative group"
-                >
-                  <Link
-                    to={item.path}
-                    className={`flex items-center ${
-                      sidebarCollapsed ? "justify-center" : "gap-3"
-                    } px-3 py-2 rounded-lg transition-all duration-200
-                  ${
-                    location.pathname === item.path
-                      ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                      : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                  }`}
-                    onClick={closeSidebar}
+              {accountItems.map((item) => {
+                // Special handling for Chat Support
+                if (item.label === "Live Support") {
+                  return (
+                    <motion.div
+                      key={item.path}
+                      whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                      className="relative group"
+                    >
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          closeSidebar();
+                          // Open Tidio chat
+                          if (window.tidioChatApi) {
+                            window.tidioChatApi.open();
+                          } else {
+                            // If Tidio is not loaded yet, try again after a short delay
+                            const checkTidio = setInterval(() => {
+                              if (window.tidioChatApi) {
+                                window.tidioChatApi.open();
+                                clearInterval(checkTidio);
+                              }
+                            }, 100);
+
+                            // Stop checking after 5 seconds
+                            setTimeout(() => clearInterval(checkTidio), 5000);
+                          }
+                        }}
+                        className={`w-full flex items-center ${
+                          sidebarCollapsed ? "justify-center" : "gap-3"
+                        } px-3 py-2 rounded-lg transition-all duration-200 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5`}
+                      >
+                        <span className="text-lg flex items-center justify-center">
+                          {typeof item.icon === "string" &&
+                          item.icon.startsWith("/") ? (
+                            <img
+                              src={item.icon}
+                              alt={item.label}
+                              className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert transition-all duration-300"
+                            />
+                          ) : (
+                            item.icon
+                          )}
+                        </span>
+                        <AnimatePresence>
+                          {!sidebarCollapsed && (
+                            <motion.span
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -20 }}
+                              className="text-base font-normal font-['Neue_Plak'] leading-6"
+                              style={{
+                                textShadow:
+                                  "0 0 10px rgba(255, 255, 255, 0.25)",
+                              }}
+                            >
+                              {item.label}
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Tooltip for collapsed state */}
+                        {sidebarCollapsed && (
+                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            {item.label}
+                          </div>
+                        )}
+                      </button>
+                    </motion.div>
+                  );
+                }
+
+                // Regular menu items
+                return (
+                  <motion.div
+                    key={item.path}
+                    whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                    className="relative group"
                   >
-                    <span className="text-lg flex items-center justify-center">
-                      {typeof item.icon === "string" &&
-                      item.icon.startsWith("/") ? (
-                        <img
+                    <Link
+                      to={item.path}
+                      className={`flex items-center ${
+                        sidebarCollapsed ? "justify-center" : "gap-3"
+                      } px-3 py-2 rounded-lg transition-all duration-200
+              ${
+                location.pathname === item.path
+                  ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                  : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+              }`}
+                      onClick={closeSidebar}
+                    >
+                      <span className="text-lg flex items-center justify-center">
+                        {typeof item.icon === "string" &&
+                        item.icon.startsWith("/") ? (
+                          <img
                             src={item.icon}
                             alt={item.label}
                             className={`w-5 h-5 object-contain transition-all duration-300
-                              ${
-                                location.pathname === item.path
-                                  ? "opacity-100 brightness-0 invert" // 👈 stays white when active
-                                  : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                              }`}
+                      ${
+                        location.pathname === item.path
+                          ? "opacity-100 brightness-0 invert"
+                          : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                      }`}
                           />
-                      ) : (
-                        item.icon
-                      )}
-                    </span>
-                    <AnimatePresence>
-                      {!sidebarCollapsed && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          className=" text-base font-normal font-['Neue_Plak'] leading-6"
-                          style={{
-                            textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
-                          }}
-                        >
-                          {item.label}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
+                        ) : (
+                          item.icon
+                        )}
+                      </span>
+                      <AnimatePresence>
+                        {!sidebarCollapsed && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            className="text-base font-normal font-['Neue_Plak'] leading-6"
+                            style={{
+                              textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
+                            }}
+                          >
+                            {item.label}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
 
-                    {/* Tooltip for collapsed state */}
-                    {sidebarCollapsed && (
-                      <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                        {item.label}
-                      </div>
-                    )}
-                  </Link>
-                </motion.div>
-              ))}
+                      {/* Tooltip for collapsed state */}
+                      {sidebarCollapsed && (
+                        <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                          {item.label}
+                        </div>
+                      )}
+                    </Link>
+                  </motion.div>
+                );
+              })}
 
               {/* Logout Button */}
               {hasToken && (
