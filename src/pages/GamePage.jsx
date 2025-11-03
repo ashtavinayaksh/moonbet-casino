@@ -162,7 +162,6 @@ useEffect(() => {
 
   useEffect(() => {
   // Always scroll to the top when this page mounts or when a new game is loaded
-  // Always scroll to the top when this page mounts or when a new game is loaded
   window.scrollTo({ top: 0, behavior: "smooth" });
 }, [gameId]);
 
