@@ -1,11 +1,11 @@
+// /middleware.js
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
   const country = req.geo?.country?.toUpperCase() || "UNKNOWN";
-  const restrictedCountries = ["US", "GB", "NL", "SE", "BE"];
+  const blockedCountries = ["US", "GB", "NL", "SE", "BE"];
 
-  if (restrictedCountries.includes(country)) {
-    // Option 1: Show custom "Access Denied" HTML page
+  if (blockedCountries.includes(country)) {
     return new NextResponse(
       `<html>
         <head><title>Access Restricted</title></head>
@@ -19,15 +19,11 @@ export function middleware(req) {
         headers: { "Content-Type": "text/html" },
       }
     );
-
-    // Option 2 (alternative): redirect to another page
-    // return NextResponse.redirect("https://moonbet.games/blocked");
   }
 
   return NextResponse.next();
 }
 
-// Apply to all routes
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
