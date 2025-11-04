@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -11,6 +11,7 @@ const AffiliateProgram = () => {
   const [sortBy, setSortBy] = useState("Date");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [points, setPoints] = useState({ referrer: 0, referee: 0 });
 
   // Mock data - replace with actual data from your backend
   const [stats, setStats] = useState({
@@ -21,6 +22,16 @@ const AffiliateProgram = () => {
   });
 
   const [referrals] = useState([]);
+  useEffect(() => {
+  const stored = localStorage.getItem("referralData");
+  if (stored) {
+    const { referralCode, referralLink, points } = JSON.parse(stored);
+    setReferralCode(referralCode);
+    setGeneratedLink(referralLink);
+    setPoints(points || { referrer: 0, referee: 0 });
+    setIsCodeSet(true);
+  }
+}, []);
 
   // Generate random referral code
   const generateReferralCode = () => {
@@ -33,59 +44,68 @@ const AffiliateProgram = () => {
   };
 
   const handleGenerateCode = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const token = localStorage.getItem("token"); // JWT from login
-      if (!token) {
-        alert("You must be logged in to generate a referral code.");
-        return;
-      }
-
-      const payload = {
-        userId: "68f4849c321d58f1f8be302a",
-        username: "raja12qw",
-      };
-
-      const { data } = await axios.post(
-        "/referral-service/api/referral/generate",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data?.success) {
-        const info = data.data;
-        setReferralCode(info.referralCode);
-        setGeneratedLink(info.referralLink);
-        setIsCodeSet(true);
-
-        // Update statistics if available
-        if (info.statistics) {
-          setStats({
-            totalReferrals: info.statistics.totalReferrals || 0,
-            totalWagered: info.statistics.totalPoints || 0,
-            totalEarnings: info.statistics.totalCommission || 0,
-            pendingIncome: info.statistics.pendingCommission || 0,
-          });
-        }
-      } else {
-        alert(data?.message || "Failed to generate referral code.");
-      }
-    } catch (error) {
-      console.error("Referral API error:", error);
-      alert(
-        error.response?.data?.message ||
-          "Error generating referral code. Please try again."
-      );
-    } finally {
-      setLoading(false);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to generate a referral code.");
+      return;
     }
-  };
+
+    const payload = {
+      userId: "68f4849c321d58f1f8be302a",
+    };
+
+    const { data } = await axios.post(
+      "/referral-service/api/referral/generate-code",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (data?.success) {
+      const info = data.data;
+
+      // ✅ Update UI state
+      setReferralCode(info.code);
+      setGeneratedLink(info.shareLink);
+      setPoints({
+        referrer: info.points?.referrerPoints || 0,
+        referee: info.points?.refereePoints || 0,
+      });
+      setIsCodeSet(true);
+
+      // ✅ Persist in localStorage so it survives refresh
+      localStorage.setItem(
+        "referralData",
+        JSON.stringify({
+          referralCode: info.code,
+          referralLink: info.shareLink,
+          points: {
+            referrer: info.points?.referrerPoints || 0,
+            referee: info.points?.refereePoints || 0,
+          },
+        })
+      );
+
+    } else {
+      alert(data?.message || "Failed to generate referral code.");
+    }
+  } catch (error) {
+    console.error("Referral API error:", error);
+    alert(
+      error.response?.data?.message ||
+        "Error generating referral code. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Handle copying the link
   const handleCopy = async () => {
@@ -337,6 +357,13 @@ const AffiliateProgram = () => {
                         </svg>
                         Generate new code
                       </button>
+                      {points.referrer > 0 && (
+  <div className="text-gray-400 text-sm mt-2">
+    <p>You earn <span className="text-[#F07730] font-bold">{points.referrer}</span> points per referral.</p>
+    <p>Your friend earns <span className="text-[#10B981] font-bold">{points.referee}</span> points when they join.</p>
+  </div>
+)}
+
                     </motion.div>
                   )}
                 </AnimatePresence>

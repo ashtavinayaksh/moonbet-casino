@@ -12,6 +12,7 @@ import CasinoWheel2 from "../components/sections/CasinoWheel2";
 import RecommendedSection from "../components/sections/RecommendedSection";
 import LiveCasino from "../components/sections/LiveCasino";
 import ProvidersSection from "../components/sections/ProvidersSection";
+import CryptoPaymentSection from "../components/sections/CryptoPaymentSection";
 
 const Homepage = () => {
   return (
@@ -27,6 +28,7 @@ const Homepage = () => {
       <ProvidersSection />
       <GameBetsSection />
       <HomeFAQSection />
+      <CryptoPaymentSection />
     </div>
   );
 };
