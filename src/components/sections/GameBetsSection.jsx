@@ -88,7 +88,7 @@ const GameBetsSection = () => {
     <section className="w-full py-12 sm:py-16 md:py-20">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -104,7 +104,7 @@ const GameBetsSection = () => {
           <p className="text-sm sm:text-base text-gray-400">
             Watch real-time bets from players around the world
           </p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4 sm:mb-6 border-b border-white/10 overflow-x-auto scrollbar-hide">

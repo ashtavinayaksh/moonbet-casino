@@ -9,6 +9,8 @@ import GameBetsSection from "../components/sections/GameBetsSection";
 import CasinoWheel from "../components/sections/CasinoWheel";
 import SpinningWheel from "../components/sections/SpinningWheel";
 import CasinoWheel2 from "../components/sections/CasinoWheel2";
+import RecommendedSection from "../components/sections/RecommendedSection";
+import LiveCasino from "../components/sections/LiveCasino";
 
 const Homepage = () => {
   return (
@@ -16,9 +18,11 @@ const Homepage = () => {
       <HeroSection />
       {/* <CasinoWheel /> */}
       <HomeRewardsSection />
-      <HomeGamesSection />
+      {/* <HomeGamesSection /> */}
+      <RecommendedSection />
       {/* <CasinoWheel2 /> */}
       <SlotsSection />
+      <LiveCasino />
       <GameBetsSection />
       <HomeFAQSection />
     </div>
