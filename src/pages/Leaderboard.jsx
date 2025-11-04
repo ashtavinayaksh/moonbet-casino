@@ -1,110 +1,83 @@
 // Leaderboard.jsx - Fixed Podium Dimensions
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 import StarfieldBackground from "../components/leaderboard/StarfieldBackground";
 
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("daily");
   const [currentPage, setCurrentPage] = useState(1);
+  const [topWinners, setTopWinners] = useState([]);
+const [leaderboardData, setLeaderboardData] = useState([]);
+const [loading, setLoading] = useState(false);
 
   // Tab options
   const tabs = [
     { id: "daily", label: "Daily" },
     { id: "weekly", label: "Weekly" },
     { id: "monthly", label: "Monthly" },
-    { id: "alltime", label: "All Time" },
+    { id: "all-time", label: "All Time" },
   ];
 
-  // Top 3 winners data
-  const topWinners = [
-    {
-      rank: 2,
-      name: "Jolie Joie",
-      points: "50,000",
-      prize: "Prize",
-      avatar: "/leaderboard-assets/astro-profile1.svg",
-      profileInner: "/leaderboard-assets/profile1.svg",
-      icon: "/leaderboard-assets/group1.svg",
-      earned: "2,000 points",
-      position: "left",
-      bgColor: "from-gray-400 to-gray-600",
-    },
-    {
-      rank: 1,
-      name: "Jolie Joie",
-      points: "100,000",
-      prize: "Prize",
-      avatar: "/leaderboard-assets/astro-profile1.svg",
-      profileInner: "/leaderboard-assets/profile2.svg",
-      icon: "/leaderboard-assets/group2.svg",
-      diamond: "/leaderboard-assets/diamond-white.svg",
-      earned: "5,000 points",
-      endsIn: "10d 12h 10m 20s",
-      position: "center",
-      isWinner: true,
-      bgColor: "from-[#F07730] to-[#EFD28E]",
-    },
-    {
-      rank: 3,
-      name: "Jolie Joie",
-      points: "100,000",
-      prize: "Prize",
-      avatar: "/leaderboard-assets/astro-profile1.svg",
-      profileInner: "/leaderboard-assets/profile3.svg",
-      icon: "/leaderboard-assets/group3.svg",
-      earned: "2,000 points",
-      position: "right",
-      bgColor: "from-[#CD7F32] to-[#8B4513]",
-    },
-  ];
 
   // Leaderboard data
-  const leaderboardData = [
-    {
-      rank: 4,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile1.svg",
-    },
-    {
-      rank: 5,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile2.svg",
-    },
-    {
-      rank: 6,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile3.svg",
-    },
-    {
-      rank: 7,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile1.svg",
-    },
-    {
-      rank: 8,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile2.svg",
-    },
-    {
-      rank: 9,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile3.svg",
-    },
-    {
-      rank: 10,
-      username: "Henrietta.O'Connell",
-      points: 1000,
-      avatar: "/leaderboard-assets/profile1.svg",
-    },
-  ];
 
   const totalPages = 11;
+
+  useEffect(() => {
+  const fetchLeaderboard = async () => {
+    try {
+      setLoading(true);
+
+      // ✅ Fetch leaderboard data from backend
+      const response = await axios.get(
+        `/referral-service/api/leaderboard/top/all-time`
+      );
+
+      let leaderboard = [];
+      if (response.data?.success) {
+        leaderboard = response.data.data || [];
+      }
+
+      // 🧩 Add static UI fields to each dynamic user
+      const enrichedLeaderboard = leaderboard.map((item, index) => ({
+        ...item,
+        prize: "Prize",
+        avatar: `/leaderboard-assets/astro-profile${(index % 5) + 1}.svg`,
+        profileInner: `/leaderboard-assets/profile${(index % 5) + 1}.svg`,
+        icon: `/leaderboard-assets/group${(index % 5) + 1}.svg`,
+        earned: `${Math.floor(item.points / 4) || 50}+ points`,
+        position: index % 3 === 0 ? "left" : index % 3 === 1 ? "center" : "right",
+        bgColor:
+          index % 2 === 0
+            ? "from-gray-400 to-gray-600"
+            : "from-yellow-400 to-yellow-600",
+      }));
+
+      // 🥇 Split top 3 for podium and others for table
+      const topThree = enrichedLeaderboard.slice(0, 3);
+      const others = enrichedLeaderboard.slice(3);
+
+      // 🧭 Assign final positions for podium winners
+      const positions = ["left", "center", "right"];
+      const formattedTop = topThree.map((item, i) => ({
+        ...item,
+        position: positions[i] || "center",
+        isWinner: i === 1, // Center winner
+      }));
+
+      setTopWinners(formattedTop);
+      setLeaderboardData(others);
+    } catch (error) {
+      console.error("❌ Error fetching leaderboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchLeaderboard();
+}, [activeTab]);
+
 
   // Podium card component with fixed dimensions
   const PodiumCard = ({ winner }) => {
@@ -160,7 +133,7 @@ const Leaderboard = () => {
           <div className="relative w-40 h-40">
             {/* Astronaut Helmet Background */}
             <img
-              src={winner.avatar}
+              src='/leaderboard-assets/astro-profile1.svg'
               alt="Astronaut Helmet"
               className="absolute inset-0 w-full h-full"
             />
@@ -283,31 +256,20 @@ const Leaderboard = () => {
           </div>
         </div>
 
+        {loading ? (
+  <div className="text-center text-gray-400 text-lg">Loading leaderboard...</div>
+) : (
+  <>
         {/* Top 3 Podium Section - Fixed Width Container */}
         <div className="flex justify-center mb-12">
-          <div className="flex items-end gap-8">
-            <PodiumCard winner={topWinners[0]} />
-            <PodiumCard winner={topWinners[1]} />
-            <PodiumCard winner={topWinners[2]} />
-          </div>
-        </div>
-
-        {/* Ranking Info */}
-        <div className="text-center mb-8">
-          <p className="text-gray-400">
-            You earned{" "}
-            <span className="text-white">
-              <img
-                src="/leaderboard-assets/diamond.svg"
-                alt="Heart"
-                className="inline w-4 h-4 mr-1"
-              />
-              5
-            </span>{" "}
-            today and we ranked - out of{" "}
-            <span className="text-white">23,148 users</span>
-          </p>
-        </div>
+      <div className="flex items-end gap-8">
+        {topWinners.map((winner, i) => (
+          <PodiumCard key={i} winner={winner} />
+        ))}
+      </div>
+    </div>
+    </>
+    )}
 
         {/* Leaderboard Table */}
         <motion.div
