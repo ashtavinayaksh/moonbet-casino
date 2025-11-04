@@ -873,7 +873,7 @@ useEffect(() => {
         >
                      {/* Main Menu */}
                          {/* Main Menu */}
-          <div className="p-3">
+          <div className="pt-3">
             <div className="space-y-1">
               {menuItems.map((item) => (
                 <div key={item.id}>
@@ -1571,7 +1571,7 @@ useEffect(() => {
         >
           <div className="overflow-y-auto h-full custom-scrollbar pb-20">
             {/* Main Menu */}
-            <div className="pt-3">
+            <div className="p-4">
               <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">
                 Main Menu
               </h3>
