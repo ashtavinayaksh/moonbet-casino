@@ -193,7 +193,7 @@ const GameBetsSection = () => {
                       {bet.betAmount}
                     </div>
                     <div className="hidden md:block text-gray-400 text-xs lg:text-sm">
-                      {bet.multiplier}
+                      -
                     </div>
                     <div
                       className={`text-xs lg:text-sm font-semibold ${

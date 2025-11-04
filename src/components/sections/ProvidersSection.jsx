@@ -7,9 +7,9 @@ const ProvidersSection = () => {
   const [canScrollRight, setCanScrollRight] = useState(true);
 
   const providers = [
-    { id: 1, name: "Pragmatic Play", logo: "/providers/pragmatic.svg" },
+    { id: 1, name: "Pragmatic Play", logo: "/providers/vector1.svg" },
     { id: 2, name: "Evolution", logo: "/providers/evolution.svg" },
-    { id: 3, name: "BGaming", logo: "/providers/bgaming.svg" },
+    { id: 3, name: "BGaming", logo: "/providers/1.svg" },
     { id: 4, name: "Hacksaw Gaming", logo: "/providers/hacksaw.svg" },
     { id: 5, name: "Thunderkick", logo: "/providers/thunderkick.svg" },
     { id: 6, name: "Play'n GO", logo: "/providers/playngo.svg" },
@@ -159,7 +159,7 @@ const ProvidersSection = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex-shrink-0 w-[160px] h-[60px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
+                className="wallet-btn4 flex-shrink-0 w-[140px] h-[60px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
               >
                 <img
                   src={provider.logo}

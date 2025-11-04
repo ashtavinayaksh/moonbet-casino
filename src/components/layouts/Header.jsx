@@ -395,6 +395,7 @@ useEffect(() => {
       icon: "/icons/leaderboard.svg",
       className:
         "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
+      path: "/leaderboard",
     },
   ];
 
