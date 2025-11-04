@@ -809,17 +809,36 @@ const WalletModal = ({ isOpen, onClose }) => {
             onClick={onClose}
           />
 
-          <motion.div
+            <motion.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             className="fixed inset-0 flex items-center justify-center z-[101] p-4"
           >
-            <div className="bg-[#1A1D24] rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-2xl border border-white/10">
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r ">
+            <div
+              className="bg-[#000] rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                backdropFilter: "blur(30px)",
+                WebkitBackdropFilter: "blur(30px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow:
+                  "0 25px 70px rgba(0, 0, 0, 0.6), 0 0 120px rgba(240, 119, 48, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1)",
+              }}
+            >
+              {/* Header with enhanced glass effect */}
+              <div
+                className="flex items-center justify-between p-4 border-b border-white/10"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                  backdropFilter: "blur(20px)",
+                }}
+              >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg flex items-center justify-center shadow-lg shadow-[#F07730]/30">
                     <svg
                       className="w-5 h-5 text-black"
                       fill="none"
@@ -834,14 +853,16 @@ const WalletModal = ({ isOpen, onClose }) => {
                       />
                     </svg>
                   </div>
-                  <h2 className="text-xl font-bold text-white">Wallet</h2>
+                  <h2 className="text-xl font-bold text-white drop-shadow-lg">
+                    Wallet
+                  </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 hover:bg-white/10 rounded-lg transition-all backdrop-blur-sm"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-400"
+                    className="w-5 h-5 text-gray-400 hover:text-white transition-colors"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -856,7 +877,15 @@ const WalletModal = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
-              <div className="flex gap-4 p-6 border-b border-white/10 bg-[#0F1116]">
+              {/* Tab Navigation with glass effect */}
+              <div
+                className="flex gap-4 p-6 border-b border-white/10"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(15, 17, 22, 0.8) 0%, rgba(15, 17, 22, 0.4) 100%)",
+                  backdropFilter: "blur(15px)",
+                }}
+              >
                 {["overview", "buycrypto", "settings"].map((tab) => (
                   <motion.button
                     key={tab}
@@ -865,9 +894,19 @@ const WalletModal = ({ isOpen, onClose }) => {
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-2 rounded-full font-medium transition-all ${
                       activeTab === tab
-                        ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-black"
-                        : "bg-white/5 text-gray-400 hover:text-white"
+                        ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-black shadow-lg shadow-[#F07730]/30"
+                        : ""
                     }`}
+                    style={
+                      activeTab !== tab
+                        ? {
+                            background: "rgba(255, 255, 255, 0.05)",
+                            backdropFilter: "blur(10px)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            color: "#9CA3AF",
+                          }
+                        : {}
+                    }
                   >
                     {tab === "overview"
                       ? "Overview"
@@ -878,9 +917,14 @@ const WalletModal = ({ isOpen, onClose }) => {
                 ))}
               </div>
 
+              {/* Content Area with glass overlay */}
               <div
                 className="overflow-y-auto"
-                style={{ maxHeight: "calc(90vh - 200px)" }}
+                style={{
+                  maxHeight: "calc(90vh - 200px)",
+                  background:
+                    "linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%)",
+                }}
               >
                 {activeTab === "overview" && (
                   <motion.div
@@ -888,20 +932,35 @@ const WalletModal = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-6"
                   >
-                    <div className="mb-6">
+                    {/* Balance Section with glass card */}
+                    <div
+                      className="mb-6 p-4 rounded-xl"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                        backdropFilter: "blur(15px)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                      }}
+                    >
                       <h3 className="text-gray-400 text-sm mb-2">Balance</h3>
                       <div className="flex items-center gap-3">
-                        <span className="text-4xl font-bold text-white">
+                        <span className="text-4xl font-bold text-white drop-shadow-lg">
                           ${walletBalance?.totalUsd?.toFixed(2) || "0.00"}
                         </span>
-                        <div className="w-8 h-8 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold text-sm">
+                        <div className="w-8 h-8 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg shadow-[#F07730]/30">
                           $
                         </div>
                       </div>
                     </div>
 
+                    {/* Currency List with glass cards */}
                     <div className="mb-6">
-                      <div className="flex justify-between text-gray-400 text-sm mb-4 pb-2 border-b border-white/10">
+                      <div
+                        className="flex justify-between text-gray-400 text-sm mb-4 pb-2 border-b border-white/10"
+                        style={{
+                          textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+                        }}
+                      >
                         <span>Currency</span>
                         <span>Value</span>
                       </div>
@@ -913,10 +972,27 @@ const WalletModal = ({ isOpen, onClose }) => {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center justify-between py-4 border-b border-white/5 hover:bg-white/5 transition-all px-2 rounded-lg"
+                            className="flex items-center justify-between py-4 px-3 mb-2 rounded-lg transition-all"
+                            style={{
+                              background: "rgba(255, 255, 255, 0.03)",
+                              backdropFilter: "blur(10px)",
+                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background =
+                                "rgba(255, 255, 255, 0.06)";
+                              e.currentTarget.style.border =
+                                "1px solid rgba(255, 255, 255, 0.1)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background =
+                                "rgba(255, 255, 255, 0.03)";
+                              e.currentTarget.style.border =
+                                "1px solid rgba(255, 255, 255, 0.05)";
+                            }}
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
+                              <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold shadow-lg shadow-[#F07730]/20">
                                 {coin.currency.charAt(0)}
                               </div>
                               <div>
@@ -945,12 +1021,31 @@ const WalletModal = ({ isOpen, onClose }) => {
                       )}
                     </div>
 
+                    {/* Action Buttons with glass effect */}
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setShowWithdrawModal(true)}
-                        className="bg-white/5 hover:bg-white/10 text-white py-4 px-6 rounded-lg font-bold transition-all border border-white/10"
+                        className="text-white py-4 px-6 rounded-lg font-bold transition-all"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.05)",
+                          backdropFilter: "blur(10px)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background =
+                            "rgba(255, 255, 255, 0.08)";
+                          e.currentTarget.style.border =
+                            "1px solid rgba(255, 255, 255, 0.2)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background =
+                            "rgba(255, 255, 255, 0.05)";
+                          e.currentTarget.style.border =
+                            "1px solid rgba(255, 255, 255, 0.1)";
+                        }}
                       >
                         Withdraw
                       </motion.button>
@@ -958,18 +1053,28 @@ const WalletModal = ({ isOpen, onClose }) => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setShowDepositModal(true)}
-                        className="bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-4 px-6 rounded-lg font-bold transition-all"
+                        className="bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-4 px-6 rounded-lg font-bold transition-all shadow-lg shadow-[#F07730]/30"
                       >
                         Deposit
                       </motion.button>
                     </div>
 
-                    <div className="bg-gradient-to-r from-[#F07730]/10 to-[#EFD28E]/10 border border-[#F07730]/30 rounded-lg p-4">
+                    {/* 2FA Card with enhanced glass */}
+                    <div
+                      className="rounded-lg p-4"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(240, 119, 48, 0.1) 0%, rgba(240, 119, 48, 0.05) 100%)",
+                        backdropFilter: "blur(15px)",
+                        border: "1px solid rgba(240, 119, 48, 0.3)",
+                        boxShadow: "0 4px 20px rgba(240, 119, 48, 0.1)",
+                      }}
+                    >
                       <p className="text-gray-300 mb-4">
                         Improve your account security with Two-Factor
                         Authentication
                       </p>
-                      <button className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-3 px-4 rounded-lg font-medium transition-all">
+                      <button className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-3 px-4 rounded-lg font-medium transition-all shadow-lg shadow-[#F07730]/30">
                         Enable 2FA
                       </button>
                     </div>
@@ -982,6 +1087,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-6"
                   >
+                    {/* Coin Selector with glass effect */}
                     <div className="mb-4 relative">
                       <label className="text-gray-400 text-sm mb-2 block">
                         Buy
@@ -989,10 +1095,27 @@ const WalletModal = ({ isOpen, onClose }) => {
 
                       <div
                         onClick={() => setShowCoinDropdown(!showCoinDropdown)}
-                        className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
+                        className="rounded-lg p-3 flex items-center justify-between cursor-pointer transition-all"
+                        style={{
+                          background: "rgba(15, 17, 22, 0.6)",
+                          backdropFilter: "blur(15px)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background =
+                            "rgba(255, 255, 255, 0.05)";
+                          e.currentTarget.style.border =
+                            "1px solid rgba(255, 255, 255, 0.15)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background =
+                            "rgba(15, 17, 22, 0.6)";
+                          e.currentTarget.style.border =
+                            "1px solid rgba(255, 255, 255, 0.1)";
+                        }}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
+                          <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold shadow-lg shadow-[#F07730]/20">
                             {selectedCoin?.symbol?.charAt(0) || "◎"}
                           </div>
                           <div>
@@ -1021,6 +1144,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                         </svg>
                       </div>
 
+                      {/* Dropdown with glass effect */}
                       <AnimatePresence>
                         {showCoinDropdown && (
                           <motion.div
@@ -1028,7 +1152,13 @@ const WalletModal = ({ isOpen, onClose }) => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute left-0 right-0 mt-2 bg-[#0F1116] border border-white/10 rounded-lg shadow-lg z-[999] max-h-60 overflow-y-auto"
+                            className="absolute left-0 right-0 mt-2 rounded-lg shadow-xl z-[999] max-h-60 overflow-y-auto"
+                            style={{
+                              background: "rgba(15, 17, 22, 0.95)",
+                              backdropFilter: "blur(20px)",
+                              border: "1px solid rgba(255, 255, 255, 0.15)",
+                              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.5)",
+                            }}
                           >
                             {coinList.map((coin) => (
                               <div
@@ -1037,10 +1167,22 @@ const WalletModal = ({ isOpen, onClose }) => {
                                   setSelectedCoin(coin);
                                   setShowCoinDropdown(false);
                                 }}
-                                className="flex items-center justify-between px-4 py-3 hover:bg-white/5 cursor-pointer transition-all"
+                                className="flex items-center justify-between px-4 py-3 cursor-pointer transition-all"
+                                style={{
+                                  borderBottom:
+                                    "1px solid rgba(255, 255, 255, 0.05)",
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background =
+                                    "rgba(255, 255, 255, 0.05)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background =
+                                    "transparent";
+                                }}
                               >
                                 <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
+                                  <div className="w-8 h-8 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold shadow-md shadow-[#F07730]/20">
                                     {coin.symbol.charAt(0)}
                                   </div>
                                   <div>
@@ -1062,6 +1204,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                       </AnimatePresence>
                     </div>
 
+                    {/* Amount Input with glass effect */}
                     <div className="mb-6">
                       <label className="text-gray-400 text-sm mb-2 block">
                         Amount *
@@ -1072,10 +1215,22 @@ const WalletModal = ({ isOpen, onClose }) => {
                           value={buyAmount}
                           onChange={(e) => setBuyAmount(e.target.value)}
                           placeholder="0"
-                          className="flex-1 bg-[#0F1116] text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F07730] border border-white/10"
+                          className="flex-1 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F07730] transition-all"
+                          style={{
+                            background: "rgba(15, 17, 22, 0.6)",
+                            backdropFilter: "blur(15px)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                          }}
                         />
-                        <div className="bg-[#0F1116] rounded-lg px-4 py-3 flex items-center gap-2 min-w-[120px] border border-white/10">
-                          <div className="w-6 h-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black text-xs font-bold">
+                        <div
+                          className="rounded-lg px-4 py-3 flex items-center gap-2 min-w-[120px]"
+                          style={{
+                            background: "rgba(15, 17, 22, 0.6)",
+                            backdropFilter: "blur(15px)",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                          }}
+                        >
+                          <div className="w-6 h-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black text-xs font-bold shadow-md shadow-[#F07730]/20">
                             ₹
                           </div>
                           <span className="text-white font-medium">INR</span>
@@ -1099,7 +1254,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-4 px-6 rounded-lg font-bold transition-all"
+                      className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-4 px-6 rounded-lg font-bold transition-all shadow-lg shadow-[#F07730]/30"
                     >
                       Buy {selectedCoin?.symbol || "SOL"}
                     </motion.button>
@@ -1112,8 +1267,16 @@ const WalletModal = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, y: 0 }}
                     className="p-6"
                   >
+                    {/* Settings toggles with glass cards */}
                     <div className="space-y-4 mb-6">
-                      <div className="flex items-center justify-between">
+                      <div
+                        className="flex items-center justify-between p-4 rounded-lg"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.03)",
+                          backdropFilter: "blur(15px)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                        }}
+                      >
                         <div>
                           <h4 className="text-white font-medium">
                             Hide Zero Balances
@@ -1131,11 +1294,18 @@ const WalletModal = ({ isOpen, onClose }) => {
                               setHideZeroBalances(e.target.checked)
                             }
                           />
-                          <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#F07730] peer-checked:to-[#EFD28E]"></div>
+                          <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#F07730] peer-checked:to-[#EFD28E] shadow-inner"></div>
                         </label>
                       </div>
 
-                      <div className="flex items-center justify-between">
+                      <div
+                        className="flex items-center justify-between p-4 rounded-lg"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.03)",
+                          backdropFilter: "blur(15px)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                        }}
+                      >
                         <div>
                           <h4 className="text-white font-medium">
                             Display Crypto in Fiat
@@ -1154,11 +1324,12 @@ const WalletModal = ({ isOpen, onClose }) => {
                               setDisplayCryptoInFiat(e.target.checked)
                             }
                           />
-                          <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#F07730] peer-checked:to-[#EFD28E]"></div>
+                          <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#F07730] peer-checked:to-[#EFD28E] shadow-inner"></div>
                         </label>
                       </div>
                     </div>
 
+                    {/* Currency Selection with glass effect */}
                     <div className="grid grid-cols-4 gap-3 mb-6">
                       {fiatCurrencies.map((currency) => (
                         <motion.button
@@ -1167,10 +1338,34 @@ const WalletModal = ({ isOpen, onClose }) => {
                           whileTap={{ scale: 0.95 }}
                           onClick={() => setSelectedFiatCurrency(currency.code)}
                           className={`flex items-center gap-2 p-3 rounded-lg transition-all ${
-                            selectedFiatCurrency === currency.code
-                              ? "bg-gradient-to-r from-[#F07730]/20 to-[#EFD28E]/20 border-2 border-[#F07730]"
-                              : "bg-white/5 border-2 border-transparent hover:bg-white/10"
+                            selectedFiatCurrency === currency.code ? "" : ""
                           }`}
+                          style={
+                            selectedFiatCurrency === currency.code
+                              ? {
+                                  background:
+                                    "linear-gradient(135deg, rgba(240, 119, 48, 0.2) 0%, rgba(239, 210, 142, 0.2) 100%)",
+                                  border: "2px solid #F07730",
+                                  backdropFilter: "blur(10px)",
+                                }
+                              : {
+                                  background: "rgba(255, 255, 255, 0.05)",
+                                  border: "2px solid transparent",
+                                  backdropFilter: "blur(10px)",
+                                }
+                          }
+                          onMouseEnter={(e) => {
+                            if (selectedFiatCurrency !== currency.code) {
+                              e.currentTarget.style.background =
+                                "rgba(255, 255, 255, 0.08)";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (selectedFiatCurrency !== currency.code) {
+                              e.currentTarget.style.background =
+                                "rgba(255, 255, 255, 0.05)";
+                            }
+                          }}
                         >
                           <div className="relative">
                             <div
@@ -1190,19 +1385,29 @@ const WalletModal = ({ isOpen, onClose }) => {
                           <span className="text-white text-sm font-medium">
                             {currency.code}
                           </span>
-                          <div className="w-5 h-5 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black text-xs">
+                          <div className="w-5 h-5 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black text-xs shadow-md shadow-[#F07730]/20">
                             {currency.symbol}
                           </div>
                         </motion.button>
                       ))}
                     </div>
 
-                    <div className="bg-gradient-to-r from-[#F07730]/10 to-[#EFD28E]/10 border border-[#F07730]/30 rounded-lg p-4">
+                    {/* 2FA Card with enhanced glass */}
+                    <div
+                      className="rounded-lg p-4"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(240, 119, 48, 0.1) 0%, rgba(240, 119, 48, 0.05) 100%)",
+                        backdropFilter: "blur(15px)",
+                        border: "1px solid rgba(240, 119, 48, 0.3)",
+                        boxShadow: "0 4px 20px rgba(240, 119, 48, 0.1)",
+                      }}
+                    >
                       <p className="text-gray-300 mb-4">
                         Improve your account security with Two-Factor
                         Authentication
                       </p>
-                      <button className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-3 px-4 rounded-lg font-medium transition-all">
+                      <button className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-3 px-4 rounded-lg font-medium transition-all shadow-lg shadow-[#F07730]/30">
                         Enable 2FA
                       </button>
                     </div>
