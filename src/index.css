@@ -720,3 +720,28 @@ ease;
     /* background: red; */
     height: 1px;
 }
+
+/* Gradient border effect for provider cards */
+.wallet-btn4 {
+  position: relative;
+  border-radius: 8px;
+}
+
+.wallet-btn4::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 8px;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(30, 30, 30, 0.4) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}

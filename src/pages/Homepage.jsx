@@ -11,6 +11,7 @@ import SpinningWheel from "../components/sections/SpinningWheel";
 import CasinoWheel2 from "../components/sections/CasinoWheel2";
 import RecommendedSection from "../components/sections/RecommendedSection";
 import LiveCasino from "../components/sections/LiveCasino";
+import ProvidersSection from "../components/sections/ProvidersSection";
 
 const Homepage = () => {
   return (
@@ -23,6 +24,7 @@ const Homepage = () => {
       {/* <CasinoWheel2 /> */}
       <SlotsSection />
       <LiveCasino />
+      <ProvidersSection />
       <GameBetsSection />
       <HomeFAQSection />
     </div>
