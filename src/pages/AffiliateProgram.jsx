@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuthStore } from "../store/useAuthStore";
 
 const AffiliateProgram = () => {
   const [referralCode, setReferralCode] = useState("");
@@ -14,6 +15,7 @@ const AffiliateProgram = () => {
   const [points, setPoints] = useState({ referrer: 0, referee: 0 });
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user.id;
+  const { token, isLoggedIn } = useAuthStore();
 
   // Mock data - replace with actual data from your backend
   const [stats, setStats] = useState({
@@ -29,30 +31,44 @@ const AffiliateProgram = () => {
   const fetchReferralStats = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.warn("No auth token found");
+        return;
+      }
 
       const { data } = await axios.get(
-        `/referral-service/api/referral/stats/${userId}`
+        `/referral-service/api/referral/stats/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       if (data?.success && data.data) {
         const info = data.data;
-        if (info.code) {
-          // User already has a referral code
-          setReferralCode(info.code);
+
+        // ✅ Get referral code if exists
+        const code = info.asReferrer?.code || "";
+        if (code) {
+          setReferralCode(code);
           setIsCodeSet(true);
 
           const frontendUrl = window.origin;
-          setGeneratedLink(`${frontendUrl}/register?ref=${info.code}`);
+          setGeneratedLink(`${frontendUrl}/register?ref=${code}`);
 
+          // ✅ Stats update with backend totals
           setStats({
-            totalReferrals: info.stats?.totalReferrals || 0,
+            totalReferrals: info.totals?.totalReferrals || 0,
             totalWagered: 0,
-            totalEarnings: info.stats?.totalPointsEarned || 0,
+            totalEarnings: info.totals?.totalPointsOverall || 0, // 💰 comes from backend now
             pendingIncome: 0,
           });
-          setReferrals(info.recentReferrals || []);
+
+          // ✅ Combine referrals list
+          setReferrals(info.asReferrer?.recentReferrals || []);
         } else {
-          // No referral code — show button
           setIsCodeSet(false);
           setReferrals([]);
         }
@@ -82,15 +98,14 @@ const AffiliateProgram = () => {
   try {
     setLoading(true);
 
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!isLoggedIn || !token) {
       alert("You must be logged in to generate a referral code.");
       return;
     }
 
-    const payload = {
-      userId: "68f4849c321d58f1f8be302a",
-    };
+    // ✅ Get user info from state or localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const payload = { userId: user.id };
 
     const { data } = await axios.post(
       "/referral-service/api/referral/generate-code",
@@ -115,7 +130,7 @@ const AffiliateProgram = () => {
       });
       setIsCodeSet(true);
 
-      // ✅ Persist in localStorage so it survives refresh
+      // Optional: cache locally for reload persistence
       localStorage.setItem(
         "referralData",
         JSON.stringify({
@@ -128,6 +143,7 @@ const AffiliateProgram = () => {
         })
       );
 
+      console.log(`🎁 Referral code generated: ${info.code}`);
     } else {
       alert(data?.message || "Failed to generate referral code.");
     }
@@ -141,6 +157,7 @@ const AffiliateProgram = () => {
     setLoading(false);
   }
 };
+
 
   // Handle copying the link
   const handleCopy = async () => {
