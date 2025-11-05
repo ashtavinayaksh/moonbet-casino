@@ -20,6 +20,7 @@ import AuthTest from "./pages/AuthTest";
 import "react-toastify/dist/ReactToastify.css";
 import AffiliateProgram from "./pages/AffiliateProgram";
 import Leaderboard from "./pages/Leaderboard";
+import TidioChatButton from "./components/TidioChatButton";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -123,6 +124,7 @@ function App() {
             <Route path="authtest" element={<AuthTest />} />
             <Route path="/affiliate" element={<AffiliateProgram />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/tidiochat" element={<TidioChatButton />} />
           </Route>
         </Routes>
       </AuthModalHandler>
