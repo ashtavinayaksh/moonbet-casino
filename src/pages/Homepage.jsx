@@ -13,13 +13,16 @@ import RecommendedSection from "../components/sections/RecommendedSection";
 import LiveCasino from "../components/sections/LiveCasino";
 import ProvidersSection from "../components/sections/ProvidersSection";
 import CryptoPaymentSection from "../components/sections/CryptoPaymentSection";
+import VipMoonSection from "../components/sections/VipMoonSection";
+import TrustBadges from "../components/sections/TrustBadges";
 
 const Homepage = () => {
   return (
     <div className="min-h-screen bg-black">
       <HeroSection />
       {/* <CasinoWheel /> */}
-      <HomeRewardsSection />
+      <VipMoonSection />
+      {/* <HomeRewardsSection /> */}
       {/* <HomeGamesSection /> */}
       <RecommendedSection />
       {/* <CasinoWheel2 /> */}
@@ -29,6 +32,7 @@ const Homepage = () => {
       <GameBetsSection />
       <HomeFAQSection />
       <CryptoPaymentSection />
+      <TrustBadges />
     </div>
   );
 };

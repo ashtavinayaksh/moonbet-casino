@@ -59,7 +59,7 @@ const Header = ({
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user.id;
   const userName = user.username;
-  console.log("selectedCurrency are:",selectedCurrency)
+  console.log("selectedCurrency are:", selectedCurrency);
 
   useEffect(() => {
     const checkToken = () => {
@@ -175,66 +175,67 @@ const Header = ({
 
   useEffect(() => {
     const fetchWalletData = async () => {
-  try {
-    const [coinsRes, balanceRes] = await Promise.all([
-      axios.get("/wallet-service/api/wallet/coins"),
-      axios.get(`/wallet-service/api/wallet/${userId}/balance`),
-    ]);
+      try {
+        const [coinsRes, balanceRes] = await Promise.all([
+          axios.get("/wallet-service/api/wallet/coins"),
+          axios.get(`/wallet-service/api/wallet/${userId}/balance`),
+        ]);
 
-    const coins = coinsRes.data || [];
-    const walletBalances = balanceRes.data?.balances || [];
+        const coins = coinsRes.data || [];
+        const walletBalances = balanceRes.data?.balances || [];
 
-    // 🪙 merge coins and balances
-    const colorMap = {
-      BTC: "bg-orange-400",
-      ETH: "bg-blue-500",
-      USDT: "bg-green-500",
-      SOL: "bg-purple-500",
-      BNB: "bg-yellow-400",
-      XRP: "bg-gray-500",
-      ADA: "bg-blue-400",
-      DOGE: "bg-yellow-500",
-      TRX: "bg-red-500",
-      LTC: "bg-blue-800",
-      DOT: "bg-pink-500",
-      MATIC: "bg-indigo-500",
-      AVAX: "bg-red-400",
-      XLM: "bg-cyan-400",
-      BCH: "bg-green-400",
+        // 🪙 merge coins and balances
+        const colorMap = {
+          BTC: "bg-orange-400",
+          ETH: "bg-blue-500",
+          USDT: "bg-green-500",
+          SOL: "bg-purple-500",
+          BNB: "bg-yellow-400",
+          XRP: "bg-gray-500",
+          ADA: "bg-blue-400",
+          DOGE: "bg-yellow-500",
+          TRX: "bg-red-500",
+          LTC: "bg-blue-800",
+          DOT: "bg-pink-500",
+          MATIC: "bg-indigo-500",
+          AVAX: "bg-red-400",
+          XLM: "bg-cyan-400",
+          BCH: "bg-green-400",
+        };
+
+        const merged = coins.map((coin) => {
+          const match = walletBalances.find(
+            (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
+          );
+          return {
+            ...coin,
+            color: colorMap[coin.symbol] || "bg-gray-700",
+            balance: match ? match.amount.toFixed(5) : "0.00000",
+            iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol.toLowerCase()}.svg`,
+          };
+        });
+
+        setCurrencies(merged);
+
+        // 🪙 Determine preferred or default currency
+        const preferred = localStorage.getItem("preferredCurrency");
+        let initialCurrency =
+          merged.find((c) => c.symbol === preferred) ||
+          merged.find((c) => c.symbol === "BTC") ||
+          merged[0];
+
+        setSelectedCurrency(initialCurrency);
+        localStorage.setItem("preferredCurrency", initialCurrency.symbol);
+
+        // 🧮 Show its balance directly (no USD conversion)
+        setWalletBalance(
+          `${initialCurrency.balance} ${initialCurrency.symbol}`
+        );
+      } catch (err) {
+        console.error("Error fetching wallet or coins:", err);
+        setWalletBalance("0.00000 BTC");
+      }
     };
-
-    const merged = coins.map((coin) => {
-      const match = walletBalances.find(
-        (b) => b.currency.toUpperCase() === coin.symbol.toUpperCase()
-      );
-      return {
-        ...coin,
-        color: colorMap[coin.symbol] || "bg-gray-700",
-        balance: match ? match.amount.toFixed(5) : "0.00000",
-        iconPath: `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/${coin.symbol.toLowerCase()}.svg`,
-      };
-    });
-
-    setCurrencies(merged);
-
-    // 🪙 Determine preferred or default currency
-    const preferred = localStorage.getItem("preferredCurrency");
-    let initialCurrency =
-      merged.find((c) => c.symbol === preferred) ||
-      merged.find((c) => c.symbol === "BTC") ||
-      merged[0];
-
-    setSelectedCurrency(initialCurrency);
-    localStorage.setItem("preferredCurrency", initialCurrency.symbol);
-
-    // 🧮 Show its balance directly (no USD conversion)
-    setWalletBalance(`${initialCurrency.balance} ${initialCurrency.symbol}`);
-  } catch (err) {
-    console.error("Error fetching wallet or coins:", err);
-    setWalletBalance("0.00000 BTC");
-  }
-};
-
 
     if (hasToken) fetchWalletData();
     // window.addEventListener("currencyChanged", fetchWalletData);
@@ -243,81 +244,82 @@ const Header = ({
 
   // 👇 whenever a currency is selected from dropdown
   const handleCurrencySelect = async (currency) => {
-  try {
-    setSelectedCurrency(currency);
-    localStorage.setItem("preferredCurrency", currency.symbol);
+    try {
+      setSelectedCurrency(currency);
+      localStorage.setItem("preferredCurrency", currency.symbol);
 
-    let gameCurrency = localStorage.getItem("gameCurrency") || "USD";
-    localStorage.setItem("gameCurrency", gameCurrency);
+      let gameCurrency = localStorage.getItem("gameCurrency") || "USD";
+      localStorage.setItem("gameCurrency", gameCurrency);
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = user.id;
-    if (!userId) {
-      console.error("❌ No user ID found in localStorage");
-      setWalletBalance("0.00");
-      return;
-    }
-
-    setWalletBalance("Updating...");
-
-    const res = await axios.put(
-      `/wallet-service/api/games/convert/${userId}`,
-      {
-        preferredCurrency: currency.symbol,
-        gameCurrency: gameCurrency,
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = user.id;
+      if (!userId) {
+        console.error("❌ No user ID found in localStorage");
+        setWalletBalance("0.00");
+        return;
       }
-    );
 
-    if (res.data?.success && res.data.data) {
-      const { balances, betCurrency, preferredCurrency, rate } = res.data.data;
-      const match = balances.find(
-        (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
+      setWalletBalance("Updating...");
+
+      const res = await axios.put(
+        `/wallet-service/api/games/convert/${userId}`,
+        {
+          preferredCurrency: currency.symbol,
+          gameCurrency: gameCurrency,
+        }
       );
 
-      const amount = match ? Number(match.amount).toFixed(2) : "0.00";
+      if (res.data?.success && res.data.data) {
+        const { balances, betCurrency, preferredCurrency, rate } =
+          res.data.data;
+        const match = balances.find(
+          (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
+        );
 
-      // ✅ Store in localStorage to persist across reloads
-      localStorage.setItem("convertedValue", amount);
-      localStorage.setItem("preferredCurrency", preferredCurrency);
-      localStorage.setItem("gameCurrency", betCurrency);
-      localStorage.setItem("conversionRate", rate);
+        const amount = match ? Number(match.amount).toFixed(2) : "0.00";
 
-      setWalletBalance(`${amount} ${betCurrency}`);
+        // ✅ Store in localStorage to persist across reloads
+        localStorage.setItem("convertedValue", amount);
+        localStorage.setItem("preferredCurrency", preferredCurrency);
+        localStorage.setItem("gameCurrency", betCurrency);
+        localStorage.setItem("conversionRate", rate);
 
-      // ✅ Notify GamePage that currency changed
-      window.dispatchEvent(new Event("preferredCurrencyUpdated"));
-      console.log(
-        `💱 Converted ${preferredCurrency} → ${betCurrency} @ rate ${rate}`
-      );
-    } else {
-      console.warn("⚠️ Conversion API failed:", res.data?.message);
+        setWalletBalance(`${amount} ${betCurrency}`);
+
+        // ✅ Notify GamePage that currency changed
+        window.dispatchEvent(new Event("preferredCurrencyUpdated"));
+        console.log(
+          `💱 Converted ${preferredCurrency} → ${betCurrency} @ rate ${rate}`
+        );
+      } else {
+        console.warn("⚠️ Conversion API failed:", res.data?.message);
+        setWalletBalance("0.00");
+      }
+    } catch (err) {
+      console.error("❌ Currency conversion failed:", err.message);
       setWalletBalance("0.00");
+    } finally {
+      setWalletDropdownOpen(false);
     }
-  } catch (err) {
-    console.error("❌ Currency conversion failed:", err.message);
-    setWalletBalance("0.00");
-  } finally {
-    setWalletDropdownOpen(false);
-  }
-};
+  };
 
-useEffect(() => {
-  // Restore currency & converted value on reload
-  const preferred = localStorage.getItem("preferredCurrency");
-  const gameCurrency = localStorage.getItem("gameCurrency");
-  const convertedValue = localStorage.getItem("convertedValue");
+  useEffect(() => {
+    // Restore currency & converted value on reload
+    const preferred = localStorage.getItem("preferredCurrency");
+    const gameCurrency = localStorage.getItem("gameCurrency");
+    const convertedValue = localStorage.getItem("convertedValue");
 
-  if (preferred && gameCurrency && convertedValue) {
-    const currencyObj = currencies.find(
-      (c) => c.symbol.toUpperCase() === preferred.toUpperCase()
-    );
-    if (currencyObj) setSelectedCurrency(currencyObj);
+    if (preferred && gameCurrency && convertedValue) {
+      const currencyObj = currencies.find(
+        (c) => c.symbol.toUpperCase() === preferred.toUpperCase()
+      );
+      if (currencyObj) setSelectedCurrency(currencyObj);
 
-    setWalletBalance(`${convertedValue} ${gameCurrency}`);
-  }
-}, [currencies]);
+      setWalletBalance(`${convertedValue} ${gameCurrency}`);
+    }
+  }, [currencies]);
 
-    // Enhanced menu items with gradient colors
+  // Enhanced menu items with gradient colors
   const menuItems = [
     {
       id: "home",
@@ -449,27 +451,27 @@ useEffect(() => {
   };
 
   const handleLogout = () => {
-     localStorage.removeItem("token");
-     window.dispatchEvent(new Event("tokenChanged"));
+    localStorage.removeItem("token");
+    window.dispatchEvent(new Event("tokenChanged"));
     localStorage.removeItem("user");
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
     localStorage.removeItem("kycStatus");
     window.dispatchEvent(new Event("tokenChanged"));
-      // setIsLoggedIn(false);
-      // setDropdownOpen(false);
-      toast.info("You have been logged out successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      setTimeout(() => {
-    window.location.reload();
-  }, 1200);
+    // setIsLoggedIn(false);
+    // setDropdownOpen(false);
+    toast.info("You have been logged out successfully", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 1200);
   };
 
   // Handle click outside for wallet dropdown
@@ -526,38 +528,38 @@ useEffect(() => {
           <div className="flex items-center gap-3">
             {/* Desktop Sidebar Toggle Button */}
             <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={toggleDesktopSidebar}
-                          className="hidden lg:flex items-center justify-center w-10 h-10 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleDesktopSidebar}
+              className="hidden lg:flex items-center justify-center w-10 h-10 
                 rounded-lg border-[0.5px] border-white/20 
                 bg-gradient-to-b from-[rgba(30,30,30,0.15)] to-[rgba(75,75,75,0.15)]
                 shadow-[1px_2px_1px_0_rgba(0,0,0,0.40)] backdrop-blur-[1.5px]
                 hover:from-[rgba(40,40,40,0.20)] hover:to-[rgba(85,85,85,0.20)]
                 transition-all duration-300 group"
-                        >
-                          <motion.div
-                            animate={{ rotate: sidebarCollapsed ? 0 : 180 }}
-                            transition={{ duration: 0.3 }}
-                            className="flex flex-col gap-1"
-                          >
-                            <span
-                              className={`block h-0.5 bg-white/70 transition-all duration-300 ${
-                                sidebarCollapsed ? "w-5" : "w-5"
-                              }`}
-                            ></span>
-                            <span
-                              className={`block h-0.5 bg-white/70 transition-all duration-300 ${
-                                sidebarCollapsed ? "w-5" : "w-3"
-                              }`}
-                            ></span>
-                            <span
-                              className={`block h-0.5 bg-white/70 transition-all duration-300 ${
-                                sidebarCollapsed ? "w-5" : "w-4"
-                              }`}
-                            ></span>
-                          </motion.div>
-                        </motion.button>
+            >
+              <motion.div
+                animate={{ rotate: sidebarCollapsed ? 0 : 180 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col gap-1"
+              >
+                <span
+                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
+                    sidebarCollapsed ? "w-5" : "w-5"
+                  }`}
+                ></span>
+                <span
+                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
+                    sidebarCollapsed ? "w-5" : "w-3"
+                  }`}
+                ></span>
+                <span
+                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
+                    sidebarCollapsed ? "w-5" : "w-4"
+                  }`}
+                ></span>
+              </motion.div>
+            </motion.button>
 
             {/* Logo with 3D Coin */}
             <Link to="/" className="flex items-center gap-2">
@@ -606,8 +608,8 @@ useEffect(() => {
                   {/* Balance text */}
                   <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
                     {selectedCurrency
-    ? `${selectedCurrency.icon || ""} ${walletBalance}`
-    : walletBalance}
+                      ? `${selectedCurrency.icon || ""} ${walletBalance}`
+                      : walletBalance}
                   </span>
 
                   {/* Dropdown arrow */}
@@ -823,11 +825,11 @@ useEffect(() => {
             {/* Register Button */}
             {!hasToken && (
               <LoginTrigger
-              buttonText={
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-[129px] h-[36px]
+                buttonText={
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-[129px] h-[36px]
              bg-transparent 
              border-2
              bg-[linear-gradient(#1A1D24,#1A1D24)_padding-box,linear-gradient(90deg,#F07730,#EFD28E)_border-box]
@@ -837,13 +839,13 @@ useEffect(() => {
              flex items-center justify-center
              transition-all duration-300
              hover:shadow-lg hover:shadow-[#F07730]/30"
-            >
-              Register
-            </motion.button>
-            }
-            defaultTab="register"
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            />
+                  >
+                    Register
+                  </motion.button>
+                }
+                defaultTab="register"
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              />
             )}
           </div>
         </div>
@@ -872,9 +874,9 @@ useEffect(() => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto overflow-x-hidden px-2`}
         >
-                     {/* Main Menu */}
-                         {/* Main Menu */}
-          <div className="pt-3">
+          {/* Main Menu */}
+          {/* Main Menu */}
+          <div className="py-3">
             <div className="space-y-1">
               {menuItems.map((item) => (
                 <div key={item.id}>
@@ -890,8 +892,8 @@ useEffect(() => {
                         } px-3 py-2 rounded-lg transition-all duration-200 group relative
                       ${
                         activeSubmenu === item.id
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                          : "hover:bg-white/5"
+                          ? "bg-gradient-to-b from-white/30 via-white/5  backdrop-blur-[2px]"
+                          : "hover:bg-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)]"
                       }`}
                       >
                         <div
@@ -964,7 +966,7 @@ useEffect(() => {
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="ml-8 mt-1 overflow-hidden"
+                            className="flex items-center gap-3 relative  mt-1 overflow-hidden"
                           >
                             <div className="space-y-0.5">
                               {item.submenu.map((subItem) => (
@@ -1010,18 +1012,23 @@ useEffect(() => {
                         } px-3 py-2 rounded-lg transition-all duration-200
                       ${
                         location.pathname === item.path
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 backdrop-blur-[2px] text-white"
                           : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
                       }`}
                         onClick={closeSidebar}
                       >
-                        <span className="text-lg flex items-center justify-center">
+                        <span className="text-lg flex items-center justify-center test">
                           {typeof item.icon === "string" &&
                           item.icon.startsWith("/") ? (
                             <img
                               src={item.icon}
                               alt={item.label}
-                              className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                              className={`w-5 h-5 object-contain transition-all duration-300
+                                ${
+                                  location.pathname === item.path
+                                    ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                }`}
                             />
                           ) : (
                             item.icon
@@ -1076,15 +1083,15 @@ useEffect(() => {
                       <motion.button
                         whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                         onClick={() => toggleSubmenu(item.id)}
-                        className={`w-full flex items-center rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] ${
+                        className={`w-full flex items-center rounded-[8px]  backdrop-blur-[2px] hover:text-white/90 ${
                           sidebarCollapsed
-                            ? "justify-center"
-                            : "justify-between"
-                        } px-3 py-2 rounded-lg transition-all duration-200 group relative
+                            ? "justify-center "
+                            : "justify-between bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
+                        } px-3 py-2 rounded-lg transition-all duration-200 group relative 
                       ${
                         activeSubmenu === item.id
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                          : "hover:bg-white/5"
+                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] "
+                          : "hover:bg-white/5 "
                       }`}
                       >
                         <div
@@ -1115,7 +1122,7 @@ useEffect(() => {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="text-[#A8A8A8] text-base font-normal font-['Neue_Plak'] leading-6"
+                                className="text-[#A8A8A8] text-base font-normal font-['Neue_Plak'] leading-6 group-hover:text-white"
                                 style={{
                                   textShadow:
                                     "0 0 10px rgba(255, 255, 255, 0.25)",
@@ -1169,7 +1176,7 @@ useEffect(() => {
                                 <Link
                                   key={subItem.path}
                                   to={subItem.path}
-                                  className={`group flex items-center gap-4 px-3 py-1.5 rounded-[8px] bg-white/15 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] transition-all
+                                  className={`group flex items-center gap-4 px-3 py-1.5 rounded-[8px]  backdrop-blur-[2px] transition-all
                                 ${
                                   location.pathname === subItem.path
                                     ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
@@ -1181,18 +1188,18 @@ useEffect(() => {
                                     {subItem.icon}
                                   </span> */}
                                   <span className="text-lg flex items-center justify-center submenu">
-                                  {typeof item.icon === "string" &&
-                                  item.icon.startsWith("/") ? (
-                                    <img
-                                      src={subItem.icon}
-                                      alt={subItem.label}
-                                      className="w-5 h-5 object-contain opacity-70 transition-all duration-300
+                                    {typeof item.icon === "string" &&
+                                    item.icon.startsWith("/") ? (
+                                      <img
+                                        src={subItem.icon}
+                                        alt={subItem.label}
+                                        className="w-5 h-5 object-contain opacity-70 transition-all duration-300
                  group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                    />
-                                  ) : (
-                                    item.icon
-                                  )}
-                                </span>
+                                      />
+                                    ) : (
+                                      item.icon
+                                    )}
+                                  </span>
                                   <span
                                     className="text-sm font-['Neue_Plak']"
                                     style={{
@@ -1214,13 +1221,13 @@ useEffect(() => {
                       whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                       className="relative group"
                     >
-                       <Link
+                      <Link
                         to={item.path}
-                        className={`flex items-centerjustify-center gap-3 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]${
+                        className={`flex  items-center gap-3 rounded-[8px]  backdrop-blur-[2px]${
                           sidebarCollapsed
-                            ? " items-center justify-center gap-3 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                            : "gap-3"
-                        } px-3 py-2 rounded-lg transition-all duration-200
+                            ? "items-center justify-center gap-3 rounded-[8px]  backdrop-blur-[2px]"
+                            : "gap-3 bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
+                        } px-3 py-2 rounded-lg transition-all duration-200 
                       ${
                         location.pathname === item.path
                           ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
@@ -1234,7 +1241,12 @@ useEffect(() => {
                             <img
                               src={item.icon}
                               alt={item.label}
-                              className="w-5 h-5 object-contain opacity-70"
+                              className={`w-5 h-5 object-contain transition-all duration-300
+                                ${
+                                  location.pathname === item.path
+                                    ? "opacity-100 brightness-0 invert" // stays white when active
+                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                }`}
                             />
                           ) : (
                             item.icon
@@ -1261,7 +1273,7 @@ useEffect(() => {
                         {location.pathname === item.path && (
                           <motion.div
                             layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-purple-500 rounded-r"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 "
                           />
                         )}
 
@@ -1282,141 +1294,66 @@ useEffect(() => {
           {/* Account Menu */}
           <div className="py-2 mt-1 relative customborder">
             <div className="space-y-1">
-              {accountItems.map((item) => {
-                // Special handling for Chat Support
-                if (item.label === "Live Support") {
-                  return (
-                    <motion.div
-                      key={item.path}
-                      whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                      className="relative group"
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          closeSidebar();
-                          // Open Tidio chat
-                          if (window.tidioChatApi) {
-                            window.tidioChatApi.open();
-                          } else {
-                            // If Tidio is not loaded yet, try again after a short delay
-                            const checkTidio = setInterval(() => {
-                              if (window.tidioChatApi) {
-                                window.tidioChatApi.open();
-                                clearInterval(checkTidio);
-                              }
-                            }, 100);
-
-                            // Stop checking after 5 seconds
-                            setTimeout(() => clearInterval(checkTidio), 5000);
-                          }
-                        }}
-                        className={`w-full flex items-center ${
-                          sidebarCollapsed ? "justify-center" : "gap-3"
-                        } px-3 py-2 rounded-lg transition-all duration-200 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5`}
-                      >
-                        <span className="text-lg flex items-center justify-center">
-                          {typeof item.icon === "string" &&
-                          item.icon.startsWith("/") ? (
-                            <img
-                              src={item.icon}
-                              alt={item.label}
-                              className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert transition-all duration-300"
-                            />
-                          ) : (
-                            item.icon
-                          )}
-                        </span>
-                        <AnimatePresence>
-                          {!sidebarCollapsed && (
-                            <motion.span
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -20 }}
-                              className="text-base font-normal font-['Neue_Plak'] leading-6"
-                              style={{
-                                textShadow:
-                                  "0 0 10px rgba(255, 255, 255, 0.25)",
-                              }}
-                            >
-                              {item.label}
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </button>
-                    </motion.div>
-                  );
-                }
-
-                // Regular menu items
-                return (
-                  <motion.div
-                    key={item.path}
-                    whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                    className="relative group"
+              {accountItems.map((item) => (
+                <motion.div
+                  key={item.path}
+                  whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                  className="relative group"
+                >
+                  <Link
+                    to={item.path}
+                    className={`flex items-center ${
+                      sidebarCollapsed ? "justify-center" : "gap-3"
+                    } px-3 py-2 rounded-lg transition-all duration-200
+                  ${
+                    location.pathname === item.path
+                      ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                      : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+                  }`}
+                    onClick={closeSidebar}
                   >
-                    <Link
-                      to={item.path}
-                      className={`flex items-center ${
-                        sidebarCollapsed ? "justify-center" : "gap-3"
-                      } px-3 py-2 rounded-lg transition-all duration-200
-              ${
-                location.pathname === item.path
-                  ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                  : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-              }`}
-                      onClick={closeSidebar}
-                    >
-                      <span className="text-lg flex items-center justify-center">
-                        {typeof item.icon === "string" &&
-                        item.icon.startsWith("/") ? (
-                          <img
-                            src={item.icon}
-                            alt={item.label}
-                            className={`w-5 h-5 object-contain transition-all duration-300
-                      ${
-                        location.pathname === item.path
-                          ? "opacity-100 brightness-0 invert"
-                          : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                      }`}
-                          />
-                        ) : (
-                          item.icon
-                        )}
-                      </span>
-                      <AnimatePresence>
-                        {!sidebarCollapsed && (
-                          <motion.span
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="text-base font-normal font-['Neue_Plak'] leading-6"
-                            style={{
-                              textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
-                            }}
-                          >
-                            {item.label}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-
-                      {/* Tooltip for collapsed state */}
-                      {sidebarCollapsed && (
-                        <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                          {item.label}
-                        </div>
+                    <span className="text-lg flex items-center justify-center">
+                      {typeof item.icon === "string" &&
+                      item.icon.startsWith("/") ? (
+                        <img
+                          src={item.icon}
+                          alt={item.label}
+                          className={`w-5 h-5 object-contain transition-all duration-300
+                              ${
+                                location.pathname === item.path
+                                  ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                  : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                              }`}
+                        />
+                      ) : (
+                        item.icon
                       )}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                    </span>
+                    <AnimatePresence>
+                      {!sidebarCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className=" text-base font-normal font-['Neue_Plak'] leading-6"
+                          style={{
+                            textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
+                          }}
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Tooltip for collapsed state */}
+                    {sidebarCollapsed && (
+                      <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                        {item.label}
+                      </div>
+                    )}
+                  </Link>
+                </motion.div>
+              ))}
 
               {/* Logout Button */}
               {hasToken && (
@@ -1459,18 +1396,18 @@ useEffect(() => {
               )}
             </div>
           </div>
-        
-                  {/* Social Links - Only show when expanded */}
-                  {hasToken && (
-                  <AnimatePresence>
-                    {!sidebarCollapsed && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="relative customborder left-0 right-0 p-3"
-                      >
-                        {/* User Profile */}
+
+          {/* Social Links - Only show when expanded */}
+          {hasToken && (
+            <AnimatePresence>
+              {!sidebarCollapsed && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="relative customborder left-0 right-0 p-3"
+                >
+                  {/* User Profile */}
                   <div className="flex flex-col items-center justify-center gap-2 p-4 mb-3">
                     {/* Profile Icon */}
                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[linear-gradient(180deg,#1B1B1B_0%,#0F172A_100%)] shadow-[0px_2px_4px_rgba(0,0,0,0.25)] flex items-center justify-center">
@@ -1489,10 +1426,8 @@ useEffect(() => {
                     </p>
                   </div>
 
-
-        
-                        {/* Language Selector */}
-                        {/* <button className="w-full flex items-center gap-3 px-2 py-2 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 rounded-lg transition-all duration-200 mb-3">
+                  {/* Language Selector */}
+                  {/* <button className="w-full flex items-center gap-3 px-2 py-2 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 rounded-lg transition-all duration-200 mb-3">
                           <span className="text-lg">🌐</span>
                           <span
                             className="text-sm font-['Neue_Plak']"
@@ -1501,8 +1436,8 @@ useEffect(() => {
                             Language: English
                           </span>
                         </button> */}
-        
-                        {/* Social Links */}
+
+                  {/* Social Links */}
                   <div className="flex items-center gap-2">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -1541,11 +1476,11 @@ useEffect(() => {
                       </span>
                     </motion.button>
                   </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  )}
-                </motion.aside>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
+        </motion.aside>
       </div>
 
       {/* MOBILE SIDEBAR - Keep existing mobile sidebar code */}
@@ -1661,7 +1596,8 @@ useEffect(() => {
                           className={`absolute inset-0 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
                         ></div>
                         <span className="text-lg flex items-center justify-center">
-                          {typeof item.icon === "string" && item.icon.startsWith("/") ? (
+                          {typeof item.icon === "string" &&
+                          item.icon.startsWith("/") ? (
                             <img
                               src={item.icon}
                               alt={item.label}
@@ -1672,20 +1608,236 @@ useEffect(() => {
                               }`}
                             />
                           ) : (
-                            <span className={location.pathname === item.path ? "brightness-0 invert" : "group-hover:brightness-0 group-hover:invert"}>
+                            <span
+                              className={
+                                location.pathname === item.path
+                                  ? "brightness-0 invert"
+                                  : "group-hover:brightness-0 group-hover:invert"
+                              }
+                            >
                               {item.icon}
                             </span>
                           )}
                         </span>
 
-                        <span className={`font-normal font-['Neue_Plak'] font-medium relative z-10 transition-colors duration-300 ${
-                          location.pathname === item.path 
-                            ? "text-white" 
-                            : "text-[rgb(168,168,168)] group-hover:text-white"
-                        }`}>
+                        <span
+                          className={`font-normal font-['Neue_Plak'] font-medium relative z-10 transition-colors duration-300 ${
+                            location.pathname === item.path
+                              ? "text-white"
+                              : "text-[rgb(168,168,168)] group-hover:text-white"
+                          }`}
+                        >
                           {item.label}
                         </span>
                       </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Games Menu */}
+            <div className="p-4 relative customborder mobile-game">
+              <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">
+                Games
+              </h3>
+              <div className="space-y-1">
+                {gamesItems.map((item) => (
+                  <div key={item.id}>
+                    {item.submenu ? (
+                      <>
+                        <motion.button
+                          whileHover={{ scale: 1.01 }}
+                          onClick={() => {
+                            // Use a different state for mobile
+                            setActiveSubmenu(
+                              activeSubmenu === item.id ? null : item.id
+                            );
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]  transition-all duration-300 hover:bg-white/10 relative overflow-hidden group
+                            ${
+                              activeSubmenu === item.id
+                                ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                                : "text-[rgb(168,168,168)] hover:text-white"
+                            }`}
+                        >
+                          <div className="flex items-center gap-3 relative z-10">
+                            <span className="text-lg flex items-center justify-center">
+                              {typeof item.icon === "string" &&
+                              item.icon.startsWith("/") ? (
+                                <img
+                                  src={item.icon}
+                                  alt={item.label}
+                                  className={`w-5 h-5 object-contain transition-all duration-300
+                                    ${
+                                      activeSubmenu === item.id
+                                        ? "opacity-100 brightness-0 invert"
+                                        : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                    }`}
+                                />
+                              ) : (
+                                <span
+                                  className={`transition-all duration-300 ${
+                                    activeSubmenu === item.id
+                                      ? "brightness-0 invert"
+                                      : "group-hover:brightness-0 group-hover:invert"
+                                  }`}
+                                >
+                                  {item.icon}
+                                </span>
+                              )}
+                            </span>
+                            <span
+                              className={`font-medium relative z-10 transition-colors duration-300 ${
+                                activeSubmenu === item.id
+                                  ? "text-white"
+                                  : "text-[rgb(168,168,168)] group-hover:text-white"
+                              }`}
+                            >
+                              {item.label}
+                            </span>
+                          </div>
+
+                          <motion.svg
+                            animate={{
+                              rotate: activeSubmenu === item.id ? 180 : 0,
+                            }}
+                            className="w-4 h-4 text-current"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </motion.svg>
+                        </motion.button>
+
+                        {/* Submenu for Mobile */}
+                        <AnimatePresence>
+                          {activeSubmenu === item.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="mt-2 overflow-hidden"
+                            >
+                              <div className="space-y-1.5">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.path}
+                                    to={subItem.path}
+                                    className={`group flex items-center gap-4 px-3 py-2 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]  transition-all duration-300 hover:bg-white/10 relative overflow-hidden
+                                      ${
+                                        location.pathname === subItem.path
+                                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                                          : "text-[rgb(168,168,168)] hover:text-white"
+                                      }`}
+                                    onClick={closeMobileSidebar}
+                                  >
+                                    <span className="text-lg flex items-center justify-center">
+                                      {typeof subItem.icon === "string" &&
+                                      subItem.icon.startsWith("/") ? (
+                                        <img
+                                          src={subItem.icon}
+                                          alt={subItem.label}
+                                          className={`w-5 h-5 object-contain transition-all duration-300
+                                            ${
+                                              location.pathname === subItem.path
+                                                ? "opacity-100 brightness-0 invert"
+                                                : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                            }`}
+                                        />
+                                      ) : (
+                                        <span
+                                          className={`transition-all duration-300 ${
+                                            location.pathname === subItem.path
+                                              ? "brightness-0 invert"
+                                              : "group-hover:brightness-0 group-hover:invert"
+                                          }`}
+                                        >
+                                          {subItem.icon}
+                                        </span>
+                                      )}
+                                    </span>
+                                    <span
+                                      className={`font-medium transition-colors duration-300 ${
+                                        location.pathname === subItem.path
+                                          ? "text-white"
+                                          : "text-[rgb(168,168,168)] group-hover:text-white"
+                                      }`}
+                                    >
+                                      {subItem.label}
+                                    </span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        className="relative group"
+                      >
+                        <Link
+                          to={item.path}
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]  transition-all duration-300 hover:bg-white/10 relative overflow-hidden group ${
+                            location.pathname === item.path
+                              ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                              : "text-[rgb(168,168,168)]"
+                          }`}
+                          onClick={closeMobileSidebar}
+                        >
+                          <span className="text-lg flex items-center justify-center">
+                            {typeof item.icon === "string" &&
+                            item.icon.startsWith("/") ? (
+                              <img
+                                src={item.icon}
+                                alt={item.label}
+                                className={`w-5 h-5 object-contain transition-all duration-300 ${
+                                  location.pathname === item.path
+                                    ? "opacity-100 brightness-0 invert"
+                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                }`}
+                              />
+                            ) : (
+                              <span
+                                className={`transition-all duration-300 ${
+                                  location.pathname === item.path
+                                    ? "brightness-0 invert"
+                                    : "group-hover:brightness-0 group-hover:invert"
+                                }`}
+                              >
+                                {item.icon}
+                              </span>
+                            )}
+                          </span>
+
+                          <span
+                            className={`font-medium relative z-10 transition-colors duration-300 ${
+                              location.pathname === item.path
+                                ? "text-white"
+                                : "text-[rgb(168,168,168)] group-hover:text-white"
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+
+                          {/* Active indicator bar */}
+                          {location.pathname === item.path && (
+                            <motion.div
+                              layoutId="activeIndicatorMobile"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-purple-500 rounded-r"
+                            />
+                          )}
+                        </Link>
+                      </motion.div>
                     )}
                   </div>
                 ))}
@@ -1710,7 +1862,8 @@ useEffect(() => {
                     onClick={closeMobileSidebar}
                   >
                     <span className="text-lg flex items-center justify-center">
-                      {typeof item.icon === "string" && item.icon.startsWith("/") ? (
+                      {typeof item.icon === "string" &&
+                      item.icon.startsWith("/") ? (
                         <img
                           src={item.icon}
                           alt={item.label}
@@ -1721,21 +1874,25 @@ useEffect(() => {
                           }`}
                         />
                       ) : (
-                        <span className={`transition-all duration-300 ${
-                          location.pathname === item.path 
-                            ? "brightness-0 invert" 
-                            : "group-hover:brightness-0 group-hover:invert"
-                        }`}>
+                        <span
+                          className={`transition-all duration-300 ${
+                            location.pathname === item.path
+                              ? "brightness-0 invert"
+                              : "group-hover:brightness-0 group-hover:invert"
+                          }`}
+                        >
                           {item.icon}
                         </span>
                       )}
                     </span>
 
-                    <span className={`font-medium relative z-10 transition-colors duration-300 ${
-                      location.pathname === item.path 
-                        ? "text-white" 
-                        : "text-[rgb(168,168,168)] group-hover:text-white"
-                    }`}>
+                    <span
+                      className={`font-medium relative z-10 transition-colors duration-300 ${
+                        location.pathname === item.path
+                          ? "text-white"
+                          : "text-[rgb(168,168,168)] group-hover:text-white"
+                      }`}
+                    >
                       {item.label}
                     </span>
                   </Link>
@@ -1743,7 +1900,9 @@ useEffect(() => {
 
                 <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl rounded-[8px] bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px] hover:from-red-500/30 hover:to-pink-500/30 transition-all duration-300">
                   <span className="text-xl">🚪</span>
-                  <span className="text-[rgb(168,168,168)] font-medium">Logout</span>
+                  <span className="text-[rgb(168,168,168)] font-medium">
+                    Logout
+                  </span>
                 </button>
               </div>
             </div>

@@ -199,7 +199,7 @@ const RecommendedSection = () => {
 
   return (
     <motion.section
-      className="w-full relative mt-10"
+      className="w-full relative pt-10 bg-black z-[9999]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

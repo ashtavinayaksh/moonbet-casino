@@ -107,24 +107,30 @@ const GameBetsSection = () => {
         </motion.div> */}
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-4 sm:mb-6 border-b border-white/10 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 mb-4 sm:mb-6 bg-black/40 p-1 rounded-lg overflow-x-auto scrollbar-hide">
           {["all", "my"].map((tab) => (
             <button
               key={tab}
-              className={`px-4 sm:px-6 py-2 sm:py-3 font-semibold text-sm sm:text-base transition-all relative whitespace-nowrap ${
-                activeTab === tab
-                  ? "text-white"
-                  : "text-gray-400 hover:text-white"
-              }`}
               onClick={() => setActiveTab(tab)}
+              className={`relative px-4 sm:px-6 py-2 sm:py-3 font-semibold text-sm sm:text-base rounded-[8px] transition-all duration-200 ${
+                activeTab === tab
+                  ? "text-black" // Active text color
+                  : "text-gray-300 hover:text-white"
+              }`}
             >
-              {tab === "all" ? "All Bets" : "My Bets"}
+              {/* Active tab gradient background */}
               {activeTab === tab && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#F07730] to-[#EFD28E]"
+                  className="absolute inset-0 rounded-[8px] bg-gradient-to-tr from-[#7F0577] to-[#F474FB]"
+                  transition={{ type: "spring", duration: 0.4 }}
                 />
               )}
+
+              {/* Label (always above gradient) */}
+              <span className="relative z-10">
+                {tab === "all" ? "All Bets" : "My Bets"}
+              </span>
             </button>
           ))}
         </div>
