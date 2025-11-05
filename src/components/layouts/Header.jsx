@@ -1428,7 +1428,7 @@ useEffect(() => {
                   } px-3 py-2 rounded-lg text-[#A8A8A8] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group relative`}
                 >
                   <img
-                    src="/icons/login.svg"
+                    src="/icons/logout.svg"
                     alt="Logout"
                     className="w-7 h-7 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
                   />

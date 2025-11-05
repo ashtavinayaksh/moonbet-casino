@@ -12,6 +12,8 @@ const AffiliateProgram = () => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [points, setPoints] = useState({ referrer: 0, referee: 0 });
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user.id;
 
   // Mock data - replace with actual data from your backend
   const [stats, setStats] = useState({
@@ -21,17 +23,50 @@ const AffiliateProgram = () => {
     pendingIncome: 0.0,
   });
 
-  const [referrals] = useState([]);
+  const [referrals, setReferrals] = useState([]);
+
   useEffect(() => {
-  const stored = localStorage.getItem("referralData");
-  if (stored) {
-    const { referralCode, referralLink, points } = JSON.parse(stored);
-    setReferralCode(referralCode);
-    setGeneratedLink(referralLink);
-    setPoints(points || { referrer: 0, referee: 0 });
-    setIsCodeSet(true);
-  }
+  const fetchReferralStats = async () => {
+    try {
+      setLoading(true);
+
+      const { data } = await axios.get(
+        `/referral-service/api/referral/stats/${userId}`
+      );
+
+      if (data?.success && data.data) {
+        const info = data.data;
+        if (info.code) {
+          // User already has a referral code
+          setReferralCode(info.code);
+          setIsCodeSet(true);
+
+          const frontendUrl = window.origin;
+          setGeneratedLink(`${frontendUrl}/register?ref=${info.code}`);
+
+          setStats({
+            totalReferrals: info.stats?.totalReferrals || 0,
+            totalWagered: 0,
+            totalEarnings: info.stats?.totalPointsEarned || 0,
+            pendingIncome: 0,
+          });
+          setReferrals(info.recentReferrals || []);
+        } else {
+          // No referral code — show button
+          setIsCodeSet(false);
+          setReferrals([]);
+        }
+      }
+    } catch (error) {
+      console.error("❌ Failed to fetch referral stats:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchReferralStats();
 }, []);
+
 
   // Generate random referral code
   const generateReferralCode = () => {
@@ -165,6 +200,12 @@ const AffiliateProgram = () => {
     <div className="min-h-screen bg-black relative">
       {/* Background gradient effect */}
       <div className="fixed inset-0 bg-gradient-to-br from-[#13151A]/30 via-transparent to-[#1A1D24]/30 pointer-events-none" />
+      {loading && (
+  <div className="text-center text-gray-400 text-lg py-10">
+    Loading referral info...
+  </div>
+)}
+
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section with Affiliate Program */}
@@ -724,24 +765,63 @@ const AffiliateProgram = () => {
 
             {/* Table Content */}
             <div className="p-16 text-center">
-              {referrals.length === 0 ? (
-                <>
-                  <p style={h2Style}>No Referrals</p>
-                  <p
-                    style={{
-                      ...subHeadingStyle,
-                      fontSize: "14px",
-                      marginTop: "12px",
-                      color: "#6B7280",
-                    }}
-                  >
-                    Share your referral link to start earning commissions
-                  </p>
-                </>
-              ) : (
-                // Table implementation would go here when there are referrals
-                <div className="w-full">{/* Add table rows here */}</div>
-              )}
+            {(!referrals || referrals.length === 0) ? (
+  <>
+    <p style={h2Style}>Share Referral for Earning</p>
+    {/* <p
+      style={{
+        ...subHeadingStyle,
+        fontSize: "14px",
+        marginTop: "12px",
+        color: "#6B7280",
+      }}
+    >
+      Share your referral link to start earning commissions.
+    </p> */}
+  </>
+) : (
+  <div className="overflow-x-auto">
+    <table className="min-w-full border-collapse border border-white/10">
+      <thead>
+        <tr className="bg-[#111827] text-gray-300 text-sm uppercase tracking-wider">
+          <th className="px-4 py-3 text-left border-b border-white/10">#</th>
+          <th className="px-4 py-3 text-left border-b border-white/10">Referee ID</th>
+          <th className="px-4 py-3 text-left border-b border-white/10">Points Earned</th>
+          <th className="px-4 py-3 text-left border-b border-white/10">Referred Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {referrals.map((ref, idx) => (
+          <motion.tr
+  key={idx}
+  initial={{ opacity: 0, y: 5 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: idx * 0.05 }}
+  className={`text-gray-200 hover:bg-white/5 ${idx % 2 === 0 ? "bg-black/30" : "bg-black/20"}`}
+>
+
+            <td className="px-4 py-3 border-b border-white/10">{idx + 1}</td>
+            <td className="px-4 py-3 border-b border-white/10">
+              {"Player_8ec0"}
+              {/* {ref.referee?.id || ref.referee?._id || "N/A"} */}
+            </td>
+            <td className="px-4 py-3 border-b border-white/10 text-[#10B981] font-semibold">
+              +{ref.pointsEarned}
+            </td>
+            <td className="px-4 py-3 border-b border-white/10 text-gray-400">
+              {new Date(ref.referredAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </td>
+          </motion.tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
             </div>
           </div>
         </motion.div>
