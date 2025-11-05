@@ -41,7 +41,7 @@ const TidioChatButton = () => {
         position: "fixed",
         bottom: "24px",
         right: "24px",
-        backgroundColor: "#2563eb",
+
         color: "#fff",
         padding: "12px 20px",
         borderRadius: "50px",
@@ -51,10 +51,15 @@ const TidioChatButton = () => {
         zIndex: 9999,
         display: "flex",
         alignItems: "center",
-        gap: "6px",
+        gap: "8px",
       }}
     >
-      💬 Live Chat
+      {/* ✅ Chat Icon */}
+      <img
+        src="/icons/chat-icon.svg"
+        alt="Chat Icon"
+        style={{ width: "20px", height: "20px", display: "block" }}
+      />
     </button>
   );
 };

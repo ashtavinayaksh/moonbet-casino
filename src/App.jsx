@@ -124,7 +124,6 @@ function App() {
             <Route path="authtest" element={<AuthTest />} />
             <Route path="/affiliate" element={<AffiliateProgram />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/tidiochat" element={<TidioChatButton />} />
           </Route>
         </Routes>
       </AuthModalHandler>
@@ -143,6 +142,8 @@ function App() {
         theme="dark"
         closeButton={true}
       />
+      {/* ✅ Add the Tidio Chat Button (visible globally) */}
+      <TidioChatButton />
     </Router>
   );
 }
