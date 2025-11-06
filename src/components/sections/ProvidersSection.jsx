@@ -9,7 +9,7 @@ const ProvidersSection = () => {
   const providers = [
     { id: 1, name: "Pragmatic Play", logo: "/providers/vector1.svg" },
     { id: 2, name: "Evolution", logo: "/providers/evolution.svg" },
-    { id: 3, name: "BGaming", logo: "/providers/1.svg" },
+    { id: 3, name: "BGaming", logo: "/providers/bgaming.svg" },
     { id: 4, name: "Hacksaw Gaming", logo: "/providers/hacksaw.svg" },
     { id: 5, name: "Thunderkick", logo: "/providers/thunderkick.svg" },
     { id: 6, name: "Play'n GO", logo: "/providers/playngo.svg" },
@@ -90,7 +90,7 @@ const ProvidersSection = () => {
                 fill="#CED5E3"
               />
             </svg>
-            <h3 className="text-[#CED5E3] font-[400] text-[18px] uppercase">
+            <h3 className="text-[#CED5E3] font-[400] text-[16px] md:text-[18px] uppercase">
               PROVIDERS
             </h3>
           </div>
@@ -100,7 +100,7 @@ const ProvidersSection = () => {
             <motion.button
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
-              className={`w-8 h-8 flex items-center justify-center rounded-md ${
+              className={`view_btn w-8 h-8 flex items-center justify-center rounded-md ${
                 canScrollLeft
                   ? "bg-white/10 hover:bg-white/20 text-white"
                   : "bg-white/5 text-gray-500 cursor-not-allowed"
@@ -122,7 +122,7 @@ const ProvidersSection = () => {
             <motion.button
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
-              className={`w-8 h-8 flex items-center justify-center rounded-md ${
+              className={`view_btn w-8 h-8 flex items-center justify-center rounded-md ${
                 canScrollRight
                   ? "bg-white/10 hover:bg-white/20 text-white"
                   : "bg-white/5 text-gray-500 cursor-not-allowed"
@@ -159,12 +159,12 @@ const ProvidersSection = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
-                className="wallet-btn4 flex-shrink-0 w-[140px] h-[60px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
+                className="bet_btn flex-shrink-0 w-[140px] h-[60px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
               >
                 <img
                   src={provider.logo}
                   alt={provider.name}
-                  className="max-w-[120px] max-h-[40px] object-contain filter brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
+                  className=" max-w-[120px] max-h-[40px] object-contain filter brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
                   onError={(e) => {
                     e.target.style.display = "none";
                     e.target.parentElement.innerHTML = `<span class='text-white/60 text-xs font-medium'>${provider.name}</span>`;

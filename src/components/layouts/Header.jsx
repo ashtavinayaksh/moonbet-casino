@@ -521,9 +521,9 @@ const Header = ({
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-[#0A0B0D]/95 via-[#141519]/95 to-[#0A0B0D]/95 backdrop-blur-xl border-b border-white/10 z-50"
+        className="fixed top-0 left-0 right-0 h-16  bg-[rgba(0,0,0,0.7)]  shadow-[2px_2px_4px_rgba(0,0,0,0.25)]  backdrop-blur-[21.5px]  border-b border-white/10 z-50"
       >
-        <div className="h-full px-4 lg:px-6 flex items-center justify-between">
+        <div className="h-full px-4 lg:px-4 flex items-center justify-between">
           {/* Left Section - Logo & Hamburger */}
           <div className="flex items-center gap-3">
             {/* Desktop Sidebar Toggle Button */}
@@ -531,12 +531,7 @@ const Header = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleDesktopSidebar}
-              className="hidden lg:flex items-center justify-center w-10 h-10 
-                rounded-lg border-[0.5px] border-white/20 
-                bg-gradient-to-b from-[rgba(30,30,30,0.15)] to-[rgba(75,75,75,0.15)]
-                shadow-[1px_2px_1px_0_rgba(0,0,0,0.40)] backdrop-blur-[1.5px]
-                hover:from-[rgba(40,40,40,0.20)] hover:to-[rgba(85,85,85,0.20)]
-                transition-all duration-300 group"
+              className="provider_btn hidden lg:flex items-center justify-center w-10 h-10 rounded-lg  from-[rgba(30,30,30,0.15)] to-[rgba(75,75,75,0.15)] shadow-[1px_2px_1px_0_rgba(0,0,0,0.40)] backdrop-blur-[1.5px] hover:from-[rgba(40,40,40,0.20)] hover:to-[rgba(85,85,85,0.20)] transition-all duration-300 group"
             >
               <motion.div
                 animate={{ rotate: sidebarCollapsed ? 0 : 180 }}
@@ -544,18 +539,18 @@ const Header = ({
                 className="flex flex-col gap-1"
               >
                 <span
-                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
+                  className={`block h-0.5 bg-[#7D7D7D] transition-all duration-300 ${
                     sidebarCollapsed ? "w-5" : "w-5"
                   }`}
                 ></span>
                 <span
-                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
-                    sidebarCollapsed ? "w-5" : "w-3"
+                  className={`flex justify-end items-end h-0.5 bg-[#7D7D7D] transition-all duration-300 self-end ${
+                    sidebarCollapsed ? "w-3" : "w-3"
                   }`}
                 ></span>
                 <span
-                  className={`block h-0.5 bg-white/70 transition-all duration-300 ${
-                    sidebarCollapsed ? "w-5" : "w-4"
+                  className={`block h-0.5 bg-[#7D7D7D] transition-all duration-300 ${
+                    sidebarCollapsed ? "w-5" : "w-5"
                   }`}
                 ></span>
               </motion.div>
@@ -868,38 +863,377 @@ const Header = ({
         <motion.aside
           initial={false}
           animate={{
-            width: sidebarCollapsed ? 80 : 256,
+            width: sidebarCollapsed ? 65 : 256,
             x: 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-[99999] px-2`}
+          className={`fixed left-0 top-16 bottom-0 
+              bg-[rgba(0,0,0,0.7)] 
+            shadow-[2px_2px_4px_rgba(0,0,0,0.25)] 
+            backdrop-blur-[21.5px]  border-r border-white/10 
+              z-[99999] px-2`}
         >
-          {/* Main Menu */}
-          {/* Main Menu */}
-          <div className="py-3">
-            <div className="space-y-1">
-              {menuItems.map((item) => (
-                <div key={item.id}>
-                  {item.submenu ? (
-                    <>
-                      <motion.button
-                        whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                        onClick={() => toggleSubmenu(item.id)}
-                        className={`w-full flex items-center ${
-                          sidebarCollapsed
-                            ? "justify-center"
-                            : "justify-between"
-                        } px-3 py-2 rounded-lg transition-all duration-200 group relative
+          <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#3a3a3a] scrollbar-track-transparent pr-1">
+            {/* Main Menu */}
+
+            <div className="py-3">
+              <div className="space-y-1">
+                {menuItems.map((item) => (
+                  <div key={item.id}>
+                    {item.submenu ? (
+                      <>
+                        <motion.button
+                          whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                          onClick={() => toggleSubmenu(item.id)}
+                          className={`w-full flex items-center ${
+                            sidebarCollapsed
+                              ? "justify-center"
+                              : "justify-between"
+                          } px-3 py-2 rounded-lg transition-all duration-200 group relative
                       ${
                         activeSubmenu === item.id
                           ? "bg-gradient-to-b from-white/30 via-white/5  backdrop-blur-[2px]"
                           : "hover:bg-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)]"
                       }`}
+                        >
+                          <div
+                            className={`flex items-center ${
+                              sidebarCollapsed ? "" : "gap-3"
+                            } relative z-10`}
+                          >
+                            <span className="text-lg flex items-center justify-center">
+                              {typeof item.icon === "string" &&
+                              item.icon.startsWith("/") ? (
+                                <img
+                                  src={item.icon}
+                                  alt={item.label}
+                                  className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                />
+                              ) : (
+                                item.icon
+                              )}
+                            </span>
+                            <AnimatePresence>
+                              {!sidebarCollapsed && (
+                                <motion.span
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className=" text-base font-normal leading-24"
+                                  style={{
+                                    textShadow:
+                                      "0 0 10px rgba(255, 255, 255, 0.25)",
+                                  }}
+                                >
+                                  {item.label}
+                                </motion.span>
+                              )}
+                            </AnimatePresence>
+                          </div>
+
+                          {!sidebarCollapsed && (
+                            <motion.svg
+                              animate={{
+                                rotate: activeSubmenu === item.id ? 180 : 0,
+                              }}
+                              className="w-4 h-4 text-[#A8A8A8] "
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </motion.svg>
+                          )}
+
+                          {/* Tooltip for collapsed state */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                              {item.label}
+                            </div>
+                          )}
+                        </motion.button>
+
+                        {/* Submenu */}
+                        <AnimatePresence>
+                          {activeSubmenu === item.id && !sidebarCollapsed && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="flex items-center gap-3 relative  mt-1 overflow-hidden"
+                            >
+                              <div className="space-y-0.5">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.path}
+                                    to={subItem.path}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
+                                ${
+                                  location.pathname === subItem.path
+                                    ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+                                    : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+                                }`}
+                                    onClick={closeSidebar}
+                                  >
+                                    <span className="opacity-60 text-sm">
+                                      {subItem.icon}
+                                    </span>
+                                    <span
+                                      className="text-sm font-['Neue_Plak']"
+                                      style={{
+                                        textShadow:
+                                          "0 0 10px rgba(255, 255, 255, 0.25)",
+                                      }}
+                                    >
+                                      {subItem.label}
+                                    </span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <motion.div
+                        whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                        className="relative group"
                       >
-                        <div
+                        <Link
+                          to={item.path}
                           className={`flex items-center ${
-                            sidebarCollapsed ? "" : "gap-3"
-                          } relative z-10`}
+                            sidebarCollapsed ? "justify-center" : "gap-3"
+                          } px-3 py-2 rounded-lg transition-all duration-200
+                      ${
+                        location.pathname === item.path
+                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 backdrop-blur-[2px] text-white"
+                          : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+                      }`}
+                          onClick={closeSidebar}
+                        >
+                          <span className="text-lg flex items-center justify-center test">
+                            {typeof item.icon === "string" &&
+                            item.icon.startsWith("/") ? (
+                              <img
+                                src={item.icon}
+                                alt={item.label}
+                                className={`w-5 h-5 object-contain transition-all duration-300
+                                ${
+                                  location.pathname === item.path
+                                    ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                }`}
+                              />
+                            ) : (
+                              item.icon
+                            )}
+                          </span>
+                          <AnimatePresence>
+                            {!sidebarCollapsed && (
+                              <motion.span
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className=" text-base font-normal font-['Neue_Plak'] leading-6"
+                                style={{
+                                  textShadow:
+                                    "0 0 10px rgba(255, 255, 255, 0.25)",
+                                }}
+                              >
+                                {item.label}
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+
+                          {/* Active indicator bar */}
+                          {location.pathname === item.path && (
+                            <motion.div
+                              layoutId="activeIndicator"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6  rounded-r"
+                            />
+                          )}
+
+                          {/* Tooltip for collapsed state */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                              {item.label}
+                            </div>
+                          )}
+                        </Link>
+                      </motion.div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Game Menu */}
+            <div className="py-3 relative customborder">
+              <div className="space-y-1">
+                {gamesItems.map((item) => (
+                  <div key={item.id}>
+                    {item.submenu ? (
+                      <>
+                        <motion.button
+                          whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                          onClick={() => toggleSubmenu(item.id)}
+                          className={`w-full flex items-center rounded-[8px]  backdrop-blur-[2px] hover:text-white/90 ${
+                            sidebarCollapsed
+                              ? "justify-center "
+                              : "justify-between bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
+                          } px-3 py-2 rounded-lg transition-all duration-200 group relative 
+                      ${
+                        activeSubmenu === item.id
+                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] "
+                          : "hover:bg-white/5 "
+                      }`}
+                        >
+                          <div
+                            className={`flex items-center ${
+                              sidebarCollapsed ? "" : "gap-3"
+                            } relative z-10`}
+                          >
+                            <span className="text-[#A8A8A8] text-lg flex items-center justify-center">
+                              {typeof item.icon === "string" &&
+                              item.icon.startsWith("/") ? (
+                                <img
+                                  src={item.icon}
+                                  alt={item.label}
+                                  className={`w-5 h-5 object-contain transition-all duration-300
+                                  ${
+                                    location.pathname === item.path
+                                      ? "opacity-100 brightness-0 invert" // 👈 stays white when active
+                                      : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                  }`}
+                                />
+                              ) : (
+                                item.icon
+                              )}
+                            </span>
+                            <AnimatePresence>
+                              {!sidebarCollapsed && (
+                                <motion.span
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="text-[#A8A8A8] text-base font-normal font-['Neue_Plak'] leading-6 group-hover:text-white"
+                                  style={{
+                                    textShadow:
+                                      "0 0 10px rgba(255, 255, 255, 0.25)",
+                                  }}
+                                >
+                                  {item.label}
+                                </motion.span>
+                              )}
+                            </AnimatePresence>
+                          </div>
+
+                          {!sidebarCollapsed && (
+                            <motion.svg
+                              animate={{
+                                rotate: activeSubmenu === item.id ? 180 : 0,
+                              }}
+                              className="w-4 h-4 text-[#A8A8A8]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </motion.svg>
+                          )}
+
+                          {/* Tooltip for collapsed state */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                              {item.label}
+                            </div>
+                          )}
+                        </motion.button>
+
+                        {/* Submenu */}
+                        <AnimatePresence>
+                          {activeSubmenu === item.id && !sidebarCollapsed && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="mt-2.5 overflow-hidden"
+                            >
+                              <div className="space-y-1.5">
+                                {item.submenu.map((subItem) => (
+                                  <Link
+                                    key={subItem.path}
+                                    to={subItem.path}
+                                    className={`group flex items-center gap-4 px-3 py-1.5 rounded-[8px]  backdrop-blur-[2px] transition-all
+                                ${
+                                  location.pathname === subItem.path
+                                    ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+                                    : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+                                }`}
+                                    onClick={closeSidebar}
+                                  >
+                                    {/* <span className="opacity-60 text-sm">
+                                    {subItem.icon}
+                                  </span> */}
+                                    <span className="text-lg flex items-center justify-center submenu">
+                                      {typeof item.icon === "string" &&
+                                      item.icon.startsWith("/") ? (
+                                        <img
+                                          src={subItem.icon}
+                                          alt={subItem.label}
+                                          className="w-5 h-5 object-contain opacity-70 transition-all duration-300
+                 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                                        />
+                                      ) : (
+                                        item.icon
+                                      )}
+                                    </span>
+                                    <span
+                                      className="text-sm font-['Neue_Plak']"
+                                      style={{
+                                        textShadow:
+                                          "0 0 10px rgba(255, 255, 255, 0.25)",
+                                      }}
+                                    >
+                                      {subItem.label}
+                                    </span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <motion.div
+                        whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                        className="relative group"
+                      >
+                        <Link
+                          to={item.path}
+                          className={`flex  items-center gap-3 rounded-[8px]  backdrop-blur-[2px]${
+                            sidebarCollapsed
+                              ? "items-center justify-center gap-3 rounded-[8px]  backdrop-blur-[2px]"
+                              : "gap-3 bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
+                          } px-3 py-2 rounded-lg transition-all duration-200 
+                      ${
+                        location.pathname === item.path
+                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                          : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
+                      }`}
+                          onClick={closeSidebar}
                         >
                           <span className="text-lg flex items-center justify-center">
                             {typeof item.icon === "string" &&
@@ -907,428 +1241,134 @@ const Header = ({
                               <img
                                 src={item.icon}
                                 alt={item.label}
-                                className="w-5 h-5 object-contain opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                              />
-                            ) : (
-                              item.icon
-                            )}
-                          </span>
-                          <AnimatePresence>
-                            {!sidebarCollapsed && (
-                              <motion.span
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className=" text-base font-normal leading-24"
-                                style={{
-                                  textShadow:
-                                    "0 0 10px rgba(255, 255, 255, 0.25)",
-                                }}
-                              >
-                                {item.label}
-                              </motion.span>
-                            )}
-                          </AnimatePresence>
-                        </div>
-
-                        {!sidebarCollapsed && (
-                          <motion.svg
-                            animate={{
-                              rotate: activeSubmenu === item.id ? 180 : 0,
-                            }}
-                            className="w-4 h-4 text-[#A8A8A8] "
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </motion.svg>
-                        )}
-
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </motion.button>
-
-                      {/* Submenu */}
-                      <AnimatePresence>
-                        {activeSubmenu === item.id && !sidebarCollapsed && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="flex items-center gap-3 relative  mt-1 overflow-hidden"
-                          >
-                            <div className="space-y-0.5">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.path}
-                                  to={subItem.path}
-                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
-                                ${
-                                  location.pathname === subItem.path
-                                    ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                                    : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                                }`}
-                                  onClick={closeSidebar}
-                                >
-                                  <span className="opacity-60 text-sm">
-                                    {subItem.icon}
-                                  </span>
-                                  <span
-                                    className="text-sm font-['Neue_Plak']"
-                                    style={{
-                                      textShadow:
-                                        "0 0 10px rgba(255, 255, 255, 0.25)",
-                                    }}
-                                  >
-                                    {subItem.label}
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </>
-                  ) : (
-                    <motion.div
-                      whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                      className="relative group"
-                    >
-                      <Link
-                        to={item.path}
-                        className={`flex items-center ${
-                          sidebarCollapsed ? "justify-center" : "gap-3"
-                        } px-3 py-2 rounded-lg transition-all duration-200
-                      ${
-                        location.pathname === item.path
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 backdrop-blur-[2px] text-white"
-                          : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                      }`}
-                        onClick={closeSidebar}
-                      >
-                        <span className="text-lg flex items-center justify-center test">
-                          {typeof item.icon === "string" &&
-                          item.icon.startsWith("/") ? (
-                            <img
-                              src={item.icon}
-                              alt={item.label}
-                              className={`w-5 h-5 object-contain transition-all duration-300
-                                ${
-                                  location.pathname === item.path
-                                    ? "opacity-100 brightness-0 invert" // 👈 stays white when active
-                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                }`}
-                            />
-                          ) : (
-                            item.icon
-                          )}
-                        </span>
-                        <AnimatePresence>
-                          {!sidebarCollapsed && (
-                            <motion.span
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -20 }}
-                              className=" text-base font-normal font-['Neue_Plak'] leading-6"
-                              style={{
-                                textShadow:
-                                  "0 0 10px rgba(255, 255, 255, 0.25)",
-                              }}
-                            >
-                              {item.label}
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-
-                        {/* Active indicator bar */}
-                        {location.pathname === item.path && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6  rounded-r"
-                          />
-                        )}
-
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </Link>
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Game Menu */}
-          <div className="py-3 relative customborder">
-            <div className="space-y-1">
-              {gamesItems.map((item) => (
-                <div key={item.id}>
-                  {item.submenu ? (
-                    <>
-                      <motion.button
-                        whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                        onClick={() => toggleSubmenu(item.id)}
-                        className={`w-full flex items-center rounded-[8px]  backdrop-blur-[2px] hover:text-white/90 ${
-                          sidebarCollapsed
-                            ? "justify-center "
-                            : "justify-between bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
-                        } px-3 py-2 rounded-lg transition-all duration-200 group relative 
-                      ${
-                        activeSubmenu === item.id
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] "
-                          : "hover:bg-white/5 "
-                      }`}
-                      >
-                        <div
-                          className={`flex items-center ${
-                            sidebarCollapsed ? "" : "gap-3"
-                          } relative z-10`}
-                        >
-                          <span className="text-[#A8A8A8] text-lg flex items-center justify-center">
-                            {typeof item.icon === "string" &&
-                            item.icon.startsWith("/") ? (
-                              <img
-                                src={item.icon}
-                                alt={item.label}
                                 className={`w-5 h-5 object-contain transition-all duration-300
-                                  ${
-                                    location.pathname === item.path
-                                      ? "opacity-100 brightness-0 invert" // 👈 stays white when active
-                                      : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                  }`}
-                              />
-                            ) : (
-                              item.icon
-                            )}
-                          </span>
-                          <AnimatePresence>
-                            {!sidebarCollapsed && (
-                              <motion.span
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="text-[#A8A8A8] text-base font-normal font-['Neue_Plak'] leading-6 group-hover:text-white"
-                                style={{
-                                  textShadow:
-                                    "0 0 10px rgba(255, 255, 255, 0.25)",
-                                }}
-                              >
-                                {item.label}
-                              </motion.span>
-                            )}
-                          </AnimatePresence>
-                        </div>
-
-                        {!sidebarCollapsed && (
-                          <motion.svg
-                            animate={{
-                              rotate: activeSubmenu === item.id ? 180 : 0,
-                            }}
-                            className="w-4 h-4 text-[#A8A8A8]"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </motion.svg>
-                        )}
-
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </motion.button>
-
-                      {/* Submenu */}
-                      <AnimatePresence>
-                        {activeSubmenu === item.id && !sidebarCollapsed && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="mt-2.5 overflow-hidden"
-                          >
-                            <div className="space-y-1.5">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.path}
-                                  to={subItem.path}
-                                  className={`group flex items-center gap-4 px-3 py-1.5 rounded-[8px]  backdrop-blur-[2px] transition-all
-                                ${
-                                  location.pathname === subItem.path
-                                    ? "text-white bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                                    : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                                }`}
-                                  onClick={closeSidebar}
-                                >
-                                  {/* <span className="opacity-60 text-sm">
-                                    {subItem.icon}
-                                  </span> */}
-                                  <span className="text-lg flex items-center justify-center submenu">
-                                    {typeof item.icon === "string" &&
-                                    item.icon.startsWith("/") ? (
-                                      <img
-                                        src={subItem.icon}
-                                        alt={subItem.label}
-                                        className="w-5 h-5 object-contain opacity-70 transition-all duration-300
-                 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                      />
-                                    ) : (
-                                      item.icon
-                                    )}
-                                  </span>
-                                  <span
-                                    className="text-sm font-['Neue_Plak']"
-                                    style={{
-                                      textShadow:
-                                        "0 0 10px rgba(255, 255, 255, 0.25)",
-                                    }}
-                                  >
-                                    {subItem.label}
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </>
-                  ) : (
-                    <motion.div
-                      whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                      className="relative group"
-                    >
-                      <Link
-                        to={item.path}
-                        className={`flex  items-center gap-3 rounded-[8px]  backdrop-blur-[2px]${
-                          sidebarCollapsed
-                            ? "items-center justify-center gap-3 rounded-[8px]  backdrop-blur-[2px]"
-                            : "gap-3 bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
-                        } px-3 py-2 rounded-lg transition-all duration-200 
-                      ${
-                        location.pathname === item.path
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                          : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                      }`}
-                        onClick={closeSidebar}
-                      >
-                        <span className="text-lg flex items-center justify-center">
-                          {typeof item.icon === "string" &&
-                          item.icon.startsWith("/") ? (
-                            <img
-                              src={item.icon}
-                              alt={item.label}
-                              className={`w-5 h-5 object-contain transition-all duration-300
                                 ${
                                   location.pathname === item.path
                                     ? "opacity-100 brightness-0 invert" // stays white when active
                                     : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
                                 }`}
+                              />
+                            ) : (
+                              item.icon
+                            )}
+                          </span>
+                          <AnimatePresence>
+                            {!sidebarCollapsed && (
+                              <motion.span
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className=" text-base font-normal font-['Neue_Plak'] leading-6"
+                                style={{
+                                  textShadow:
+                                    "0 0 10px rgba(255, 255, 255, 0.25)",
+                                }}
+                              >
+                                {item.label}
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+
+                          {/* Active indicator bar */}
+                          {location.pathname === item.path && (
+                            <motion.div
+                              layoutId="activeIndicator"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 "
                             />
-                          ) : (
-                            item.icon
                           )}
-                        </span>
-                        <AnimatePresence>
-                          {!sidebarCollapsed && (
-                            <motion.span
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -20 }}
-                              className=" text-base font-normal font-['Neue_Plak'] leading-6"
-                              style={{
-                                textShadow:
-                                  "0 0 10px rgba(255, 255, 255, 0.25)",
-                              }}
-                            >
+
+                          {/* Tooltip for collapsed state */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                               {item.label}
-                            </motion.span>
+                            </div>
                           )}
-                        </AnimatePresence>
-
-                        {/* Active indicator bar */}
-                        {location.pathname === item.path && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 "
-                          />
-                        )}
-
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </Link>
-                    </motion.div>
-                  )}
-                </div>
-              ))}
+                        </Link>
+                      </motion.div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Account Menu */}
-          <div className="py-2 mt-1 relative customborder">
-            <div className="space-y-1">
-              {accountItems.map((item) => (
-                <motion.div
-                  key={item.path}
-                  whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                  className="relative group"
-                >
-                  <Link
-                    to={item.path}
-                    className={`flex items-center ${
-                      sidebarCollapsed ? "justify-center" : "gap-3"
-                    } px-3 py-2 rounded-lg transition-all duration-200
+            {/* Account Menu */}
+            <div className="py-2 mt-1 relative customborder">
+              <div className="space-y-1">
+                {accountItems.map((item) => (
+                  <motion.div
+                    key={item.path}
+                    whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                    className="relative group"
+                  >
+                    <Link
+                      to={item.path}
+                      className={`flex items-center ${
+                        sidebarCollapsed ? "justify-center" : "gap-3"
+                      } px-3 py-2 rounded-lg transition-all duration-200
                   ${
                     location.pathname === item.path
                       ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
                       : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
                   }`}
-                    onClick={closeSidebar}
-                  >
-                    <span className="text-lg flex items-center justify-center">
-                      {typeof item.icon === "string" &&
-                      item.icon.startsWith("/") ? (
-                        <img
-                          src={item.icon}
-                          alt={item.label}
-                          className={`w-5 h-5 object-contain transition-all duration-300
+                      onClick={closeSidebar}
+                    >
+                      <span className="text-lg flex items-center justify-center">
+                        {typeof item.icon === "string" &&
+                        item.icon.startsWith("/") ? (
+                          <img
+                            src={item.icon}
+                            alt={item.label}
+                            className={`w-5 h-5 object-contain transition-all duration-300
                               ${
                                 location.pathname === item.path
                                   ? "opacity-100 brightness-0 invert" // 👈 stays white when active
                                   : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
                               }`}
-                        />
-                      ) : (
-                        item.icon
+                          />
+                        ) : (
+                          item.icon
+                        )}
+                      </span>
+                      <AnimatePresence>
+                        {!sidebarCollapsed && (
+                          <motion.span
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            className=" text-base font-normal font-['Neue_Plak'] leading-6"
+                            style={{
+                              textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
+                            }}
+                          >
+                            {item.label}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+
+                      {/* Tooltip for collapsed state */}
+                      {sidebarCollapsed && (
+                        <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                          {item.label}
+                        </div>
                       )}
-                    </span>
+                    </Link>
+                  </motion.div>
+                ))}
+
+                {/* Logout Button */}
+                {hasToken && (
+                  <motion.button
+                    whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full flex items-center ${
+                      sidebarCollapsed ? "justify-center" : "gap-3"
+                    } px-3 py-2 rounded-lg text-[#A8A8A8] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group relative`}
+                  >
+                    <img
+                      src="/icons/logout.svg"
+                      alt="Logout"
+                      className="w-7 h-7 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                    />
                     <AnimatePresence>
                       {!sidebarCollapsed && (
                         <motion.span
@@ -1339,8 +1379,9 @@ const Header = ({
                           style={{
                             textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
                           }}
+                          onClick={handleLogout}
                         >
-                          {item.label}
+                          Logout
                         </motion.span>
                       )}
                     </AnimatePresence>
@@ -1348,86 +1389,45 @@ const Header = ({
                     {/* Tooltip for collapsed state */}
                     {sidebarCollapsed && (
                       <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                        {item.label}
+                        Logout
                       </div>
                     )}
-                  </Link>
-                </motion.div>
-              ))}
-
-              {/* Logout Button */}
-              {hasToken && (
-                <motion.button
-                  whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full flex items-center ${
-                    sidebarCollapsed ? "justify-center" : "gap-3"
-                  } px-3 py-2 rounded-lg text-[#A8A8A8] hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 group relative`}
-                >
-                  <img
-                    src="/icons/logout.svg"
-                    alt="Logout"
-                    className="w-7 h-7 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-                  />
-                  <AnimatePresence>
-                    {!sidebarCollapsed && (
-                      <motion.span
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        className=" text-base font-normal font-['Neue_Plak'] leading-6"
-                        style={{
-                          textShadow: "0 0 10px rgba(255, 255, 255, 0.25)",
-                        }}
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Tooltip for collapsed state */}
-                  {sidebarCollapsed && (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                      Logout
-                    </div>
-                  )}
-                </motion.button>
-              )}
+                  </motion.button>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Social Links - Only show when expanded */}
-          {hasToken && (
-            <AnimatePresence>
-              {!sidebarCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="relative customborder left-0 right-0 p-3"
-                >
-                  {/* User Profile */}
-                  <div className="flex flex-col items-center justify-center gap-2 p-4 mb-3">
-                    {/* Profile Icon */}
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[linear-gradient(180deg,#1B1B1B_0%,#0F172A_100%)] shadow-[0px_2px_4px_rgba(0,0,0,0.25)] flex items-center justify-center">
-                      <span className="text-lg sm:text-xl text-white font-semibold">
-                        {userName ? userName.charAt(0).toUpperCase() : ""}
-                      </span>
-                    </div>
+            {/* Social Links - Only show when expanded */}
+            {hasToken && (
+              <AnimatePresence>
+                {!sidebarCollapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="relative customborder left-0 right-0 p-3"
+                  >
+                    {/* User Profile */}
+                    <div className="flex flex-col items-center justify-center gap-2 p-4 mb-3">
+                      {/* Profile Icon */}
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[linear-gradient(180deg,#1B1B1B_0%,#0F172A_100%)] shadow-[0px_2px_4px_rgba(0,0,0,0.25)] flex items-center justify-center">
+                        <span className="text-lg sm:text-xl text-white font-semibold">
+                          {userName ? userName.charAt(0).toUpperCase() : ""}
+                        </span>
+                      </div>
 
-                    {/* Username */}
-                    <p
-                      className="text-[#C3C3C3] text-center font-[400] text-[16px] 
+                      {/* Username */}
+                      <p
+                        className="text-[#C3C3C3] text-center font-[400] text-[16px] 
                leading-[24px] tracking-[0.3px] 
                font-['Neue_Plack',sans-serif] not-italic"
-                    >
-                      {userName}
-                    </p>
-                  </div>
+                      >
+                        {userName}
+                      </p>
+                    </div>
 
-                  {/* Language Selector */}
-                  {/* <button className="w-full flex items-center gap-3 px-2 py-2 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 rounded-lg transition-all duration-200 mb-3">
+                    {/* Language Selector */}
+                    {/* <button className="w-full flex items-center gap-3 px-2 py-2 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 rounded-lg transition-all duration-200 mb-3">
                           <span className="text-lg">🌐</span>
                           <span
                             className="text-sm font-['Neue_Plak']"
@@ -1437,49 +1437,50 @@ const Header = ({
                           </span>
                         </button> */}
 
-                  {/* Social Links */}
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
-                    >
-                      <img
-                        src="/icons/twitter.svg"
-                        alt="Twitter"
-                        className="w-4 h-4 object-contain"
-                      />
-                      <span
-                        className="text-[#C3C3C3] text-[14px] leading-[24px] 
+                    {/* Social Links */}
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
+                      >
+                        <img
+                          src="/icons/twitter.svg"
+                          alt="Twitter"
+                          className="w-4 h-4 object-contain"
+                        />
+                        <span
+                          className="text-[#C3C3C3] text-[14px] leading-[24px] 
              font-[400] font-['Neue_Plack',sans-serif] 
              not-italic tracking-[0.3px] text-center"
+                        >
+                          Twitter
+                        </span>
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
                       >
-                        Twitter
-                      </span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
-                    >
-                      <img
-                        src="/icons/telegram.svg"
-                        alt="Telegram"
-                        className="w-4 h-4 object-contain"
-                      />
-                      <span
-                        className="text-[#C3C3C3] text-[14px] leading-[24px] 
+                        <img
+                          src="/icons/telegram.svg"
+                          alt="Telegram"
+                          className="w-4 h-4 object-contain"
+                        />
+                        <span
+                          className="text-[#C3C3C3] text-[14px] leading-[24px] 
              font-[400] font-['Neue_Plack',sans-serif] 
              not-italic tracking-[0.3px] text-center"
-                      >
-                        Telegram
-                      </span>
-                    </motion.button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          )}
+                        >
+                          Telegram
+                        </span>
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
+          </div>
         </motion.aside>
       </div>
 

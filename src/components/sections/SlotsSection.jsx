@@ -241,7 +241,7 @@ const SlotsSection = () => {
               </svg>
             </motion.span>
             <motion.h3
-              className="text-[#CED5E3] font-[400] text-[18px] leading-[44px] 
+              className="text-[#CED5E3] font-[400]  text-[16px] md:text-[18px] leading-[44px] 
                      font-['Neuropolitical'] not-italic uppercase"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -261,7 +261,17 @@ const SlotsSection = () => {
             {/* View All Button */}
             <motion.button
               onClick={handleViewAll}
-              className="text-[#A8A8A8] hover:text-white text-sm font-medium transition-colors duration-300"
+              className="view_btn text-[#A7A7A7] hover:text-white transition-colors duration-300 "
+              style={{
+                fontFamily: "Neue Plak",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "24px", // 171.429%
+                textTransform: "capitalize",
+                background: "rgba(255, 255, 255, 0.20)",
+                padding: "2px 10px",
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -273,7 +283,7 @@ const SlotsSection = () => {
               <motion.button
                 onClick={() => scroll("left")}
                 disabled={!canScrollLeft}
-                className={`w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
+                className={`view_btn w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
                   canScrollLeft
                     ? "bg-white/10 hover:bg-white/20 text-white"
                     : "bg-white/5 text-gray-600 cursor-not-allowed"
@@ -299,7 +309,7 @@ const SlotsSection = () => {
               <motion.button
                 onClick={() => scroll("right")}
                 disabled={!canScrollRight}
-                className={`w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
+                className={`view_btn w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
                   canScrollRight
                     ? "bg-white/10 hover:bg-white/20 text-white"
                     : "bg-white/5 text-gray-600 cursor-not-allowed"

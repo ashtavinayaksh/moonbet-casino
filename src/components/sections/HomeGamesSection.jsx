@@ -146,7 +146,7 @@ const HomeGamesSection = () => {
               </svg>
             </span>
             <h3
-              className="text-[#CED5E3] font-[400] text-[18px] leading-[44px] 
+              className="text-[#CED5E3] font-[400] text-[16px] md:text-[18px] leading-[44px]
              font-['Neuropolitical'] not-italic uppercase"
             >
               RECOMMENDED
@@ -197,7 +197,7 @@ const HomeGamesSection = () => {
             ref={scrollContainerRef}
             className="overflow-x-auto scrollbar-hide pb-4"
           >
-             <div className="grid grid-flow-col auto-cols-[87px] sm:auto-cols-[180px] md:auto-cols-[145px] gap-3 md:gap-3">
+            <div className="grid grid-flow-col auto-cols-[87px] sm:auto-cols-[180px] md:auto-cols-[145px] gap-3 md:gap-3">
               {gamesData.map((game, index) => (
                 <motion.div
                   key={game.id}

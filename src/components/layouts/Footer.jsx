@@ -100,7 +100,12 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative w-full bg-black overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[800px]">
+    <footer
+      className="customborder-footer relative w-full bg-black overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[800px]"
+      style={{
+        paddingTop: "clamp(30px, 8vw, 100px)",
+      }}
+    >
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img
@@ -119,7 +124,7 @@ const Footer = () => {
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <div className="max-w-[1366px] mx-auto px-4 sm:px-6 w-full flex flex-col h-full pt-6">
+        <div className="max-w-[1366px] mx-auto px-4 sm:px-10 w-full flex flex-col h-full pt-6">
           {/* ================= TOP LOGO ROW ================= */}
           <div className="flex items-center justify-center md:justify-between w-full mb-6">
             {/* Logo */}

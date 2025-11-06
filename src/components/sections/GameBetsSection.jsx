@@ -65,8 +65,7 @@ const GameBetsSection = () => {
             betAmount: b.amount,
             multiplier: b.multiplier || "-",
             payout: b.payout,
-            color:
-              b.type === "win" || b.type === "refund" ? "green" : "red",
+            color: b.type === "win" || b.type === "refund" ? "green" : "red",
             time: new Date(b.createdAt).toLocaleTimeString(),
           }));
           setBets(formatted);
@@ -107,7 +106,13 @@ const GameBetsSection = () => {
         </motion.div> */}
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-4 sm:mb-6 bg-black/40 p-1 rounded-lg overflow-x-auto scrollbar-hide">
+        <div
+          class="provider_btn flex gap-2 mb-4 sm:mb-6 p-1 rounded-[8px] overflow-x-auto scrollbar-hide w-fit"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(30, 30, 30, 0.15) 0%, rgba(75, 75, 75, 0.15) 100%)",
+          }}
+        >
           {["all", "my"].map((tab) => (
             <button
               key={tab}

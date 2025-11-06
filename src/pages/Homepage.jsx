@@ -21,8 +21,8 @@ const Homepage = () => {
     <div className="min-h-screen bg-black">
       <HeroSection />
       {/* <CasinoWheel /> */}
-      <VipMoonSection />
-      {/* <HomeRewardsSection /> */}
+      {/* <VipMoonSection /> */}
+      <HomeRewardsSection />
       {/* <HomeGamesSection /> */}
       <RecommendedSection />
       {/* <CasinoWheel2 /> */}

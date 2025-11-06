@@ -49,7 +49,7 @@ const Layout = () => {
             marginLeft:
               window.innerWidth >= 1024
                 ? desktopSidebarCollapsed
-                  ? 80
+                  ? 60
                   : 256
                 : 0,
             paddingTop: 64, // Height of header
@@ -80,7 +80,7 @@ const Layout = () => {
             marginLeft:
               window.innerWidth >= 1024
                 ? desktopSidebarCollapsed
-                  ? 80
+                  ? 60
                   : 256
                 : 0,
           }}
@@ -144,7 +144,7 @@ const Layout = () => {
           border-radius: 10px;
         }
 
-         ::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
           border-radius: 8px;
           background: var(
             --hover-bar,

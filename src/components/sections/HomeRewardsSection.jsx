@@ -1,79 +1,96 @@
-// src/components/sections/HomeRewardsSection.jsx
-import React, { useRef, useState, useEffect } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
-import MoonBetButton from "../ui-elements/MoonBetButton";
+// src/components/sections/HomeRewardsSection.jsx (OPTIMIZED)
+import React, { useRef, useState, useEffect, useMemo } from "react";
+import { motion, useInView } from "framer-motion";
 
 const HomeRewardsSection = () => {
-  const scrollContainerRef = useRef(null);
   const sectionRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const controls = useAnimation();
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
-  // Rewards data
-  const rewardsData = [
-    {
-      id: 1,
-      badge: "NOW LIVE",
-      titleLine1: "New Rewards",
-      titleLine2: "System",
-      buttonText: "SEE REWARDS",
-    },
-    {
-      id: 2,
-      badge: "NOW LIVE",
-      titleLine1: "New Rewards",
-      titleLine2: "System",
-      buttonText: "SEE REWARDS",
-    },
-    {
-      id: 3,
-      badge: "NOW LIVE",
-      titleLine1: "New Rewards",
-      titleLine2: "System",
-      buttonText: "SEE REWARDS",
-    },
-  ];
+  // Memoized rewards data to prevent recreation on every render
+  const rewardsData = useMemo(
+    () => [
+      {
+        id: 1,
+        badge: "Bonus",
+        titleLine1: "Upto 560%",
+        titleLine2: "Bonus",
+        description1: "Elite Status, Stellar",
+        description2: "Awards",
+        img: "/rewards/img1.svg",
+        fallbackImg:
+          "https://via.placeholder.com/178x168/0A2BBC/ffffff?text=Bonus+Card",
+        imgBgColor: "#0A2BBC",
+      },
+      {
+        id: 2,
+        badge: "Instant Games",
+        titleLine1: "99.99%",
+        titleLine2: "RTP Games",
+        description1: "Odds out of this",
+        description2: "world.",
+        img: "/rewards/img3.svg",
+        fallbackImg:
+          "https://via.placeholder.com/178x168/DC1FFF/ffffff?text=Games+Card",
+        imgBgColor: "#DC1FFFBA",
+      },
+      {
+        id: 3,
+        badge: "New Original",
+        titleLine1: "Honeypot",
+        titleLine2: "Game",
+        description1: "Best out of all Crash",
+        description2: "games out there.",
+        img: "/rewards/img2.svg",
+        fallbackImg:
+          "https://via.placeholder.com/178x168/F07730/ffffff?text=Honeypot+Card",
+        imgBgColor: "#F07730CC",
+      },
+    ],
+    []
+  );
 
-  // Handle scroll to update current index for indicators
-  const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
+  const [imageErrors, setImageErrors] = useState({});
 
-    const container = scrollContainerRef.current;
-    const scrollLeft = container.scrollLeft;
-    const cardWidth = container.clientWidth * 0.85;
-    const newIndex = Math.round(scrollLeft / cardWidth);
-
-    setCurrentIndex(Math.min(newIndex, rewardsData.length - 1));
+  const handleImageError = (id, fallbackImg) => {
+    setImageErrors((prev) => ({ ...prev, [id]: fallbackImg }));
   };
 
+  // Optimized scroll handler with debouncing via RAF
   useEffect(() => {
-    const container = scrollContainerRef.current;
+    const container = document.querySelector(".rewards-scroll-container");
+    if (!container) return;
 
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
+    let rafId = null;
+    const handleScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
 
-      return () => {
-        container.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, []);
+      rafId = requestAnimationFrame(() => {
+        const scrollLeft = container.scrollLeft;
+        const cardWidth = 375;
+        const gap = 24;
+        const newIndex = Math.round(scrollLeft / (cardWidth + gap));
+        setCurrentIndex(
+          Math.min(Math.max(0, newIndex), rewardsData.length - 1)
+        );
+      });
+    };
 
-  // Trigger animations when in view
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [rewardsData.length]);
 
-  // Animation variants
+  // Simplified animation variants (GPU-accelerated)
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
+        staggerChildren: 0.12,
+        delayChildren: 0.15,
       },
     },
   };
@@ -81,226 +98,187 @@ const HomeRewardsSection = () => {
   const cardVariants = {
     hidden: {
       opacity: 0,
-      y: 50,
-      rotateX: -30,
+      y: 25,
     },
     visible: {
       opacity: 1,
       y: 0,
-      rotateX: 0,
       transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const badgeVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 15,
-        delay: 0.3,
-      },
-    },
-  };
-
-  const glowVariants = {
-    initial: { opacity: 0.3, scale: 0.8 },
-    animate: {
-      opacity: [0.3, 0.6, 0.3],
-      scale: [0.8, 1.1, 0.8],
-      transition: {
-        duration: 4,
-        repeat: Infinity,
-        ease: "easeInOut",
+        duration: 0.4,
+        ease: [0.25, 0.1, 0.25, 1],
       },
     },
   };
 
   return (
-    <motion.section
+    <section
       ref={sectionRef}
-      className="w-full py-16 md:py-10 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
+      className="w-full py-16 md:py-5 relative overflow-hidden"
     >
-      {/* Background Effect with Animation */}
-      <motion.div className="absolute inset-0 opacity-30">
-        <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-500/20 to-transparent rounded-full blur-3xl"
-          variants={glowVariants}
-          initial="initial"
-          animate="animate"
-        />
-        <motion.div
-          className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tl from-purple-500/20 to-transparent rounded-full blur-3xl"
-          variants={glowVariants}
-          initial="initial"
-          animate="animate"
-          transition={{ delay: 2 }}
-        />
-      </motion.div>
-
-      <div className="relative z-10 w-full mx-auto px-4">
-        {/* Cards Container - Scrollable on mobile, grid on desktop */}
+      <div className="relative z-10 w-full max-w-[1366px] mx-auto px-4">
+        {/* Cards Container */}
         <div
-          ref={scrollContainerRef}
-          className="overflow-x-auto lg:overflow-visible scrollbar-hide px-4 lg:px-8"
+          className="rewards-scroll-container overflow-x-auto lg:overflow-visible scrollbar-hide"
+          style={{
+            scrollSnapType: "x mandatory",
+            WebkitOverflowScrolling: "touch",
+          }}
         >
           <motion.div
-            className="flex lg:grid lg:grid-cols-3 gap-6 pb-4"
+            className="flex justify-evenly lg:grid-cols-3 gap-[2px] lg:gap-[2px] pb-4 lg:pb-0"
             variants={containerVariants}
             initial="hidden"
-            animate={controls}
+            animate={isInView ? "visible" : "hidden"}
           >
-            {rewardsData.map((reward, index) => (
+            {rewardsData.map((reward) => (
               <motion.div
                 key={reward.id}
                 variants={cardVariants}
-                custom={index}
                 whileHover={{
                   scale: 1.02,
-                  translateY: -5,
-                  transition: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 20,
-                  },
+                  y: -5,
+                  transition: { duration: 0.2 },
                 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex-shrink-0 w-[85vw] lg:w-full"
+                className="flex-shrink-0 lg:flex-shrink"
+                style={{
+                  width: "375px",
+                  scrollSnapAlign: "center",
+                }}
               >
-                <motion.div
-                  className="wallet-btn3 relative h-full backdrop-blur-xl rounded-2xl p-6 hover:border-[#F07730]/50 transition-all duration-300 group"
-                  whileHover={{
-                    boxShadow: "0 20px 40px rgba(240, 119, 48, 0.2)",
+                <div
+                  className="relative rounded-[15px] overflow-hidden group cursor-pointer will-change-transform"
+                  style={{
+                    width: "100%",
+                    height: "195px",
+                    border: "1px solid rgba(255, 255, 255, 0.20)",
+                    background: "#2A2A2A",
+                    boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
+                    backdropFilter: "blur(2px)",
                   }}
                 >
-                  {/* Badge with Animation */}
-                  {reward.badge && (
-                    <motion.span
-                      className="inline-block py-1 text-[#F07730] text-xs font-semibold mb-4"
-                      variants={badgeVariants}
+                  {/* Content - Left Side */}
+                  <div
+                    className="absolute left-0 top-0 bottom-0 z-10 flex flex-col justify-between p-6"
+                    style={{ width: "50%" }}
+                  >
+                    {/* Badge */}
+                    <span
+                      className="inline-block w-fit px-3 py-1 bg-white rounded-full"
+                      style={{
+                        color: "#070707",
+                        fontFamily: "Neue Plak, sans-serif",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        lineHeight: "24px",
+                        borderRadius: "4px",
+                        padding: "1px 12px",
+                      }}
                     >
                       {reward.badge}
-                    </motion.span>
-                  )}
+                    </span>
 
-                  {/* Content with Stagger Animation */}
-                  <motion.p
-                    className="text-[#FFF] font-[600] text-[24px] leading-[28px] mb-8"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: index * 0.1 + 0.3,
-                      ease: "easeOut",
+                    {/* Title & Description */}
+                    <div>
+                      <h3
+                        className="mb-2"
+                        style={{
+                          color: "#E5EAF2",
+                          fontFamily: "Neue Plak, Arial, sans-serif",
+                          fontSize: "20px",
+                          fontWeight: 400,
+                          lineHeight: "23px",
+                        }}
+                      >
+                        {reward.titleLine1}
+                        <br />
+                        {reward.titleLine2}
+                      </h3>
+
+                      <p
+                        style={{
+                          color: "#E5EAF2",
+                          fontFamily: "Neue Plak, Arial, sans-serif",
+                          fontSize: "12px",
+                          fontWeight: 400,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {reward.description1}
+                        <br />
+                        {reward.description2}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Image - Right Side (Fixed Size) */}
+                  <div
+                    className="absolute right-0 top-0 bottom-0 rounded-r-[15px] flex items-center justify-center"
+                    style={{
+                      width: "50%",
+                      background: reward.imgBgColor,
                     }}
-                    viewport={{ once: true }}
                   >
-                    <motion.span
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 + 0.4 }}
-                      viewport={{ once: true }}
-                    >
-                      {reward.titleLine1}
-                    </motion.span>
-                    <br />
-                    <motion.span
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 + 0.5 }}
-                      viewport={{ once: true }}
-                    >
-                      {reward.titleLine2}
-                    </motion.span>
-                  </motion.p>
+                    <img
+                      src={imageErrors[reward.id] || reward.img}
+                      alt={reward.titleLine2}
+                      loading="lazy"
+                      className="relative"
+                      style={{
+                        width: "177.882px",
+                        height: "168px",
+                        objectFit: "contain",
+                        aspectRatio: "177.88/168",
+                        filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        handleImageError(reward.id, reward.fallbackImg);
+                        e.target.src = reward.fallbackImg;
+                      }}
+                    />
+                  </div>
 
-                  {/* Button with Animation */}
-                  {/* <motion.div
-                    className="flex justify-start"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: index * 0.1 + 0.6,
-                      type: "spring",
-                      stiffness: 150,
-                    }}
-                    viewport={{ once: true }}
-                  >
-                    <MoonBetButton
-                      onClick={() =>
-                        console.log(`${reward.buttonText} clicked`)
-                      }
-                    ></MoonBetButton>
-                  </motion.div> */}
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-[176px] h-[44px] 
-                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
-                 text-[#000] font-[600] text-[16px] 
-                 font-['Neue_Plack',sans-serif]
-                 rounded-lg shadow-md 
-                 transition-all duration-300
-                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
-                 flex items-center justify-center"
-                  >
-                    {reward.buttonText}
-                  </motion.button>
-                  {/* Hover Glow Effect with Animation */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#F07730]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    initial={false}
-                    whileHover={{
-                      opacity: [0, 1, 0.8],
-                      transition: {
-                        duration: 0.5,
-                        times: [0, 0.5, 1],
-                      },
+                  {/* Hover Effect - GPU Accelerated */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none rounded-[15px]"
+                    style={{
+                      transition:
+                        "opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                      willChange: "opacity",
                     }}
                   />
-                </motion.div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
 
-        {/* Mobile Scroll Indicators with Animation */}
-        <motion.div
-          className="flex lg:hidden justify-center gap-2 mt-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
+        {/* Mobile Scroll Indicators */}
+        <div className="flex lg:hidden justify-center gap-2 mt-6">
           {rewardsData.map((_, index) => (
-            <motion.span
+            <button
               key={index}
+              onClick={() => {
+                const container = document.querySelector(
+                  ".rewards-scroll-container"
+                );
+                if (container) {
+                  const scrollAmount = (375 + 24) * index;
+                  container.scrollTo({
+                    left: scrollAmount,
+                    behavior: "smooth",
+                  });
+                }
+              }}
               className={`transition-all duration-300 ${
                 currentIndex === index
-                  ? "w-8 h-2 bg-[#F07730] rounded-full"
-                  : "w-2 h-2 bg-white/20 rounded-full"
-              }`}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{
-                delay: index * 0.1 + 0.9,
-                type: "spring",
-                stiffness: 200,
-              }}
-              whileHover={{ scale: 1.2 }}
+                  ? "w-8 h-2 bg-[#F07730]"
+                  : "w-2 h-2 bg-white/20"
+              } rounded-full`}
+              aria-label={`Go to card ${index + 1}`}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       <style jsx>{`
@@ -312,7 +290,7 @@ const HomeRewardsSection = () => {
           display: none;
         }
       `}</style>
-    </motion.section>
+    </section>
   );
 };
 
