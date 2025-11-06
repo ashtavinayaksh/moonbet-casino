@@ -872,7 +872,7 @@ const Header = ({
             x: 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-40 overflow-y-auto overflow-x-hidden px-2`}
+          className={`fixed left-0 top-16 bottom-0 bg-gradient-to-b from-[#0A0B0D]/95 to-[#141519]/95 backdrop-blur-xl border-r border-white/10 z-[99999] px-2`}
         >
           {/* Main Menu */}
           {/* Main Menu */}
