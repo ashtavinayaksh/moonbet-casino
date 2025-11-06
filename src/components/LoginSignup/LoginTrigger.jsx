@@ -46,16 +46,13 @@ export const LoginTrigger = ({
 const handleLoginSuccess = (userData) => {
   // Extract essential fields
   const { token, user } = userData || {};
-  if (token) localStorage.setItem("token", token);
+  if (token) {
+    localStorage.setItem("token", token);
+    window.dispatchEvent(new Event("tokenChanged"));
+  }
 
   if (user) {
     const { username, email, kycStatus, id } = user;
-
-    // Save individual entries (easy access)
-    // localStorage.setItem("userId", _id);
-    // localStorage.setItem("username", username);
-    // localStorage.setItem("email", email);
-    // localStorage.setItem("kycStatus", kycStatus);
 
     // Save as a compact JSON for profile dropdowns/modals
     localStorage.setItem("user", JSON.stringify({ id, username, email, kycStatus }));
@@ -69,14 +66,14 @@ const handleLoginSuccess = (userData) => {
 // Handle signup success
 const handleSignupSuccess = (userData) => {
   const { token, user } = userData || {};
-  if (token) localStorage.setItem("token", token);
+  if (token) {
+    localStorage.setItem("token", token);
+    window.dispatchEvent(new Event("tokenChanged"));
+  }
 
   if (user) {
-    const { username, email, kycStatus, id } = user;
-    // localStorage.setItem("userId", _id);
-    // localStorage.setItem("username", username);
-    // localStorage.setItem("email", email);
-    // localStorage.setItem("kycStatus", kycStatus);
+    const { username, email, kycStatus, _id } = user;
+    const id = _id;
     localStorage.setItem("user", JSON.stringify({ id, username, email, kycStatus }));
   }
 
