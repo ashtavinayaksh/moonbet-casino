@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
-import WithdrawalConfirmationPopup from "./WithdrawalConfirmationPopup";
+// import WithdrawalConfirmationPopup from "./WithdrawalConfirmationPopup";
+import WithdrawalConfirmationPopup from "./settings/WithdrawalConfirmationPopup";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
@@ -226,84 +227,101 @@ const WalletModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleWithdraw = async () => {
-    if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
-      toast.error("Please fill all fields");
-      return;
-    }
+  // Step 1: Submit Withdraw Request
+const handleWithdraw = async () => {
+  if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
+    toast.error("Please fill all fields");
+    return;
+  }
 
-    const userId =
-      JSON.parse(localStorage.getItem("user") || "{}").id ||
-      "68eb94c22a7983ea19b0bd6a";
+  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  const payload = {
+    currency: selectedWithdrawCoin.symbol.toUpperCase(),
+    amount: parseFloat(withdrawAmount),
+    address: withdrawAddress,
+  };
 
-    const payload = {
-      currency: selectedWithdrawCoin.symbol.toUpperCase(),
-      amount: parseFloat(withdrawAmount),
-      address: withdrawAddress,
-    };
+  try {
+    const { data } = await axios.post(
+      `/wallet-service/api/wallet/${userId}/withdraw`,
+      payload
+    );
 
-    try {
-      const { data } = await axios.post(
-        `/wallet-service/api/wallet/${userId}/withdrawOtp`,
-        payload
-      );
-
+    if (data.requestId) {
       setOtpRequestId(data.requestId);
-      toast.success(
-        "OTP sent to your registered email. Please verify to continue."
-      );
+      toast.success("Withdrawal request created successfully!");
       setShowWithdrawConfirmation(true);
-    } catch (err) {
-      console.error("❌ Withdraw OTP error:", err);
-      toast.error(
-        err.response?.data?.message || "Failed to send OTP. Please try again."
-      );
+    } else {
+      toast.error("Unexpected response from server");
     }
-  };
+  } catch (err) {
+    console.error("❌ Withdraw error:", err);
+    toast.error(err.response?.data?.message || "Withdrawal request failed");
+  }
+};
 
-  const handleConfirmWithdraw = async (otpCode) => {
-    if (!otpCode || !otpRequestId) {
-      toast.error("Missing OTP or request ID");
-      return;
-    }
+// Step 2: Confirm Withdraw (execute API)
+const handleConfirmWithdraw = async (requestId) => {
+  try {
+    const { data } = await axios.post(
+      `/wallet-service/api/wallet/withdraw/execute/${requestId}`
+    );
 
-    const userId =
-      JSON.parse(localStorage.getItem("user") || "{}").id ||
-      "68eb94c22a7983ea19b0bd6a";
+    toast.success("✅ Withdrawal executed successfully!");
+    setShowWithdrawConfirmation(false);
+    setShowWithdrawModal(false);
+    setWithdrawAmount("");
+    setWithdrawAddress("");
+  } catch (err) {
+    console.error("❌ Execute withdraw error:", err);
+    toast.error(err.response?.data?.message || "Failed to execute withdrawal");
+  }
+};
 
-    try {
-      // Step 1: Verify OTP
-      await axios.post(`/wallet-service/api/wallet/verify-otp`, {
-        requestId: otpRequestId,
-        otp: otpCode,
-      });
 
-      toast.success("✅ OTP verified successfully. Processing withdrawal...");
+  // const handleConfirmWithdraw = async (otpCode) => {
+  //   if (!otpCode || !otpRequestId) {
+  //     toast.error("Missing OTP or request ID");
+  //     return;
+  //   }
 
-      // Step 2: Proceed with actual withdrawal
-      const withdrawData = {
-        currency: selectedWithdrawCoin.symbol.toUpperCase(),
-        address: withdrawAddress,
-        amount: parseFloat(withdrawAmount),
-      };
+  //   const userId =
+  //     JSON.parse(localStorage.getItem("user") || "{}").id ||
+  //     "68eb94c22a7983ea19b0bd6a";
 
-      await axios.post(
-        `/wallet-service/api/wallet/${userId}/withdraw`,
-        withdrawData
-      );
+  //   try {
+  //     // Step 1: Verify OTP
+  //     await axios.post(`/wallet-service/api/wallet/verify-otp`, {
+  //       requestId: otpRequestId,
+  //       otp: otpCode,
+  //     });
 
-      toast.success("💸 Withdrawal request submitted successfully!");
-      setShowWithdrawConfirmation(false);
-      setShowWithdrawModal(false);
-      setWithdrawAddress("");
-      setWithdrawAmount("");
-    } catch (err) {
-      console.error("❌ Withdrawal verification error:", err);
-      toast.error(
-        err.response?.data?.message || "Failed to verify OTP or withdraw funds."
-      );
-    }
-  };
+  //     toast.success("✅ OTP verified successfully. Processing withdrawal...");
+
+  //     // Step 2: Proceed with actual withdrawal
+  //     const withdrawData = {
+  //       currency: selectedWithdrawCoin.symbol.toUpperCase(),
+  //       address: withdrawAddress,
+  //       amount: parseFloat(withdrawAmount),
+  //     };
+
+  //     await axios.post(
+  //       `/wallet-service/api/wallet/${userId}/withdraw`,
+  //       withdrawData
+  //     );
+
+  //     toast.success("💸 Withdrawal request submitted successfully!");
+  //     setShowWithdrawConfirmation(false);
+  //     setShowWithdrawModal(false);
+  //     setWithdrawAddress("");
+  //     setWithdrawAmount("");
+  //   } catch (err) {
+  //     console.error("❌ Withdrawal verification error:", err);
+  //     toast.error(
+  //       err.response?.data?.message || "Failed to verify OTP or withdraw funds."
+  //     );
+  //   }
+  // };
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -1427,6 +1445,13 @@ const WalletModal = ({ isOpen, onClose }) => {
             }}
             userEmail={emailId} // Pass actual user email
           />
+          <WithdrawalConfirmationPopup
+          isOpen={showWithdrawConfirmation}
+          onClose={() => setShowWithdrawConfirmation(false)}
+          requestId={otpRequestId}
+          onConfirm={handleConfirmWithdraw}
+          />
+
 
           {renderDepositModal()}
           {renderWithdrawModal()}
