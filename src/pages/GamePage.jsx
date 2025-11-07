@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
 import GameBetsSection from "../components/sections/GameBetsSection";
+import RecommendedSection from "../components/sections/RecommendedSection";
+import ProvidersSection from "../components/sections/ProvidersSection";
 import { LoginTrigger } from "../components/LoginSignup/LoginTrigger";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -457,6 +459,8 @@ const handlePlayToggle = () => {
         </div>
     </div>
     <div className="bg-black">
+    <RecommendedSection />
+    <ProvidersSection />
         <GameBetsSection />
       </div>
       {!hasToken || showLogin && (
