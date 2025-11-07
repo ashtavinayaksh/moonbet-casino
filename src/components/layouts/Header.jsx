@@ -585,9 +585,7 @@ const Header = ({
                 {/* Wallet Button */}
                 <button
                   onClick={() => setWalletDropdownOpen(!walletDropdownOpen)}
-                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 
-               rounded-xl backdrop-blur-[2px] bg-[#000]/80 text-white 
-               transition-all duration-300 max-w-[150px] sm:max-w-none"
+                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-[8px]  border-[rgba(255,255,255,0.4)] bg-[linear-gradient(180deg,rgba(75,75,75,0.3)_0%,rgba(244,116,251,0.3)_100%)] shadow-[1px_2px_1px_rgba(0,0,0,0.4)] backdrop-blur-[1.5px]  text-white transition-all duration-300 max-w-[150px] sm:max-w-none"
                 >
                   {/* Coin logo */}
                   <img
@@ -755,7 +753,11 @@ const Header = ({
               {/* Coins/Chips Display - Wallet Button */}
               <button
                 onClick={() => setWalletModalOpen(true)}
-                className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#000]/80 transition-all hover:scale-[1.02]"
+                className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-[8px]  border-[rgba(255,255,255,0.40)] transition-all hover:scale-[1.02] backdrop-blur-[1.5px] shadow-[1px_2px_1px_rgba(0,0,0,0.40)]"
+                style={{
+                  background:
+                    "linear-gradient(0deg, rgba(240, 119, 48, 0.60) 0%, rgba(240, 119, 48, 0.00) 100%)",
+                }}
               >
                 <span className="text-xl">
                   <img
@@ -770,78 +772,70 @@ const Header = ({
 
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">
-            {/* Search - Desktop only */}
-            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
-              <img
-                src="/icons/search.svg" // 👈 replace with your image path
-                alt="User Avatar"
-                className="w-full h-full object-cover"
-              />
-            </button> */}
-            {/* gift - Desktop only */}
-            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors relative">
-              <img
-                src="/icons/gift.svg" // 👈 replace with your image path
-                alt="User Avatar"
-                className="w-full h-full object-cover"
-              />
-            </button> */}
-
-            {/* win - Desktop only */}
-            {/* <button className="hidden lg:block p-2 hover:bg-white/10 rounded-lg transition-colors">
-              <img
-                src="/icons/win.svg" // 👈 replace with your image path
-                alt="User Avatar"
-                className="w-full h-full object-cover"
-              />
-            </button> */}
-
-            {/* Profile Avatar */}
-            {/* Trigger Button */}
-            <LoginTrigger
-              buttonText={
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-[150px] h-[36px] 
-                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
-                 text-black font-[600] text-[16px] 
-                 font-['Neue_Plack',sans-serif]
-                 rounded-lg shadow-md 
-                 transition-all duration-300
-                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
-                 flex items-center justify-center"
-                >
-                  LOGIN
-                </motion.button>
-              }
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            />
-            {/* Register Button */}
+            {/* ✅ Show Login & Register only when NOT logged in */}
             {!hasToken && (
-              <LoginTrigger
-                buttonText={
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-[129px] h-[36px]
-             bg-transparent 
-             border-2
-             bg-[linear-gradient(#1A1D24,#1A1D24)_padding-box,linear-gradient(90deg,#F07730,#EFD28E)_border-box]
-             text-white font-[600] text-[16px]
-             font-['Neue_Plack',sans-serif]
-             rounded-lg shadow-md
-             flex items-center justify-center
-             transition-all duration-300
-             hover:shadow-lg hover:shadow-[#F07730]/30"
-                  >
-                    Register
-                  </motion.button>
-                }
-                defaultTab="register"
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-              />
+              <>
+                <LoginTrigger
+                  buttonText={
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-[150px] h-[36px] 
+              bg-gradient-to-r from-[#F07730] to-[#EFD28E]
+              text-black font-[600] text-[16px] 
+              font-['Neue_Plack',sans-serif]
+              rounded-lg shadow-md 
+              transition-all duration-300
+              hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
+              flex items-center justify-center"
+                    >
+                      LOGIN
+                    </motion.button>
+                  }
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                />
+
+                <LoginTrigger
+                  buttonText={
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-[129px] h-[36px]
+              bg-transparent 
+              border-2
+              bg-[linear-gradient(#1A1D24,#1A1D24)_padding-box,linear-gradient(90deg,#F07730,#EFD28E)_border-box]
+              text-white font-[600] text-[16px]
+              font-['Neue_Plack',sans-serif]
+              rounded-lg shadow-md
+              flex items-center justify-center
+              transition-all duration-300
+              hover:shadow-lg hover:shadow-[#F07730]/30"
+                    >
+                      Register
+                    </motion.button>
+                  }
+                  defaultTab="register"
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                />
+              </>
             )}
+
+            {/* ✅ Profile & Wallet shown only when logged in */}
+            {hasToken && (
+  <LoginTrigger
+    buttonText={
+      <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center cursor-pointer">
+        <img
+          src="/icons/login.svg"
+          alt="User Avatar"
+          className="w-full h-full object-cover"
+        />
+      </div>
+    }
+    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+  />
+)}
+
           </div>
         </div>
       </motion.header>
