@@ -1,4 +1,4 @@
-// src/components/sections/HomeRewardsSection.jsx (OPTIMIZED)
+// src/components/sections/HomeRewardsSection.jsx (MOBILE FIXED)
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { motion, scale, useInView } from "framer-motion";
 
@@ -67,9 +67,8 @@ const HomeRewardsSection = () => {
 
       rafId = requestAnimationFrame(() => {
         const scrollLeft = container.scrollLeft;
-        const cardWidth = 375;
-        const gap = 24;
-        const newIndex = Math.round(scrollLeft / (cardWidth + gap));
+        const containerWidth = container.offsetWidth;
+        const newIndex = Math.round(scrollLeft / containerWidth);
         setCurrentIndex(
           Math.min(Math.max(0, newIndex), rewardsData.length - 1)
         );
@@ -115,7 +114,7 @@ const HomeRewardsSection = () => {
       ref={sectionRef}
       className="w-full py-16 md:py-5 relative overflow-hidden"
     >
-      <div className="relative z-10 w-full max-w-[1366px] mx-auto px-4">
+      <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4">
         {/* Cards Container */}
         <div
           className="rewards-scroll-container overflow-x-auto lg:overflow-visible scrollbar-hide"
@@ -125,7 +124,7 @@ const HomeRewardsSection = () => {
           }}
         >
           <motion.div
-            className="flex justify-center lg:grid-cols-3 gap-[2px] lg:gap-[10px] pb-4 lg:pb-0"
+            className="flex lg:grid lg:grid-cols-3 gap-4 lg:gap-[10px] pb-4 lg:pb-0"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -139,11 +138,12 @@ const HomeRewardsSection = () => {
                   y: -5,
                   transition: { duration: 0.2 },
                 }}
-                className="lg:flex-shrink"
+                className="flex-shrink-0 lg:flex-shrink w-full lg:w-auto snap-center"
                 style={{
-                  width: "395px",
-                  scrollSnapAlign: "center",
-                  gap: "10",
+                  minWidth:
+                    window.innerWidth < 1024 ? "calc(100vw - 32px)" : "auto",
+                  maxWidth:
+                    window.innerWidth < 1024 ? "calc(100vw - 32px)" : "100%",
                 }}
               >
                 <div
@@ -276,7 +276,7 @@ const HomeRewardsSection = () => {
                   ".rewards-scroll-container"
                 );
                 if (container) {
-                  const scrollAmount = (375 + 24) * index;
+                  const scrollAmount = container.offsetWidth * index;
                   container.scrollTo({
                     left: scrollAmount,
                     behavior: "smooth",
@@ -301,6 +301,19 @@ const HomeRewardsSection = () => {
         }
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+
+        /* Mobile: Force one card view */
+        @media (max-width: 1023px) {
+          .rewards-scroll-container {
+            scroll-snap-type: x mandatory;
+            scroll-padding: 0 16px;
+          }
+
+          .rewards-scroll-container > div > div {
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+          }
         }
       `}</style>
     </section>
