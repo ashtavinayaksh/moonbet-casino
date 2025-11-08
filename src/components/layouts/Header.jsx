@@ -1288,7 +1288,9 @@ const Header = ({
             {/* Account Menu */}
             <div className="py-2 mt-1 relative customborder">
               <div className="space-y-1">
-                {accountItems.map((item) => (
+                {accountItems
+                .filter((item) => hasToken || item.path !== "/affiliate")
+                .map((item) => (
                   <motion.div
                     key={item.path}
                     whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
