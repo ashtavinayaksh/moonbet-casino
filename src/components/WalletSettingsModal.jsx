@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const WalletSettingsModal = ({ isOpen, onClose }) => {
-  const [selectedCurrency, setSelectedCurrency] = useState(
-  localStorage.getItem("gameCurrency") || "USD"
-);
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user.id;
 
@@ -26,28 +25,49 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
     return () => { document.body.style.overflow = "unset"; };
   }, [isOpen]);
 
+  // ✅ Fetch user's gameCurrency when modal opens
+  useEffect(() => {
+    if (!isOpen || !userId) return;
+
+    const fetchCurrency = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(
+          `/wallet-service/api/games/${userId}/check-currency`
+        );
+
+        if (data?.success && data?.data?.gameCurrency) {
+          setSelectedCurrency(data.data.gameCurrency);
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch currency:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurrency();
+  }, [isOpen, userId]);
+
   if (!isOpen) return null;
 
   const handleSave = async () => {
     try {
       setSaving(true);
 
-      // 🔗 call your API with the selected currency
       await axios.put(
         `/wallet-service/api/games/${userId}/currency`,
         { currency: selectedCurrency }
       );
 
-      localStorage.setItem("gameCurrency", selectedCurrency);
-      // (optional) let the rest of the UI know something changed
+      // Optionally, notify other components
       window.dispatchEvent(new Event("currencyChanged"));
-
       onClose();
     } catch (err) {
       console.error("Failed to update currency:", err?.response?.data || err.message);
       alert(
         err?.response?.data?.message ||
-        "Failed to update currency. Please try again."
+          "Failed to update currency. Please try again."
       );
     } finally {
       setSaving(false);
@@ -63,7 +83,6 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
       />
 
       {/* Modal */}
-           {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center z-[101] p-4">
         <div
           className="bg-[#000] rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100"
@@ -125,55 +144,58 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
                 Currency
               </h3>
 
-              {/* Currency Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {currencies.map((currency) => (
-                  <button
-                    key={currency.code}
-                    onClick={() => setSelectedCurrency(currency.code)}
-                    disabled={saving}
-                    className={`
-                      relative flex items-center gap-3 p-3 rounded-xl
-                      transition-all duration-200
-                      ${
-                        selectedCurrency === currency.code
-                          ? "bg-white/10 border-2 border-[#F07730]"
-                          : "bg-white/5 border-2 border-transparent hover:bg-white/10"
-                      }
-                      ${saving ? "opacity-60 cursor-not-allowed" : ""}
-                    `}
-                  >
-                    {/* Radio Circle */}
-                    <div className="relative">
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 ${
+              {loading ? (
+                <p className="text-gray-400 text-sm">Loading currencies...</p>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {currencies.map((currency) => (
+                    <button
+                      key={currency.code}
+                      onClick={() => setSelectedCurrency(currency.code)}
+                      disabled={saving}
+                      className={`
+                        relative flex items-center gap-3 p-3 rounded-xl
+                        transition-all duration-200
+                        ${
                           selectedCurrency === currency.code
-                            ? "border-blue-500"
-                            : "border-gray-500"
-                        }`}
-                      >
-                        {selectedCurrency === currency.code && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
-                          </div>
-                        )}
+                            ? "bg-white/10 border-2 border-[#F07730]"
+                            : "bg-white/5 border-2 border-transparent hover:bg-white/10"
+                        }
+                        ${saving ? "opacity-60 cursor-not-allowed" : ""}
+                      `}
+                    >
+                      {/* Radio Circle */}
+                      <div className="relative">
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 ${
+                            selectedCurrency === currency.code
+                              ? "border-blue-500"
+                              : "border-gray-500"
+                          }`}
+                        >
+                          {selectedCurrency === currency.code && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Currency Info */}
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-7 h-7 rounded-full ${currency.color} flex items-center justify-center text-white text-xs font-bold`}
-                      >
-                        {currency.flag}
+                      {/* Currency Info */}
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-7 h-7 rounded-full ${currency.color} flex items-center justify-center text-white text-xs font-bold`}
+                        >
+                          {currency.flag}
+                        </div>
+                        <span className="text-white font-medium">
+                          {currency.code}
+                        </span>
                       </div>
-                      <span className="text-white font-medium">
-                        {currency.code}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Info Box */}
@@ -227,14 +249,6 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes modalSlideIn {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .modal-content { animation: modalSlideIn 0.3s ease-out; }
-      `}</style>
     </>
   );
 };
