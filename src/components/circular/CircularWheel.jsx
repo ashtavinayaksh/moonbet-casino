@@ -248,185 +248,186 @@ const CircularWheel = () => {
     if (width <= 380) return "-140px"; // Very small screens
     if (width <= 480) return "-90px"; // Small mobile
     if (width <= 768) return "-150px"; // Mobile
-    if (width >= 1300) return "-200px"; // For Mac or Windows Desktop
+    if (width >= 1300) return "-210px"; // For Mac or Windows Desktop
     return "-167px"; // Desktop
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center bg-black overflow-hidden">
-      <motion.div
-        ref={wheelRef}
-        className="svg-wrapper"
-        style={{
-          rotate: springRotation,
-        }}
-        drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0}
-        onDragStart={handleDragStart}
-        onDrag={handleDrag}
-        onDragEnd={handleDragEnd}
-        onWheel={handleWheel}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* OUTER IMAGE SEGMENT WHEEL */}
-        <svg
-          width="894"
-          height="894"
-          viewBox="0 0 1094 1094"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
+    <div className="relative w-full flex items-center justify-center bg-black overflow-hidden -mb-40 md:-mb-60">
+      {/* 🟣 NEW MASK CONTAINER */}
+      <div className="wheel-mask">
+        <motion.div
+          ref={wheelRef}
+          className="svg-wrapper"
+          style={{ rotate: springRotation }}
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={0}
+          onDragStart={handleDragStart}
+          onDrag={handleDrag}
+          onDragEnd={handleDragEnd}
+          onWheel={handleWheel}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <defs>
-            {/* Gradient for highlighted segment stroke - matching the image */}
-            <linearGradient
-              id="highlightGradient"
-              x1="547"
-              y1="0"
-              x2="547"
-              y2="1094"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#DC1FFF" />
-              <stop offset="1" stopColor="white" />
-            </linearGradient>
-
-            <linearGradient
-              id="paint0_linear_8212_718"
-              x1="547.087"
-              y1="96.7229"
-              x2="547.087"
-              y2="329"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#DC1FFF" />
-              <stop offset="1" stopColor="white" />
-            </linearGradient>
-
-            {/* Define 12 image patterns with unique keys */}
-            {images.map((img, i) => (
-              <pattern
-                key={`img-pattern-${i}`}
-                id={`pattern${i}_8212_718`}
-                patternContentUnits="objectBoundingBox"
-                width="1"
-                height="1"
+          {/* OUTER IMAGE SEGMENT WHEEL */}
+          <svg
+            width="894"
+            height="894"
+            viewBox="0 0 1094 1094"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <defs>
+              {/* Gradient for highlighted segment stroke - matching the image */}
+              <linearGradient
+                id="highlightGradient"
+                x1="547"
+                y1="0"
+                x2="547"
+                y2="1094"
+                gradientUnits="userSpaceOnUse"
               >
-                <image
-                  href={img}
+                <stop stopColor="#DC1FFF" />
+                <stop offset="1" stopColor="white" />
+              </linearGradient>
+
+              <linearGradient
+                id="paint0_linear_8212_718"
+                x1="547.087"
+                y1="96.7229"
+                x2="547.087"
+                y2="329"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="#DC1FFF" />
+                <stop offset="1" stopColor="white" />
+              </linearGradient>
+
+              {/* Define 12 image patterns with unique keys */}
+              {images.map((img, i) => (
+                <pattern
+                  key={`img-pattern-${i}`}
+                  id={`pattern${i}_8212_718`}
+                  patternContentUnits="objectBoundingBox"
                   width="1"
                   height="1"
-                  preserveAspectRatio="xMidYMid slice"
-                />
-              </pattern>
-            ))}
-          </defs>
+                >
+                  <image
+                    href={img}
+                    width="1"
+                    height="1"
+                    preserveAspectRatio="xMidYMid slice"
+                  />
+                </pattern>
+              ))}
+            </defs>
 
-          {/* 12 outer paths with image fills - clickable segments */}
-          {segmentPaths.map((d, i) => {
-            const isHighlighted = i === activeSegmentIndex;
+            {/* 12 outer paths with image fills - clickable segments */}
+            {segmentPaths.map((d, i) => {
+              const isHighlighted = i === activeSegmentIndex;
+
+              return (
+                <path
+                  key={`path-segment-${i}`}
+                  d={d}
+                  fill={`url(#pattern${i}_8212_718)`}
+                  stroke={isHighlighted ? "url(#highlightGradient)" : "none"}
+                  strokeWidth={isHighlighted ? "3" : "0"}
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  onClick={() => handleSegmentClick(i)}
+                  style={{
+                    cursor: "pointer",
+                    filter: isHighlighted ? "brightness(1.1)" : "brightness(1)",
+                    transition: "all 0.3s ease",
+                  }}
+                  className="segment-path"
+                  onMouseEnter={(e) =>
+                    !isHighlighted &&
+                    (e.target.style.filter = "brightness(1.2)")
+                  }
+                  onMouseLeave={(e) =>
+                    !isHighlighted && (e.target.style.filter = "brightness(1)")
+                  }
+                />
+              );
+            })}
+          </svg>
+
+          {/* INNER RING */}
+          <svg
+            className="svg2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 604 606"
+            fill="none"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M0 303C0.000125125 135.657 135.21 0 302 0C468.79 0.000107924 604 135.658 604 303C604 470.342 468.79 606 302 606C135.21 606 0 470.342 0 303ZM301.5 79.9999C178.617 79.9999 78.9997 179.841 78.9997 303C78.9999 426.16 178.617 526 301.5 526C424.383 526 524 426.159 524 303C524 179.84 424.383 80 301.5 79.9999Z"
+              fill="#A7A7A7"
+              fillOpacity="0.5"
+            />
+          </svg>
+
+          {/* SEGMENT LABELS & ICONS ON INNER RING WITH RESPONSIVE POSITIONING */}
+          {segmentLabels.map((label, index) => {
+            const segmentRotation = index * 30;
+            const isHighlighted = index === activeSegmentIndex;
 
             return (
-              <path
-                key={`path-segment-${i}`}
-                d={d}
-                fill={`url(#pattern${i}_8212_718)`}
-                stroke={isHighlighted ? "url(#highlightGradient)" : "none"}
-                strokeWidth={isHighlighted ? "3" : "0"}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                onClick={() => handleSegmentClick(i)}
+              <div
+                key={`segment-label-${index}`}
+                className={`segment-container-inner ${
+                  isHighlighted ? "highlighted" : ""
+                }`}
                 style={{
-                  cursor: "pointer",
-                  filter: isHighlighted ? "brightness(1.1)" : "brightness(1)",
-                  transition: "all 0.3s ease",
+                  transform: `translate(-50%, -50%) rotate(${segmentRotation}deg)`,
                 }}
-                className="segment-path"
-                onMouseEnter={(e) =>
-                  !isHighlighted && (e.target.style.filter = "brightness(1.2)")
-                }
-                onMouseLeave={(e) =>
-                  !isHighlighted && (e.target.style.filter = "brightness(1)")
-                }
-              />
+              >
+                {/* Responsive positioning on inner ring */}
+                <div
+                  style={{ transform: `translateY(${getInnerRingPosition()})` }}
+                >
+                  <div className="segment-icon-inner">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 36 17"
+                      fill="none"
+                      style={{
+                        transform: `rotate(-${segmentRotation + rotation}deg)`,
+                      }}
+                    >
+                      <path
+                        d="M16.7089 9.80341C15.1512 15.3384 8.03561 17.4109 3.82898 12.9776C-2.6707 6.12942 6.65953 -3.46522 13.9082 1.98328C17.6856 4.82106 22.105 16.2803 28.3247 11.7605C33.8228 7.76457 28.0995 0.18353 22.5255 3.41418C21.4294 4.04974 20.592 5.14425 19.5942 5.89154C20.1964 0.606435 26.6786 -1.77721 31.0333 1.49429C39.7066 8.00967 29.5515 19.326 22.0465 13.3945C18.2617 10.4017 14.6522 0.349328 8.39891 3.52472C2.54124 6.49946 6.28627 14.6392 12.5184 12.5379C14.1396 11.9912 15.2806 10.6624 16.7089 9.80341Z"
+                        fill={isHighlighted ? "#fff" : "#999"}
+                      />
+                    </svg>
+                  </div>
+                  <div className="segment-number-inner">
+                    <span
+                      style={{
+                        display: "inline-block",
+                        transform: `rotate(-${segmentRotation + rotation}deg)`,
+                      }}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                </div>
+              </div>
             );
           })}
-        </svg>
-
-        {/* INNER RING */}
-        <svg
-          className="svg2"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 604 606"
-          fill="none"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0 303C0.000125125 135.657 135.21 0 302 0C468.79 0.000107924 604 135.658 604 303C604 470.342 468.79 606 302 606C135.21 606 0 470.342 0 303ZM301.5 79.9999C178.617 79.9999 78.9997 179.841 78.9997 303C78.9999 426.16 178.617 526 301.5 526C424.383 526 524 426.159 524 303C524 179.84 424.383 80 301.5 79.9999Z"
-            fill="#A7A7A7"
-            fillOpacity="0.5"
-          />
-        </svg>
-
+        </motion.div>
         {/* CENTER CONTENT */}
         <div className="center-content">
           <div className="center-title">MOON</div>
           <div className="center-title">ORIGINALS</div>
         </div>
-
-        {/* SEGMENT LABELS & ICONS ON INNER RING WITH RESPONSIVE POSITIONING */}
-        {segmentLabels.map((label, index) => {
-          const segmentRotation = index * 30;
-          const isHighlighted = index === activeSegmentIndex;
-
-          return (
-            <div
-              key={`segment-label-${index}`}
-              className={`segment-container-inner ${
-                isHighlighted ? "highlighted" : ""
-              }`}
-              style={{
-                transform: `translate(-50%, -50%) rotate(${segmentRotation}deg)`,
-              }}
-            >
-              {/* Responsive positioning on inner ring */}
-              <div
-                style={{ transform: `translateY(${getInnerRingPosition()})` }}
-              >
-                <div className="segment-icon-inner">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 36 17"
-                    fill="none"
-                    style={{
-                      transform: `rotate(-${segmentRotation + rotation}deg)`,
-                    }}
-                  >
-                    <path
-                      d="M16.7089 9.80341C15.1512 15.3384 8.03561 17.4109 3.82898 12.9776C-2.6707 6.12942 6.65953 -3.46522 13.9082 1.98328C17.6856 4.82106 22.105 16.2803 28.3247 11.7605C33.8228 7.76457 28.0995 0.18353 22.5255 3.41418C21.4294 4.04974 20.592 5.14425 19.5942 5.89154C20.1964 0.606435 26.6786 -1.77721 31.0333 1.49429C39.7066 8.00967 29.5515 19.326 22.0465 13.3945C18.2617 10.4017 14.6522 0.349328 8.39891 3.52472C2.54124 6.49946 6.28627 14.6392 12.5184 12.5379C14.1396 11.9912 15.2806 10.6624 16.7089 9.80341Z"
-                      fill={isHighlighted ? "#fff" : "#999"}
-                    />
-                  </svg>
-                </div>
-                <div className="segment-number-inner">
-                  <span
-                    style={{
-                      display: "inline-block",
-                      transform: `rotate(-${segmentRotation + rotation}deg)`,
-                    }}
-                  >
-                    {label}
-                  </span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </motion.div>
+      </div>
     </div>
   );
 };

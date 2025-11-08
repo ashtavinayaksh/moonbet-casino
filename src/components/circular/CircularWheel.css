@@ -11,6 +11,26 @@
   touch-action: none; /* Important for touch gestures */
 }
 
+/* 🟣 Mask layer to show only top 180° */
+.wheel-mask {
+  position: relative;
+  width: min(110vw, 110vh, 1200px);
+  aspect-ratio: 1/1;
+  overflow: hidden;
+
+  /* Show only top 180° */
+  mask-image: linear-gradient(to bottom, black 50%, transparent 50%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 50%);
+
+  /* 🟢 NEW: Limit visual height */
+  height: 50%; /* shows only top half height of wheel */
+  margin-bottom: -10%; /* pulls next section up nicely (tweak 5–15%) */
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 .svg-wrapper:active {
   cursor: grabbing;
 }
@@ -49,21 +69,25 @@
 /* Center content */
 .center-content {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: white;
   z-index: 10;
   pointer-events: none;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-family: Neuropolitical;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 115.385% */
 }
 
 .center-title {
   font-size: clamp(20px, 4vw, 28px);
   letter-spacing: 3px;
   font-weight: bold;
-  font-family: "Arial", sans-serif;
 }
 
 /* SEGMENT LABELS & ICONS ON INNER RING - DESKTOP */

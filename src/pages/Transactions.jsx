@@ -16,8 +16,9 @@ const Transactions = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const userId = localStorage.getItem("userid");
         const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const userId = user.id;
 
         if (!userId || !token) {
           console.warn("No userId or token found in localStorage.");
@@ -35,6 +36,7 @@ const Transactions = () => {
             },
           }
         );
+        console.log("Fetching:", `https://api.moonbet.games/wallet-service/api/wallet/${userId}/transactions`);
 
         if (Array.isArray(data.transactions)) {
           // ✅ Format transactions for frontend
