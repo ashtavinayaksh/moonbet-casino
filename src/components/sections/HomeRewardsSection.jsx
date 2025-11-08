@@ -1,6 +1,6 @@
 // src/components/sections/HomeRewardsSection.jsx (OPTIMIZED)
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, scale, useInView } from "framer-motion";
 
 const HomeRewardsSection = () => {
   const sectionRef = useRef(null);
@@ -125,7 +125,7 @@ const HomeRewardsSection = () => {
           }}
         >
           <motion.div
-            className="flex justify-evenly lg:grid-cols-3 gap-[2px] lg:gap-[2px] pb-4 lg:pb-0"
+            className="flex justify-center lg:grid-cols-3 gap-[2px] lg:gap-[10px] pb-4 lg:pb-0"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -139,10 +139,11 @@ const HomeRewardsSection = () => {
                   y: -5,
                   transition: { duration: 0.2 },
                 }}
-                className="flex-shrink-0 lg:flex-shrink"
+                className="lg:flex-shrink"
                 style={{
-                  width: "375px",
+                  width: "395px",
                   scrollSnapAlign: "center",
+                  gap: "10",
                 }}
               >
                 <div
@@ -183,7 +184,7 @@ const HomeRewardsSection = () => {
                         className="mb-2"
                         style={{
                           color: "#E5EAF2",
-                          fontFamily: "Neue Plak, Arial, sans-serif",
+                          fontFamily: "Neue Plak, sans-serif",
                           fontSize: "20px",
                           fontWeight: 400,
                           lineHeight: "23px",
@@ -197,7 +198,7 @@ const HomeRewardsSection = () => {
                       <p
                         style={{
                           color: "#E5EAF2",
-                          fontFamily: "Neue Plak, Arial, sans-serif",
+                          fontFamily: "Neue Plak, sans-serif",
                           fontSize: "12px",
                           fontWeight: 400,
                           lineHeight: "18px",
@@ -215,27 +216,39 @@ const HomeRewardsSection = () => {
                     className="absolute right-0 top-0 bottom-0 rounded-r-[15px] flex items-center justify-center"
                     style={{
                       width: "50%",
-                      background: reward.imgBgColor,
                     }}
                   >
-                    <img
-                      src={imageErrors[reward.id] || reward.img}
-                      alt={reward.titleLine2}
-                      loading="lazy"
-                      className="relative"
+                    {/* Background Box */}
+                    <div
+                      className="flex items-center justify-center rounded-[12px]"
                       style={{
-                        width: "177.882px",
-                        height: "168px",
-                        objectFit: "contain",
-                        aspectRatio: "177.88/168",
-                        filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+                        width: "144px",
+                        height: "144px",
+                        background: reward.imgBgColor,
+                        border: "1px solid rgba(255, 255, 255, 0.40)",
+                        boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
                       }}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        handleImageError(reward.id, reward.fallbackImg);
-                        e.target.src = reward.fallbackImg;
-                      }}
-                    />
+                    >
+                      {/* Image */}
+                      <img
+                        src={imageErrors[reward.id] || reward.img}
+                        alt={reward.titleLine2}
+                        loading="lazy"
+                        className="relative"
+                        style={{
+                          width: "200",
+                          height: "168",
+                          objectFit: "contain",
+                          transform: "scale(1.2)",
+                          filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          handleImageError(reward.id, reward.fallbackImg);
+                          e.target.src = reward.fallbackImg;
+                        }}
+                      />
+                    </div>
                   </div>
 
                   {/* Hover Effect - GPU Accelerated */}

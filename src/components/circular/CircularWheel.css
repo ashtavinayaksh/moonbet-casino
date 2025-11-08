@@ -1,0 +1,100 @@
+.svg-wrapper {
+  position: relative;
+  width: min(110vw, 110vh, 1200px); /* Responsive sizing */
+  aspect-ratio: 1/1; /* Maintain square aspect ratio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Center horizontally */
+}
+
+/* Main SVG should be 100% of wrapper */
+.svg-wrapper > svg:first-child {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.svg2 {
+  position: absolute;
+  width: 55%; /* Adjusted for better proportion */
+  height: 55%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Rotating outer wheel */
+.rotating-wheel {
+  animation: spin 40s linear infinite;
+}
+
+.rotating-wheel:hover {
+  animation-play-state: paused;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Center content */
+.center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.center-title {
+  font-size: clamp(16px, 3vw, 22px); /* Responsive font size */
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* Segment text & icons */
+.segment-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  color: #d1d1d1;
+  pointer-events: none;
+}
+
+.segment-number {
+  font-size: clamp(10px, 1.5vw, 13px); /* Responsive font size */
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.segment-icon svg {
+  width: 36px;
+  height: 17px;
+  margin-top: 4px;
+}
+
+/* Hovered/active segment style */
+.segment-container:hover .segment-number {
+  color: #fff;
+}
+
+/* Container to center everything */
+@media (max-width: 768px) {
+  .svg-wrapper {
+    width: min(85vw, 85vh);
+  }
+
+  .segment-icon svg {
+    width: 28px;
+    height: 14px;
+  }
+}

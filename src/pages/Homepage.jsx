@@ -15,12 +15,13 @@ import ProvidersSection from "../components/sections/ProvidersSection";
 import CryptoPaymentSection from "../components/sections/CryptoPaymentSection";
 import VipMoonSection from "../components/sections/VipMoonSection";
 import TrustBadges from "../components/sections/TrustBadges";
+import CircularWheel from "../components/circular/CircularWheel";
 
 const Homepage = () => {
   return (
     <div className="min-h-screen bg-black">
       <HeroSection />
-      {/* <CasinoWheel /> */}
+      <CircularWheel />
       {/* <VipMoonSection /> */}
       <HomeRewardsSection />
       {/* <HomeGamesSection /> */}
