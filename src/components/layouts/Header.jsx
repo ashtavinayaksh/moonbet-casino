@@ -776,7 +776,7 @@ const Header = ({
             {/* 🧍 User Avatar / Leaderboard Link */}
             <Link
               to="/leaderboard"
-              className="view_btn w-10 h-10 flex items-center justify-center rounded-full overflow-hidden hover:opacity-80 transition-all"
+              className="view_btn w-10 h-10 flex items-center justify-center overflow-hidden hover:opacity-80 transition-all"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
