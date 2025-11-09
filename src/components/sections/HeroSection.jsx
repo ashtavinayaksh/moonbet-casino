@@ -338,7 +338,7 @@ const HeroSection = () => {
       gameImage: "/games/golden.svg",
       amount: `$${randomAmount}`,
       username: randomUsername,
-      icon: "/icons/moon.svg",
+      icon: "/icons/moon1.svg",
       gameName: randomGame,
       provider: randomProvider,
       betId: Math.random().toString(36).substring(2, 15),
@@ -407,10 +407,10 @@ const HeroSection = () => {
       if (data?.success && Array.isArray(data.data)) {
         const mapped = data.data.map((item, index) => ({
           id: `${item.user}-${index}`,
-          gameImage: "/games/golden.svg",
+          gameImage: `/slots/img${(index % 9) + 1}.svg`,
           amount: parseAmountWithSymbol(item.amount),
           username: item.user || "Player***XXX",
-          icon: "/icons/moon.svg",
+          icon: `/moon/moon${(index % 3) + 1}.svg`,
           timeAgo: item.timeAgo,
         }));
         setRecentWinsData(mapped);
@@ -557,7 +557,10 @@ const HeroSection = () => {
 
                     {/* Username with Icon */}
                     <motion.div className="flex items-center gap-1">
-                      <img src={win.icon} alt="icon" className="w-3 h-3" />
+                      <img
+                      src={`/moon/moon${(index % 3) + 1}.svg`}
+                      alt="icon" 
+                      className="w-3 h-3" />
                       <span className="text-gray-400 text-[8px] xs:text-[9px]">
                         {win.username}
                       </span>

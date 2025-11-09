@@ -377,7 +377,7 @@ const SlotsSection = () => {
                       {/* Image container with fixed dimensions */}
                       <div className="relative w-full h-32 sm:h-48 overflow-hidden">
                         <motion.img
-                          src={game.image}
+                          src={`/slots/img${(index % 9) + 1}.svg`}
                           alt={game.name}
                           className="w-full h-full object-cover"
                           variants={imageVariants}

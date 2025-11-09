@@ -373,8 +373,8 @@ const LiveCasino = () => {
                       {/* Image container with fixed dimensions */}
                       <div className="relative w-full h-32 sm:h-48 overflow-hidden">
                         <motion.img
-                          src={game.image}
-                          alt={game.name}
+                          src={`/live-casino/img${(index % 9) + 1}.svg`}
+                          alt={`Live Casino ${(index % 9) + 1}`}
                           className="w-full h-full object-cover"
                           variants={imageVariants}
                           initial="idle"

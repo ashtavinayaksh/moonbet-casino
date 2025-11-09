@@ -751,6 +751,7 @@ const Header = ({
               </div>
 
               {/* Coins/Chips Display - Wallet Button */}
+
               <button
                 onClick={() => setWalletModalOpen(true)}
                 className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-[8px]  border-[rgba(255,255,255,0.40)] transition-all hover:scale-[1.02] backdrop-blur-[1.5px] shadow-[1px_2px_1px_rgba(0,0,0,0.40)]"
@@ -772,6 +773,24 @@ const Header = ({
 
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">
+            {/* 🧍 User Avatar / Leaderboard Link */}
+            <Link
+              to="/leaderboard"
+              className="view_btn w-10 h-10 flex items-center justify-center rounded-full overflow-hidden hover:opacity-80 transition-all"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="19"
+                viewBox="0 0 18 19"
+                fill="none"
+              >
+                <path
+                  d="M11.9648 15.5293C12.992 15.5293 13.8251 16.3615 13.8252 17.3887V17.4033H14.9229C15.2544 17.4033 15.5224 17.6714 15.5225 18.0029C15.5225 18.3346 15.2545 18.6035 14.9229 18.6035H3.08008C2.7486 18.6033 2.48047 18.3344 2.48047 18.0029C2.48053 17.6715 2.74864 17.4035 3.08008 17.4033H4.17773V17.3887C4.17782 16.3615 5.01091 15.5293 6.03809 15.5293H11.9648ZM13.5 0C14.1659 2.94004e-05 14.7 0.540356 14.7002 1.2002V1.28418H16.2061C17.196 1.28426 18.0059 2.09499 18.0059 3.08496V3.69043C18.0059 5.64638 16.548 7.27294 14.6641 7.54297C14.4119 9.81074 12.8337 11.671 10.7158 12.3369L11.4844 14.3281H6.52148L7.29004 12.3369C5.17821 11.677 3.59399 9.81074 3.3418 7.54297C1.45184 7.27294 0 5.64638 0 3.69043V3.08496C0 2.09499 0.803849 1.28426 1.7998 1.28418H3.2998V1.2002C3.29996 0.540338 3.84007 0 4.5 0H13.5ZM9.5459 3.67871C9.3239 3.22871 8.68196 3.22871 8.45996 3.67871L7.87793 4.85449L6.57617 5.04004C6.08421 5.11203 5.88023 5.7241 6.24609 6.07812L7.18164 6.99609L6.95996 8.28613C6.87596 8.7841 7.39793 9.16261 7.83594 8.92871L9 8.31641L10.1582 8.92871C10.6081 9.16239 11.124 8.78403 11.04 8.28613L10.8242 6.99609L11.7598 6.07812C12.1196 5.7301 11.9218 5.1189 11.4238 5.04688L10.1279 4.85449L9.5459 3.67871ZM1.7998 2.48438C1.46984 2.48445 1.2002 2.75502 1.2002 3.08496V3.69043C1.2002 4.97434 2.09989 6.04229 3.2998 6.31836V2.48438H1.7998ZM14.7002 2.48438V6.31836C15.906 6.04225 16.8057 4.96834 16.8057 3.69043V3.08496C16.8057 2.75501 16.536 2.48445 16.2061 2.48438H14.7002Z"
+                  fill="#7D7D7D"
+                />
+              </svg>
+            </Link>
             {/* ✅ Show Login & Register only when NOT logged in */}
             {!hasToken && (
               <>
@@ -822,20 +841,26 @@ const Header = ({
 
             {/* ✅ Profile & Wallet shown only when logged in */}
             {hasToken && (
-  <LoginTrigger
-    buttonText={
-      <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center cursor-pointer">
-        <img
-          src="/icons/login.svg"
-          alt="User Avatar"
-          className="w-full h-full object-cover"
-        />
-      </div>
-    }
-    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-  />
-)}
-
+              <LoginTrigger
+                buttonText={
+                  <div className="view_btn w-10 h-10 flex items-center justify-center rounded-full overflow-hidden hover:opacity-80 transition-all">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                    >
+                      <path
+                        d="M20.1612 1.52601C20.2324 1.17783 21.0307 1.18575 20.9991 1.62888L20.9833 12.5726C20.8173 13.2373 20.3667 13.6883 19.7107 13.8703C19.5289 15.4055 18.7542 16.7428 17.6555 17.7873C17.782 19.2591 17.5449 20.7468 15.8375 21H5.25351C3.52245 20.7863 3.2458 19.275 3.38807 17.7873C2.28936 16.7349 1.51473 15.3976 1.33293 13.8703C0.613629 13.6646 0.107747 13.1503 0.0445116 12.3827C-0.0108193 11.7259 -0.0187237 10.5152 0.0445116 9.85844C0.107747 9.20166 0.629437 8.58444 1.29341 8.45783C1.39616 7.68235 1.52263 6.9227 1.77558 6.18679C3.36436 1.51809 8.56546 -1.0299 13.2765 0.394443C16.8098 1.47062 19.434 4.74662 19.7423 8.43409L20.1612 8.57653V1.52601ZM4.20223 15.5875C5.48274 16.8694 9.78274 17.2176 11.5454 17.1305C13.4346 17.0356 17.4105 16.4896 17.6476 14.1157C17.8373 12.2482 17.5132 10.0879 17.6476 8.18879C17.3947 6.36879 15.7506 5.97314 14.2408 5.56957C13.9642 5.49835 13.2449 5.26888 13.0077 5.27679C12.9287 5.27679 12.9129 5.29261 12.8496 5.33218C12.5888 5.48253 11.9881 6.33714 11.7509 6.38461H9.30057L8.13862 5.29261C6.44708 5.71201 3.64102 5.97314 3.44341 8.1967C3.30903 9.72392 3.41179 11.8842 3.49874 13.443C3.54616 14.353 3.49874 14.899 4.19432 15.6033L4.20223 15.5875Z"
+                        fill="#CED5E3"
+                      />
+                    </svg>
+                  </div>
+                }
+                className="p-2 rounded-lg hover:opacity-80 transition-colors"
+              />
+            )}
           </div>
         </div>
       </motion.header>
@@ -1217,16 +1242,20 @@ const Header = ({
                       >
                         <Link
                           to={item.path}
-                          className={`flex  items-center gap-3 rounded-[8px]  backdrop-blur-[2px]${
+                          className={`flex items-center gap-3 px-3 py-2 rounded-[8px] transition-all duration-200 
+                        ${
+                          // ✅ Collapsed + Active
+                          sidebarCollapsed && location.pathname === item.path
+                            ? "wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
+                            : // ✅ Expanded + Active
+                            !sidebarCollapsed && location.pathname === item.path
+                            ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                            : // ✅ Collapsed + Inactive
                             sidebarCollapsed
-                              ? "items-center justify-center gap-3 rounded-[8px]  backdrop-blur-[2px]"
-                              : "gap-3 bg-white/10 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]"
-                          } px-3 py-2 rounded-lg transition-all duration-200 
-                      ${
-                        location.pathname === item.path
-                          ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                          : "text-[#A8A8A8] hover:text-white/90 hover:bg-white/5"
-                      }`}
+                            ? "justify-center text-[##000] hover:text-white/90 hover:bg-white/5"
+                            : // ✅ Expanded + Inactive
+                              "gap-3 bg-white/10 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+                        }`}
                           onClick={closeSidebar}
                         >
                           <span className="text-lg flex items-center justify-center">
@@ -1288,9 +1317,7 @@ const Header = ({
             {/* Account Menu */}
             <div className="py-2 mt-1 relative customborder">
               <div className="space-y-1">
-                {accountItems
-                .filter((item) => hasToken || item.path !== "/affiliate")
-                .map((item) => (
+                {accountItems.map((item) => (
                   <motion.div
                     key={item.path}
                     whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
