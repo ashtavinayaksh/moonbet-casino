@@ -128,7 +128,7 @@ function App() {
         </Routes>
       </AuthModalHandler>
 
-      {/* ✅ SIMPLIFIED TOAST CONTAINER - DISABLE closeOnClick */}
+      {/* SIMPLIFIED TOAST CONTAINER - DISABLE closeOnClick */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -142,7 +142,7 @@ function App() {
         theme="dark"
         closeButton={true}
       />
-      {/* ✅ Add the Tidio Chat Button (visible globally) */}
+      {/* Add the Tidio Chat Button (visible globally) */}
       <TidioChatButton />
     </Router>
   );
