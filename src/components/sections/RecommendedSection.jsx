@@ -24,8 +24,8 @@ const RecommendedSection = () => {
     const scrollWidth = container.scrollWidth;
     const clientWidth = container.clientWidth;
 
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    setCanScrollLeft(scrollLeft > 1);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
   };
 
   useEffect(() => {
@@ -54,8 +54,8 @@ const RecommendedSection = () => {
   // Add scroll position check after games are loaded
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (container && games.length > 0) {
-      checkScrollPosition();
+    if (container) {
+      setTimeout(checkScrollPosition, 500);
       container.addEventListener("scroll", checkScrollPosition);
       window.addEventListener("resize", checkScrollPosition);
 
@@ -199,7 +199,7 @@ const RecommendedSection = () => {
 
   return (
     <motion.section
-      className="w-full relative pt-10 bg-black z-[9999]"
+      className="w-full relative pt-10 bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -214,7 +214,7 @@ const RecommendedSection = () => {
             type: "spring",
             stiffness: 100,
           }}
-          className="flex justify-between items-center mb-10"
+          className="flex justify-between items-center mb-1"
         >
           <div className="flex items-center gap-3">
             <motion.span
@@ -241,7 +241,7 @@ const RecommendedSection = () => {
               </svg>
             </motion.span>
             <motion.h3
-              className="text-[#CED5E3] font-[400]  text-[16px] md:text-[18px] leading-[44px] 
+              className="text-[#CED5E3] font-[400]  text-[14px] md:text-[18px] leading-[44px] 
                      font-['Neuropolitical'] not-italic uppercase"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}

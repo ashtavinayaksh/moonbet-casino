@@ -214,7 +214,7 @@ const SlotsSection = () => {
             type: "spring",
             stiffness: 100,
           }}
-          className="flex justify-between items-center mb-10"
+          className="flex justify-between items-center mb-1"
         >
           <div className="flex items-center gap-3">
             <motion.span

@@ -398,6 +398,7 @@ const Header = ({
       className:
         "rounded-lg bg-[rgba(255,255,255,0.15)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]",
       path: "/leaderboard",
+      activeCollapsedIcon: "/active-menu/leaderboard-active-collasped.svg", // Add this
     },
   ];
 
@@ -531,28 +532,16 @@ const Header = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleDesktopSidebar}
-              className="provider_btn hidden lg:flex items-center justify-center w-10 h-10 rounded-lg  from-[rgba(30,30,30,0.15)] to-[rgba(75,75,75,0.15)] shadow-[1px_2px_1px_0_rgba(0,0,0,0.40)] backdrop-blur-[1.5px] hover:from-[rgba(40,40,40,0.20)] hover:to-[rgba(85,85,85,0.20)] transition-all duration-300 group"
+              className="hidden md:flex view_btn items-center justify-center w-10 h-10 rounded-lg from-[rgba(30,30,30,0.15)] to-[rgba(75,75,75,0.15)] shadow-[1px_2px_1px_0_rgba(0,0,0,0.40)] backdrop-blur-[1.5px] hover:from-[rgba(40,40,40,0.20)] hover:to-[rgba(85,85,85,0.20)] transition-all duration-300 group"
             >
               <motion.div
                 animate={{ rotate: sidebarCollapsed ? 0 : 180 }}
                 transition={{ duration: 0.3 }}
                 className="flex flex-col gap-1"
               >
-                <span
-                  className={`block h-0.5 bg-[#7D7D7D] transition-all duration-300 ${
-                    sidebarCollapsed ? "w-5" : "w-5"
-                  }`}
-                ></span>
-                <span
-                  className={`flex justify-end items-end h-0.5 bg-[#7D7D7D] transition-all duration-300 self-end ${
-                    sidebarCollapsed ? "w-3" : "w-3"
-                  }`}
-                ></span>
-                <span
-                  className={`block h-0.5 bg-[#7D7D7D] transition-all duration-300 ${
-                    sidebarCollapsed ? "w-5" : "w-5"
-                  }`}
-                ></span>
+                <span className="hidden md:block w-5 h-0.5 bg-[#7D7D7D]" />
+                <span className="hidden md:block w-3 h-0.5 bg-[#7D7D7D]" />
+                <span className="hidden md:block w-5 h-0.5 bg-[#7D7D7D]" />
               </motion.div>
             </motion.button>
 
@@ -774,7 +763,7 @@ const Header = ({
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">
             {/* 🧍 User Avatar / Leaderboard Link */}
-            <Link
+            {/* <Link
               to="/leaderboard"
               className="view_btn w-10 h-10 flex items-center justify-center overflow-hidden hover:opacity-80 transition-all"
             >
@@ -790,7 +779,7 @@ const Header = ({
                   fill="#7D7D7D"
                 />
               </svg>
-            </Link>
+            </Link> */}
             {/* ✅ Show Login & Register only when NOT logged in */}
             {!hasToken && (
               <>
@@ -1243,38 +1232,54 @@ const Header = ({
                         <Link
                           to={item.path}
                           className={`flex items-center gap-3 px-3 py-2 rounded-[8px] transition-all duration-200 
-                        ${
-                          // ✅ Collapsed + Active
-                          sidebarCollapsed && location.pathname === item.path
-                            ? "wallet-btn2 view_moon_btn relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
-                            : // ✅ Expanded + Active
-                            !sidebarCollapsed && location.pathname === item.path
-                            ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                            : // ✅ Collapsed + Inactive
-                            sidebarCollapsed
-                            ? "justify-center text-[##000] hover:text-white/90 hover:bg-white/5"
-                            : // ✅ Expanded + Inactive
-                              "gap-3 bg-white/10 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                        }`}
+                         ${
+                           // ✅ Collapsed + Active
+                           sidebarCollapsed && location.pathname === item.path
+                             ? "wallet-btn2 view_moon_btn relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
+                             : // ✅ Expanded + Active
+                             !sidebarCollapsed &&
+                               location.pathname === item.path
+                             ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
+                             : // ✅ Collapsed + Inactive
+                             sidebarCollapsed
+                             ? "justify-center text-[##000] hover:text-white/90 hover:bg-white/5"
+                             : // ✅ Expanded + Inactive
+                               "gap-3 bg-white/10 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+                         }`}
                           onClick={closeSidebar}
                         >
                           <span className="text-lg flex items-center justify-center">
                             {typeof item.icon === "string" &&
                             item.icon.startsWith("/") ? (
                               <img
-                                src={item.icon}
+                                src={
+                                  // ✅ Collapsed + Active - Use special active image
+                                  sidebarCollapsed &&
+                                  location.pathname === item.path &&
+                                  item.activeCollapsedIcon
+                                    ? item.activeCollapsedIcon
+                                    : // Default to regular icon for other states
+                                      item.icon
+                                }
                                 alt={item.label}
                                 className={`w-5 h-5 object-contain transition-all duration-300
-                                ${
-                                  location.pathname === item.path
-                                    ? "opacity-100 brightness-0 invert" // stays white when active
-                                    : "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                                }`}
+                             ${
+                               // ✅ Collapsed + Active - Remove filters to show colored image
+                               sidebarCollapsed &&
+                               location.pathname === item.path
+                                 ? "opacity-100 filter-none" // Show original colored image
+                                 : // ✅ Expanded + Active - White icon
+                                 location.pathname === item.path
+                                 ? "opacity-100 brightness-0 invert"
+                                 : // ✅ Inactive states
+                                   "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                             }`}
                               />
                             ) : (
                               item.icon
                             )}
                           </span>
+
                           <AnimatePresence>
                             {!sidebarCollapsed && (
                               <motion.span

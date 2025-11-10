@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AffiliateProgram from "./pages/AffiliateProgram";
 import Leaderboard from "./pages/Leaderboard";
 import TidioChatButton from "./components/TidioChatButton";
-import Blackjack from "./pages/Blackjack/Blackjack";
+import Blackjack from "./pages/Blackjack";
 
 // Placeholder pages
 const HoneypotPage = () => (
