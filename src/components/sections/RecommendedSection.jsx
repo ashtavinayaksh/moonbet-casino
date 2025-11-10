@@ -17,15 +17,16 @@ const RecommendedSection = () => {
 
   // Check scroll position
   const checkScrollPosition = () => {
-    if (!scrollContainerRef.current) return;
-
     const container = scrollContainerRef.current;
-    const scrollLeft = container.scrollLeft;
-    const scrollWidth = container.scrollWidth;
-    const clientWidth = container.clientWidth;
+    if (!container) return;
 
-    setCanScrollLeft(scrollLeft > 1);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    const scrollLeft = Math.round(container.scrollLeft);
+    const scrollWidth = Math.round(container.scrollWidth);
+    const clientWidth = Math.round(container.clientWidth);
+
+    // ✅ fix: use >= 1 instead of > 10
+    setCanScrollLeft(scrollLeft >= 1);
+    setCanScrollRight(scrollLeft <= scrollWidth - clientWidth - 1);
   };
 
   useEffect(() => {
@@ -54,8 +55,8 @@ const RecommendedSection = () => {
   // Add scroll position check after games are loaded
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (container) {
-      setTimeout(checkScrollPosition, 500);
+    if (container && games.length > 0) {
+      checkScrollPosition();
       container.addEventListener("scroll", checkScrollPosition);
       window.addEventListener("resize", checkScrollPosition);
 
@@ -85,6 +86,7 @@ const RecommendedSection = () => {
           left: targetScroll,
           behavior: "smooth",
         });
+        setTimeout(checkScrollPosition, 300);
       } else {
         // Desktop scroll behavior
         const scrollAmount = 300;
