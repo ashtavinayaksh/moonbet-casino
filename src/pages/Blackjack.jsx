@@ -105,7 +105,7 @@ const Blackjack = () => {
       <audio ref={chipClickRef} src="/sounds/chip-click.mp3" preload="auto" />
 
       {/* ==================== TABLE ==================== */}
-      <div className="relative w-full max-w-[1366px] h-[500px] sm:h-[501px] rounded-[24px] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden p-4 md:p-6 bg-transparent mt-5">
+      <div className="relative w-full max-w-[1366px] h-[500px] sm:h-[501px] rounded-[24px] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col p-4 md:p-6 bg-transparent mt-5">
         {/* Header */}
         <div className="flex items-center gap-2 text-[#d5dde8] mb-2 relative z-10 text-sm sm:text-base">
           <span className="text-lg sm:text-xl">🂡</span>
