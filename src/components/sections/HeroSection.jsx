@@ -361,70 +361,70 @@ const HeroSection = () => {
 
   // Auto update winners with push/pop animation
   useEffect(() => {
-  let interval;
+    let interval;
 
-  const getCurrencySymbol = (currency) => {
-    switch (currency?.toUpperCase()) {
-      case "USD":
-        return "$";
-      case "EUR":
-        return "€";
-      case "GBP":
-        return "£";
-      case "INR":
-        return "₹";
-      case "JPY":
-        return "¥";
-      case "BTC":
-        return "₿";
-      case "ETH":
-        return "Ξ";
-      case "SOL":
-        return "◎";
-      default:
-        return "";
-    }
-  };
-
-  const parseAmountWithSymbol = (amountStr) => {
-    if (!amountStr) return "$0.00";
-
-    // Example formats from backend: "1.6 USD", "2.4 EURO", "0.3 EUR"
-    const parts = amountStr.trim().split(" ");
-    let amount = parts[0];
-    let currency = parts[1] || "USD";
-
-    const symbol = getCurrencySymbol(currency);
-    return `${symbol}${parseFloat(amount).toFixed(2)}`;
-  };
-
-  const fetchRecentWins = async () => {
-    try {
-      const { data } = await axios.get(
-        "/wallet-service/api/games/recent-wins?limit=20"
-      );
-
-      if (data?.success && Array.isArray(data.data)) {
-        const mapped = data.data.map((item, index) => ({
-          id: `${item.user}-${index}`,
-          gameImage: `/slots/img${(index % 9) + 1}.svg`,
-          amount: parseAmountWithSymbol(item.amount),
-          username: item.user || "Player***XXX",
-          icon: `/moon/moon${(index % 3) + 1}.svg`,
-          timeAgo: item.timeAgo,
-        }));
-        setRecentWinsData(mapped);
+    const getCurrencySymbol = (currency) => {
+      switch (currency?.toUpperCase()) {
+        case "USD":
+          return "$";
+        case "EUR":
+          return "€";
+        case "GBP":
+          return "£";
+        case "INR":
+          return "₹";
+        case "JPY":
+          return "¥";
+        case "BTC":
+          return "₿";
+        case "ETH":
+          return "Ξ";
+        case "SOL":
+          return "◎";
+        default:
+          return "";
       }
-    } catch (err) {
-      console.error("❌ Failed to fetch recent wins:", err);
-    }
-  };
+    };
 
-  // initial fetch
-  fetchRecentWins();
+    const parseAmountWithSymbol = (amountStr) => {
+      if (!amountStr) return "$0.00";
 
-  // refresh every 5 seconds
-  interval = setInterval(fetchRecentWins, 5000);
+      // Example formats from backend: "1.6 USD", "2.4 EURO", "0.3 EUR"
+      const parts = amountStr.trim().split(" ");
+      let amount = parts[0];
+      let currency = parts[1] || "USD";
+
+      const symbol = getCurrencySymbol(currency);
+      return `${symbol}${parseFloat(amount).toFixed(2)}`;
+    };
+
+    const fetchRecentWins = async () => {
+      try {
+        const { data } = await axios.get(
+          "/wallet-service/api/games/recent-wins?limit=20"
+        );
+
+        if (data?.success && Array.isArray(data.data)) {
+          const mapped = data.data.map((item, index) => ({
+            id: `${item.user}-${index}`,
+            gameImage: `/slots/img${(index % 9) + 1}.svg`,
+            amount: parseAmountWithSymbol(item.amount),
+            username: item.user || "Player***XXX",
+            icon: `/moon/moon${(index % 3) + 1}.svg`,
+            timeAgo: item.timeAgo,
+          }));
+          setRecentWinsData(mapped);
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch recent wins:", err);
+      }
+    };
+
+    // initial fetch
+    fetchRecentWins();
+
+    // refresh every 5 seconds
+    interval = setInterval(fetchRecentWins, 5000);
 
     return () => clearInterval(interval);
   }, [isPaused]);
@@ -452,7 +452,7 @@ const HeroSection = () => {
   };
 
   return (
-      <section className="relative md:min-h-screen bg-black overflow-hidden">
+    <section className="relative md:min-h-screen bg-black overflow-hidden">
       {/* Recent Wins Section - Dark background strip */}
       <div className="absolute top-0 left-0 right-0 z-20">
         <div
@@ -558,9 +558,10 @@ const HeroSection = () => {
                     {/* Username with Icon */}
                     <motion.div className="flex items-center gap-1">
                       <img
-                      src={`/moon/moon${(index % 3) + 1}.svg`}
-                      alt="icon" 
-                      className="w-3 h-3" />
+                        src={`/moon/moon${(index % 3) + 1}.svg`}
+                        alt="icon"
+                        className="w-3 h-3"
+                      />
                       <span className="text-gray-400 text-[8px] xs:text-[9px]">
                         {win.username}
                       </span>
@@ -629,13 +630,13 @@ const HeroSection = () => {
       </div>
 
       {/* Hero Content - Main Banner */}
-      <div className="relative z-10 w-full md:min-h-screen h-[350px] flex items-center justify-center pt-24 sm:pt-28 md:pt-32">
+      <div className="relative z-10 w-full md:min-h-screen h-[300px] flex items-center justify-center pt-24 sm:pt-28 md:pt-32">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-center bg-no-repeat bg-cover h-[400px] sm:h-auto"
           style={{
             backgroundImage: "url('/home-assets/home-banner.png')",
-            backgroundSize: "cover", 
+            backgroundSize: "cover",
           }}
         >
           {/* Gradient overlay */}
