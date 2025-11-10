@@ -107,7 +107,7 @@ const GameBetsSection = () => {
 
         {/* Tabs */}
         <div
-          class="provider_btn flex gap-2 mb-4 sm:mb-6 p-1 rounded-[8px] overflow-x-auto scrollbar-hide w-fit"
+          class="bet_btn flex gap-2 mb-4 sm:mb-6 p-1 rounded-[8px] overflow-x-auto scrollbar-hide w-fit"
           style={{
             background:
               "linear-gradient(0deg, rgba(30, 30, 30, 0.15) 0%, rgba(75, 75, 75, 0.15) 100%)",

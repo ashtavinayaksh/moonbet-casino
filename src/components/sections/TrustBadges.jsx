@@ -89,7 +89,7 @@ const TrustBadges = () => {
     <section className="relative w-full py-8 md:py-2  bg-black">
       <div className="max-w-7xl mx-auto px-4">
         {/* Mobile: horizontal scroll, Desktop: grid */}
-        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto scrollbar-hide sm:overflow-visible">
+        <div className="provider_grid sm:grid sm:grid-cols-4 lg:grid-cols-4 gap-4">
           {badges.map((badge, index) => (
             <motion.div
               key={badge.id}
@@ -97,7 +97,7 @@ const TrustBadges = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="flex-shrink-0 w-[80%] sm:w-auto"
+              className="flex-shrink-0 sm:w-auto"
             >
               <div
                 className="provider_btn relative flex items-center gap-3 px-6 py-4 transition-all duration-300 hover:border-white/60 group rounded-xl"

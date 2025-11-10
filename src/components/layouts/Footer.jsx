@@ -289,44 +289,13 @@ const Footer = () => {
 
           {/* ================= BOTTOM SECTION ================= */}
           <motion.div
-            className="flex flex-col sm:flex-row justify-between items-center py-6 md:py-8 gap-4 mb-20 sm:mb-16 md:mb-12 lg:mb-0"
+            className="flex justify-center items-center py-6 md:py-8 mb-20 sm:mb-16 md:mb-12 lg:mb-0"
             variants={itemVariants}
           >
-            {/* BeGambleAware */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
-              <motion.div
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10 w-full sm:w-auto justify-center sm:justify-start"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 0 20px rgba(255, 107, 0, 0.3)",
-                }}
-              >
-                <div className="scale-90 sm:scale-100">{BegambleawareIcon}</div>
-                <span className="text-xs sm:text-sm font-medium text-white/80">
-                  BeGambleAware
-                </span>
-                <span className="text-sm sm:text-base font-bold text-orange-500">
-                  18+
-                </span>
-              </motion.div>
-            </div>
-
-            {/* Copyright */}
-            <div className="text-xs sm:text-sm text-white/60 text-center hidden md:block">
+            {/* Centered Copyright */}
+            <div className="text-xs sm:text-sm text-white/60 text-center">
               © MoonBet {new Date().getFullYear()}
             </div>
-
-            {/* Contact Button */}
-            <motion.button
-              className="hidden md:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 backdrop-blur-lg rounded-lg border border-white/10 justify-center sm:justify-start"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 0 20px rgba(255, 107, 0, 0.3)",
-              }}
-            >
-              <div className="scale-90 sm:scale-100">{ContactIcon}</div>
-              <span>Contact Us</span>
-            </motion.button>
           </motion.div>
         </div>
       </motion.div>

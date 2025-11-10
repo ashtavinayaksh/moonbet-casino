@@ -147,7 +147,7 @@ const ProvidersSection = () => {
         <div className="relative">
           <div
             ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
+            className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-2"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -159,15 +159,15 @@ const ProvidersSection = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
-                className="bet_btn flex-shrink-0 w-[140px] h-[60px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
+                className="trust_btn flex-shrink-0 w-[25%] sm:w-[140px] sm:h-[60px] h-[50px] bg-black/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all duration-300"
               >
                 <img
                   src={provider.logo}
                   alt={provider.name}
-                  className=" max-w-[120px] max-h-[40px] object-contain filter brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
+                  className="max-w-[80px] sm:max-w-[120px] max-h-[35px] sm:max-h-[40px] object-contain filter brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
                   onError={(e) => {
                     e.target.style.display = "none";
-                    e.target.parentElement.innerHTML = `<span class='text-white/60 text-xs font-medium'>${provider.name}</span>`;
+                    e.target.parentElement.innerHTML = `<span class='text-white/60 text-xs font-medium text-center'>${provider.name}</span>`;
                   }}
                 />
               </motion.div>

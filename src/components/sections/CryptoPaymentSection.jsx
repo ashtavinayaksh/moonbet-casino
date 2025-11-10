@@ -9,17 +9,17 @@ const CryptoPaymentSection = () => {
 
   // Alternating Bitcoin and Solana pattern
   const cryptoIcons = [
-    { id: 1, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
-    { id: 2, type: "solana", logo: "/crypto-assets/solana.svg" },
-    { id: 3, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
-    { id: 4, type: "solana", logo: "/crypto-assets/solana.svg" },
-    { id: 5, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
-    { id: 6, type: "solana", logo: "/crypto-assets/solana.svg" },
-    { id: 7, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
-    { id: 8, type: "solana", logo: "/crypto-assets/solana.svg" },
-    { id: 9, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
-    { id: 10, type: "solana", logo: "/crypto-assets/solana.svg" },
-    { id: 11, type: "bitcoin", logo: "/crypto-assets/bitcoin.svg" },
+    { id: 1, type: "bitcoin", logo: "/crypto-assets/interacLogo.webp" },
+    { id: 2, type: "solana", logo: "/crypto-assets/sol.svg" },
+    { id: 3, type: "bitcoin", logo: "/crypto-assets/btc.svg" },
+    { id: 4, type: "solana", logo: "/crypto-assets/bnb.svg" },
+    { id: 5, type: "bitcoin", logo: "/crypto-assets/link.svg" },
+    { id: 6, type: "solana", logo: "/crypto-assets/ltc.svg" },
+    { id: 7, type: "bitcoin", logo: "/crypto-assets/ton.svg" },
+    { id: 8, type: "solana", logo: "/crypto-assets/trx.svg" },
+    { id: 9, type: "bitcoin", logo: "/crypto-assets/xrp.svg" },
+    { id: 10, type: "solana", logo: "/crypto-assets/ada.svg" },
+    { id: 11, type: "bitcoin", logo: "/crypto-assets/eth.svg" },
   ];
 
   // Check scroll position for mobile
@@ -89,11 +89,11 @@ const CryptoPaymentSection = () => {
                 className="flex-shrink-0"
               >
                 {crypto.type === "bitcoin" ? (
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-[#F7931A] flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="w-12 h-12 lg:w-12 lg:h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
                     <img
                       src={crypto.logo}
                       alt="Bitcoin"
-                      className="w-6 h-6 lg:w-7 lg:h-7 object-contain"
+                      className="w-full h-full object-contain" // ✅ FULL WIDTH IMAGE FIX
                       onError={(e) => {
                         e.target.style.display = "none";
                         e.target.parentElement.innerHTML =
@@ -106,7 +106,7 @@ const CryptoPaymentSection = () => {
                     <img
                       src={crypto.logo}
                       alt="Solana"
-                      className="w-full h-full object-contain p-1"
+                      className="w-full h-full object-contain" // ✅ FULL WIDTH IMAGE FIX
                       onError={(e) => {
                         e.target.style.display = "none";
                         e.target.parentElement.innerHTML =
@@ -191,7 +191,7 @@ const CryptoPaymentSection = () => {
                 className="flex-shrink-0"
               >
                 {crypto.type === "bitcoin" ? (
-                  <div className="w-10 h-10 rounded-full bg-[#F7931A] flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
                     <img
                       src={crypto.logo}
                       alt="Bitcoin"

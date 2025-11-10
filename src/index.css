@@ -698,27 +698,26 @@
 
 /* Border glass effect */
 .customborder::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: radial-gradient(
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
     circle at center,
     rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.10) 35%,
+    rgba(255, 255, 255, 0.1) 35%,
     rgba(255, 255, 255, 0.05) 70%,
     rgba(255, 255, 255, 0) 100%
   );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    transition: background .3s
-ease;
-    border-radius: 8px;
-    /* background: red; */
-    height: 1px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.3s ease;
+  border-radius: 8px;
+  /* background: red; */
+  height: 1px;
 }
 
 /* Gradient border effect for provider cards */
@@ -791,6 +790,43 @@ ease;
   pointer-events: none;
   z-index: 1;
 }
+/* Mobile view: 2-column grid layout with balanced spacing */
+@media (max-width: 640px) {
+  .provider_btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: linear-gradient(
+      180deg,
+      rgba(20, 20, 20, 0.8) 0%,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  .provider_btn:before {
+    border-radius: 12px;
+    background: linear-gradient(
+      157deg,
+      rgba(255, 255, 255, 0.35) 2.12%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(30, 30, 30, 0.9) 100%
+    );
+  }
+
+  /* Grid layout for mobile section container */
+  .provider_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    justify-items: center;
+  }
+}
+
 .bet_btn {
   position: relative;
   border-radius: 8px;
@@ -803,9 +839,9 @@ ease;
   border-radius: 8px;
   background: linear-gradient(
     321deg,
-    rgb(255 255 255 / 46%) 0%,
-    rgb(255 255 255 / 8%) 50%,
-    rgb(30 30 30 / 96%) 100%
+    rgb(255 255 255 / 17%) 0%,
+    rgb(255 255 255 / 7%) 50%,
+    rgb(30 30 30 / 30%) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -835,4 +871,26 @@ ease;
   border-radius: 8px;
 
   height: 1px;
+}
+.trust_btn {
+  position: relative;
+  border-radius: 8px;
+}
+.trust_btn:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 8px;
+  background: linear-gradient(
+    172deg,
+    rgb(255 255 255 / 35%) 0%,
+    rgb(255 255 255 / 0%) 50%,
+    rgb(30 30 30 / 96%) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
 }
