@@ -253,7 +253,7 @@ const CircularWheel = () => {
   };
 
   return (
-    <div className="relative w-full flex items-center justify-center bg-black overflow-hidden -mb-40 md:-mb-60 -mt-5 md:-mt-20">
+    <div className="relative w-full flex items-center justify-center bg-black overflow-hidden -mb-40 md:-mb-60 -mt-5 md:-mt-10">
       {/* 🟣 NEW MASK CONTAINER */}
       <div className="wheel-mask">
         <motion.div

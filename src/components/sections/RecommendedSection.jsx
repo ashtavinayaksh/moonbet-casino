@@ -17,18 +17,18 @@ const RecommendedSection = () => {
 
   // Check scroll position
   const checkScrollPosition = () => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const scrollLeft = container.scrollLeft;
-  const scrollWidth = container.scrollWidth;
-  const clientWidth = container.clientWidth;
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
 
-  const tolerance = 5; // allows small rounding differences
+    const tolerance = 5; // allows small rounding differences
 
-  setCanScrollLeft(scrollLeft > tolerance);
-  setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
-};
+    setCanScrollLeft(scrollLeft > tolerance);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
+  };
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -55,38 +55,38 @@ const RecommendedSection = () => {
 
   // Add scroll position check after games are loaded
   useEffect(() => {
-  const container = scrollContainerRef.current;
-  if (!container || games.length === 0) return;
+    const container = scrollContainerRef.current;
+    if (!container || games.length === 0) return;
 
-  const handle = () => checkScrollPosition();
-  container.addEventListener("scroll", handle);
-  window.addEventListener("resize", handle);
+    const handle = () => checkScrollPosition();
+    container.addEventListener("scroll", handle);
+    window.addEventListener("resize", handle);
 
-  // ensure initial state after layout paint
-  const timeout = setTimeout(handle, 300);
+    // ensure initial state after layout paint
+    const timeout = setTimeout(handle, 300);
 
-  return () => {
-    container.removeEventListener("scroll", handle);
-    window.removeEventListener("resize", handle);
-    clearTimeout(timeout);
-  };
-}, [games]);
+    return () => {
+      container.removeEventListener("scroll", handle);
+      window.removeEventListener("resize", handle);
+      clearTimeout(timeout);
+    };
+  }, [games]);
 
   const scroll = (direction) => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const scrollAmount = window.innerWidth < 640 ? container.clientWidth : 300;
-  const targetScroll =
-    direction === "left"
-      ? container.scrollLeft - scrollAmount
-      : container.scrollLeft + scrollAmount;
+    const scrollAmount = window.innerWidth < 640 ? container.clientWidth : 300;
+    const targetScroll =
+      direction === "left"
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
 
-  container.scrollTo({ left: targetScroll, behavior: "smooth" });
+    container.scrollTo({ left: targetScroll, behavior: "smooth" });
 
-  // re-check after animation completes
-  setTimeout(checkScrollPosition, 400);
-};
+    // re-check after animation completes
+    setTimeout(checkScrollPosition, 400);
+  };
 
   const handlePlayNow = (gameName) => {
     // Replace spaces with dashes for clean URLs
@@ -190,7 +190,7 @@ const RecommendedSection = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container max-w-7xl mx-auto px-4">
+      <div className="container max-w-7xl mx-auto px-4 py-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -233,7 +233,7 @@ const RecommendedSection = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              RECOMMENDED
+              TRANDING
             </motion.h3>
           </div>
 
@@ -345,9 +345,9 @@ const RecommendedSection = () => {
                 ref={scrollContainerRef}
                 className="grid grid-flow-col auto-cols-[calc(25%-8px)] sm:auto-cols-[145px] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
-    WebkitOverflowScrolling: "touch",
-    overscrollBehaviorX: "contain",
-  }}
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehaviorX: "contain",
+                }}
               >
                 {games.map((game, index) => (
                   <motion.div

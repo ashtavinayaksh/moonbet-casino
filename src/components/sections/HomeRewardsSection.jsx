@@ -112,7 +112,7 @@ const HomeRewardsSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full py-16 md:py-5 relative overflow-hidden"
+      className="w-full py-16 md:py-10 relative overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4">
         {/* Cards Container */}

@@ -452,7 +452,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative md:min-h-screen bg-black overflow-hidden">
+    <section className="relative md:h-[200] bg-black">
       {/* Recent Wins Section - Dark background strip */}
       <div className="absolute top-0 left-0 right-0 z-20">
         <div
@@ -630,18 +630,18 @@ const HeroSection = () => {
       </div>
 
       {/* Hero Content - Main Banner */}
-      <div className="relative z-10 w-full md:min-h-screen h-[300px] flex items-center justify-center pt-24 sm:pt-28 md:pt-32">
+      <div className="relative z-10 w-full  flex items-center justify-center pt-24 sm:pt-28 md:pt-32">
         {/* Background image */}
-        <div
+        {/* <div
           className="absolute inset-0 bg-center bg-no-repeat bg-cover h-[400px] sm:h-auto"
           style={{
             backgroundImage: "url('/home-assets/home-banner.png')",
             backgroundSize: "cover",
           }}
         >
-          {/* Gradient overlay */}
+         
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        </div>
+        </div> */}
 
         {/* Foreground content */}
         <div className="relative container mx-auto px-4 z-20">

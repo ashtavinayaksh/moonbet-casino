@@ -20,15 +20,12 @@ import CircularWheel from "../components/circular/CircularWheel";
 const Homepage = () => {
   return (
     <div className="min-h-screen bg-black">
-      <HeroSection />
-      <CircularWheel />
-      {/* <VipMoonSection /> */}
       <HomeRewardsSection />
-      {/* <HomeGamesSection /> */}
+      <HeroSection />
       <RecommendedSection />
-      {/* <CasinoWheel2 /> */}
       <SlotsSection />
       <LiveCasino />
+      <CircularWheel />
       <ProvidersSection />
       <GameBetsSection />
       <HomeFAQSection />

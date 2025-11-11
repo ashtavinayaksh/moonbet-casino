@@ -17,17 +17,17 @@ const LiveCasino = () => {
 
   // Check scroll position
   const checkScrollPosition = () => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const scrollLeft = container.scrollLeft;
-  const scrollWidth = container.scrollWidth;
-  const clientWidth = container.clientWidth;
-  const tolerance = 5; // Allow small rounding differences
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
+    const tolerance = 5; // Allow small rounding differences
 
-  setCanScrollLeft(scrollLeft > tolerance);
-  setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
-};
+    setCanScrollLeft(scrollLeft > tolerance);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
+  };
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -54,46 +54,45 @@ const LiveCasino = () => {
 
   // Add scroll position check after games are loaded
   useEffect(() => {
-  const container = scrollContainerRef.current;
-  if (!container || games.length === 0) return;
+    const container = scrollContainerRef.current;
+    if (!container || games.length === 0) return;
 
-  const handle = () => checkScrollPosition();
-  container.addEventListener("scroll", handle);
-  window.addEventListener("resize", handle);
+    const handle = () => checkScrollPosition();
+    container.addEventListener("scroll", handle);
+    window.addEventListener("resize", handle);
 
-  // ✅ Delay initial check after layout
-  const timeout = setTimeout(handle, 300);
+    // ✅ Delay initial check after layout
+    const timeout = setTimeout(handle, 300);
 
-  return () => {
-    container.removeEventListener("scroll", handle);
-    window.removeEventListener("resize", handle);
-    clearTimeout(timeout);
-  };
-}, [games]);
-
+    return () => {
+      container.removeEventListener("scroll", handle);
+      window.removeEventListener("resize", handle);
+      clearTimeout(timeout);
+    };
+  }, [games]);
 
   const scroll = (direction) => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const isMobile = window.innerWidth < 640;
-  const scrollAmount = isMobile ? container.clientWidth : 300;
+    const isMobile = window.innerWidth < 640;
+    const scrollAmount = isMobile ? container.clientWidth : 300;
 
-  const targetScroll =
-    direction === "left"
-      ? container.scrollLeft - scrollAmount
-      : container.scrollLeft + scrollAmount;
+    const targetScroll =
+      direction === "left"
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
 
-  container.scrollTo({
-    left: targetScroll,
-    behavior: "smooth",
-  });
+    container.scrollTo({
+      left: targetScroll,
+      behavior: "smooth",
+    });
 
-  // ✅ Force re-check after smooth scroll finishes
-  setTimeout(() => {
-    checkScrollPosition();
-  }, 400);
-};
+    // ✅ Force re-check after smooth scroll finishes
+    setTimeout(() => {
+      checkScrollPosition();
+    }, 400);
+  };
 
   const handlePlayNow = (gameName) => {
     // Replace spaces with dashes for clean URLs
@@ -348,9 +347,9 @@ const LiveCasino = () => {
                 ref={scrollContainerRef}
                 className="grid grid-flow-col auto-cols-[calc(25%-8px)] sm:auto-cols-[145px] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
-    WebkitOverflowScrolling: "touch",
-    overscrollBehaviorX: "contain",
-  }}
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehaviorX: "contain",
+                }}
               >
                 {games.map((game, index) => (
                   <motion.div

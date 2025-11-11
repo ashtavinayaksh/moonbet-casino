@@ -17,17 +17,17 @@ const SlotsSection = () => {
 
   // Check scroll position
   const checkScrollPosition = () => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const scrollLeft = container.scrollLeft;
-  const scrollWidth = container.scrollWidth;
-  const clientWidth = container.clientWidth;
-  const tolerance = 5; // small margin for rounding errors
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
+    const tolerance = 5; // small margin for rounding errors
 
-  setCanScrollLeft(scrollLeft > tolerance);
-  setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
-};
+    setCanScrollLeft(scrollLeft > tolerance);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
+  };
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -54,48 +54,47 @@ const SlotsSection = () => {
 
   // Add scroll position check after games are loaded
   useEffect(() => {
-  const container = scrollContainerRef.current;
-  if (!container || games.length === 0) return;
+    const container = scrollContainerRef.current;
+    if (!container || games.length === 0) return;
 
-  const handle = () => checkScrollPosition();
-  container.addEventListener("scroll", handle);
-  window.addEventListener("resize", handle);
+    const handle = () => checkScrollPosition();
+    container.addEventListener("scroll", handle);
+    window.addEventListener("resize", handle);
 
-  const timeout = setTimeout(handle, 300); // ensures correct initial state
+    const timeout = setTimeout(handle, 300); // ensures correct initial state
 
-  return () => {
-    container.removeEventListener("scroll", handle);
-    window.removeEventListener("resize", handle);
-    clearTimeout(timeout);
-  };
-}, [games]);
+    return () => {
+      container.removeEventListener("scroll", handle);
+      window.removeEventListener("resize", handle);
+      clearTimeout(timeout);
+    };
+  }, [games]);
 
   const scroll = (direction) => {
-  const container = scrollContainerRef.current;
-  if (!container) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  // Determine scroll amount
-  const isMobile = window.innerWidth < 640;
-  const scrollAmount = isMobile ? container.clientWidth : 300;
+    // Determine scroll amount
+    const isMobile = window.innerWidth < 640;
+    const scrollAmount = isMobile ? container.clientWidth : 300;
 
-  // Calculate new scroll position
-  const targetScroll =
-    direction === "left"
-      ? container.scrollLeft - scrollAmount
-      : container.scrollLeft + scrollAmount;
+    // Calculate new scroll position
+    const targetScroll =
+      direction === "left"
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
 
-  // Perform smooth scroll
-  container.scrollTo({
-    left: targetScroll,
-    behavior: "smooth",
-  });
+    // Perform smooth scroll
+    container.scrollTo({
+      left: targetScroll,
+      behavior: "smooth",
+    });
 
-  // ✅ Recheck after animation (production fix)
-  setTimeout(() => {
-    checkScrollPosition();
-  }, 400); // 400ms works well for smooth scroll
-};
-
+    // ✅ Recheck after animation (production fix)
+    setTimeout(() => {
+      checkScrollPosition();
+    }, 400); // 400ms works well for smooth scroll
+  };
 
   const handlePlayNow = (gameName) => {
     // Replace spaces with dashes for clean URLs
@@ -194,7 +193,7 @@ const SlotsSection = () => {
 
   return (
     <motion.section
-      className="w-full relative mt-10"
+      className="w-full relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -354,9 +353,9 @@ const SlotsSection = () => {
                 ref={scrollContainerRef}
                 className="grid grid-flow-col auto-cols-[calc(25%-8px)] sm:auto-cols-[145px] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
-    WebkitOverflowScrolling: "touch",
-    overscrollBehaviorX: "contain",
-  }}
+                  WebkitOverflowScrolling: "touch",
+                  overscrollBehaviorX: "contain",
+                }}
               >
                 {games.map((game, index) => (
                   <motion.div
