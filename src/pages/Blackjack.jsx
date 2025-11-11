@@ -21,6 +21,14 @@ const Blackjack = () => {
     } catch (_) {}
   };
 
+  const stopSound = (ref) => {
+    if (!ref.current) return;
+    try {
+      ref.current.pause();
+      ref.current.currentTime = 0;
+    } catch (_) {}
+  };
+
   const animateBalance = async (newBalance) => {
     await balanceControls.start({
       scale: [1, 1.15, 1],
@@ -40,31 +48,34 @@ const Blackjack = () => {
     setDealerCards([]);
     setDeckShuffle((s) => s + 1);
 
-    // Deal sequence
+    // ✅ Play flip sound only while cards are moving
+    playSound(cardFlipRef);
+
+    // Deal sequence with timing
     setTimeout(() => {
-      playSound(cardFlipRef);
       setDealerCards([{ rank: "A", suit: "♥" }]);
     }, 350);
 
     setTimeout(() => {
-      playSound(cardFlipRef);
       setDealerCards((prev) => [...prev, { back: true }]);
     }, 700);
 
     setTimeout(() => {
-      playSound(cardFlipRef);
       setPlayerCards([{ dim: true }]);
     }, 1050);
 
     setTimeout(() => {
-      playSound(cardFlipRef);
       setPlayerCards((prev) => [...prev, { rank: "A", suit: "♥" }]);
     }, 1400);
 
     setTimeout(() => {
-      playSound(cardFlipRef);
       setPlayerCards((prev) => [...prev, { rank: "K", suit: "♠" }]);
     }, 1750);
+
+    // ✅ stop sound slightly after all animations finish (smooth sync)
+    setTimeout(() => {
+      stopSound(cardFlipRef);
+    }, 2000);
 
     setTimeout(() => setBetPlaced(false), 2600);
   };
@@ -187,7 +198,7 @@ const Blackjack = () => {
           </div>
 
           {/* Player Cards */}
-          <div className="absolute bottom-[22%]  md:bottom-[-9%] left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <div className="absolute bottom-[22%] md:bottom-[-9%] left-1/2 -translate-x-1/2 flex flex-col items-center">
             {playerCards.length > 0 && (
               <div className="flex gap-2 mb-1 sm:mb-2">
                 <span className="bg-[#22262f] text-[#d1d5e5] text-[10px] sm:text-xs font-semibold rounded-full px-2 sm:px-3 py-0.5 sm:py-1">

@@ -428,6 +428,8 @@ const CircularWheel = () => {
           <div className="center-title">ORIGINALS</div>
         </div>
       </div>
+      {/* ✅ bottom curved border visible under the mask */}
+      <div className="wheel-border-line"></div>
     </div>
   );
 };
