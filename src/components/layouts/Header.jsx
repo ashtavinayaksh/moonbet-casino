@@ -1232,20 +1232,19 @@ const Header = ({
                         <Link
                           to={item.path}
                           className={`flex items-center gap-3 px-3 py-2 rounded-[8px] transition-all duration-200 
-                         ${
-                           // ✅ Collapsed + Active
-                           sidebarCollapsed && location.pathname === item.path
-                             ? "wallet-btn2 view_moon_btn relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
-                             : // ✅ Expanded + Active
-                             !sidebarCollapsed &&
-                               location.pathname === item.path
-                             ? "bg-gradient-to-b from-white/30 via-white/5 to-white/30 shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px] text-white"
-                             : // ✅ Collapsed + Inactive
-                             sidebarCollapsed
-                             ? "justify-center text-[##000] hover:text-white/90 hover:bg-white/5"
-                             : // ✅ Expanded + Inactive
-                               "gap-3 bg-white/10 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
-                         }`}
+    ${
+      // ✅ Collapsed + Active
+      sidebarCollapsed && location.pathname === item.path
+        ? "wallet-btn2 view_moon_btn relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
+        : // ✅ Expanded + Active
+        !sidebarCollapsed && location.pathname === item.path
+        ? "wallet-btn2 view_moon_btn relative flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-[rgba(255,255,255,0.40)] transition-all shadow-[1px_2px_1px_rgba(0,0,0,0.40)] bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)] text-white"
+        : // ✅ Collapsed + Inactive
+        sidebarCollapsed
+        ? "justify-center text-[##000] hover:text-white/90 hover:bg-white/5"
+        : // ✅ Expanded + Inactive
+          "gap-3 bg-white/10 text-[#A8A8A8] hover:text-white/90 hover:bg-white/5 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
+    }`}
                           onClick={closeSidebar}
                         >
                           <span className="text-lg flex items-center justify-center">
@@ -1253,27 +1252,30 @@ const Header = ({
                             item.icon.startsWith("/") ? (
                               <img
                                 src={
-                                  // ✅ Collapsed + Active - Use special active image
+                                  // ✅ Collapsed + Active - Use special active image for collapsed
                                   sidebarCollapsed &&
-                                  location.pathname === item.path &&
-                                  item.activeCollapsedIcon
+                                  location.pathname === item.path
+                                    ? item.activeCollapsedIcon
+                                    : // ✅ Expanded + Active - Use active image for expanded as well
+                                    !sidebarCollapsed &&
+                                      location.pathname === item.path
                                     ? item.activeCollapsedIcon
                                     : // Default to regular icon for other states
                                       item.icon
                                 }
                                 alt={item.label}
                                 className={`w-5 h-5 object-contain transition-all duration-300
-                             ${
-                               // ✅ Collapsed + Active - Remove filters to show colored image
-                               sidebarCollapsed &&
-                               location.pathname === item.path
-                                 ? "opacity-100 filter-none" // Show original colored image
-                                 : // ✅ Expanded + Active - White icon
+                               ${
+                                 // ✅ Collapsed + Active - Remove filters to show colored image
+                                 sidebarCollapsed &&
                                  location.pathname === item.path
-                                 ? "opacity-100 brightness-0 invert"
-                                 : // ✅ Inactive states
-                                   "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
-                             }`}
+                                   ? "opacity-100 filter-none" // Show original colored image for collapsed
+                                   : // ✅ Expanded + Active - White icon
+                                   location.pathname === item.path
+                                   ? "opacity-100 "
+                                   : // ✅ Inactive states
+                                     "opacity-70 group-hover:opacity-100 group-hover:brightness-0 group-hover:invert"
+                               }`}
                               />
                             ) : (
                               item.icon

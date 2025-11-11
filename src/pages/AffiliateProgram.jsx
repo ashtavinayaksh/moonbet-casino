@@ -443,10 +443,10 @@ const AffiliateProgram = () => {
               </div>
 
               {/* Right Side - Visual Element */}
-              <div className="hidden lg:flex justify-center items-center">
+              <div className="hidden lg:flex justify-content-start">
                 <div className="relative">
                   <img
-                    src="/affiliates/astro-affilaite-2.svg"
+                    src="/affiliates/astro-affilaite-final.svg"
                     alt="Affiliate Illustration"
                     className="w-full h-full object-cover drop-shadow-[0_0_40px_rgba(240,119,48,0.3)]"
                   />

@@ -1136,3 +1136,55 @@
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.1);
 }
+.custom-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px; /* border thickness */
+  border-radius: 24px;
+  background: linear-gradient(
+      134deg,
+      rgba(255, 255, 255, 0.9) -7.85%,
+      rgba(255, 255, 255, 0.36) 9.73%,
+      rgba(255, 255, 255, 0) 84.96%,
+      rgba(255, 255, 255, 0.9) 100.63%
+    ),
+    rgba(255, 255, 255, 0.05);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Define the custom class with the CSS variable */
+.dropdown-hover-effect {
+  --drop-down-hover: radial-gradient(
+    366.61% 130.38% at 16.42% 20%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.36) 6.76%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Apply the hover effect using the CSS variable */
+.dropdown-hover-effect:hover {
+  background: radial-gradient(
+    366.61% 130.38% at 16.42% 20%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.36) 6.76%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 60px;
+  color: #fff;
+}
+.dropdown-hover-effect:hover img {
+  background: radial-gradient(
+    366.61% 130.38% at 16.42% 20%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.36) 6.76%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 60px;
+  fill: #a7a7a7;
+}

@@ -22,8 +22,8 @@ export const LoginTrigger = ({
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-  if (forceOpen) setIsModalOpen(true);
-}, [forceOpen]);
+    if (forceOpen) setIsModalOpen(true);
+  }, [forceOpen]);
 
   // Check login state
   useEffect(() => {
@@ -43,55 +43,61 @@ export const LoginTrigger = ({
   }, []);
 
   // Handle login success
-const handleLoginSuccess = (userData) => {
-  // Extract essential fields
-  const { token, user } = userData || {};
-  if (token) {
-    localStorage.setItem("token", token);
-    window.dispatchEvent(new Event("tokenChanged"));
-  }
+  const handleLoginSuccess = (userData) => {
+    // Extract essential fields
+    const { token, user } = userData || {};
+    if (token) {
+      localStorage.setItem("token", token);
+      window.dispatchEvent(new Event("tokenChanged"));
+    }
 
-  if (user) {
-    const { username, email, kycStatus, id } = user;
+    if (user) {
+      const { username, email, kycStatus, id } = user;
 
-    // Save as a compact JSON for profile dropdowns/modals
-    localStorage.setItem("user", JSON.stringify({ id, username, email, kycStatus }));
-  }
+      // Save as a compact JSON for profile dropdowns/modals
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ id, username, email, kycStatus })
+      );
+    }
 
-  setIsLoggedIn(true);
-  handleCloseModal();
-  if (onLoginSuccess) onLoginSuccess(userData);
-};
+    setIsLoggedIn(true);
+    handleCloseModal();
+    if (onLoginSuccess) onLoginSuccess(userData);
+  };
 
-// Handle signup success
-const handleSignupSuccess = (userData) => {
-  const { token, user } = userData || {};
-  if (token) {
-    localStorage.setItem("token", token);
-    window.dispatchEvent(new Event("tokenChanged"));
-  }
+  // Handle signup success
+  const handleSignupSuccess = (userData) => {
+    const { token, user } = userData || {};
+    if (token) {
+      localStorage.setItem("token", token);
+      window.dispatchEvent(new Event("tokenChanged"));
+    }
 
-  if (user) {
-    const { username, email, kycStatus, _id } = user;
-    const id = _id;
-    localStorage.setItem("user", JSON.stringify({ id, username, email, kycStatus }));
-  }
+    if (user) {
+      const { username, email, kycStatus, _id } = user;
+      const id = _id;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ id, username, email, kycStatus })
+      );
+    }
 
-  setIsLoggedIn(true);
-  handleCloseModal();
-  if (onSignupSuccess) onSignupSuccess(userData);
-};
+    setIsLoggedIn(true);
+    handleCloseModal();
+    if (onSignupSuccess) onSignupSuccess(userData);
+  };
 
   const handleLogout = () => {
-   localStorage.removeItem("token");
-   window.dispatchEvent(new Event("tokenChanged"));
-  localStorage.removeItem("user");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("username");
-  localStorage.removeItem("email");
-  localStorage.removeItem("kycStatus");
-  localStorage.clear();
-  window.dispatchEvent(new Event("tokenChanged"));
+    localStorage.removeItem("token");
+    window.dispatchEvent(new Event("tokenChanged"));
+    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("kycStatus");
+    localStorage.clear();
+    window.dispatchEvent(new Event("tokenChanged"));
     setIsLoggedIn(false);
     setDropdownOpen(false);
     toast.info("You have been logged out successfully", {
@@ -143,25 +149,30 @@ const handleSignupSuccess = (userData) => {
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div
-            className="absolute right-0 mt-3 w-56 bg-[#1b2132] border border-white/10 rounded-xl shadow-2xl py-2 z-[9999]"
-            style={{ backdropFilter: "blur(16px)" }}
+            className="custom-header absolute right-0 mt-3 w-44 rounded-[24px] py-2 z-[9999] shadow-2xl"
+            style={{
+              background: "linear-gradient(180deg, #50545B 0%, #3C4046 100%)",
+              backdropFilter: "blur(67.95500183105469px)",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
+            }}
           >
-            {/* REPLACE THE LINK WITH BUTTON (Lines 109-114) */}
+            {/* Profile Button */}
             <button
               onClick={handleProfileClick}
-              className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all w-full text-left"
+              className="flex items-center gap-3 px-4 py-2.5 text-[#A7A7A7] dropdown-hover-effect transition-all w-full text-left hover:bg-[radial-gradient(366.61%_130.38%_at_16.42%_20%,_rgba(255,_255,_255,_0.40)_0%,_rgba(255,_255,_255,_0.36)_6.76%,_rgba(255,_255,_255,_0)_100%)] hover:rounded-[60px] hover:shadow-lg hover:text-white hover:filter hover:drop-shadow-[0_0_4px_rgba(0,_0,_0,_0.10)]"
             >
               <img
                 src="/icons/user.svg"
-                alt=""
-                className="w-4 h-4 invert brightness-0"
+                alt="Profile Icon"
+                className="w-4 h-4 invert brightness-0 hover:brightness-100"
               />
               <span>Profile</span>
             </button>
 
+            {/* Bets Link */}
             <Link
               to="/bets"
-              className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-[#A7A7A7] dropdown-hover-effect transition-all hover:bg-[radial-gradient(366.61%_130.38%_at_16.42%_20%,_rgba(255,_255,_255,_0.40)_0%,_rgba(255,_255,_255,_0.36)_6.76%,_rgba(255,_255,_255,_0)_100%)] hover:rounded-[60px] hover:shadow-lg hover:text-white hover:filter hover:drop-shadow-[0_0_4px_rgba(0,_0,_0,_0.10)]"
             >
               <img
                 src="/icons/crypto.svg"
@@ -171,9 +182,10 @@ const handleSignupSuccess = (userData) => {
               <span>Bets</span>
             </Link>
 
+            {/* Transactions Link */}
             <Link
               to="/transactions"
-              className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-[#A7A7A7] dropdown-hover-effect transition-all hover:bg-[radial-gradient(366.61%_130.38%_at_16.42%_20%,_rgba(255,_255,_255,_0.40)_0%,_rgba(255,_255,_255,_0.36)_6.76%,_rgba(255,_255,_255,_0)_100%)] hover:rounded-[60px] hover:shadow-lg hover:text-white hover:filter hover:drop-shadow-[0_0_4px_rgba(0,_0,_0,_0.10)]"
             >
               <img
                 src="/icons/transaction.svg"
@@ -182,9 +194,11 @@ const handleSignupSuccess = (userData) => {
               />
               <span>Transactions</span>
             </Link>
+
+            {/* Settings Link */}
             <Link
               to="/settings"
-              className="flex items-center gap-3 px-4 py-2.5 text-gray-200 hover:bg-white/10 transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-[#A7A7A7] dropdown-hover-effect transition-all hover:bg-[radial-gradient(366.61%_130.38%_at_16.42%_20%,_rgba(255,_255,_255,_0.40)_0%,_rgba(255,_255,_255,_0.36)_6.76%,_rgba(255,_255,_255,_0)_100%)] hover:rounded-[60px] hover:shadow-lg hover:text-white hover:filter hover:drop-shadow-[0_0_4px_rgba(0,_0,_0,_0.10)]"
             >
               <img
                 src="/icons/setting.svg"
@@ -194,11 +208,13 @@ const handleSignupSuccess = (userData) => {
               <span>Settings</span>
             </Link>
 
+            {/* Divider */}
             <div className="border-t border-white/10 my-1"></div>
 
+            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-red-400 hover:bg-red-500/10 transition-all"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-red-400 hover:bg-red-500/10 transition-all hover:rounded-[60px] hover:shadow-lg hover:text-white"
             >
               <img
                 src="/icons/power-button.svg"
