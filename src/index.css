@@ -921,3 +921,218 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* TrustBadges Mobile Responsive Styles */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Smooth scrolling for mobile */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Badge container responsive adjustments */
+.provider_btn {
+  touch-action: manipulation; /* Better touch response on mobile */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  /* Ensure badges don't get too small */
+  .provider_btn {
+    min-width: 140px;
+  }
+
+  /* Adjust icon sizes for very small screens */
+  .provider_btn svg {
+    min-width: 20px;
+    min-height: 20px;
+  }
+
+  /* Ensure text is readable */
+  .provider_btn span {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  /* Better touch targets */
+  .provider_btn {
+    min-height: 44px; /* iOS recommended minimum touch target */
+  }
+}
+
+/* Small mobile devices (320px - 375px) */
+@media (max-width: 375px) {
+  .provider_btn {
+    min-width: 120px;
+    padding: 8px 10px;
+  }
+
+  .provider_btn span {
+    font-size: 10px;
+  }
+
+  .provider_btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .provider_btn {
+    padding: 12px 16px;
+  }
+
+  .provider_btn span {
+    font-size: 14px;
+  }
+}
+
+/* Improve visibility in dark mode */
+@media (prefers-color-scheme: dark) {
+  .provider_btn {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .provider_btn:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .provider_btn,
+  .provider_btn * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .provider_btn {
+    border: 2px solid currentColor;
+  }
+
+  .provider_btn:hover,
+  .provider_btn:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* Landscape mode for mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+  .provider_btn {
+    padding: 6px 12px;
+  }
+
+  .provider_btn span {
+    font-size: 11px;
+  }
+
+  .provider_btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Focus styles for accessibility */
+.provider_btn:focus-visible {
+  outline: 2px solid #4b5563;
+  outline-offset: 2px;
+}
+
+/* Active state for mobile touch */
+.provider_btn:active {
+  transform: scale(0.98);
+}
+
+/* Ensure icons maintain aspect ratio */
+.provider_btn img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+/* Grid adjustments for different screen sizes */
+@media (min-width: 320px) and (max-width: 480px) {
+  .trust-badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 0 8px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .trust-badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .trust-badges-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 0 24px;
+  }
+}
+
+/* Horizontal scroll container for mobile */
+.trust-badges-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 8px 12px;
+  scroll-snap-type: x mandatory;
+}
+
+.trust-badges-scroll > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+.affiliate-para {
+  color: #a7a7a7;
+  font-feature-settings: "ss01" on, "cv01" on;
+  font-family: "Neue Plak";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  letter-spacing: var(--Letter-Spacing, 0);
+  padding: 10px 0;
+}
+
+.affiliate-para ~ .wallet-btn3 {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.your-reff {
+  color: #e5eaf2;
+  font-family: "Neue Plak";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 44px; /* 244.444% */
+  text-transform: capitalize;
+}
+.affiliate-para2 {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}

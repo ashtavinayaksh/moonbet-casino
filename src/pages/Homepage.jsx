@@ -33,7 +33,7 @@ const Homepage = () => {
       <GameBetsSection />
       <HomeFAQSection />
       <CryptoPaymentSection />
-      {/* <TrustBadges /> */}
+      <TrustBadges />
     </div>
   );
 };

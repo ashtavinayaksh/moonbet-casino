@@ -28,61 +28,60 @@ const AffiliateProgram = () => {
   const [referrals, setReferrals] = useState([]);
 
   useEffect(() => {
-  const fetchReferralStats = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("No auth token found");
-        return;
-      }
-
-      const { data } = await axios.get(
-        `/referral-service/api/referral/stats/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    const fetchReferralStats = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.warn("No auth token found");
+          return;
         }
-      );
 
-      if (data?.success && data.data) {
-        const info = data.data;
+        const { data } = await axios.get(
+          `/referral-service/api/referral/stats/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        // ✅ Get referral code if exists
-        const code = info.asReferrer?.code || "";
-        if (code) {
-          setReferralCode(code);
-          setIsCodeSet(true);
+        if (data?.success && data.data) {
+          const info = data.data;
 
-          const frontendUrl = window.origin;
-          setGeneratedLink(`${frontendUrl}/register?ref=${code}`);
+          // ✅ Get referral code if exists
+          const code = info.asReferrer?.code || "";
+          if (code) {
+            setReferralCode(code);
+            setIsCodeSet(true);
 
-          // ✅ Stats update with backend totals
-          setStats({
-            totalReferrals: info.totals?.totalReferrals || 0,
-            totalWagered: 0,
-            totalEarnings: info.totals?.totalPointsOverall || 0, // 💰 comes from backend now
-            pendingIncome: 0,
-          });
+            const frontendUrl = window.origin;
+            setGeneratedLink(`${frontendUrl}/register?ref=${code}`);
 
-          // ✅ Combine referrals list
-          setReferrals(info.asReferrer?.recentReferrals || []);
-        } else {
-          setIsCodeSet(false);
-          setReferrals([]);
+            // ✅ Stats update with backend totals
+            setStats({
+              totalReferrals: info.totals?.totalReferrals || 0,
+              totalWagered: 0,
+              totalEarnings: info.totals?.totalPointsOverall || 0, // 💰 comes from backend now
+              pendingIncome: 0,
+            });
+
+            // ✅ Combine referrals list
+            setReferrals(info.asReferrer?.recentReferrals || []);
+          } else {
+            setIsCodeSet(false);
+            setReferrals([]);
+          }
         }
+      } catch (error) {
+        console.error("❌ Failed to fetch referral stats:", error.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("❌ Failed to fetch referral stats:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchReferralStats();
-}, []);
-
+    fetchReferralStats();
+  }, []);
 
   // Generate random referral code
   const generateReferralCode = () => {
@@ -95,69 +94,68 @@ const AffiliateProgram = () => {
   };
 
   const handleGenerateCode = async () => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    if (!isLoggedIn || !token) {
-      alert("You must be logged in to generate a referral code.");
-      return;
-    }
-
-    // ✅ Get user info from state or localStorage
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const payload = { userId: user.id };
-
-    const { data } = await axios.post(
-      "/referral-service/api/referral/generate-code",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      if (!isLoggedIn || !token) {
+        alert("You must be logged in to generate a referral code.");
+        return;
       }
-    );
 
-    if (data?.success) {
-      const info = data.data;
+      // ✅ Get user info from state or localStorage
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const payload = { userId: user.id };
 
-      // ✅ Update UI state
-      setReferralCode(info.code);
-      setGeneratedLink(info.shareLink);
-      setPoints({
-        referrer: info.points?.referrerPoints || 0,
-        referee: info.points?.refereePoints || 0,
-      });
-      setIsCodeSet(true);
-
-      // Optional: cache locally for reload persistence
-      localStorage.setItem(
-        "referralData",
-        JSON.stringify({
-          referralCode: info.code,
-          referralLink: info.shareLink,
-          points: {
-            referrer: info.points?.referrerPoints || 0,
-            referee: info.points?.refereePoints || 0,
+      const { data } = await axios.post(
+        "/referral-service/api/referral/generate-code",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-        })
+        }
       );
 
-      console.log(`🎁 Referral code generated: ${info.code}`);
-    } else {
-      alert(data?.message || "Failed to generate referral code.");
-    }
-  } catch (error) {
-    console.error("Referral API error:", error);
-    alert(
-      error.response?.data?.message ||
-        "Error generating referral code. Please try again."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+      if (data?.success) {
+        const info = data.data;
 
+        // ✅ Update UI state
+        setReferralCode(info.code);
+        setGeneratedLink(info.shareLink);
+        setPoints({
+          referrer: info.points?.referrerPoints || 0,
+          referee: info.points?.refereePoints || 0,
+        });
+        setIsCodeSet(true);
+
+        // Optional: cache locally for reload persistence
+        localStorage.setItem(
+          "referralData",
+          JSON.stringify({
+            referralCode: info.code,
+            referralLink: info.shareLink,
+            points: {
+              referrer: info.points?.referrerPoints || 0,
+              referee: info.points?.refereePoints || 0,
+            },
+          })
+        );
+
+        console.log(`🎁 Referral code generated: ${info.code}`);
+      } else {
+        alert(data?.message || "Failed to generate referral code.");
+      }
+    } catch (error) {
+      console.error("Referral API error:", error);
+      alert(
+        error.response?.data?.message ||
+          "Error generating referral code. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle copying the link
   const handleCopy = async () => {
@@ -195,36 +193,38 @@ const AffiliateProgram = () => {
   };
 
   const subHeadingStyle = {
-    color: "#C1C1C1",
-    fontSize: "18px",
+    color: "#CED5E3",
+    fontSize: "14px",
     fontStyle: "normal",
     fontWeight: 400,
-    lineHeight: "normal",
+    lineHeight: "18px",
+
+    fontFamily: "Neue Plak",
+    textTransform: "capitalize",
   };
 
   const h2Style = {
     color: "#E5EAF2",
     textAlign: "center",
     fontFamily: "Neuropolitical, sans-serif",
-    fontSize: "26px",
+    fontSize: "18px",
     fontStyle: "normal",
     fontWeight: 400,
-    lineHeight: "34px",
+    lineHeight: "44px",
     textTransform: "uppercase",
   };
 
   return (
-    <div className="min-h-screen bg-black relative">
+    <div className="min-h-screen bg-black ">
       {/* Background gradient effect */}
       <div className="fixed inset-0 bg-gradient-to-br from-[#13151A]/30 via-transparent to-[#1A1D24]/30 pointer-events-none" />
       {loading && (
-  <div className="text-center text-gray-400 text-lg py-10">
-    Loading referral info...
-  </div>
-)}
+        <div className="text-center text-gray-400 text-lg py-10">
+          Loading referral info...
+        </div>
+      )}
 
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className=" z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section with Affiliate Program */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -233,10 +233,18 @@ const AffiliateProgram = () => {
           className="mb-8"
         >
           {/* Main Glass Card */}
-          <div className="p-8 lg:p-12 ">
-            <div className="grid lg:grid-cols-2 gap-8 items-center ">
+          <div className="main-grid-affi">
+            <div
+              className="grid lg:grid-cols-2 gap-8 items-center"
+              style={{
+                borderRadius: "12px",
+                backgroundImage: "url('/affiliates/bg-image.svg')",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
               {/* Left Content */}
-              <div className="space-y-6">
+              <div className="space-y-6 md:px-12 px:4 p-4">
                 {/* Title with icon */}
                 <div className="flex items-center gap-4">
                   <svg
@@ -252,9 +260,9 @@ const AffiliateProgram = () => {
                       d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                     />
                   </svg>
-                  <h1 style={{ ...h2Style, textAlign: "left" }}>
+                  <h2 style={{ ...h2Style, textAlign: "left" }}>
                     Affiliate Program
-                  </h1>
+                  </h2>
                 </div>
 
                 <p style={subHeadingStyle}>
@@ -272,16 +280,15 @@ const AffiliateProgram = () => {
                     >
                       <button
                         onClick={handleGenerateCode}
-                        className="w-full sm:w-auto px-8 py-3.5
-                                 bg-gradient-to-r from-[#F07730] to-[#EFD28E]
-                                 text-[#000] font-[600] text-[16px] 
-                                 font-['Neue_Plack',sans-serif]
-                                 rounded-lg shadow-md 
-                                 transition-all duration-300
-                                 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90
-                                 hover:scale-[1.02] active:scale-[0.98]
-                                 flex items-center justify-center gap-2"
+                        className="w-full sm:w-auto px-8 py-3.5 text-[#rgba(255, 255, 255, 0.50)] font-[400] text-[14px] rounded-[8px] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
                         style={{
+                          borderRadius: "8px",
+                          border: "1px solid rgba(255, 255, 255, 0.80)",
+                          opacity: 0.5,
+                          background:
+                            "linear-gradient(109deg, rgba(201, 201, 201, 0.80) 1.57%, rgba(196, 196, 196, 0.10) 100%)",
+                          backdropFilter: "blur(30px)",
+                          WebkitBackdropFilter: "blur(30px)",
                           fontFamily: "Avenir, -apple-system, sans-serif",
                         }}
                       >
@@ -346,13 +353,10 @@ const AffiliateProgram = () => {
                         </div>
                         <button
                           onClick={handleCopy}
-                          className="px-8 py-3.5 bg-gradient-to-r from-[#F07730] to-[#F07730] text-white font-bold 
+                          className="w-12 h-12 bg-gradient-to-r from-[#F07730] to-[#F07730] text-white font-bold 
                                    rounded-xl hover:shadow-lg hover:shadow-[#F07730]/25 transition-all duration-200
                                    hover:scale-[1.02] active:scale-[0.98] min-w-[100px]
-                                   flex items-center justify-center gap-2"
-                          style={{
-                            fontFamily: "Avenir, -apple-system, sans-serif",
-                          }}
+                                   flex items-center justify-center"
                         >
                           {copied ? (
                             <>
@@ -416,12 +420,23 @@ const AffiliateProgram = () => {
                         Generate new code
                       </button>
                       {points.referrer > 0 && (
-  <div className="text-gray-400 text-sm mt-2">
-    <p>You earn <span className="text-[#F07730] font-bold">{points.referrer}</span> points per referral.</p>
-    <p>Your friend earns <span className="text-[#10B981] font-bold">{points.referee}</span> points when they join.</p>
-  </div>
-)}
-
+                        <div className="text-gray-400 text-sm mt-2">
+                          <p>
+                            You earn{" "}
+                            <span className="text-[#F07730] font-bold">
+                              {points.referrer}
+                            </span>{" "}
+                            points per referral.
+                          </p>
+                          <p>
+                            Your friend earns{" "}
+                            <span className="text-[#10B981] font-bold">
+                              {points.referee}
+                            </span>{" "}
+                            points when they join.
+                          </p>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -429,121 +444,12 @@ const AffiliateProgram = () => {
 
               {/* Right Side - Visual Element */}
               <div className="hidden lg:flex justify-center items-center">
-                <div className="relative w-64 h-64">
-                  {/* Animated circles */}
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    className="absolute inset-0"
-                  >
-                    <div className="absolute inset-0 rounded-full border border-[#10B981]/20" />
-                    <div className="absolute inset-6 rounded-full border border-[#059669]/20" />
-                    <div className="absolute inset-12 rounded-full border border-[#10B981]/10" />
-                  </motion.div>
-
-                  {/* Center megaphone icon */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative">
-                      <div className="absolute inset-0 blur-2xl bg-gradient-to-br from-[#10B981]/30 to-[#059669]/30" />
-                      <svg
-                        viewBox="0 0 200 200"
-                        className="w-32 h-32 relative z-10"
-                        fill="none"
-                      >
-                        <path
-                          d="M50 80 L120 60 L120 140 L50 120 Z"
-                          fill="url(#megaphoneGradient)"
-                          stroke="rgba(255,255,255,0.2)"
-                          strokeWidth="2"
-                        />
-                        <rect
-                          x="30"
-                          y="80"
-                          width="30"
-                          height="40"
-                          fill="url(#handleGradient)"
-                          stroke="rgba(255,255,255,0.2)"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M130 70 Q150 70 150 100 Q150 130 130 130"
-                          stroke="rgba(16, 185, 129, 0.6)"
-                          strokeWidth="3"
-                          fill="none"
-                          className="animate-pulse"
-                        />
-                        <path
-                          d="M140 60 Q170 60 170 100 Q170 140 140 140"
-                          stroke="rgba(16, 185, 129, 0.4)"
-                          strokeWidth="3"
-                          fill="none"
-                          className="animate-pulse"
-                          style={{ animationDelay: "0.5s" }}
-                        />
-                        <defs>
-                          <linearGradient
-                            id="megaphoneGradient"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="100%"
-                          >
-                            <stop offset="0%" stopColor="#10B981" />
-                            <stop offset="100%" stopColor="#059669" />
-                          </linearGradient>
-                          <linearGradient
-                            id="handleGradient"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="100%"
-                          >
-                            <stop offset="0%" stopColor="#34D399" />
-                            <stop offset="100%" stopColor="#10B981" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
-
-                  {/* Floating coins */}
-                  <motion.div
-                    className="absolute top-0 right-0"
-                    animate={{ y: [-10, 10, -10] }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <div
-                      className="w-12 h-12 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full 
-                                  flex items-center justify-center text-white font-bold shadow-lg shadow-[#F07730]/30"
-                    >
-                      $
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="absolute bottom-0 left-0"
-                    animate={{ y: [10, -10, 10] }}
-                    transition={{
-                      duration: 3.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <div
-                      className="w-10 h-10 bg-gradient-to-br from-[#10B981] to-[#059669] rounded-full 
-                                  flex items-center justify-center text-white font-bold shadow-lg shadow-green-500/30"
-                    >
-                      $
-                    </div>
-                  </motion.div>
+                <div className="relative">
+                  <img
+                    src="/affiliates/astro-affilaite-2.svg"
+                    alt="Affiliate Illustration"
+                    className="w-full h-full object-cover drop-shadow-[0_0_40px_rgba(240,119,48,0.3)]"
+                  />
                 </div>
               </div>
             </div>
@@ -555,21 +461,13 @@ const AffiliateProgram = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
         >
           {/* Total Referrals Card */}
           <motion.div whileHover={{ scale: 1.02 }} className="relative">
-            <div className="p-6 wallet-btn3">
-              <p
-                style={{
-                  ...subHeadingStyle,
-                  fontSize: "14px",
-                  marginBottom: "8px",
-                }}
-              >
-                Total Referrals
-              </p>
-              <div className="flex items-center gap-3">
+            <div className="p-2">
+              <p className="affiliate-para">Total Referrals</p>
+              <div className="flex items-center gap-3 wallet-btn3 relative p-3">
                 <svg
                   className="w-6 h-6 text-[#F07730]"
                   fill="none"
@@ -590,19 +488,25 @@ const AffiliateProgram = () => {
 
           {/* Total Wagered Card */}
           <motion.div whileHover={{ scale: 1.02 }} className="relative">
-            <div className="p-6 wallet-btn3">
-              <p
-                style={{
-                  ...subHeadingStyle,
-                  fontSize: "14px",
-                  marginBottom: "8px",
-                }}
-              >
-                Total Wagered
-              </p>
-              <div className="flex items-center gap-3">
-                <span style={titleStyle}>
-                  $ {stats.totalWagered.toFixed(2)}
+            <div className="p-2 ">
+              <p className="affiliate-para">Total Wagered</p>
+              <div className="flex items-center gap-3 p-3 relative wallet-btn3">
+                <span className="inline-flex items-center gap-3 align-middle">
+                  <span style={titleStyle} className="flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="11"
+                      height="18"
+                      viewBox="0 0 11 18"
+                      fill="none"
+                    >
+                      <path
+                        d="M5.94264 7.8753V3.87578C6.79821 4.02009 7.60495 4.37117 8.29465 4.89838C8.43215 4.99267 8.59348 5.04382 8.76051 5.04607C9.29566 5.04607 9.73199 4.61544 9.73765 4.08028C9.73878 3.85078 9.64902 3.63035 9.48769 3.46673C8.49121 2.61341 7.24136 2.11007 5.93128 2.03508V0.694314C5.93128 0.311389 5.6211 0.00120219 5.23817 0.00120219C5.23023 7.71814e-05 5.22224 7.71813e-05 5.2143 7.71813e-05C4.82571 -0.00561819 4.5053 0.304604 4.4996 0.694314V1.98962C1.94308 2.17142 0.204661 3.75079 0.204661 5.85281C0.204661 8.43204 2.39759 9.14789 4.4996 9.71599V14.2609C3.39062 14.1121 2.34531 13.6519 1.48858 12.9316C1.32725 12.8032 1.12724 12.7316 0.920449 12.727C0.396651 12.7634 -0.00670087 13.202 8.43547e-05 13.7269C-0.00104066 13.9564 0.0887139 14.1769 0.250047 14.3405C1.42379 15.3972 2.93271 16.0051 4.51092 16.0562V17.3061C4.51092 17.314 4.51205 17.322 4.51205 17.3299C4.53022 17.7185 4.86087 18.0185 5.24946 17.9992C5.63238 17.9992 5.94257 17.689 5.94257 17.3061V16.0335C9.04447 15.829 10.2943 13.9428 10.2943 11.9431C10.2944 9.26152 8.04469 8.44343 5.94264 7.8753ZM4.51099 7.51171C3.27249 7.14812 2.30671 6.77317 2.30671 5.71647C2.30671 4.65977 3.18161 3.89849 4.51099 3.79625V7.51171ZM5.94264 14.2836V10.1478C7.22659 10.5114 8.22645 10.9999 8.21509 12.193C8.21509 13.0565 7.62425 14.0791 5.94264 14.2836Z"
+                        fill="#F07730"
+                      />
+                    </svg>
+                    {stats.totalWagered.toFixed(2)}
+                  </span>
                 </span>
               </div>
             </div>
@@ -610,19 +514,25 @@ const AffiliateProgram = () => {
 
           {/* Total Earnings Card */}
           <motion.div whileHover={{ scale: 1.02 }} className="relative">
-            <div className="p-6 wallet-btn3">
-              <p
-                style={{
-                  ...subHeadingStyle,
-                  fontSize: "14px",
-                  marginBottom: "8px",
-                }}
-              >
-                Total Earnings
-              </p>
-              <div className="flex items-center gap-3">
-                <span style={titleStyle}>
-                  $ {stats.totalEarnings.toFixed(2)}
+            <div className="p-2">
+              <p className="affiliate-para">Total Earnings</p>
+              <div className="flex items-center gap-3 p-3 relative wallet-btn3">
+                <span className="inline-flex items-center gap-3 align-middle">
+                  <span style={titleStyle} className="flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="11"
+                      height="18"
+                      viewBox="0 0 11 18"
+                      fill="none"
+                    >
+                      <path
+                        d="M5.94264 7.8753V3.87578C6.79821 4.02009 7.60495 4.37117 8.29465 4.89838C8.43215 4.99267 8.59348 5.04382 8.76051 5.04607C9.29566 5.04607 9.73199 4.61544 9.73765 4.08028C9.73878 3.85078 9.64902 3.63035 9.48769 3.46673C8.49121 2.61341 7.24136 2.11007 5.93128 2.03508V0.694314C5.93128 0.311389 5.6211 0.00120219 5.23817 0.00120219C5.23023 7.71814e-05 5.22224 7.71813e-05 5.2143 7.71813e-05C4.82571 -0.00561819 4.5053 0.304604 4.4996 0.694314V1.98962C1.94308 2.17142 0.204661 3.75079 0.204661 5.85281C0.204661 8.43204 2.39759 9.14789 4.4996 9.71599V14.2609C3.39062 14.1121 2.34531 13.6519 1.48858 12.9316C1.32725 12.8032 1.12724 12.7316 0.920449 12.727C0.396651 12.7634 -0.00670087 13.202 8.43547e-05 13.7269C-0.00104066 13.9564 0.0887139 14.1769 0.250047 14.3405C1.42379 15.3972 2.93271 16.0051 4.51092 16.0562V17.3061C4.51092 17.314 4.51205 17.322 4.51205 17.3299C4.53022 17.7185 4.86087 18.0185 5.24946 17.9992C5.63238 17.9992 5.94257 17.689 5.94257 17.3061V16.0335C9.04447 15.829 10.2943 13.9428 10.2943 11.9431C10.2944 9.26152 8.04469 8.44343 5.94264 7.8753ZM4.51099 7.51171C3.27249 7.14812 2.30671 6.77317 2.30671 5.71647C2.30671 4.65977 3.18161 3.89849 4.51099 3.79625V7.51171ZM5.94264 14.2836V10.1478C7.22659 10.5114 8.22645 10.9999 8.21509 12.193C8.21509 13.0565 7.62425 14.0791 5.94264 14.2836Z"
+                        fill="#F07730"
+                      />
+                    </svg>
+                    {stats.totalEarnings.toFixed(2)}
+                  </span>
                 </span>
               </div>
             </div>
@@ -630,28 +540,37 @@ const AffiliateProgram = () => {
 
           {/* Pending Income Card with Claim */}
           <motion.div whileHover={{ scale: 1.02 }} className="relative">
-            <div className="p-6 wallet-btn3">
+            <div className="p-2">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <p
-                    style={{
-                      ...subHeadingStyle,
-                      fontSize: "14px",
-                      marginBottom: "8px",
-                    }}
-                  >
-                    Pending Income
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <span style={titleStyle}>
-                      $ {stats.pendingIncome.toFixed(2)}
+                  <p className="affiliate-para">Pending Income</p>
+                  <div className="flex items-center gap-3 p-3 relative wallet-btn3">
+                    <span className="inline-flex items-center gap-3 align-middle">
+                      <span
+                        style={titleStyle}
+                        className="flex items-center gap-1"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="11"
+                          height="18"
+                          viewBox="0 0 11 18"
+                          fill="none"
+                        >
+                          <path
+                            d="M5.94264 7.8753V3.87578C6.79821 4.02009 7.60495 4.37117 8.29465 4.89838C8.43215 4.99267 8.59348 5.04382 8.76051 5.04607C9.29566 5.04607 9.73199 4.61544 9.73765 4.08028C9.73878 3.85078 9.64902 3.63035 9.48769 3.46673C8.49121 2.61341 7.24136 2.11007 5.93128 2.03508V0.694314C5.93128 0.311389 5.6211 0.00120219 5.23817 0.00120219C5.23023 7.71814e-05 5.22224 7.71813e-05 5.2143 7.71813e-05C4.82571 -0.00561819 4.5053 0.304604 4.4996 0.694314V1.98962C1.94308 2.17142 0.204661 3.75079 0.204661 5.85281C0.204661 8.43204 2.39759 9.14789 4.4996 9.71599V14.2609C3.39062 14.1121 2.34531 13.6519 1.48858 12.9316C1.32725 12.8032 1.12724 12.7316 0.920449 12.727C0.396651 12.7634 -0.00670087 13.202 8.43547e-05 13.7269C-0.00104066 13.9564 0.0887139 14.1769 0.250047 14.3405C1.42379 15.3972 2.93271 16.0051 4.51092 16.0562V17.3061C4.51092 17.314 4.51205 17.322 4.51205 17.3299C4.53022 17.7185 4.86087 18.0185 5.24946 17.9992C5.63238 17.9992 5.94257 17.689 5.94257 17.3061V16.0335C9.04447 15.829 10.2943 13.9428 10.2943 11.9431C10.2944 9.26152 8.04469 8.44343 5.94264 7.8753ZM4.51099 7.51171C3.27249 7.14812 2.30671 6.77317 2.30671 5.71647C2.30671 4.65977 3.18161 3.89849 4.51099 3.79625V7.51171ZM5.94264 14.2836V10.1478C7.22659 10.5114 8.22645 10.9999 8.21509 12.193C8.21509 13.0565 7.62425 14.0791 5.94264 14.2836Z"
+                            fill="#F07730"
+                          />
+                        </svg>
+                        {stats.pendingIncome.toFixed(2)}
+                      </span>
                     </span>
                   </div>
                 </div>
                 <button
                   onClick={handleClaim}
                   disabled={stats.pendingIncome === 0}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                  className={`absolute right-0 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
                     stats.pendingIncome > 0
                       ? "bg-gradient-to-r from-[#10B981] to-[#059669] text-white hover:shadow-lg hover:shadow-green-500/25"
                       : "bg-gray-700/50 text-gray-500 cursor-not-allowed"
@@ -671,19 +590,25 @@ const AffiliateProgram = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <div className="overflow-hidden wallet-btn3">
+          <div
+            className="overflow-hidden wallet-btn3"
+            style={{
+              borderRadius: "12px",
+              backgroundImage: "url('/affiliates/bg-table.svg')",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
             {/* Table Header */}
             <div className="p-6 border-b border-white/20">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="wallet-btn3" style={titleStyle}>
-                  Your Referrals
-                </h2>
+                <p className="wallet-btn3 your-reff">Your Referrals</p>
 
                 <div className="flex gap-3 w-full sm:w-auto">
                   {/* Search Input */}
-                  <div className="relative flex-1 sm:flex-initial">
+                  <div className="affiliate-para2 wallet-btn3 relative inline-flex items-center rounded-[8px] px-3 py-[8px] w-full sm:w-[200px]">
                     <svg
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"
+                      className="w-4 h-4 mr-2 text-[#7D7D7D] flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -701,14 +626,16 @@ const AffiliateProgram = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       style={{
-                        ...subHeadingStyle,
-                        fontSize: "14px",
-                        background: "rgba(0, 0, 0, 0.3)",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
-                        borderRadius: "8px",
-                        padding: "10px 12px 10px 44px",
+                        color: "#7D7D7D",
+                        fontFeatureSettings: "'ss01' on, 'cv01' on",
+                        fontFamily: "Neue Plak, sans-serif",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "20px",
+                        letterSpacing: "0",
                       }}
-                      className="w-full sm:w-64 focus:outline-none focus:border-[#10B981]/50 transition-all duration-200"
+                      className="bg-transparent w-full placeholder-[#7D7D7D] focus:outline-none"
                     />
                   </div>
 
@@ -717,16 +644,23 @@ const AffiliateProgram = () => {
                     <button
                       onClick={() => setShowSortDropdown(!showSortDropdown)}
                       style={{
-                        ...subHeadingStyle,
-                        fontSize: "14px",
-                        background: "rgba(0, 0, 0, 0.3)",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#A7A7A7",
+                        fontFeatureSettings: "'ss01' on, 'cv01' on",
+                        fontFamily: "Neue Plak, sans-serif",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "20px",
+                        letterSpacing: "0",
+                        background: "rgba(255, 255, 255, 0.1)",
                         borderRadius: "8px",
-                        padding: "10px 16px",
+                        padding: "8px 16px",
+                        border: "1px solid rgba(255, 255, 255, 0.40)",
+                        backdropFilter: "blur(30px)",
                       }}
                       className="flex items-center gap-2 hover:border-white/30 transition-all duration-200"
                     >
-                      <span style={{ color: "#6B7280" }}>Sort By:</span>
+                      <span className="text-[#7D7D7D]">Sort By:</span>
                       <span>{sortBy}</span>
                       <svg
                         className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
@@ -781,11 +715,11 @@ const AffiliateProgram = () => {
             </div>
 
             {/* Table Content */}
-            <div className="p-16 text-center">
-            {(!referrals || referrals.length === 0) ? (
-  <>
-    <p style={h2Style}>Share Referral for Earning</p>
-    {/* <p
+            <div className="p-1 text-center">
+              {!referrals || referrals.length === 0 ? (
+                <>
+                  <p style={h2Style}>Share Referral for Earning</p>
+                  {/* <p
       style={{
         ...subHeadingStyle,
         fontSize: "14px",
@@ -795,71 +729,67 @@ const AffiliateProgram = () => {
     >
       Share your referral link to start earning commissions.
     </p> */}
-  </>
-) : (
-  <div className="overflow-x-auto">
-    <table className="min-w-full border-collapse border border-white/10">
-      <thead>
-        <tr className="bg-[#111827] text-gray-300 text-sm uppercase tracking-wider">
-          <th className="px-4 py-3 text-left border-b border-white/10">#</th>
-          <th className="px-4 py-3 text-left border-b border-white/10">Referee ID</th>
-          <th className="px-4 py-3 text-left border-b border-white/10">Points Earned</th>
-          <th className="px-4 py-3 text-left border-b border-white/10">Referred Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {referrals.map((ref, idx) => (
-          <motion.tr
-  key={idx}
-  initial={{ opacity: 0, y: 5 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: idx * 0.05 }}
-  className={`text-gray-200 hover:bg-white/5 ${idx % 2 === 0 ? "bg-black/30" : "bg-black/20"}`}
->
-
-            <td className="px-4 py-3 border-b border-white/10">{idx + 1}</td>
-            <td className="px-4 py-3 border-b border-white/10">
-              {"Player_8ec0"}
-              {/* {ref.referee?.id || ref.referee?._id || "N/A"} */}
-            </td>
-            <td className="px-4 py-3 border-b border-white/10 text-[#10B981] font-semibold">
-              +{ref.pointsEarned}
-            </td>
-            <td className="px-4 py-3 border-b border-white/10 text-gray-400">
-              {new Date(ref.referredAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </td>
-          </motion.tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
-
+                </>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border-collapse border border-white/10">
+                    <thead>
+                      <tr className="affiliate-para2 text-gray-300 text-sm uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left border-b border-white/10">
+                          #
+                        </th>
+                        <th className="px-4 py-3 text-left border-b border-white/10">
+                          Referee ID
+                        </th>
+                        <th className="px-4 py-3 text-left border-b border-white/10">
+                          Points Earned
+                        </th>
+                        <th className="px-4 py-3 text-left border-b border-white/10">
+                          Referred Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {referrals.map((ref, idx) => (
+                        <motion.tr
+                          key={idx}
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className={`text-gray-200 hover:bg-white/5 ${
+                            idx % 2 === 0 ? "bg-black/30" : "bg-black/20"
+                          }`}
+                        >
+                          <td className="px-4 py-3 text-left border-b border-white/10">
+                            {idx + 1}
+                          </td>
+                          <td className="px-4 py-3 text-left border-b border-white/10">
+                            {"Player_8ec0"}
+                            {/* {ref.referee?.id || ref.referee?._id || "N/A"} */}
+                          </td>
+                          <td className="px-4 py-3 text-left border-b border-white/10 text-[#10B981] font-semibold">
+                            +{ref.pointsEarned}
+                          </td>
+                          <td className="px-4 py-3 text-left border-b border-white/10 text-gray-400">
+                            {new Date(ref.referredAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              }
+                            )}
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
       </div>
-
-      {/* Add custom styles */}
-      <style jsx>{`
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-
-        .animate-pulse {
-          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-      `}</style>
     </div>
   );
 };
