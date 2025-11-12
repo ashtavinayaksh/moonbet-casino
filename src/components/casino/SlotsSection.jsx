@@ -353,7 +353,7 @@ const SlotsSection = () => {
             >
               <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto scrollbar-hide"
+                className="grid grid-flow-col auto-cols-[calc(100%/3-12px)] sm:auto-cols-[calc(100%/6-12px)] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
                   WebkitOverflowScrolling: "touch",
                   overscrollBehaviorX: "contain",
@@ -375,7 +375,7 @@ const SlotsSection = () => {
                       }}
                     >
                       {/* Insert the updated image block here */}
-                      <div className="relative w-[220px] h-[140px] sm:w-[260px] sm:h-[160px] overflow-hidden rounded-xl">
+                      <div className="relative w-full aspect-[16/9] sm:aspect-[16/9] md:h-[180px] lg:h-[150px] overflow-hidden rounded-xl">
                         <motion.img
                           src={game.image}
                           alt={game.name}

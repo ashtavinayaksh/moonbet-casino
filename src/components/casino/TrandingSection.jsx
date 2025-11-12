@@ -344,7 +344,7 @@ const TrandingSection = () => {
             >
               <div
                 ref={scrollContainerRef}
-                className="flex gap-4 overflow-x-auto scrollbar-hide"
+                className="grid grid-flow-col auto-cols-[calc(100%/3-12px)] sm:auto-cols-[calc(100%/6-12px)] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
                   WebkitOverflowScrolling: "touch",
                   overscrollBehaviorX: "contain",
@@ -365,8 +365,8 @@ const TrandingSection = () => {
                         boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
                       }}
                     >
-                      {/* Insert the updated image block here */}
-                      <div className="relative w-[220px] h-[140px] sm:w-[260px] sm:h-[160px] overflow-hidden rounded-xl">
+                      {/* Increased image size but kept 16:9 proportion */}
+                      <div className="relative w-full aspect-[16/9] sm:aspect-[16/9] md:h-[180px] lg:h-[150px] overflow-hidden rounded-xl">
                         <motion.img
                           src={game.image}
                           alt={game.name}
@@ -375,11 +375,13 @@ const TrandingSection = () => {
                           initial="idle"
                           whileHover="hover"
                         />
+
+                        {/* Tags */}
                         <div className="absolute top-2 left-2 bg-[#6A4DF4] text-white text-[10px] font-semibold px-2 py-[2px] rounded">
-                          {game.name || "game"}
+                          NEW
                         </div>
                         <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-[2px] rounded">
-                          {game.provider || "endorphia"}
+                          99% RTP
                         </div>
                       </div>
 
@@ -403,11 +405,11 @@ const TrandingSection = () => {
                     </motion.div>
 
                     {/* Game title + provider */}
-                    <div className="mt-2 text-sm text-white/90 font-semibold">
-                      {game.name || "game"}
+                    <div className="mt-2 text-sm text-white/90 font-semibold truncate">
+                      {game.name || "Game"}
                     </div>
-                    <div className="text-xs text-white/50">
-                      {game.provider || "endorphia"}
+                    <div className="text-xs text-white/50 truncate">
+                      {game.provider || "Moonbet Originals"}
                     </div>
                   </motion.div>
                 ))}
