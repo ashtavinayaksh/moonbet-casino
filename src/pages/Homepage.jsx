@@ -12,9 +12,9 @@ import CryptoPaymentSection from "../components/sections/CryptoPaymentSection";
 // import VipMoonSection from "../components/sections/VipMoonSection";
 import TrustBadges from "../components/sections/TrustBadges";
 import CircularWheel from "../components/circular/CircularWheel";
-import SlotsSection from "../components/casino/SlotsSection";
-import LiveCasino from "../components/casino/LiveCasino";
-import TrandingSection from "../components/casino/TrandingSection";
+import SlotsSection from "../components/sections/SlotsSection";
+import LiveCasino from "../components/sections/LiveCasino";
+import RecommendedSection from "../components/sections/RecommendedSection";
 
 const Homepage = () => {
   return (
@@ -24,7 +24,7 @@ const Homepage = () => {
       {/* <RecommendedSection />
       <SlotsSection />
       <LiveCasino /> */}
-      <TrandingSection />
+      <RecommendedSection />
       <SlotsSection />
       <LiveCasino />
       <CircularWheel />

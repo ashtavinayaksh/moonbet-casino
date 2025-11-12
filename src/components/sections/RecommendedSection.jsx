@@ -35,11 +35,20 @@ const RecommendedSection = () => {
       try {
         const { data } = await axios.get("/wallet-service/api/games");
 
-        if (data?.games?.items) {
-          setGames(data.games.items);
-        } else {
-          setGames([]); // fallback if API returns no games
+        // ✅ Compatible with both old and new API response formats
+        let fetchedGames = [];
+
+        if (Array.isArray(data?.data)) {
+          // new API response (data.data)
+          fetchedGames = data.data;
+        } else if (Array.isArray(data?.games?.items)) {
+          // old API response (data.games.items)
+          fetchedGames = data.games.items;
         }
+
+        // ✅ Randomize (shuffle) the games list
+        const shuffled = fetchedGames.sort(() => Math.random() - 0.5);
+        setGames(shuffled);
       } catch (error) {
         console.error("❌ Error fetching games:", error);
         toast.error(
@@ -185,12 +194,12 @@ const RecommendedSection = () => {
 
   return (
     <motion.section
-      className="w-full relative pt-10 bg-black"
+      className="w-full relative bg-black py-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container max-w-7xl mx-auto px-4 py-10">
+      <div className="container max-w-7xl mx-auto px-4 py-5">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -233,7 +242,7 @@ const RecommendedSection = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              TRANDING
+              TRENDING
             </motion.h3>
           </div>
 
@@ -343,7 +352,7 @@ const RecommendedSection = () => {
             >
               <div
                 ref={scrollContainerRef}
-                className="grid grid-flow-col auto-cols-[calc(25%-8px)] sm:auto-cols-[145px] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
+                className="grid grid-flow-col auto-cols-[calc(100%/3-12px)] sm:auto-cols-[calc(100%/6-12px)] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
                   WebkitOverflowScrolling: "touch",
                   overscrollBehaviorX: "contain",
@@ -354,7 +363,7 @@ const RecommendedSection = () => {
                     key={game.uuid}
                     variants={cardVariants}
                     whileHover="hover"
-                    className="group cursor-pointer"
+                    className="group cursor-pointer flex-shrink-0"
                     custom={index}
                   >
                     <motion.div
@@ -364,16 +373,24 @@ const RecommendedSection = () => {
                         boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
                       }}
                     >
-                      {/* Image container with fixed dimensions */}
-                      <div className="relative w-full h-32 sm:h-48 overflow-hidden">
+                      {/* Increased image size but kept 16:9 proportion */}
+                      <div className="relative w-full aspect-[18/12] bg-black flex items-center justify-center overflow-hidden rounded-xl">
                         <motion.img
-                          src={`/recommended/img${(index % 9) + 1}.svg`}
+                          src={game.image}
                           alt={game.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-xl"
                           variants={imageVariants}
                           initial="idle"
                           whileHover="hover"
                         />
+
+                        {/* Tags */}
+                        <div className="absolute top-2 left-2 bg-[#6A4DF4] text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                          NEW
+                        </div>
+                        <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                          99% RTP
+                        </div>
                       </div>
 
                       {/* Overlay with Play Button */}
@@ -386,7 +403,7 @@ const RecommendedSection = () => {
                       >
                         <motion.button
                           onClick={() => handlePlayNow(game.name)}
-                          className="px-3 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-xs sm:text-base shadow-lg"
+                          className="px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm sm:text-base shadow-lg"
                           variants={buttonVariants}
                           whileTap="tap"
                         >
@@ -394,6 +411,14 @@ const RecommendedSection = () => {
                         </motion.button>
                       </motion.div>
                     </motion.div>
+
+                    {/* Game title + provider */}
+                    <div className="mt-2 text-sm text-white/90 font-semibold truncate">
+                      {game.name || "Game"}
+                    </div>
+                    <div className="text-xs text-white/50 truncate">
+                      {game.provider || "Moonbet Originals"}
+                    </div>
                   </motion.div>
                 ))}
               </div>

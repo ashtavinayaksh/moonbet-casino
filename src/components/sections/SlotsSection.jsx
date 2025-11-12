@@ -34,10 +34,14 @@ const SlotsSection = () => {
       try {
         const { data } = await axios.get("/wallet-service/api/games");
 
-        if (data?.games?.items) {
+        // ✅ Updated according to new backend response
+        if (Array.isArray(data?.data)) {
+          setGames(data.data);
+        } else if (Array.isArray(data?.games?.items)) {
+          // backward compatibility (old format)
           setGames(data.games.items);
         } else {
-          setGames([]); // fallback if API returns no games
+          setGames([]);
         }
       } catch (error) {
         console.error("❌ Error fetching games:", error);
@@ -351,7 +355,7 @@ const SlotsSection = () => {
             >
               <div
                 ref={scrollContainerRef}
-                className="grid grid-flow-col auto-cols-[calc(25%-8px)] sm:auto-cols-[145px] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
+                className="grid grid-flow-col auto-cols-[calc(100%/3-12px)] sm:auto-cols-[calc(100%/6-12px)] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
                 style={{
                   WebkitOverflowScrolling: "touch",
                   overscrollBehaviorX: "contain",
@@ -362,7 +366,7 @@ const SlotsSection = () => {
                     key={game.uuid}
                     variants={cardVariants}
                     whileHover="hover"
-                    className="group cursor-pointer"
+                    className="group cursor-pointer flex-shrink-0"
                     custom={index}
                   >
                     <motion.div
@@ -372,16 +376,22 @@ const SlotsSection = () => {
                         boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
                       }}
                     >
-                      {/* Image container with fixed dimensions */}
-                      <div className="relative w-full h-32 sm:h-48 overflow-hidden">
+                      {/* Insert the updated image block here */}
+                      <div className="relative w-full aspect-[18/12] bg-black flex items-center justify-center overflow-hidden rounded-xl">
                         <motion.img
-                          src={`/slots/img${(index % 9) + 1}.svg`}
+                          src={game.image}
                           alt={game.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-xl"
                           variants={imageVariants}
                           initial="idle"
                           whileHover="hover"
                         />
+                        <div className="absolute top-2 left-2 bg-[#6A4DF4] text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                          {game.name || "game"}
+                        </div>
+                        <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                          {game.provider || "endrophia"}
+                        </div>
                       </div>
 
                       {/* Overlay with Play Button */}
@@ -394,7 +404,7 @@ const SlotsSection = () => {
                       >
                         <motion.button
                           onClick={() => handlePlayNow(game.name)}
-                          className="px-3 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-xs sm:text-base shadow-lg"
+                          className="px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm sm:text-base shadow-lg"
                           variants={buttonVariants}
                           whileTap="tap"
                         >
@@ -402,6 +412,14 @@ const SlotsSection = () => {
                         </motion.button>
                       </motion.div>
                     </motion.div>
+
+                    {/* Game title + provider */}
+                    <div className="mt-2 text-sm text-white/90 font-semibold">
+                      {game.name || "Game"}
+                    </div>
+                    <div className="text-xs text-white/50">
+                      {game.provider || "endrophia"}
+                    </div>
                   </motion.div>
                 ))}
               </div>

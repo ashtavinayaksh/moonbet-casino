@@ -128,6 +128,7 @@ function App() {
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/blackjack" element={<Blackjack />} />
             <Route path="/casino" element={<Casino />} />
+            <Route path="/casino/:category" element={<Casino />} />
           </Route>
         </Routes>
       </AuthModalHandler>

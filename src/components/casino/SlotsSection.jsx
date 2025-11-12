@@ -1,44 +1,27 @@
 // src/components/sections/SlotSection.jsx
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import MoonBetButton from "../ui-elements/MoonBetButton";
-import api from "../../api/axios";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const SlotsSection = () => {
-  const scrollContainerRef = useRef(null);
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(48); // 8 rows × 6 games per row
   const navigate = useNavigate();
 
-  // Check scroll position
-  const checkScrollPosition = () => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const scrollLeft = container.scrollLeft;
-    const scrollWidth = container.scrollWidth;
-    const clientWidth = container.clientWidth;
-    const tolerance = 5; // small margin for rounding errors
-
-    setCanScrollLeft(scrollLeft > tolerance);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - tolerance);
-  };
-
+  // ✅ Fetch games from API
   useEffect(() => {
     const fetchGames = async () => {
+      setLoading(true);
       try {
-        const { data } = await axios.get("/wallet-service/api/games");
-
-        // ✅ Updated according to new backend response
+        const { data } = await axios.get(
+          "/wallet-service/api/games?type=slots"
+        );
         if (Array.isArray(data?.data)) {
           setGames(data.data);
         } else if (Array.isArray(data?.games?.items)) {
-          // backward compatibility (old format)
           setGames(data.games.items);
         } else {
           setGames([]);
@@ -52,181 +35,82 @@ const SlotsSection = () => {
         setLoading(false);
       }
     };
-
     fetchGames();
   }, []);
 
-  // Add scroll position check after games are loaded
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container || games.length === 0) return;
-
-    const handle = () => checkScrollPosition();
-    container.addEventListener("scroll", handle);
-    window.addEventListener("resize", handle);
-
-    const timeout = setTimeout(handle, 300); // ensures correct initial state
-
-    return () => {
-      container.removeEventListener("scroll", handle);
-      window.removeEventListener("resize", handle);
-      clearTimeout(timeout);
-    };
-  }, [games]);
-
-  const scroll = (direction) => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    // Determine scroll amount
-    const isMobile = window.innerWidth < 640;
-    const scrollAmount = isMobile ? container.clientWidth : 300;
-
-    // Calculate new scroll position
-    const targetScroll =
-      direction === "left"
-        ? container.scrollLeft - scrollAmount
-        : container.scrollLeft + scrollAmount;
-
-    // Perform smooth scroll
-    container.scrollTo({
-      left: targetScroll,
-      behavior: "smooth",
-    });
-
-    // ✅ Recheck after animation (production fix)
-    setTimeout(() => {
-      checkScrollPosition();
-    }, 400); // 400ms works well for smooth scroll
-  };
-
   const handlePlayNow = (gameName) => {
-    // Replace spaces with dashes for clean URLs
     const gameSlug = encodeURIComponent(gameName);
     navigate(`/game/${gameSlug}`);
   };
 
-  const handleViewAll = () => {
-    navigate("/live-casino"); // Navigate to all live casino page
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 48); // Load 8 more rows (48 more games)
   };
 
-  // Animation variants
+  // === Animation Variants ===
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.05 },
     },
   };
 
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-      scale: 0.9,
-    },
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-        duration: 0.6,
-      },
+      transition: { type: "spring", stiffness: 100, damping: 15 },
     },
     hover: {
-      scale: 1.02,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10,
-      },
-    },
-  };
-
-  const imageVariants = {
-    idle: {
-      scale: 1,
-    },
-    hover: {
-      scale: 1.1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20,
-      },
+      scale: 1.03,
+      transition: { type: "spring", stiffness: 300, damping: 15 },
     },
   };
 
   const overlayVariants = {
-    idle: {
-      opacity: 0,
-    },
+    idle: { opacity: 0 },
     hover: {
       opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
+      transition: { duration: 0.3, ease: "easeInOut" },
     },
   };
 
   const buttonVariants = {
-    idle: {
-      scale: 0.8,
-      opacity: 0,
-    },
+    idle: { scale: 0.8, opacity: 0 },
     hover: {
       scale: 1,
       opacity: 1,
-      transition: {
-        delay: 0.1,
-        duration: 0.3,
-        ease: [0.23, 1, 0.32, 1],
-      },
+      transition: { delay: 0.1, duration: 0.3 },
     },
-    tap: {
-      scale: 0.95,
-    },
+    tap: { scale: 0.95 },
   };
 
   return (
     <motion.section
-      className="w-full relative"
+      className="w-full relative py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <div className="container max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            type: "spring",
-            stiffness: 100,
-          }}
-          className="flex justify-between items-center mb-1"
-        >
+        {/* === Header === */}
+        <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <motion.span
               className="text-2xl"
               initial={{ rotate: -180, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6 }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
-                viewBox="0 0 20 20"
                 fill="none"
+                viewBox="0 0 20 20"
               >
                 <path
                   d="M15.0977 20C15.9748 20 16.6911 19.2805 16.6911 18.3994V16.629C16.6911 15.7478 15.9748 15.0283 15.0977 15.0283H1.59343C0.716355 15.0283 0 15.7478 0 16.629V18.3994C0 19.2805 0.716355 20 1.59343 20H15.0977Z"
@@ -238,102 +122,19 @@ const SlotsSection = () => {
                 />
               </svg>
             </motion.span>
+
             <motion.h3
-              className="text-[#CED5E3] font-[400]  text-[16px] md:text-[18px] leading-[44px] 
-                     font-['Neuropolitical'] not-italic uppercase"
+              className="text-[#CED5E3] text-[18px] font-['Neuropolitical'] uppercase"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.6 }}
             >
               SLOTS
             </motion.h3>
           </div>
+        </div>
 
-          {/* Right side controls - View All and Arrow Buttons */}
-          <motion.div
-            className="flex items-center gap-3"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            {/* View All Button */}
-            <motion.button
-              onClick={handleViewAll}
-              className="view_btn text-[#A7A7A7] hover:text-white transition-colors duration-300 "
-              style={{
-                fontFamily: "Neue Plak",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontWeight: 400,
-                lineHeight: "24px", // 171.429%
-                textTransform: "capitalize",
-                background: "rgba(255, 255, 255, 0.20)",
-                padding: "2px 10px",
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View All
-            </motion.button>
-
-            {/* Arrow Buttons */}
-            <div className="flex items-center gap-1">
-              <motion.button
-                onClick={() => scroll("left")}
-                disabled={!canScrollLeft}
-                className={`view_btn w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
-                  canScrollLeft
-                    ? "bg-white/10 hover:bg-white/20 text-white"
-                    : "bg-white/5 text-gray-600 cursor-not-allowed"
-                }`}
-                aria-label="Scroll left"
-                whileHover={canScrollLeft ? { scale: 1.1 } : {}}
-                whileTap={canScrollLeft ? { scale: 0.9 } : {}}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </motion.button>
-
-              <motion.button
-                onClick={() => scroll("right")}
-                disabled={!canScrollRight}
-                className={`view_btn w-8 h-8 flex items-center justify-center rounded-md transition-all duration-300 ${
-                  canScrollRight
-                    ? "bg-white/10 hover:bg-white/20 text-white"
-                    : "bg-white/5 text-gray-600 cursor-not-allowed"
-                }`}
-                aria-label="Scroll right"
-                whileHover={canScrollRight ? { scale: 1.1 } : {}}
-                whileTap={canScrollRight ? { scale: 0.9 } : {}}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </motion.button>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Loading State */}
+        {/* === Game Grid === */}
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.p
@@ -348,73 +149,53 @@ const SlotsSection = () => {
           ) : (
             <motion.div
               key="content"
-              className="relative"
               initial="hidden"
               animate="visible"
               variants={containerVariants}
             >
-              <div
-                ref={scrollContainerRef}
-                className="grid grid-flow-col auto-cols-[calc(100%/3-12px)] sm:auto-cols-[calc(100%/6-12px)] gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide"
-                style={{
-                  WebkitOverflowScrolling: "touch",
-                  overscrollBehaviorX: "contain",
-                }}
-              >
-                {games.map((game, index) => (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+                {games.slice(0, visibleCount).map((game, index) => (
                   <motion.div
-                    key={game.uuid}
+                    key={game.uuid || index}
                     variants={cardVariants}
                     whileHover="hover"
-                    className="group cursor-pointer flex-shrink-0"
-                    custom={index}
+                    className="group relative rounded-xl overflow-hidden border border-white/10 hover:border-[#F07730]/50 transition-all duration-300 cursor-pointer"
                   >
-                    <motion.div
-                      className="relative rounded-xl overflow-hidden border border-white/10 hover:border-[#F07730]/50 transition-all duration-300"
-                      whileHover={{
-                        borderColor: "rgba(240, 119, 48, 0.5)",
-                        boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
-                      }}
-                    >
-                      {/* Insert the updated image block here */}
-                      <div className="relative w-full aspect-[18/12] bg-black flex items-center justify-center overflow-hidden rounded-xl">
-                        <motion.img
-                          src={game.image}
-                          alt={game.name}
-                          className="w-full h-full object-cover rounded-xl"
-                          variants={imageVariants}
-                          initial="idle"
-                          whileHover="hover"
-                        />
-                        <div className="absolute top-2 left-2 bg-[#6A4DF4] text-white text-[10px] font-semibold px-2 py-[2px] rounded">
-                          {game.name || "game"}
-                        </div>
-                        <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-[2px] rounded">
-                          {game.provider || "endrophia"}
-                        </div>
+                    {/* Game Image */}
+                    <div className="relative aspect-[18/12] bg-black overflow-hidden rounded-xl">
+                      <motion.img
+                        src={game.image}
+                        alt={game.name}
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                      <div className="absolute top-2 left-2 bg-[#6A4DF4] text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                        {game.name || "game"}
                       </div>
+                      <div className="absolute top-2 right-2 bg-black/70 text-white text-[10px] font-semibold px-2 py-[2px] rounded">
+                        {game.provider || "endrophia"}
+                      </div>
+                    </div>
 
-                      {/* Overlay with Play Button */}
-                      <motion.div
-                        className="absolute inset-0 bg-black/70 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto"
-                        variants={overlayVariants}
-                        initial="idle"
-                        animate="idle"
-                        whileHover="hover"
+                    {/* Hover Overlay */}
+                    <motion.div
+                      className="absolute inset-0 bg-black/70 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto"
+                      variants={overlayVariants}
+                      initial="idle"
+                      animate="idle"
+                      whileHover="hover"
+                    >
+                      <motion.button
+                        onClick={() => handlePlayNow(game.name)}
+                        className="px-4 py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm shadow-lg"
+                        variants={buttonVariants}
+                        whileTap="tap"
                       >
-                        <motion.button
-                          onClick={() => handlePlayNow(game.name)}
-                          className="px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm sm:text-base shadow-lg"
-                          variants={buttonVariants}
-                          whileTap="tap"
-                        >
-                          PLAY NOW
-                        </motion.button>
-                      </motion.div>
+                        PLAY NOW
+                      </motion.button>
                     </motion.div>
 
-                    {/* Game title + provider */}
-                    <div className="mt-2 text-sm text-white/90 font-semibold">
+                    {/* Game Title */}
+                    <div className="mt-2 text-sm text-white/90 font-semibold truncate">
                       {game.name || "Game"}
                     </div>
                     <div className="text-xs text-white/50">
@@ -423,6 +204,20 @@ const SlotsSection = () => {
                   </motion.div>
                 ))}
               </div>
+
+              {/* === Load More Button === */}
+              {visibleCount < games.length && (
+                <div className="flex justify-center mt-10">
+                  <motion.button
+                    onClick={handleLoadMore}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-white font-semibold rounded-full shadow-lg"
+                  >
+                    LOAD MORE
+                  </motion.button>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
