@@ -334,7 +334,35 @@ const CircularWheel = () => {
                   key={`path-segment-${i}`}
                   d={d}
                   fill={`url(#pattern${i}_8212_718)`}
-                  stroke={isHighlighted ? "url(#highlightGradient)" : "none"}
+                  // stroke={isHighlighted ? "url(#highlightGradient)" : "none"}
+                  stroke={
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="238"
+                      height="242"
+                      viewBox="0 0 238 242"
+                      fill="none"
+                    >
+                      <path
+                        d="M1.84082 16.2402C81.2859 -4.1085 161.296 -2.79308 235.553 16.5273L175.645 239.739C157.075 235.056 137.635 232.566 117.617 232.566C98.352 232.566 79.6218 234.871 61.6875 239.219L1.84082 16.2402Z"
+                        stroke="url(#paint0_linear_8212_999)"
+                        stroke-width="3"
+                      />
+                      <defs>
+                        <linearGradient
+                          id="paint0_linear_8212_999"
+                          x1="118.697"
+                          y1="0"
+                          x2="118.697"
+                          y2="232.277"
+                          gradientUnits="userSpaceOnUse"
+                        >
+                          <stop stop-color="#DC1FFF" />
+                          <stop offset="1" stop-color="white" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  }
                   strokeWidth={isHighlighted ? "3" : "0"}
                   strokeLinejoin="round"
                   strokeLinecap="round"
