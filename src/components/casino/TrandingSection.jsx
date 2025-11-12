@@ -194,7 +194,7 @@ const TrandingSection = () => {
 
   return (
     <motion.section
-      className="w-full relative bg-black"
+      className="w-full relative bg-black py-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

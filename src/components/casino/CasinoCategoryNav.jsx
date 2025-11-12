@@ -484,7 +484,7 @@ const CasinoCategoryNav = () => {
 
   return (
     <section className="relative w-full mt-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-5">
         {/* --- Categories Row --- */}
         <div className="relative flex items-center w-full">
           {/* Left Arrow */}
