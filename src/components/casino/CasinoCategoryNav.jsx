@@ -384,6 +384,21 @@ const CasinoCategoryNav = () => {
         </svg>
       ),
     },
+    {
+      id: "Arcade",
+      label: "Arcade",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" fill="#7C7D96" />
+        </svg>
+      ),
+    },
   ];
 
   const filters = [
@@ -468,7 +483,7 @@ const CasinoCategoryNav = () => {
   }, []);
 
   return (
-    <section className="relative w-full bg-black/95 backdrop-blur-xl border-t border-white/5 shadow-[0_-4px_10px_rgba(0,0,0,0.3)] z-40">
+    <section className="relative w-full mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
         {/* --- Categories Row --- */}
         <div className="relative flex items-center w-full">

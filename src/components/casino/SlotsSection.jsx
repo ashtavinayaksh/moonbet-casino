@@ -34,10 +34,12 @@ const SlotsSection = () => {
       try {
         const { data } = await axios.get("/wallet-service/api/games");
 
-        if (data?.games?.items) {
-          // ✅ Randomize the order before setting state
-          const shuffled = data.games.items.sort(() => Math.random() - 0.5);
-          setGames(shuffled);
+        // ✅ Updated according to new backend response
+        if (Array.isArray(data?.data)) {
+          setGames(data.data);
+        } else if (Array.isArray(data?.games?.items)) {
+          // backward compatibility (old format)
+          setGames(data.games.items);
         } else {
           setGames([]);
         }

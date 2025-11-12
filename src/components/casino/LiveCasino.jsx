@@ -34,12 +34,20 @@ const LiveCasino = () => {
       try {
         const { data } = await axios.get("/wallet-service/api/games");
 
-        if (data?.games?.items) {
-          const shuffled = data.games.items.sort(() => Math.random() - 0.5);
-          setGames(shuffled);
-        } else {
-          setGames([]); // fallback if API returns no games
+        // ✅ Support both new and old response formats
+        let fetchedGames = [];
+
+        if (Array.isArray(data?.data)) {
+          // new backend structure
+          fetchedGames = data.data;
+        } else if (Array.isArray(data?.games?.items)) {
+          // old backend structure
+          fetchedGames = data.games.items;
         }
+
+        // ✅ Shuffle the games list randomly
+        const shuffled = fetchedGames.sort(() => Math.random() - 0.5);
+        setGames(shuffled);
       } catch (error) {
         console.error("❌ Error fetching games:", error);
         toast.error(

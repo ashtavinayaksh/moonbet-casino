@@ -35,12 +35,20 @@ const TrandingSection = () => {
       try {
         const { data } = await axios.get("/wallet-service/api/games");
 
-        if (data?.games?.items) {
-          const shuffled = data.games.items.sort(() => Math.random() - 0.5);
-          setGames(shuffled);
-        } else {
-          setGames([]); // fallback if API returns no games
+        // ✅ Compatible with both old and new API response formats
+        let fetchedGames = [];
+
+        if (Array.isArray(data?.data)) {
+          // new API response (data.data)
+          fetchedGames = data.data;
+        } else if (Array.isArray(data?.games?.items)) {
+          // old API response (data.games.items)
+          fetchedGames = data.games.items;
         }
+
+        // ✅ Randomize (shuffle) the games list
+        const shuffled = fetchedGames.sort(() => Math.random() - 0.5);
+        setGames(shuffled);
       } catch (error) {
         console.error("❌ Error fetching games:", error);
         toast.error(
