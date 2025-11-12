@@ -366,7 +366,7 @@ const TrandingSection = () => {
                       }}
                     >
                       {/* Increased image size but kept 16:9 proportion */}
-                      <div className="relative w-full aspect-[16/9] sm:aspect-[16/9] md:h-[180px] lg:h-[150px] overflow-hidden rounded-xl">
+                      <div className="relative w-full aspect-[16/10] bg-black flex items-center justify-center overflow-hidden rounded-xl">
                         <motion.img
                           src={game.image}
                           alt={game.name}

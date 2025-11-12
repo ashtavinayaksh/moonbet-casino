@@ -452,11 +452,11 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative md:h-[200] bg-black">
+    <section className="w-full relative md:h-[200] bg-black">
       {/* Recent Wins Section - Dark background strip */}
-      <div className="absolute top-0 left-0 right-0 z-20">
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-center">
         <div
-          className="relative px-2 sm:px-3 md:px-4 py-2 sm:py-3"
+          className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-[12px]"
           style={{
             background:
               "linear-gradient(0deg, rgb(30 30 30 / 55%) 0%, rgb(75 75 75 / 35%) 100%)",
