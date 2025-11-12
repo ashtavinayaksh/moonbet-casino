@@ -186,12 +186,12 @@ const TrandingSection = () => {
 
   return (
     <motion.section
-      className="w-full relative pt-10 bg-black"
+      className="w-full relative bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container max-w-7xl mx-auto px-4 py-10">
+      <div className="container max-w-7xl mx-auto px-4 py-5">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
