@@ -1,6 +1,7 @@
 // src/components/LoginSignup/LoginTrigger.jsx
 
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginSignup from "./LoginSignup";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -210,8 +211,8 @@ export const LoginTrigger = ({
               </div>
             </button>
             {/* Bets Button */}
-            <button
-              onClick={handleProfileClick}
+            <Link
+              to="/bets"
               className="relative flex items-center gap-3 px-4 py-2.5 w-full text-left rounded-[60px] overflow-hidden transition-all duration-300
              text-[#A7A7A7] group"
             >
@@ -261,11 +262,11 @@ export const LoginTrigger = ({
                 {/* Label */}
                 <span className="text-sm font-medium text-white">Bets</span>
               </div>
-            </button>
+            </Link>
 
             {/* Transactions Button */}
-            <button
-              onClick={handleProfileClick}
+            <Link
+              to="/transactions"
               className="relative flex items-center gap-3 px-4 py-2.5 w-full text-left rounded-[60px] overflow-hidden transition-all duration-300 text-[#A7A7A7] group"
             >
               {/* Default State */}
@@ -357,7 +358,7 @@ export const LoginTrigger = ({
                   Transactions
                 </span>
               </div>
-            </button>
+            </Link>
 
             {/* Settings Button */}
             <Link

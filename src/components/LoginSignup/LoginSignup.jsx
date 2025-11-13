@@ -296,18 +296,31 @@ const LoginSignup = ({
             </svg>
           </button>
 
-          <div className="flex flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-row w-full h-full">
             {/* Left Side - Banner */}
-            <div
-              className="hidden lg:flex lg:w-[42%] relative bg-cover bg-no-repeat"
-              style={{
-                backgroundImage: 'url("/home-assets/login-bg.svg")',
-                backgroundPosition: "center",
-              }}
-            ></div>
+            <div 
+    className="hidden lg:flex w-[45%] h-[690px] relative"
+    style={{
+      backgroundImage: "url('/home-assets/login-bg.svg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      borderTopLeftRadius: "18px",
+      borderBottomLeftRadius: "18px",
+    }}
+  ></div>
 
             {/* Right Side - Form */}
-            <div className="login-bg w-full lg:w-[60%] p-6 sm:p-8 lg:p-10 max-h-[85vh] overflow-y-auto">
+            <div 
+    className="w-full lg:w-[55%] h-[690px] p-10 flex flex-col"
+    style={{
+      background: "rgba(255, 255, 255, 0.08)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      borderTopRightRadius: "18px",
+      borderBottomRightRadius: "18px",
+    }}
+  >
               <div className="mb-6 flex ">
                 <Link to="/" className="flex gap-2">
                   <span className="flex gap-2 text-xl font-bold text-white tracking-wider">
@@ -362,69 +375,64 @@ const LoginSignup = ({
                     exit={{ opacity: 0, x: 10 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-white mb-1">
-                          Email Address
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Email Address"
-                          value={loginData.email}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 rounded-[10px]  placeholder-[#fff]  border border-[rgba(255,255,255,0.25)]  bg-[rgba(255,255,255,0.10)] backdrop-blur-md  focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] transition-all"
-                        />
-                      </div>
+                    <div className="space-y-5 mt-6">
+                      {/* EMAIL */}
+  <div>
+    <label className="text-sm text-white/80 font-semibold mb-1 block">
+      Email Address
+    </label>
+    <input
+      type="email"
+      name="email"
+      placeholder="Email Address"
+      value={loginData.email}
+      onChange={handleLoginChange}
+      className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
+       bg-white/10 border border-white/20 focus:border-[#F07730]"
+    />
+  </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-white mb-1">
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          value={loginData.password}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 rounded-[10px] text-white placeholder-[#d7d7d7] 
-                 border border-[rgba(255,255,255,0.25)] 
-                 bg-[rgba(255,255,255,0.10)] 
-                 backdrop-blur-md 
-                 focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] 
-                 transition-all"
-                        />
-                      </div>
+    <label className="text-sm text-white/80 font-semibold mb-1 block">
+      Password
+    </label>
+    <input
+      type="password"
+      name="password"
+      placeholder="Password"
+      value={loginData.password}
+      onChange={handleLoginChange}
+      className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
+      bg-white/10 border border-white/20 focus:border-[#F07730]"
+    />
+  </div>
 
                       <div className="flex justify-end">
-                        <button
-                          onClick={() => setActiveTab("forgot")}
-                          className="text-sm text-white/80 hover:text-[#F07730] transition-colors"
-                        >
-                          Forgot Password?
-                        </button>
-                      </div>
+    <button
+      onClick={() => setActiveTab("forgot")}
+      className="text-sm text-white/70 hover:text-[#F07730]"
+    >
+      Forgot Password?
+    </button>
+  </div>
 
                       <button
-                        onClick={handleLoginSubmit}
-                        className="w-full py-3 rounded-[10px] font-semibold text-black 
-               bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
-               hover:opacity-90 transition-all duration-200 shadow-md"
-                      >
-                        Sign In
-                      </button>
+    onClick={handleLoginSubmit}
+    className="w-full py-3 rounded-[12px] font-semibold text-black 
+    bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl"
+  >
+    Sign In
+  </button>
                     </div>
 
-                    <div className="relative my-6">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10" />
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="px-3 text-xs text-white-500 bg-[#7D7D7D;]">
-                          OR
-                        </span>
-                      </div>
-                    </div>
+                    <div className="relative my-3">
+    <div className="absolute inset-0 flex items-center">
+      <div className="w-full border-t border-white/15" />
+    </div>
+    <div className="relative flex justify-center">
+      <span className="px-3 text-sm text-white/50 bg-transparent">OR</span>
+    </div>
+  </div>
 
                     {/* Social Buttons */}
                     <div className="flex justify-center mb-6">
@@ -473,17 +481,15 @@ const LoginSignup = ({
                       </div>
                     </div>
 
-                    <div className="mt-6 text-center">
-                      <span className="register_text">
-                        Don't have an account?{" "}
-                      </span>
-                      <button
-                        onClick={() => setActiveTab("register")}
-                        className="register_now hover:text-[#EFD28E] font-semibold"
-                      >
-                        Register now
-                      </button>
-                    </div>
+                    <div className="mt-6 text-center text-white/80 text-sm">
+    Don’t have an account?{" "}
+    <button 
+      onClick={() => setActiveTab("register")}
+      className="text-[#F07730] font-semibold hover:text-[#EFD28E]"
+    >
+      Register Now
+    </button>
+  </div>
                   </motion.div>
                 ) : activeTab === "register" ? (
                   <motion.div
