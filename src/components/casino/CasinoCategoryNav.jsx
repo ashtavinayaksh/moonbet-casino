@@ -265,8 +265,26 @@ const CasinoCategoryNav = ({
   // --- Categories ---
   const categories = [
     {
+      id: "recent",
+      label: "Recent Games",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+        >
+          <path
+            d="M1.5 10C1.5 5.30558 5.30558 1.5 10 1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5C5.30558 18.5 1.5 14.6944 1.5 10ZM10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM9.9931 4.64827C9.9435 4.28233 9.6295 4 9.25 4C8.836 4 8.5 4.336 8.5 4.75V10.75L8.5069 10.8517C8.5565 11.2177 8.8705 11.5 9.25 11.5H13.25L13.3517 11.4931C13.7177 11.4435 14 11.1295 14 10.75C14 10.336 13.664 10 13.25 10H10V4.75L9.9931 4.64827Z"
+            fill="#7D7D7D"
+          />
+        </svg>
+      ),
+    },
+    {
       id: "favorites",
-      label: "For You",
+      label: "Favorites",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -670,18 +688,24 @@ const CasinoCategoryNav = ({
         </div>
 
         {/* --- Filters Row --- */}
-        {/* --- Filters Row --- */}
+
         <div className="flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-3 w-full">
           {/* Search + Static Filters */}
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 flex-shrink-0 w-full sm:w-auto">
             {/* Search Bar */}
-            <div className="relative w-full sm:w-64 lg:w-72">
+            <div className="crypto_btn relative w-full sm:w-64 lg:w-72">
               <input
                 type="text"
                 placeholder="Search for a casino game"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-64 lg:w-72 px-4 py-2.5 pl-10 bg-white/5 rounded-xl border border-white/10 text-sm text-gray-300 placeholder-gray-500 focus:border-[#F07730]/50 focus:bg-white/10 focus:outline-none transition-all"
+                className="w-full px-4 py-2.5 pl-10 text-sm text-gray-300 placeholder-gray-500 focus:border-[#F07730]/50 focus:bg-white/10 focus:outline-none transition-all
+                   rounded-[8px]"
+                style={{
+                  borderRadius: " 60px",
+
+                  background: "rgba(0, 0, 0, 0.80)",
+                }}
               />
               <svg
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"
@@ -699,13 +723,27 @@ const CasinoCategoryNav = ({
             </div>
 
             {/* Studios */}
-            <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all w-full sm:w-auto">
+            <button
+              className="crypto_btn flex items-center justify-center gap-2 px-4 py-2.5 transition-all w-full sm:w-auto
+                 rounded-[8px]"
+              style={{
+                borderRadius: " 60px",
+                background: "rgba(0, 0, 0, 0.80)",
+              }}
+            >
               <span className="text-sm text-gray-300">Studios</span>
               <ChevronRight className="w-4 h-4 text-gray-400 rotate-90" />
             </button>
 
             {/* Filters */}
-            <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all w-full sm:w-auto">
+            <button
+              className="crypto_btn flex items-center justify-center gap-2 px-4 py-2.5 transition-all w-full sm:w-auto
+                 rounded-[8px]"
+              style={{
+                borderRadius: " 60px",
+                background: "rgba(0, 0, 0, 0.80)",
+              }}
+            >
               <FilterIcon className="w-4 h-4 text-gray-400" />
               <span className="text-sm text-gray-300">Filters</span>
             </button>
@@ -720,7 +758,13 @@ const CasinoCategoryNav = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => scrollFilters("left")}
-                  className="p-2 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all flex-shrink-0"
+                  className="p-2 transition-all flex-shrink-0
+                     rounded-[8px] "
+                  style={{
+                    borderRadius: " 60px",
+                    border: "1px solid rgba(255, 255, 255, 0.40)",
+                    background: "rgba(0, 0, 0, 0.80)",
+                  }}
                 >
                   <ChevronLeft className="w-4 h-4 text-white" />
                 </motion.button>
@@ -740,18 +784,20 @@ const CasinoCategoryNav = ({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedFilter(filter.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all flex-shrink-0 ${
-                      selectedFilter === filter.id
-                        ? "bg-gradient-to-r from-[#F07730]/30 to-[#EFD28E]/30 border border-[#F07730]/50"
-                        : "bg-white/5 border border-white/10 hover:bg-white/10"
-                    }`}
+                    className={`crypto_btn flex items-center gap-2 px-4 py-2.5 transition-all flex-shrink-0 
+              rounded-[60px] ] 
+              ${
+                selectedFilter === filter.id
+                  ? "bg-gradient-to-r from-[#F07730]/30 to-[#EFD28E]/30"
+                  : "bg-[rgba(0,0,0,0.80)] hover:bg-[rgba(0,0,0,0.70)]"
+              }`}
                   >
                     <IconComponent className="w-4 h-4 text-gray-400" />
                     <span
                       className={`text-sm font-medium ${
                         selectedFilter === filter.id
                           ? "text-[#F07730]"
-                          : "text-gray-300"
+                          : "cryptp-para text-[#7D7D7D;]"
                       }`}
                     >
                       {filter.label}
@@ -768,7 +814,9 @@ const CasinoCategoryNav = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => scrollFilters("right")}
-                  className="p-2 bg-white/10 rounded-xl border border-white/20 hover:bg-white/20 transition-all flex-shrink-0"
+                  className="p-2 transition-all flex-shrink-0
+                     rounded-[8px] border border-[rgba(255,255,255,0.40)] bg-[rgba(255,255,255,0.10)]
+                     hover:bg-[rgba(255,255,255,0.15)]"
                 >
                   <ChevronRight className="w-4 h-4 text-white" />
                 </motion.button>
