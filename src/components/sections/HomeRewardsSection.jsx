@@ -17,10 +17,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Bonus",
         description1: "Elite Status, Stellar",
         description2: "Awards",
-        img: "/rewards/img1.svg",
-        fallbackImg:
-          "https://via.placeholder.com/178x168/0A2BBC/ffffff?text=Bonus+Card",
-        imgBgColor: "#0A2BBC",
+        img: "/rewards/rewards1.png",
       },
       {
         id: 2,
@@ -29,10 +26,7 @@ const HomeRewardsSection = () => {
         titleLine2: "RTP Games",
         description1: "Odds out of this",
         description2: "world.",
-        img: "/rewards/img3.svg",
-        fallbackImg:
-          "https://via.placeholder.com/178x168/DC1FFF/ffffff?text=Games+Card",
-        imgBgColor: "#DC1FFFBA",
+        img: "/rewards/rewards2.png",
       },
       {
         id: 3,
@@ -41,10 +35,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Game",
         description1: "Best out of all Crash",
         description2: "games out there.",
-        img: "/rewards/img2.svg",
-        fallbackImg:
-          "https://via.placeholder.com/178x168/F07730/ffffff?text=Honeypot+Card",
-        imgBgColor: "#F07730CC",
+        img: "/rewards/rewards3.png",
       },
     ],
     []
@@ -212,36 +203,15 @@ const HomeRewardsSection = () => {
                   </div>
 
                   {/* Image - Right Side (Fixed Size) */}
-                  <div
-                    className="absolute right-0 top-0 bottom-0 rounded-r-[15px] flex items-center justify-center"
-                    style={{
-                      width: "50%",
-                    }}
-                  >
+                  <div className="absolute right-0 top-0 bottom-0 rounded-r-[15px] flex items-center justify-center">
                     {/* Background Box */}
-                    <div
-                      className="flex items-center justify-center rounded-[12px]"
-                      style={{
-                        width: "144px",
-                        height: "144px",
-                        background: reward.imgBgColor,
-                        border: "1px solid rgba(255, 255, 255, 0.40)",
-                        boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
-                      }}
-                    >
+                    <div className="flex items-center justify-center ">
                       {/* Image */}
                       <img
                         src={imageErrors[reward.id] || reward.img}
                         alt={reward.titleLine2}
                         loading="lazy"
                         className="relative"
-                        style={{
-                          width: "200",
-                          height: "168",
-                          objectFit: "contain",
-                          transform: "scale(1.2)",
-                          filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.3))",
-                        }}
                         onError={(e) => {
                           e.target.onerror = null;
                           handleImageError(reward.id, reward.fallbackImg);
