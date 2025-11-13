@@ -18,7 +18,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
 
       // 🔥 1. Recent Games
       if (type === "recent") {
-        apiUrl = `/wallet-service/api/games?sortBy=recents&userId=${userId}`;
+        apiUrl = `/wallet-service/api/games?sortBy=recent&userId=${userId}`;
       }
 
       // 🔥 2. Favourite Games
