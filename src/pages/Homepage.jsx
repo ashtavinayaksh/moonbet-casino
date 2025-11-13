@@ -15,6 +15,7 @@ import CircularWheel from "../components/circular/CircularWheel";
 import SlotsSection from "../components/sections/SlotsSection";
 import LiveCasino from "../components/sections/LiveCasino";
 import RecommendedSection from "../components/sections/RecommendedSection";
+import RecentSection from "../components/sections/RecentSection";
 
 const Homepage = () => {
   return (
@@ -24,6 +25,7 @@ const Homepage = () => {
       {/* <RecommendedSection />
       <SlotsSection />
       <LiveCasino /> */}
+      <RecentSection />
       <RecommendedSection />
       <SlotsSection />
       <LiveCasino />

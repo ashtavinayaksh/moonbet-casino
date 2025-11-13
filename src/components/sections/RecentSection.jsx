@@ -1,4 +1,3 @@
-// src/components/sections/RecommendedSection.jsx
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -7,13 +6,15 @@ import MoonBetButton from "../ui-elements/MoonBetButton";
 import api from "../../api/axios";
 import axios from "axios";
 
-const RecommendedSection = () => {
+const RecentSection = () => {
   const scrollContainerRef = useRef(null);
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user.id || "690b0290cb255ca66b14a529";
 
   // Check scroll position
   const checkScrollPosition = () => {
@@ -33,7 +34,9 @@ const RecommendedSection = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const { data } = await axios.get("/wallet-service/api/games");
+        const { data } = await axios.get(
+          `/wallet-service/api/games?sortBy=recents&userId=${userId}`
+        );
 
         // ✅ Compatible with both old and new API response formats
         let fetchedGames = [];
@@ -45,10 +48,7 @@ const RecommendedSection = () => {
           // old API response (data.games.items)
           fetchedGames = data.games.items;
         }
-
-        // ✅ Randomize (shuffle) the games list
-        const shuffled = fetchedGames.sort(() => Math.random() - 0.5);
-        setGames(shuffled);
+        setGames(fetchedGames);
       } catch (error) {
         console.error("❌ Error fetching games:", error);
         toast.error(
@@ -194,7 +194,7 @@ const RecommendedSection = () => {
 
   return (
     <motion.section
-      className="w-full relative bg-black pb-5"
+      className="w-full relative bg-black pt-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -242,7 +242,7 @@ const RecommendedSection = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              TRENDING
+              RECENT
             </motion.h3>
           </div>
 
@@ -430,4 +430,4 @@ const RecommendedSection = () => {
   );
 };
 
-export default RecommendedSection;
+export default RecentSection;
