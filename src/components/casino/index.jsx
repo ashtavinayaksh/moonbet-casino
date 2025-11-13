@@ -9,29 +9,53 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
   const [favorite, setFavorite] = useState({});
 
   useEffect(() => {
-    const fetchGames = async () => {
-      setLoading(true);
-      try {
+  const fetchGames = async () => {
+    setLoading(true);
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = user.id || "690b0290cb255ca66b14a529";
+      let apiUrl = "";
+
+      // 🔥 1. Recent Games
+      if (type === "recent") {
+        apiUrl = `/wallet-service/api/games?sortBy=recents&userId=${userId}`;
+      }
+
+      // 🔥 2. Favourite Games
+      else if (type === "favorites") {
+        apiUrl = `/wallet-service/api/games?sortBy=favourite&userId=${userId}`;
+      }
+
+      // 🔥 3. All other categories
+      else {
         const params = new URLSearchParams();
+
         if (type && type !== "all") params.append("type", type);
         if (filter) params.append("sortBy", filter);
         if (searchTerm) params.append("name", searchTerm);
 
         const query = params.toString() ? `?${params.toString()}` : "";
-        const { data } = await axios.get(`/wallet-service/api/games${query}`);
-
-        if (data?.success) setGames(data.data || []);
-        else setGames([]);
-      } catch (err) {
-        console.error("❌ Error fetching games:", err);
-        setGames([]);
-      } finally {
-        setLoading(false);
+        apiUrl = `/wallet-service/api/games${query}`;
       }
-    };
 
-    fetchGames();
-  }, [type, filter, searchTerm]);
+      console.log("🔗 FINAL GameGrid API:", apiUrl);
+
+      const { data } = await axios.get(apiUrl);
+
+      if (data?.success) setGames(data.data || []);
+      else if (Array.isArray(data?.data)) setGames(data.data);
+      else setGames([]);
+
+    } catch (err) {
+      console.error("❌ Error fetching games:", err);
+      setGames([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchGames();
+}, [type, filter, searchTerm]);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 48);
 
