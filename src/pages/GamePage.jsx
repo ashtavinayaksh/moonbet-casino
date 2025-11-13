@@ -90,12 +90,13 @@ useEffect(() => {
   const fetchGameUrl = async () => {
     try {
       // 🕹 Step 1: Fetch all games
-      const { data } = await axios.get("/wallet-service/api/games");
+      const res = await axios.get("/wallet-service/api/games");
+const allGames = res.data?.data || [];
 
-      const game = data?.games?.items?.find(
-        (g) =>
-          g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
-      );
+const game = allGames.find(
+  (g) =>
+    g.name.toLowerCase() === decodeURIComponent(gameId).toLowerCase()
+);
 
       if (!game) {
         toast.error("Game not found!");
