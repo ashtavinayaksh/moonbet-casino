@@ -373,12 +373,7 @@ const LoginSignup = ({
                           placeholder="Email Address"
                           value={loginData.email}
                           onChange={handleLoginChange}
-                          className="w-full px-4 py-3 rounded-[10px] text-white placeholder-[#d7d7d7] 
-                 border border-[rgba(255,255,255,0.25)] 
-                 bg-[rgba(255,255,255,0.10)] 
-                 backdrop-blur-md 
-                 focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] 
-                 transition-all"
+                          className="w-full px-4 py-3 rounded-[10px]  placeholder-[#fff]  border border-[rgba(255,255,255,0.25)]  bg-[rgba(255,255,255,0.10)] backdrop-blur-md  focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] transition-all"
                         />
                       </div>
 
@@ -498,13 +493,95 @@ const LoginSignup = ({
                     exit={{ opacity: 0, x: -10 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-white mb-1">
+                    <div className="space-y-3">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Email address"
+                        value={signupData.email}
+                        onChange={handleSignupChange}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                      />
+
+                      <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={signupData.username}
+                        onChange={handleSignupChange}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                      />
+
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={signupData.password}
+                        onChange={handleSignupChange}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                      />
+
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        value={signupData.confirmPassword}
+                        onChange={handleSignupChange}
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                      />
+
+                      <div className="space-y-2 pt-2">
+                        <label className="flex items-start gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="agreeTerms"
+                            checked={signupData.agreeTerms}
+                            onChange={handleSignupChange}
+                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
+                          />
+                          <span className="text-xs text-gray-300">
+                            I agree to the{" "}
+                            <a
+                              href="#"
+                              className="text-[#F07730] hover:underline"
+                            >
+                              Terms
+                            </a>{" "}
+                            and confirm I'm 18+
+                          </span>
+                        </label>
+
+                        <label className="flex items-start gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="agreeMarketing"
+                            checked={signupData.agreeMarketing}
+                            onChange={handleSignupChange}
+                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
+                          />
+                          <span className="text-xs text-gray-300">
+                            Send me promotions
+                          </span>
+                        </label>
+                      </div>
+
+                      <button
+                        onClick={handleSignupSubmit}
+                        className="w-full py-3 mt-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
+                      >
                         Create Account
-                      </h3>
-                      <p className="text-gray-400 text-sm">
-                        Join the winning team
-                      </p>
+                      </button>
+                    </div>
+
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/10" />
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="px-3 text-xs text-white-500 bg-[#7D7D7D;]">
+                          OR
+                        </span>
+                      </div>
                     </div>
 
                     {/* Social Buttons */}
@@ -588,97 +665,6 @@ const LoginSignup = ({
                       </div>
                     )}
 
-                    <div className="relative my-6">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10" />
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="px-3 text-xs text-gray-500 bg-[#1a1d24]">
-                          or with email
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email address"
-                        value={signupData.email}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        value={signupData.username}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
-                      <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={signupData.password}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm password"
-                        value={signupData.confirmPassword}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
-                      <div className="space-y-2 pt-2">
-                        <label className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="agreeTerms"
-                            checked={signupData.agreeTerms}
-                            onChange={handleSignupChange}
-                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
-                          />
-                          <span className="text-xs text-gray-300">
-                            I agree to the{" "}
-                            <a
-                              href="#"
-                              className="text-[#F07730] hover:underline"
-                            >
-                              Terms
-                            </a>{" "}
-                            and confirm I'm 18+
-                          </span>
-                        </label>
-
-                        <label className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="agreeMarketing"
-                            checked={signupData.agreeMarketing}
-                            onChange={handleSignupChange}
-                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
-                          />
-                          <span className="text-xs text-gray-300">
-                            Send me promotions
-                          </span>
-                        </label>
-                      </div>
-
-                      <button
-                        onClick={handleSignupSubmit}
-                        className="w-full py-3 mt-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
-                      >
-                        Create Account
-                      </button>
-                    </div>
-
                     <div className="mt-6 text-center">
                       <span className="text-gray-400 text-sm">
                         Already have an account?{" "}
@@ -724,7 +710,7 @@ const LoginSignup = ({
                               placeholder="Enter your email address"
                               value={forgotPasswordData.email}
                               onChange={handleForgotPasswordChange}
-                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#E1E1E1] placeholder-[#fff] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                             />
                           </div>
 
