@@ -1222,3 +1222,31 @@
   line-height: 20px; /* 142.857% */
   letter-spacing: var(--Letter-Spacing, 0);
 }
+
+.register_text {
+  color: #7d7d7d;
+  text-align: center;
+  font-family: "Neue Plak";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.register_now {
+  color: #e1e1e1;
+  font-family: "Neue Plak";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.login-bg {
+  border-radius: 0 12px 12px 0;
+  opacity: 0.5;
+  background: linear-gradient(
+    109deg,
+    rgba(201, 201, 201, 0.8) 1.57%,
+    rgba(196, 196, 196, 0.1) 100%
+  );
+  backdrop-filter: blur(30px);
+}

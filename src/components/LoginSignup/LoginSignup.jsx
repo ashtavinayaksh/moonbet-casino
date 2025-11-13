@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 // Icon Components
 const GoogleIcon = () => (
@@ -100,136 +101,139 @@ const LoginSignup = ({
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const handleLoginSubmit = async () => {
-  const { email, password } = loginData;
+    const { email, password } = loginData;
 
-  // ✅ Validate email
-  if (!validateEmail(email)) {
-    toast.error("Please enter a valid email address.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
+    // ✅ Validate email
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
 
-  // ✅ Validate password length
-  if (password.length < 12 || password.length > 15) {
-    toast.error("Password must be between 12 and 15 characters.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
+    // ✅ Validate password length
+    if (password.length < 12 || password.length > 15) {
+      toast.error("Password must be between 12 and 15 characters.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
 
-  try {
-    const { data } = await axios.post("/auth-service/api/auth/login", loginData);
+    try {
+      const { data } = await axios.post(
+        "/auth-service/api/auth/login",
+        loginData
+      );
 
-    if (data?.token) {
-      localStorage.setItem("token", data.token);
-      window.dispatchEvent(new Event("tokenChanged"));
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        window.dispatchEvent(new Event("tokenChanged"));
 
-      if (data.user) {
-        const { id, username, email, kycStatus } = data.user;
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ id, username, email, kycStatus })
-        );
+        if (data.user) {
+          const { id, username, email, kycStatus } = data.user;
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ id, username, email, kycStatus })
+          );
+        }
+
+        toast.success("You have logged in successfully", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        setTimeout(() => {
+          if (onLoginSuccess) onLoginSuccess(data);
+        }, 500);
+      } else {
+        toast.error(data.message || "Login failed", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error(
+        err.response?.data?.message || "Invalid credentials. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    }
+  };
 
-      toast.success("You have logged in successfully", {
+  const handleSignupSubmit = async () => {
+    const { email, username, password, confirmPassword, agreeTerms } =
+      signupData;
+
+    if (!validateEmail(email)) {
+      toast.error("Please enter a valid email address.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (!username.trim()) {
+      toast.error("Username is required.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (password.length < 12 || password.length > 15) {
+      toast.error("Password must be between 12 and 15 characters.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (!agreeTerms) {
+      toast.error("You must agree to the Terms and confirm you're 18+.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        "/auth-service/api/auth/register",
+        signupData
+      );
+
+      toast.success("Account created successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
 
       setTimeout(() => {
-        if (onLoginSuccess) onLoginSuccess(data);
+        if (onSignupSuccess) onSignupSuccess(data);
       }, 500);
-    } else {
-      toast.error(data.message || "Login failed", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    } catch (err) {
+      console.error("Signup error:", err);
+      toast.error(
+        err.response?.data?.message || "Signup failed. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    toast.error(
-      err.response?.data?.message || "Invalid credentials. Please try again.",
-      {
-        position: "top-right",
-        autoClose: 3000,
-      }
-    );
-  }
-};
-
-  const handleSignupSubmit = async () => {
-  const { email, username, password, confirmPassword, agreeTerms } = signupData;
-
-  if (!validateEmail(email)) {
-    toast.error("Please enter a valid email address.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  if (!username.trim()) {
-    toast.error("Username is required.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  if (password.length < 12 || password.length > 15) {
-    toast.error("Password must be between 12 and 15 characters.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    toast.error("Passwords do not match.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  if (!agreeTerms) {
-    toast.error("You must agree to the Terms and confirm you're 18+.", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  try {
-    const { data } = await axios.post(
-      "/auth-service/api/auth/register",
-      signupData
-    );
-
-    toast.success("Account created successfully!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-
-    setTimeout(() => {
-      if (onSignupSuccess) onSignupSuccess(data);
-    }, 500);
-  } catch (err) {
-    console.error("Signup error:", err);
-    toast.error(
-      err.response?.data?.message || "Signup failed. Please try again.",
-      {
-        position: "top-right",
-        autoClose: 3000,
-      }
-    );
-  }
-};
-
+  };
 
   const handleForgotPasswordSubmit = () => {
     console.log("Forgot Password:", forgotPasswordData);
@@ -256,25 +260,26 @@ const LoginSignup = ({
       onClick={onClose}
     >
       {/* Centering wrapper */}
-      <div className="flex items-center justify-center min-h-full">
+      <div
+        className="flex items-center justify-center min-h-full"
+        style={{
+          background: "rgba(8, 8, 8, 0.30)",
+          backdropFilter: "blur(25px)",
+          WebkitBackdropFilter: "blur(25px)", // ✅ for Safari
+        }}
+      >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="relative w-full max-w-[900px] rounded-2xl overflow-hidden shadow-2xl"
-          style={{
-            background: "linear-gradient(135deg, #1a1d24 0%, #0f1014 100%)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            boxShadow:
-              "0 20px 60px rgba(0, 0, 0, 0.9), 0 0 100px rgba(240, 119, 48, 0.15)",
-          }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200 group"
+            className="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center transition-all duration-200 group"
           >
             <svg
               className="w-5 h-5 text-white/70 group-hover:text-white transition-colors"
@@ -293,101 +298,34 @@ const LoginSignup = ({
 
           <div className="flex flex-col lg:flex-row">
             {/* Left Side - Banner */}
-            <div className="hidden lg:flex lg:w-[40%] relative bg-gradient-to-br from-[#F07730] via-[#D66920] to-[#B85515] p-8 lg:p-10">
-              <div className="absolute inset-0 opacity-10">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage:
-                      'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-                  }}
-                />
-              </div>
-
-              <div className="relative z-10 flex flex-col justify-between h-full">
-                <div>
-                  <div className="mb-6">
-                    <div className="h-10 flex items-center">
-                      <span className="text-3xl font-bold text-white">
-                        MOONBET
-                      </span>
-                    </div>
-                  </div>
-                  <h2 className="text-3xl font-bold text-white mb-3">
-                    Welcome to MoonBet
-                  </h2>
-                  <p className="text-white/90 text-sm leading-relaxed">
-                    Join thousands of players in the ultimate crypto casino
-                    experience. Win big, play fair, stay secure.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                      <svg
-                        className="w-5 h-5 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold">
-                        Provably Fair
-                      </div>
-                      <div className="text-white/70 text-xs">
-                        Transparent & Verifiable
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                      <svg
-                        className="w-5 h-5 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold">
-                        Instant Withdrawals
-                      </div>
-                      <div className="text-white/70 text-xs">
-                        Crypto Payments Only
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/20">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-white font-semibold text-sm">
-                        2,341 Players Online
-                      </span>
-                    </div>
-                    <div className="text-white/70 text-xs">
-                      Must be 18+ to play
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div
+              className="hidden lg:flex lg:w-[42%] relative bg-cover bg-no-repeat"
+              style={{
+                backgroundImage: 'url("/home-assets/login-bg.svg")',
+                backgroundPosition: "center",
+              }}
+            ></div>
 
             {/* Right Side - Form */}
-            <div className="w-full lg:w-[60%] p-6 sm:p-8 lg:p-10 max-h-[85vh] overflow-y-auto">
+            <div className="login-bg w-full lg:w-[60%] p-6 sm:p-8 lg:p-10 max-h-[85vh] overflow-y-auto">
+              <div className="mb-6 flex ">
+                <Link to="/" className="flex gap-2">
+                  <span className="flex gap-2 text-xl font-bold text-white tracking-wider">
+                    {/* Desktop Logo */}
+                    <img
+                      src="/icons/logo.svg"
+                      alt="Moonbet Logo"
+                      className="w-32 h-auto object-contain hidden md:block md:mx-1"
+                    />
+                    {/* Mobile Logo */}
+                    <img
+                      src="/home-assets/mobile-logo.svg"
+                      alt="Moonbet Logo Mobile"
+                      className="w-28 h-auto object-contain block md:hidden"
+                    />
+                  </span>
+                </Link>
+              </div>
               {/* Tabs - Hide when on forgot password */}
               {activeTab !== "forgot" && (
                 <div className="flex gap-2 mb-6 p-1 bg-white/5 rounded-xl">
@@ -424,56 +362,62 @@ const LoginSignup = ({
                     exit={{ opacity: 0, x: 10 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-white mb-1">
-                        Welcome Back
-                      </h3>
-                      <p className="text-gray-400 text-sm">
-                        Sign in to continue playing
-                      </p>
-                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-white mb-1">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Email Address"
+                          value={loginData.email}
+                          onChange={handleLoginChange}
+                          className="w-full px-4 py-3 rounded-[10px] text-white placeholder-[#d7d7d7] 
+                 border border-[rgba(255,255,255,0.25)] 
+                 bg-[rgba(255,255,255,0.10)] 
+                 backdrop-blur-md 
+                 focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] 
+                 transition-all"
+                        />
+                      </div>
 
-                    {/* Social Buttons */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
-                        <div className="col-span-2 flex justify-center mb-4">
-  <GoogleLogin
-    onSuccess={async (credentialResponse) => {
-      try {
-        const { credential } = credentialResponse;
-        const decoded = jwtDecode(credential);
-        console.log("✅ Google user:", decoded);
+                      <div>
+                        <label className="block text-sm font-semibold text-white mb-1">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          value={loginData.password}
+                          onChange={handleLoginChange}
+                          className="w-full px-4 py-3 rounded-[10px] text-white placeholder-[#d7d7d7] 
+                 border border-[rgba(255,255,255,0.25)] 
+                 bg-[rgba(255,255,255,0.10)] 
+                 backdrop-blur-md 
+                 focus:outline-none focus:ring-1 focus:ring-[#F07730] focus:border-[#F07730] 
+                 transition-all"
+                        />
+                      </div>
 
-        const { data } = await axios.post(
-          "/auth-service/api/auth/google",
-          { token: credential }
-        );
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => setActiveTab("forgot")}
+                          className="text-sm text-white/80 hover:text-[#F07730] transition-colors"
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
 
-        if (data?.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          window.dispatchEvent(new Event("tokenChanged"));
-
-          toast.success("Signed in with Google!");
-          if (onLoginSuccess) onLoginSuccess(data);
-        }
-      } catch (err) {
-        console.error("Google login failed:", err);
-        toast.error("Google login failed");
-      }
-    }}
-    onError={() => toast.error("Google Sign-In failed")}
-    useOneTap
-  />
-</div>
-
+                      <button
+                        onClick={handleLoginSubmit}
+                        className="w-full py-3 rounded-[10px] font-semibold text-black 
+               bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
+               hover:opacity-90 transition-all duration-200 shadow-md"
+                      >
+                        Sign In
                       </button>
-                      {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
-                        <WalletIcon />
-                        <span className="text-white text-sm font-medium">
-                          Wallet
-                        </span>
-                      </button> */}
                     </div>
 
                     <div className="relative my-6">
@@ -481,61 +425,68 @@ const LoginSignup = ({
                         <div className="w-full border-t border-white/10" />
                       </div>
                       <div className="relative flex justify-center">
-                        <span className="px-3 text-xs text-gray-500 bg-[#1a1d24]">
-                          or with email
+                        <span className="px-3 text-xs text-white-500 bg-[#7D7D7D;]">
+                          OR
                         </span>
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <div>
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Email address"
-                          value={loginData.email}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                        />
-                      </div>
-
-                      <div>
-                        <input
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          value={loginData.password}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                        />
-                      </div>
-
-                      <div className="flex justify-end">
-                        <button
-                          onClick={() => setActiveTab("forgot")}
-                          className="text-sm text-[#F07730] hover:text-[#EFD28E] transition-colors"
-                        >
-                          Forgot password?
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={handleLoginSubmit}
-                        className="w-full py-3 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
+                    {/* Social Buttons */}
+                    <div className="flex justify-center mb-6">
+                      <div
+                        className="flex items-center justify-center w-full  py-2"
+                        style={{
+                          borderRadius: "40px",
+                          background: "#fff",
+                        }}
                       >
-                        Sign In
-                      </button>
+                        <div className="google_Auth">
+                          <GoogleLogin
+                            className="google_Auth"
+                            onSuccess={async (credentialResponse) => {
+                              try {
+                                const { credential } = credentialResponse;
+                                const decoded = jwtDecode(credential);
+                                console.log("✅ Google user:", decoded);
+
+                                const { data } = await axios.post(
+                                  "/auth-service/api/auth/google",
+                                  { token: credential }
+                                );
+
+                                if (data?.token) {
+                                  localStorage.setItem("token", data.token);
+                                  localStorage.setItem(
+                                    "user",
+                                    JSON.stringify(data.user)
+                                  );
+                                  window.dispatchEvent(
+                                    new Event("tokenChanged")
+                                  );
+                                  toast.success("Signed in with Google!");
+                                  if (onLoginSuccess) onLoginSuccess(data);
+                                }
+                              } catch (err) {
+                                console.error("Google login failed:", err);
+                                toast.error("Google login failed");
+                              }
+                            }}
+                            onError={() => toast.error("Google Sign-In failed")}
+                            useOneTap
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div className="mt-6 text-center">
-                      <span className="text-gray-400 text-sm">
+                      <span className="register_text">
                         Don't have an account?{" "}
                       </span>
                       <button
                         onClick={() => setActiveTab("register")}
-                        className="text-[#F07730] hover:text-[#EFD28E] font-semibold text-sm"
+                        className="register_now hover:text-[#EFD28E] font-semibold"
                       >
-                        Sign up
+                        Register now
                       </button>
                     </div>
                   </motion.div>
@@ -560,36 +511,40 @@ const LoginSignup = ({
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
                         <div className="col-span-2 flex justify-center mb-4">
-  <GoogleLogin
-    onSuccess={async (credentialResponse) => {
-      try {
-        const { credential } = credentialResponse;
-        const decoded = jwtDecode(credential);
-        console.log("✅ Google user:", decoded);
+                          <GoogleLogin
+                            onSuccess={async (credentialResponse) => {
+                              try {
+                                const { credential } = credentialResponse;
+                                const decoded = jwtDecode(credential);
+                                console.log("✅ Google user:", decoded);
 
-        const { data } = await axios.post(
-          "/auth-service/api/auth/google",
-          { token: credential }
-        );
+                                const { data } = await axios.post(
+                                  "/auth-service/api/auth/google",
+                                  { token: credential }
+                                );
 
-        if (data?.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          window.dispatchEvent(new Event("tokenChanged"));
+                                if (data?.token) {
+                                  localStorage.setItem("token", data.token);
+                                  localStorage.setItem(
+                                    "user",
+                                    JSON.stringify(data.user)
+                                  );
+                                  window.dispatchEvent(
+                                    new Event("tokenChanged")
+                                  );
 
-          toast.success("Signed in with Google!");
-          if (onLoginSuccess) onLoginSuccess(data);
-        }
-      } catch (err) {
-        console.error("Google login failed:", err);
-        toast.error("Google login failed");
-      }
-    }}
-    onError={() => toast.error("Google Sign-In failed")}
-    useOneTap
-  />
-</div>
-
+                                  toast.success("Signed in with Google!");
+                                  if (onLoginSuccess) onLoginSuccess(data);
+                                }
+                              } catch (err) {
+                                console.error("Google login failed:", err);
+                                toast.error("Google login failed");
+                              }
+                            }}
+                            onError={() => toast.error("Google Sign-In failed")}
+                            useOneTap
+                          />
+                        </div>
                       </button>
                       {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
@@ -628,7 +583,7 @@ const LoginSignup = ({
                           placeholder="Enter referral code"
                           value={signupData.referralCode}
                           onChange={handleSignupChange}
-                          className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                          className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                         />
                       </div>
                     )}
@@ -651,7 +606,7 @@ const LoginSignup = ({
                         placeholder="Email address"
                         value={signupData.email}
                         onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                       />
 
                       <input
@@ -660,7 +615,7 @@ const LoginSignup = ({
                         placeholder="Username"
                         value={signupData.username}
                         onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                       />
 
                       <input
@@ -669,7 +624,7 @@ const LoginSignup = ({
                         placeholder="Password"
                         value={signupData.password}
                         onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                       />
 
                       <input
@@ -678,7 +633,7 @@ const LoginSignup = ({
                         placeholder="Confirm password"
                         value={signupData.confirmPassword}
                         onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                       />
 
                       <div className="space-y-2 pt-2">
@@ -769,7 +724,7 @@ const LoginSignup = ({
                               placeholder="Enter your email address"
                               value={forgotPasswordData.email}
                               onChange={handleForgotPasswordChange}
-                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
                             />
                           </div>
 
