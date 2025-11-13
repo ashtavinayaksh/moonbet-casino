@@ -6,6 +6,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
   const [games, setGames] = useState([]);
   const [visibleCount, setVisibleCount] = useState(48);
   const [loading, setLoading] = useState(true);
+  const [favorite, setFavorite] = useState({});
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -68,6 +69,32 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                   custom={i}
                   className="relative rounded-xl overflow-hidden border border-white/10 hover:border-[#F07730]/50 cursor-pointer group transition-all"
                 >
+                  {/* Favorite Icon (Top Right) */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // prevents PLAY NOW trigger
+                      setFavorite((prev) => ({
+                        ...prev,
+                        [game.uuid]: !prev[game.uuid],
+                      }));
+                    }}
+                    className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-[8px]   transition-all duration-300 z-50 ${
+                      favorite?.[game.uuid]
+                        ? ""
+                        : " hover:bg-[rgba(240,119,48,0.10)]"
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="16"
+                      viewBox="0 0 18 16"
+                      fill={favorite?.[game.uuid] ? "#F07730" : "#7D7D7D"}
+                      className="transition-all duration-300"
+                    >
+                      <path d="M12.5107 0C13.9776 7.87092e-05 15.3563 0.572114 16.3936 1.60938C18.5348 3.75068 18.5349 7.23458 16.3936 9.37598L10.3721 15.3984C10.0067 15.7637 9.51929 15.9648 9 15.9648C8.48071 15.9648 7.99326 15.7636 7.62793 15.3984L1.60547 9.37598C-0.53553 7.23467 -0.535317 3.75066 1.60547 1.60938C2.64272 0.572084 4.02233 4.57993e-05 5.48926 0C6.78661 0 8.01573 0.44767 9 1.26855C9.98434 0.44767 11.2133 0 12.5107 0Z" />
+                    </svg>
+                  </button>
                   <div className="relative aspect-[18/12] overflow-hidden rounded-xl">
                     <motion.img
                       src={game.image}
