@@ -461,12 +461,13 @@ const Header = ({
       icon: "/icons/providers.svg",
       activeIcon: "/active-menu/providers-active.svg", // Single variable
     },
+    ...(hasToken ? [
     {
       path: "/affiliate",
       label: "Affiliates",
       icon: "/icons/affiliates.svg",
       activeIcon: "/active-menu/affliate-active.svg", // Single variable
-    },
+    },] : []),
     {
       path: "#",
       label: "Rewards",

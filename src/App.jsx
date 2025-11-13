@@ -1,10 +1,10 @@
-// src/App.jsx - SIMPLE FIX FOR CLOSE BUTTON
-
+// src/App.jsx
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useSearchParams,
 } from "react-router-dom";
 import Layout from "./components/layouts/Layout";
@@ -14,8 +14,8 @@ import Transactions from "./pages/Transactions";
 import Bets from "./pages/Bets";
 import LoginSignup from "./components/LoginSignup/LoginSignup";
 import GamePage from "./pages/GamePage";
-import { ToastContainer, toast } from "react-toastify";
-import "./styles/toastify-custom.css"; // Your custom styles
+import { ToastContainer } from "react-toastify";
+import "./styles/toastify-custom.css";
 import AuthTest from "./pages/AuthTest";
 import "react-toastify/dist/ReactToastify.css";
 import AffiliateProgram from "./pages/AffiliateProgram";
@@ -30,32 +30,42 @@ const HoneypotPage = () => (
     <h1>Honeypot Game</h1>
   </div>
 );
-
 const CoinflipPage = () => (
   <div className="min-h-screen p-8 text-white">
     <h1>Coinflip Game</h1>
   </div>
 );
-
 const PumpDumpPage = () => (
   <div className="min-h-screen p-8 text-white">
     <h1>Pump.Dump Game</h1>
   </div>
 );
-
 const FuturesPage = () => (
   <div className="min-h-screen p-8 text-white">
     <h1>Futures Game</h1>
   </div>
 );
-
 const ChatPage = () => (
   <div className="min-h-screen p-8 text-white">
     <h1>Chat</h1>
   </div>
 );
 
-// Auth Modal Handler Component
+//
+// 🔐 PRIVATE ROUTE WRAPPER
+//
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    // redirect to home with ?modal=auth to open login popup
+    return <Navigate to="/?modal=auth&tab=login" replace />;
+  }
+  return children;
+};
+
+//
+// 🔓 AUTH MODAL HANDLER
+//
 const AuthModalHandler = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -70,7 +80,6 @@ const AuthModalHandler = ({ children }) => {
   useEffect(() => {
     const modalParam = searchParams.get("modal");
     const tabParam = searchParams.get("tab");
-
     if (modalParam === "auth" && !isLoggedIn) {
       setIsAuthModalOpen(true);
       setDefaultTab(tabParam === "register" ? "register" : "login");
@@ -106,48 +115,88 @@ const AuthModalHandler = ({ children }) => {
   );
 };
 
+//
+// 🧭 APP ROUTES
+//
 function App() {
   return (
     <Router>
       <AuthModalHandler>
         <Routes>
           <Route path="/" element={<Layout />}>
+            {/* ✅ PUBLIC ROUTES */}
             <Route index element={<Homepage />} />
             <Route path="game/honeypot" element={<HoneypotPage />} />
             <Route path="game/coinflip" element={<CoinflipPage />} />
             <Route path="game/pumpdump" element={<PumpDumpPage />} />
             <Route path="game/futures" element={<FuturesPage />} />
-            <Route path="chat" element={<ChatPage />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="bets" element={<Bets />} />
-            <Route path="bet-history" element={<Bets />} />
             <Route path="game/:gameId" element={<GamePage />} />
+            <Route path="chat" element={<ChatPage />} />
             <Route path="authtest" element={<AuthTest />} />
-            <Route path="/affiliate" element={<AffiliateProgram />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/blackjack" element={<Blackjack />} />
-            <Route path="/casino" element={<Casino />} />
-            <Route path="/casino/:category" element={<Casino />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
+            <Route path="blackjack" element={<Blackjack />} />
+            <Route path="casino" element={<Casino />} />
+            <Route path="casino/:category" element={<Casino />} />
+
+            {/* 🔒 PRIVATE ROUTES (require login) */}
+            <Route
+              path="settings"
+              element={
+                <PrivateRoute>
+                  <Settings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="transactions"
+              element={
+                <PrivateRoute>
+                  <Transactions />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="bets"
+              element={
+                <PrivateRoute>
+                  <Bets />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="bet-history"
+              element={
+                <PrivateRoute>
+                  <Bets />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="affiliate"
+              element={
+                <PrivateRoute>
+                  <AffiliateProgram />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
       </AuthModalHandler>
 
-      {/* SIMPLIFIED TOAST CONTAINER - DISABLE closeOnClick */}
+      {/* ✅ Toast + Tidio Global */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick={true} // ← Changed from false to true
+        newestOnTop
+        closeOnClick
         rtl={false}
-        pauseOnFocusLoss={true}
-        draggable={true}
-        pauseOnHover={true}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
         theme="dark"
-        closeButton={true}
+        closeButton
       />
-      {/* Add the Tidio Chat Button (visible globally) */}
       <TidioChatButton />
     </Router>
   );
