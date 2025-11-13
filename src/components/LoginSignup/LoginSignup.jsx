@@ -273,7 +273,7 @@ const LoginSignup = ({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-[900px] rounded-2xl overflow-hidden shadow-2xl"
+          className="relative w-full max-w-[900px] rounded-2xl overflow-y-auto overflow-x-hidden shadow-2xl max-h-[95vh] scrollbar-thin scrollbar-thumb-[#F07730]/40 scrollbar-track-transparent"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
@@ -298,29 +298,29 @@ const LoginSignup = ({
 
           <div className="flex flex-col lg:flex-row w-full h-full">
             {/* Left Side - Banner */}
-            <div 
-    className="hidden lg:flex w-[45%] h-[690px] relative"
-    style={{
-      backgroundImage: "url('/home-assets/login-bg.svg')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      borderTopLeftRadius: "18px",
-      borderBottomLeftRadius: "18px",
-    }}
-  ></div>
+            <div
+              className="hidden lg:flex w-[45%] h-[690px] relative"
+              style={{
+                backgroundImage: "url('/home-assets/login-bg.svg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                borderTopLeftRadius: "18px",
+                borderBottomLeftRadius: "18px",
+              }}
+            ></div>
 
             {/* Right Side - Form */}
-            <div 
-    className="w-full lg:w-[55%] h-[690px] p-10 flex flex-col"
-    style={{
-      background: "rgba(255, 255, 255, 0.08)",
-      backdropFilter: "blur(12px)",
-      WebkitBackdropFilter: "blur(12px)",
-      borderTopRightRadius: "18px",
-      borderBottomRightRadius: "18px",
-    }}
-  >
+            <div
+              className="w-full lg:w-[55%] h-[690px] p-10 flex flex-col"
+              style={{
+                background: "rgba(255, 255, 255, 0.08)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderTopRightRadius: "18px",
+                borderBottomRightRadius: "18px",
+              }}
+            >
               <div className="mb-6 flex ">
                 <Link to="/" className="flex gap-2">
                   <span className="flex gap-2 text-xl font-bold text-white tracking-wider">
@@ -377,62 +377,64 @@ const LoginSignup = ({
                   >
                     <div className="space-y-5 mt-6">
                       {/* EMAIL */}
-  <div>
-    <label className="text-sm text-white/80 font-semibold mb-1 block">
-      Email Address
-    </label>
-    <input
-      type="email"
-      name="email"
-      placeholder="Email Address"
-      value={loginData.email}
-      onChange={handleLoginChange}
-      className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
+                      <div>
+                        <label className="text-sm text-white/80 font-semibold mb-1 block">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Email Address"
+                          value={loginData.email}
+                          onChange={handleLoginChange}
+                          className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
        bg-white/10 border border-white/20 focus:border-[#F07730]"
-    />
-  </div>
+                        />
+                      </div>
 
                       <div>
-    <label className="text-sm text-white/80 font-semibold mb-1 block">
-      Password
-    </label>
-    <input
-      type="password"
-      name="password"
-      placeholder="Password"
-      value={loginData.password}
-      onChange={handleLoginChange}
-      className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
+                        <label className="text-sm text-white/80 font-semibold mb-1 block">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          value={loginData.password}
+                          onChange={handleLoginChange}
+                          className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
       bg-white/10 border border-white/20 focus:border-[#F07730]"
-    />
-  </div>
+                        />
+                      </div>
 
                       <div className="flex justify-end">
-    <button
-      onClick={() => setActiveTab("forgot")}
-      className="text-sm text-white/70 hover:text-[#F07730]"
-    >
-      Forgot Password?
-    </button>
-  </div>
+                        <button
+                          onClick={() => setActiveTab("forgot")}
+                          className="text-sm text-white/70 hover:text-[#F07730]"
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
 
                       <button
-    onClick={handleLoginSubmit}
-    className="w-full py-3 rounded-[12px] font-semibold text-black 
+                        onClick={handleLoginSubmit}
+                        className="w-full py-3 rounded-[12px] font-semibold text-black 
     bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl"
-  >
-    Sign In
-  </button>
+                      >
+                        Sign In
+                      </button>
                     </div>
 
                     <div className="relative my-3">
-    <div className="absolute inset-0 flex items-center">
-      <div className="w-full border-t border-white/15" />
-    </div>
-    <div className="relative flex justify-center">
-      <span className="px-3 text-sm text-white/50 bg-transparent">OR</span>
-    </div>
-  </div>
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/15" />
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="px-3 text-sm text-white/50 bg-transparent">
+                          OR
+                        </span>
+                      </div>
+                    </div>
 
                     {/* Social Buttons */}
                     <div className="flex justify-center mb-6">
@@ -482,14 +484,14 @@ const LoginSignup = ({
                     </div>
 
                     <div className="mt-6 text-center text-white/80 text-sm">
-    Don’t have an account?{" "}
-    <button 
-      onClick={() => setActiveTab("register")}
-      className="text-[#F07730] font-semibold hover:text-[#EFD28E]"
-    >
-      Register Now
-    </button>
-  </div>
+                      Don’t have an account?{" "}
+                      <button
+                        onClick={() => setActiveTab("register")}
+                        className="text-[#F07730] font-semibold hover:text-[#EFD28E]"
+                      >
+                        Register Now
+                      </button>
+                    </div>
                   </motion.div>
                 ) : activeTab === "register" ? (
                   <motion.div
@@ -506,7 +508,7 @@ const LoginSignup = ({
                         placeholder="Email address"
                         value={signupData.email}
                         onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] overflow-y-auto transition-all"
                       />
 
                       <input
@@ -591,7 +593,7 @@ const LoginSignup = ({
                     </div>
 
                     {/* Social Buttons */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="grid grid-cols-2 gap-3 mb-2">
                       <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
                         <div className="col-span-2 flex justify-center mb-4">
                           <GoogleLogin
@@ -638,7 +640,7 @@ const LoginSignup = ({
                     </div>
 
                     {/* Referral Code */}
-                    <button
+                    {/* <button
                       onClick={() => setShowReferralCode(!showReferralCode)}
                       className="w-full flex items-center justify-between py-2.5 px-4 mb-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
                     >
@@ -656,7 +658,7 @@ const LoginSignup = ({
                       >
                         <polyline points="6 9 12 15 18 9" />
                       </svg>
-                    </button>
+                    </button> */}
 
                     {showReferralCode && (
                       <div className="mb-4">
@@ -671,7 +673,7 @@ const LoginSignup = ({
                       </div>
                     )}
 
-                    <div className="mt-6 text-center">
+                    <div className="text-center">
                       <span className="text-gray-400 text-sm">
                         Already have an account?{" "}
                       </span>
