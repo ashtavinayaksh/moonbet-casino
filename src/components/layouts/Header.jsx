@@ -461,13 +461,16 @@ const Header = ({
       icon: "/icons/providers.svg",
       activeIcon: "/active-menu/providers-active.svg", // Single variable
     },
-    ...(hasToken ? [
-    {
-      path: "/affiliate",
-      label: "Affiliates",
-      icon: "/icons/affiliates.svg",
-      activeIcon: "/active-menu/affliate-active.svg", // Single variable
-    },] : []),
+    ...(hasToken
+      ? [
+          {
+            path: "/affiliate",
+            label: "Affiliates",
+            icon: "/icons/affiliates.svg",
+            activeIcon: "/active-menu/affliate-active.svg", // Single variable
+          },
+        ]
+      : []),
     {
       path: "#",
       label: "Rewards",
@@ -641,7 +644,7 @@ const Header = ({
                 {/* Wallet Button */}
                 <button
                   onClick={() => setWalletDropdownOpen(!walletDropdownOpen)}
-                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-[8px]  border-[rgba(255,255,255,0.4)] bg-[linear-gradient(180deg,rgba(75,75,75,0.3)_0%,rgba(244,116,251,0.3)_100%)] shadow-[1px_2px_1px_rgba(0,0,0,0.4)] backdrop-blur-[1.5px]  text-white transition-all duration-300 max-w-[150px] sm:max-w-none"
+                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 -mt-2 sm:py-2.5 rounded-[8px]  border-[rgba(255,255,255,0.4)] bg-[linear-gradient(180deg,rgba(75,75,75,0.3)_0%,rgba(244,116,251,0.3)_100%)] shadow-[1px_2px_1px_rgba(0,0,0,0.4)] backdrop-blur-[1.5px]  text-white transition-all duration-300 max-w-[150px] sm:max-w-none"
                 >
                   {/* Coin logo */}
                   <img
@@ -682,10 +685,12 @@ const Header = ({
                 {/* Wallet Dropdown */}
                 {walletDropdownOpen && (
                   <div
-                    className="walletbtnnn absolute left-[80%] sm:left-1/2 md:left-1/2 -translate-x-1/2 mt-10 w-[90vw] sm:w-80 bg-[#1A1D24]/95
-                 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
+                    className="custom-header absolute left-[80%] sm:left-1/2 md:left-[65%]  -translate-x-1/2 mt-10 w-[90vw] sm:w-80 rounded-[24px]  shadow-2xl overflow-hidden z-50"
                     style={{
-                      backdropFilter: "blur(20px)",
+                      background:
+                        "linear-gradient(rgb(80, 84, 91) 0%, rgb(60, 64, 70) 100%)",
+                      backdropFilter: "blur(135.5px)",
+                      WebkitBackdropFilter: "blur(135.5px)", // Safari support
                       boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8)",
                     }}
                   >
