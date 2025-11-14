@@ -592,7 +592,7 @@ const CasinoCategoryNav = ({
               className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none z-10"
               style={{
                 background:
-                  "linear-gradient(to left, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0))",
+                  "linear-gradient(to left, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0))",
               }}
             ></div>
             <div
