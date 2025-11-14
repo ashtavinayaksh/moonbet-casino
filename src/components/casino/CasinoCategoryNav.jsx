@@ -566,7 +566,7 @@ const CasinoCategoryNav = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
         {/* --- Categories Row --- */}
         <div className="relative flex items-center w-full">
-          {/* Left Arrow */}
+          {/* Left Arrow (Matches Filter Row Style) */}
           <AnimatePresence>
             {showLeftArrow && (
               <motion.button
@@ -574,99 +574,111 @@ const CasinoCategoryNav = ({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => scrollCategories("left")}
-                className="absolute left-0 z-20 flex-shrink-0"
+                className="absolute left-0 z-20 flex-shrink-0 p-2 transition-all rounded-[8px]"
+                style={{
+                  borderRadius: "60px",
+                  border: "1px solid rgba(255, 255, 255, 0.40)",
+                  background: "rgba(0, 0, 0, 0.80)",
+                }}
               >
-                <div className="p-1.5 bg-white/10 rounded-lg border border-white/20 hover:bg-white/20 transition-all">
-                  <ChevronLeft className="w-5 h-5 text-white" />
-                </div>
+                <ChevronLeft className="w-4 h-4 text-white" />
               </motion.button>
             )}
           </AnimatePresence>
 
           {/* Categories */}
-          <div
-            ref={categoriesRef}
-            className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide scroll-smooth w-full px-0"
-          >
-            {categories.map((category) => (
-              <motion.button
-                key={category.id}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setSelectedCategory(category.id);
-                  navigate(
-                    `/casino/${category.id === "all" ? "" : category.id}`
-                  );
-                }}
-                className={`group view_btn relative flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 transition-all flex-shrink-0
+          <div className="relative w-full">
+            <div
+              className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none z-10"
+              style={{
+                background:
+                  "linear-gradient(to left, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0))",
+              }}
+            ></div>
+            <div
+              ref={categoriesRef}
+              className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide scroll-smooth w-full pr-8" // ✅ padding-right keeps arrow clear
+            >
+              {categories.map((category) => (
+                <motion.button
+                  key={category.id}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    navigate(
+                      `/casino/${category.id === "all" ? "" : category.id}`
+                    );
+                  }}
+                  className={`group view_btn relative flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 transition-all flex-shrink-0
     rounded-[8px]  border-[rgba(255,255,255,0.40)] bg-[rgba(255,255,255,0.10)]
     ${
       selectedCategory === category.id
         ? "bg-gradient-to-r from-[#FFBF9A]/10 to-[#F07730]/10"
         : "hover:bg-[linear-gradient(0deg,rgba(240,119,48,0.6)_0%,rgba(240,119,48,0)_100%)]"
     }`}
-              >
-                {/* SVG ICON */}
-                <span className="flex items-center justify-center w-5 h-5 transition-all duration-200 group-hover:[&>svg_path]:fill-[#E1E1E1] group-hover:[&>svg]:stroke-[#E1E1E1]">
-                  {selectedCategory === category.id ? (
-                    // ✅ Active Gradient Fill SVG
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="19"
-                      height="18"
-                      viewBox="0 0 19 18"
-                      fill="none"
-                    >
-                      <defs>
-                        <linearGradient
-                          id={`grad-${category.id}`}
-                          x1="0"
-                          y1="9"
-                          x2="19"
-                          y2="9"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#FFBF9A" />
-                          <stop offset="1" stopColor="#F07730" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M0 11.0826L1.50788 11.1131L3.6168 8.96536L5.28872 10.6697C5.72581 10.0967 6.26313 9.6166 6.88753 9.24862L6.99724 9.18497L7.08325 9.27711L6.71316 7.68072C6.41094 7.75925 6.09688 7.79971 5.77631 7.79971C4.73402 7.79971 3.76173 7.37276 3.03841 6.5999L2.9524 6.50777L2.84269 6.5713C1.31272 7.47306 0.306496 9.04847 0.0108933 11.0113L0 11.0826ZM5.7763 7.01097C3.88059 7.01097 2.33824 5.43872 2.33824 3.50609C2.33824 1.57214 3.88059 0 5.7763 0C7.41736 0 8.79347 1.17794 9.13367 2.74781C7.69568 3.2535 6.47709 4.97501 6.46406 6.94026C6.24177 6.9865 6.01182 7.01097 5.7763 7.01097Z"
-                        fill={`url(#grad-${category.id})`}
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M8.2141 18H18.9888C19.1192 15.0711 18.1211 12.565 15.4398 10.9865L15.3029 10.9057L15.1916 11.0226C14.2739 12.0031 13.0404 12.5449 11.7177 12.5449C10.3953 12.5449 9.16189 12.0031 8.24413 11.0226L8.13499 10.9057L7.99591 10.9865C7.42817 11.321 6.93601 11.6974 6.51368 12.1105L8.3126 13.9441H5.49752C5.62486 15.3375 6.13305 16.4856 7.34173 17.3652L8.2141 18ZM11.7177 11.5442C9.31262 11.5442 7.35587 9.54954 7.35587 7.09767C7.35587 4.64409 9.31262 2.64966 11.7177 2.64966C14.1231 2.64966 16.08 4.64409 16.08 7.0956C16.08 9.54745 14.1231 11.5442 11.7177 11.5442Z"
-                        fill={`url(#grad-${category.id})`}
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M3.36832 10.437L0.348586 13.377H2.07298C2.50481 16.3196 4.66104 17.5791 6.81726 17.9999C5.30739 16.9493 4.61901 15.4781 4.61901 13.377H6.38545L3.36832 10.437Z"
-                        fill={`url(#grad-${category.id})`}
-                      />
-                    </svg>
-                  ) : (
-                    // Default inactive gray SVG
-                    category.icon
-                  )}
-                </span>
-
-                {/* Label */}
-                <span
-                  className={`text-sm font-medium ${
-                    selectedCategory === category.id
-                      ? "text-[#F07730]"
-                      : "text-[#7D7D7D]"
-                  }`}
                 >
-                  {category.label}
-                </span>
-              </motion.button>
-            ))}
+                  {/* SVG ICON */}
+                  <span className="flex items-center justify-center w-5 h-5 transition-all duration-200 group-hover:[&>svg_path]:fill-[#E1E1E1] group-hover:[&>svg]:stroke-[#E1E1E1]">
+                    {selectedCategory === category.id ? (
+                      // ✅ Active Gradient Fill SVG
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="19"
+                        height="18"
+                        viewBox="0 0 19 18"
+                        fill="none"
+                      >
+                        <defs>
+                          <linearGradient
+                            id={`grad-${category.id}`}
+                            x1="0"
+                            y1="9"
+                            x2="19"
+                            y2="9"
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop stopColor="#FFBF9A" />
+                            <stop offset="1" stopColor="#F07730" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M0 11.0826L1.50788 11.1131L3.6168 8.96536L5.28872 10.6697C5.72581 10.0967 6.26313 9.6166 6.88753 9.24862L6.99724 9.18497L7.08325 9.27711L6.71316 7.68072C6.41094 7.75925 6.09688 7.79971 5.77631 7.79971C4.73402 7.79971 3.76173 7.37276 3.03841 6.5999L2.9524 6.50777L2.84269 6.5713C1.31272 7.47306 0.306496 9.04847 0.0108933 11.0113L0 11.0826ZM5.7763 7.01097C3.88059 7.01097 2.33824 5.43872 2.33824 3.50609C2.33824 1.57214 3.88059 0 5.7763 0C7.41736 0 8.79347 1.17794 9.13367 2.74781C7.69568 3.2535 6.47709 4.97501 6.46406 6.94026C6.24177 6.9865 6.01182 7.01097 5.7763 7.01097Z"
+                          fill={`url(#grad-${category.id})`}
+                        />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M8.2141 18H18.9888C19.1192 15.0711 18.1211 12.565 15.4398 10.9865L15.3029 10.9057L15.1916 11.0226C14.2739 12.0031 13.0404 12.5449 11.7177 12.5449C10.3953 12.5449 9.16189 12.0031 8.24413 11.0226L8.13499 10.9057L7.99591 10.9865C7.42817 11.321 6.93601 11.6974 6.51368 12.1105L8.3126 13.9441H5.49752C5.62486 15.3375 6.13305 16.4856 7.34173 17.3652L8.2141 18ZM11.7177 11.5442C9.31262 11.5442 7.35587 9.54954 7.35587 7.09767C7.35587 4.64409 9.31262 2.64966 11.7177 2.64966C14.1231 2.64966 16.08 4.64409 16.08 7.0956C16.08 9.54745 14.1231 11.5442 11.7177 11.5442Z"
+                          fill={`url(#grad-${category.id})`}
+                        />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M3.36832 10.437L0.348586 13.377H2.07298C2.50481 16.3196 4.66104 17.5791 6.81726 17.9999C5.30739 16.9493 4.61901 15.4781 4.61901 13.377H6.38545L3.36832 10.437Z"
+                          fill={`url(#grad-${category.id})`}
+                        />
+                      </svg>
+                    ) : (
+                      // Default inactive gray SVG
+                      category.icon
+                    )}
+                  </span>
+
+                  {/* Label */}
+                  <span
+                    className={`text-sm font-medium ${
+                      selectedCategory === category.id
+                        ? "text-[#F07730]"
+                        : "text-[#7D7D7D]"
+                    }`}
+                  >
+                    {category.label}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
           </div>
 
           {/* Right Arrow */}
