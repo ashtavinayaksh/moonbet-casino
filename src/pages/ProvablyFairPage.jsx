@@ -198,8 +198,8 @@ const ResponsibleGambling = () => {
             className="text-center"
           >
             <h1
-              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
-                         bg-clip-text text-transparent"
+              className="text-5xl md:text-2xl font-bold mb-6 text-[#f7f7f7] 
+                         bg-clip-text "
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Responsible Gambling at Moonbet

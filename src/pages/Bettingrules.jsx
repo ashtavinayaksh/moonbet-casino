@@ -178,11 +178,7 @@ const BettingRules = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <h1
-              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
-                         bg-clip-text text-transparent"
-              style={{ fontFamily: "Neuropolitical, sans-serif" }}
-            >
+            <h1 className="text-2xl md:text-2xl font-bold mb-6 ">
               Betting Rules
             </h1>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto">
@@ -232,9 +228,9 @@ const BettingRules = () => {
           <div className="hidden lg:block">
             <div className="sticky top-24">
               <div className="wallet-btn3 rounded-2xl p-6">
-                <h3 className="text-lg font-bold text-white mb-4">
+                <p className="text-lg font-bold text-white mb-4">
                   Quick Navigation
-                </h3>
+                </p>
                 <nav className="space-y-2">
                   {sections.map((section) => (
                     <button
@@ -264,10 +260,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <AlertCircle className="w-8 h-8 text-[#F07730]" />
                 1. Claims and Protests
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 How to dispute game outcomes or transaction errors.
               </p>
@@ -324,10 +320,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <Shield className="w-8 h-8 text-[#F07730]" />
                 2. General Betting Principles
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Core rules governing acceptance, finality, and error handling of
                 casino wagers.
@@ -335,9 +331,9 @@ const BettingRules = () => {
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     2.1 Bet Finality
-                  </h3>
+                  </p>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
@@ -361,9 +357,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     2.2 Provable Fairness
-                  </h3>
+                  </p>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
@@ -387,9 +383,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     2.3 Error Handling
-                  </h3>
+                  </p>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
@@ -418,10 +414,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">🎮</span>
                 3. Eligible Games and Bet Types
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Definitions of each supported casino game and their wager
                 structures.
@@ -429,9 +425,9 @@ const BettingRules = () => {
 
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     3.1 Slot Games
-                  </h3>
+                  </p>
                   <ul className="space-y-2 text-sm">
                     <li className="text-gray-300">
                       <span className="text-[#F07730] font-bold">
@@ -455,9 +451,9 @@ const BettingRules = () => {
                 </div>
 
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     3.2 Card & Live Games
-                  </h3>
+                  </p>
                   <ul className="space-y-2 text-sm">
                     <li className="text-gray-300">
                       <span className="text-[#F07730] font-bold">
@@ -481,9 +477,9 @@ const BettingRules = () => {
                 </div>
 
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     3.3 Special Games
-                  </h3>
+                  </p>
                   <ul className="space-y-2 text-sm">
                     <li className="text-gray-300">
                       <span className="text-[#F07730] font-bold">
@@ -515,10 +511,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <DollarSign className="w-8 h-8 text-[#F07730]" />
                 4. Stake Limits and Controls
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Minimum, maximum, and dynamic limits to ensure platform
                 stability.
@@ -526,9 +522,9 @@ const BettingRules = () => {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-gradient-to-br from-[#F07730]/20 to-transparent rounded-xl p-6 border border-[#F07730]/30">
-                  <h3 className="text-lg font-bold text-white mb-4">
+                  <p className="text-lg font-bold text-white mb-4">
                     Default Limits
-                  </h3>
+                  </p>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-300">Minimum Stake:</span>
@@ -550,9 +546,9 @@ const BettingRules = () => {
                 </div>
 
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-4">
+                  <p className="text-lg font-bold text-white mb-4">
                     Player Controls
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
@@ -584,19 +580,19 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">💰</span>
                 5. Settlement and Payout Mechanics
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 When and how winnings are credited or refunded.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     5.1 Instant On-Chain Payouts
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-3">
                       <ChevronRight className="w-5 h-5 text-[#F07730] mt-0.5" />
@@ -616,9 +612,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     5.2 Refunds and Voided Bets
-                  </h3>
+                  </p>
                   <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <p className="text-white font-bold mb-2">
                       Voided Scenarios:
@@ -639,9 +635,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     5.3 Transaction Fees
-                  </h3>
+                  </p>
                   <div className="flex items-center gap-4 p-4 bg-[#F07730]/10 rounded-xl">
                     <DollarSign className="w-6 h-6 text-[#F07730]" />
                     <div>
@@ -663,19 +659,19 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">📊</span>
                 6. Payout Structures and Volatility
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 How multipliers work, chance distributions, and risk settings.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-4">
+                  <p className="text-xl font-bold text-white mb-4">
                     6.1 Plinko Multipliers
-                  </h3>
+                  </p>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/30">
                       <h4 className="text-green-400 font-bold mb-2">
@@ -712,9 +708,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     6.2 Slot RTP Variance
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730]">•</span>
@@ -737,9 +733,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <p className="text-xl font-bold text-white mb-3">
                     6.3 Table & Live Dealer Payouts
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730]">•</span>
@@ -766,10 +762,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <Shield className="w-8 h-8 text-[#F07730]" />
                 7. Smart-Contract and Provable Fairness Audits
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Transparency measures ensuring game integrity.
               </p>
@@ -799,19 +795,19 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">🎁</span>
                 8. Promotional Bet Conditions
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Rules for wagering bonuses, free spins, and rakeback.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     8.1 Bonus Wagering
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="text-gray-300">
                       <span className="text-[#F07730] font-bold">
@@ -829,9 +825,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     8.2 VIP Rakeback
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="text-gray-300">
                       • Earn rakeback on net losses across all games
@@ -851,19 +847,19 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">🔒</span>
                 9. Cancellation and Fraud Prevention
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 How Moonbet handles suspicious activity and enforces rules.
               </p>
 
               <div className="space-y-4">
                 <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/30">
-                  <h3 className="text-red-400 font-bold mb-2">
+                  <p className="text-red-400 font-bold mb-2">
                     Security Measures
-                  </h3>
+                  </p>
                   <ul className="space-y-2 text-gray-300">
                     <li>
                       • KYC optional but required for bonuses or VIP status
@@ -887,19 +883,19 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">❤️</span>
                 10. Responsible Gaming and Support
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Tools for safe play and where to seek help.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     Player Protection Tools
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
@@ -923,9 +919,9 @@ const BettingRules = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-3">
+                  <p className="text-lg font-bold text-white mb-3">
                     Support Channels
-                  </h3>
+                  </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2">
                       <span className="text-[#F07730]">•</span>
@@ -958,10 +954,10 @@ const BettingRules = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-8"
             >
-              <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
                 <span className="text-2xl">📖</span>
                 11. Glossary of Key Terms
-              </h2>
+              </p>
               <p className="text-gray-400 mb-6">
                 Quick definitions of essential betting concepts.
               </p>

@@ -210,8 +210,7 @@ const TermsAndConditions = () => {
             className="text-center"
           >
             <h1
-              className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
-                         bg-clip-text text-transparent"
+              className="text-4xl md:text-2xl font-bold mb-4 text-[#f7f7f7]"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Terms & Conditions
@@ -265,9 +264,9 @@ const TermsAndConditions = () => {
           <div className="hidden lg:block">
             <div className="sticky top-24">
               <div className="wallet-btn3 rounded-2xl p-4">
-                <h3 className="text-sm font-bold text-white mb-4 px-2">
+                <p className="text-sm font-bold text-white mb-4 px-2">
                   ALL SECTIONS
-                </h3>
+                </p>
                 <nav className="space-y-1 max-h-[70vh] overflow-y-auto scrollbar-hide">
                   {sections.map((section) => (
                     <button
@@ -297,10 +296,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Book className="w-6 h-6 text-[#F07730]" />
                 1. Introduction
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">1.1 Purpose:</span>{" "}
@@ -328,10 +327,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">📚</span>
                 2. Definitions
-              </h2>
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
                   {
@@ -379,10 +378,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <User className="w-6 h-6 text-[#F07730]" />
                 3. Eligibility & Compliance
-              </h2>
+              </p>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <span className="text-[#F07730] font-bold">3.1</span>
@@ -415,10 +414,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Wallet className="w-6 h-6 text-[#F07730]" />
                 4. Account & Wallet Connection
-              </h2>
+              </p>
               <div className="space-y-3">
                 <p className="text-gray-300">
                   <span className="text-[#F07730] font-bold">4.1</span> No
@@ -443,10 +442,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">💰</span>
                 5. Deposits & Withdrawals
-              </h2>
+              </p>
               <div className="space-y-4">
                 <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                   <h3 className="text-white font-bold mb-2">
@@ -493,10 +492,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">🎮</span>
                 6. Gameplay & Fairness
-              </h2>
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-[#F07730]/10 to-transparent rounded-xl p-4 border border-[#F07730]/30">
                   <h3 className="text-[#F07730] font-bold mb-2">
@@ -538,10 +537,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">🎁</span>
                 7. Promotions & Bonuses
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -573,10 +572,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">💸</span>
                 8. Fees & Taxes
-              </h2>
+              </p>
               <div className="space-y-3">
                 <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/30">
                   <p className="text-green-400 font-bold">
@@ -606,10 +605,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">❤️</span>
                 9. Responsible Gambling
-              </h2>
+              </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                   <h3 className="text-white font-bold mb-2">
@@ -649,10 +648,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">⚠️</span>
                 10. User Conduct & Prohibited Activities
-              </h2>
+              </p>
               <div className="space-y-4">
                 <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/30">
                   <h3 className="text-red-400 font-bold mb-3">
@@ -684,10 +683,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">©️</span>
                 11. Intellectual Property
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -713,10 +712,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">↩️</span>
                 12. Refunds & Chargebacks
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -742,10 +741,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">⚡</span>
                 13. Disclaimers
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -777,10 +776,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Shield className="w-6 h-6 text-[#F07730]" />
                 14. Limitation of Liability
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -813,10 +812,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">🛡️</span>
                 15. Indemnification
-              </h2>
+              </p>
               <p className="text-gray-300">
                 You agree to indemnify and hold harmless Moonbet, its
                 affiliates, officers, directors, employees, and agents from any
@@ -832,9 +831,9 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4">
+              <p className="text-2xl font-bold text-white mb-4">
                 Privacy & Data Protection
-              </h2>
+              </p>
 
               <div className="space-y-6">
                 {/* Privacy */}
@@ -940,10 +939,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">🤝</span>
                 20. Responsible Gambling Support
-              </h2>
+              </p>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-white/5 rounded-xl">
                   <h3 className="text-[#F07730] font-bold mb-2">
@@ -977,10 +976,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Scale className="w-6 h-6 text-[#F07730]" />
                 21. Governing Law & Dispute Resolution
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -1011,10 +1010,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="text-xl">📝</span>
                 22. Changes to Terms
-              </h2>
+              </p>
               <div className="space-y-3 text-gray-300">
                 <p>
                   <span className="text-[#F07730] font-bold">
@@ -1040,10 +1039,10 @@ const TermsAndConditions = () => {
               whileInView={{ opacity: 1 }}
               className="wallet-btn3 rounded-2xl p-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <p className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Mail className="w-6 h-6 text-[#F07730]" />
                 23. Contact Us
-              </h2>
+              </p>
               <p className="text-gray-300 mb-4">
                 For questions or to exercise your rights, contact us:
               </p>

@@ -272,18 +272,18 @@ const AffiliateLandingPage = () => {
           className="container max-w-7xl mx-auto relative z-10"
         >
           <div className="text-center mb-12">
-            <h1
-              className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] bg-clip-text text-transparent"
+            <p
+              className="text-5xl md:text-2xl font-bold mb-6 "
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Moonbet Affiliate Program
-            </h1>
-            <h2
+            </p>
+            <p
               className="text-2xl md:text-3xl text-gray-300 mb-8"
               style={{ fontFamily: "Avenir, -apple-system, sans-serif" }}
             >
               Start earning at X% and never stop growing
-            </h2>
+            </p>
             <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-10">
               Join the first truly decentralized crypto casino affiliate program
               where transparency meets profitability. Built on Solana's
@@ -308,14 +308,13 @@ const AffiliateLandingPage = () => {
       {/* Simple Steps Section */}
       <section className="py-16 px-4 border-t border-white/10">
         <div className="container max-w-7xl mx-auto">
-          <motion.h2
+          <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-16 text-white"
-            style={{ fontFamily: "Neuropolitical, sans-serif" }}
+            className="text-3xl md:text-2xl font-bold text-center mb-16 text-white"
           >
             We make it simple to start earning
-          </motion.h2>
+          </motion.p>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -358,10 +357,7 @@ const AffiliateLandingPage = () => {
                     </div>
                     <div className="text-[#F07730]">{step.icon}</div>
                   </div>
-                  <h3
-                    className="text-xl font-bold text-white mb-3"
-                    style={{ fontFamily: "Avenir, -apple-system, sans-serif" }}
-                  >
+                  <h3 className="text-xl font-bold text-white mb-3">
                     {step.title}
                   </h3>
                   <p className="text-gray-400">{step.description}</p>
@@ -380,12 +376,12 @@ const AffiliateLandingPage = () => {
             whileInView={{ opacity: 1 }}
             className="text-center mb-16"
           >
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-6 text-white"
+            <p
+              className="text-3xl md:text-2xl font-bold mb-6 text-white"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Promote the Earth's leading decentralized casino
-            </h2>
+            </p>
             <p className="text-lg text-gray-400 max-w-3xl mx-auto">
               Attract high-value crypto natives through our unique offering:
               provably fair games, near-zero house edge, instant withdrawals,
@@ -446,12 +442,12 @@ const AffiliateLandingPage = () => {
             whileInView={{ opacity: 1 }}
             className="text-center mb-12"
           >
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-6 text-white"
+            <p
+              className="text-3xl md:text-2xl font-bold mb-6 text-white"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Commission Structure
-            </h2>
+            </p>
             <h3 className="text-xl text-gray-300 mb-8">Revenue Share Model</h3>
           </motion.div>
 
@@ -535,7 +531,7 @@ const AffiliateLandingPage = () => {
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 text-white"
+            className="text-3xl md:text-2xl font-bold text-center mb-12 text-white"
             style={{ fontFamily: "Neuropolitical, sans-serif" }}
           >
             Why Partner with Moonbet?
@@ -610,7 +606,7 @@ const AffiliateLandingPage = () => {
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 text-white"
+            className="text-3xl md:text-2xl font-bold text-center mb-12 text-white"
             style={{ fontFamily: "Neuropolitical, sans-serif" }}
           >
             Affiliate Tools & Resources
@@ -678,7 +674,7 @@ const AffiliateLandingPage = () => {
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 text-white"
+            className="text-3xl md:text-2xl font-bold text-center mb-12 text-white"
             style={{ fontFamily: "Neuropolitical, sans-serif" }}
           >
             Getting Started
@@ -789,7 +785,7 @@ const AffiliateLandingPage = () => {
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 text-white"
+            className="text-3xl md:text-2xl font-bold text-center mb-12 text-white"
             style={{ fontFamily: "Neuropolitical, sans-serif" }}
           >
             Frequently Asked Questions
@@ -807,9 +803,13 @@ const AffiliateLandingPage = () => {
                 <button
                   onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
                   className="w-full px-6 py-4 flex items-center justify-between text-left 
-                           hover:bg-white/5 transition-colors"
+                           hover:bg-white/5 relative rounded-lg p-[1px]
+        bg-[linear-gradient(106deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.10)_35%,rgba(255,255,255,0.05)_70%,rgba(255,255,255,0)_100%)]
+        transition-all duration-300"
                 >
-                  <span className="font-medium text-white">{faq.question}</span>
+                  <span className="text-base md:text-lg font-[400] text-[#CED5E3] pr-4">
+                    {faq.question}
+                  </span>
                   {openFAQ === index ? (
                     <ChevronUp className="w-5 h-5 text-[#F07730]" />
                   ) : (
@@ -834,12 +834,12 @@ const AffiliateLandingPage = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
           >
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-6 text-white"
+            <p
+              className="text-2xl md:text-2xl font-bold mb-6 text-white"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Shall We?
-            </h2>
+            </p>
             <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
               Join thousands of affiliates earning with the most transparent,
               fair, and profitable crypto casino affiliate program.

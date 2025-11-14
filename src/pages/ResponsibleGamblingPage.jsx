@@ -44,7 +44,7 @@ const ResponsibleGamblingPage = () => {
           <div className="flex items-center justify-center gap-4 mb-6">
             <ResponsibleIcon />
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#f7f7f7] bg-clip-text text-transparent uppercase"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#f7f7f7] uppercase"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Responsible Gambling
