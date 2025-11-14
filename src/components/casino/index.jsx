@@ -24,6 +24,9 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
         // 🔥 2. Favourite Games
         else if (type === "favorites") {
           apiUrl = `/wallet-service/api/games?sortBy=favourite&userId=${userId}`;
+          // 🔥 2. live casino Games
+        } else if (type === "live-casino") {
+          apiUrl = `/wallet-service/api/games?name=casino`;
         }
 
         // 🔥 3. All other categories

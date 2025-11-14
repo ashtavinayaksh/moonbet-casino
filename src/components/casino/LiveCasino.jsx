@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import MoonBetButton from "../ui-elements/MoonBetButton";
 import api from "../../api/axios";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const LiveCasino = () => {
   const scrollContainerRef = useRef(null);
@@ -110,7 +111,7 @@ const LiveCasino = () => {
   };
 
   const handleViewAll = () => {
-    navigate("/live-casino"); // Navigate to all live casino page
+    navigate("/casino/live-casino"); // Navigate to all live casino page
   };
 
   // Animation variants
@@ -256,6 +257,7 @@ const LiveCasino = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {/* View All Button */}
+
             <motion.button
               onClick={handleViewAll}
               className="view_btn text-[#A7A7A7] hover:text-white transition-colors duration-300 "
@@ -272,7 +274,7 @@ const LiveCasino = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              View All
+              All
             </motion.button>
 
             {/* Arrow Buttons */}

@@ -104,7 +104,7 @@ const RecentSection = () => {
   };
 
   const handleViewAll = () => {
-    navigate("/live-casino"); // Navigate to all live casino page
+    navigate("/casino/recent"); // Navigate to all live casino page
   };
 
   // Animation variants
@@ -270,7 +270,7 @@ const RecentSection = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              View All
+              All
             </motion.button>
 
             {/* Arrow Buttons */}

@@ -107,7 +107,7 @@ const SlotsSection = () => {
   };
 
   const handleViewAll = () => {
-    navigate("/live-casino"); // Navigate to all live casino page
+    navigate("/casino/slots"); // Navigate to all live casino page
   };
 
   // Animation variants
@@ -273,7 +273,7 @@ const SlotsSection = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              View All
+              All
             </motion.button>
 
             {/* Arrow Buttons */}
