@@ -7,6 +7,7 @@ import WithdrawalConfirmationPopup from "./settings/WithdrawalConfirmationPopup"
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
+import { useWalletSocket } from "../context/WalletSocketContext";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -40,6 +41,50 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   const [showWithdrawConfirmation, setShowWithdrawConfirmation] =
     useState(false);
+
+  const socket = useWalletSocket();
+
+  useEffect(() => {
+  if (!isOpen || !socket) return;
+
+  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  if (userId) {
+    socket.emit("joinDepositRoom", userId);
+  }
+}, [isOpen, socket]);
+
+useEffect(() => {
+  if (!socket) return;
+
+  const handler = (msg) => {
+    console.log("🔥 Wallet deposit update:", msg);
+
+    if (msg.status === "credited") {
+      toast.success("🎉 Deposit credited!");
+      refreshBalance();
+    }
+
+    if (msg.status === "finished") {
+      toast.success("💸 Blockchain confirmations completed");
+    }
+
+    if (msg.status === "confirming") {
+      toast.info("⏳ Confirming on blockchain…");
+    }
+
+    if (msg.status === "sending") {
+      toast.info("📤 Processing via NOWPayments…");
+    }
+
+    if (msg.status === "waiting") {
+      toast.info("💰 Payment detected — waiting confirmations");
+    }
+  };
+
+  socket.on("deposit_status", handler);
+
+  return () => socket.off("deposit_status", handler);
+}, [socket]);
 
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
@@ -149,6 +194,19 @@ const WalletModal = ({ isOpen, onClose }) => {
         .catch(console.error);
     }
   }, [walletAddress]);
+
+  const refreshBalance = async () => {
+  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  const token = localStorage.getItem("token");
+
+  axios
+    .get(`/wallet-service/api/wallet/${userId}/balance`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(({ data }) => setWalletBalance(data))
+    .catch(console.error);
+};
+
 
   const cryptoCurrencies = [
     {
