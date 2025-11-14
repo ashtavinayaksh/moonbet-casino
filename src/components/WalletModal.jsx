@@ -82,7 +82,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         .then(({ data }) => {
           if (Array.isArray(data)) {
             setDepositCoinList(data);
-            setSelectedDepositCoin(data[0]);
+            setSelectedDepositCoin(null);
           }
         })
         .catch((err) => console.error("❌ Error fetching deposit coins:", err));
@@ -437,18 +437,20 @@ const handleConfirmWithdraw = async (requestId) => {
                     className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
-                        {selectedDepositCoin?.symbol?.charAt(0) || "◎"}
-                      </div>
-                      <div>
-                        <div className="text-white font-bold">
-                          {selectedDepositCoin?.symbol || "SOL"}
-                        </div>
-                        <div className="text-gray-400 text-sm">
-                          {selectedDepositCoin?.name || "Solana"}
-                        </div>
-                      </div>
-                    </div>
+  {selectedDepositCoin ? (
+    <>
+      <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
+        {selectedDepositCoin.symbol.charAt(0)}
+      </div>
+      <div>
+        <div className="text-white font-bold">{selectedDepositCoin.symbol}</div>
+        <div className="text-gray-400 text-sm">{selectedDepositCoin.name}</div>
+      </div>
+    </>
+  ) : (
+    <div className="text-gray-400 text-sm">Select Currency</div>
+  )}
+</div>
                     <svg
                       className={`w-5 h-5 text-gray-400 transition-transform ${
                         showDepositDropdown ? "rotate-180" : ""
