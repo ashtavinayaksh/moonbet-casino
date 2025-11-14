@@ -95,7 +95,7 @@ const Footer = () => {
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },
       { label: "Provably Fair", path: "/provably-fair" },
-      { label: "RNG", path: "/rng" },
+      { label: "RNG", path: "#" },
     ],
   };
 

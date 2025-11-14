@@ -50,7 +50,7 @@ const ProvidersPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="trust_btn bg-black/20 rounded-xl flex items-center justify-center p-1 hover:bg-white/5 transition-all duration-300"
+              className="trust_btn bg-black/20 rounded-xl flex items-center justify-center p- hover:bg-white/5 transition-all duration-300"
             >
               <img
                 src={provider.logo}
