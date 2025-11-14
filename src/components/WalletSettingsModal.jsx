@@ -22,7 +22,9 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
   // Prevent body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
-    return () => { document.body.style.overflow = "unset"; };
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [isOpen]);
 
   // ✅ Fetch user's gameCurrency when modal opens
@@ -55,16 +57,18 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
     try {
       setSaving(true);
 
-      await axios.put(
-        `/wallet-service/api/games/${userId}/currency`,
-        { currency: selectedCurrency }
-      );
+      await axios.put(`/wallet-service/api/games/${userId}/currency`, {
+        currency: selectedCurrency,
+      });
 
       // Optionally, notify other components
       window.dispatchEvent(new Event("currencyChanged"));
       onClose();
     } catch (err) {
-      console.error("Failed to update currency:", err?.response?.data || err.message);
+      console.error(
+        "Failed to update currency:",
+        err?.response?.data || err.message
+      );
       alert(
         err?.response?.data?.message ||
           "Failed to update currency. Please try again."
@@ -114,7 +118,7 @@ const WalletSettingsModal = ({ isOpen, onClose }) => {
                   />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-white">Wallet Settings</h2>
+              <p className="text-xl font-bold text-white">Wallet Settings</p>
             </div>
             <button
               onClick={onClose}

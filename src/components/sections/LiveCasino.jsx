@@ -369,10 +369,12 @@ const LiveCasino = () => {
                     custom={index}
                   >
                     <motion.div
-                      className="relative rounded-xl overflow-hidden border border-white/10 hover:border-[#F07730]/50 transition-all duration-300"
+                      className="relative rounded-xl overflow-hidden border border-white/10  transition-all duration-300"
                       whileHover={{
-                        borderColor: "rgba(240, 119, 48, 0.5)",
                         boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
+                        borderRadius: "12px",
+                        background: "rgba(8, 8, 8, 0.30)",
+                        backdropFilter: "blur(2px)",
                       }}
                     >
                       {/* Insert the updated image block here */}
@@ -403,11 +405,64 @@ const LiveCasino = () => {
                       >
                         <motion.button
                           onClick={() => handlePlayNow(game.name)}
-                          className="px-4 sm:px-6 py-1.5 sm:py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm sm:text-base shadow-lg"
+                          className="px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-white font-semibold text-sm sm:text-base shadow-lg"
                           variants={buttonVariants}
                           whileTap="tap"
                         >
-                          PLAY NOW
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="54"
+                            height="59"
+                            viewBox="0 0 54 59"
+                            fill="none"
+                          >
+                            <g filter="url(#filter0_d_8546_318)">
+                              <path
+                                d="M12.1624 1.12451C7.65462 -1.51293 4 0.647693 4 5.94654V45.0497C4 50.3539 7.65462 52.5117 12.1624 49.8767L45.6704 30.2758C50.1797 27.6374 50.1797 23.3629 45.6704 20.7251L12.1624 1.12451Z"
+                                fill="#E1E1E1"
+                              />
+                            </g>
+                            <defs>
+                              <filter
+                                id="filter0_d_8546_318"
+                                x="0"
+                                y="0"
+                                width="53.0522"
+                                height="59.0001"
+                                filterUnits="userSpaceOnUse"
+                                color-interpolation-filters="sRGB"
+                              >
+                                <feFlood
+                                  flood-opacity="0"
+                                  result="BackgroundImageFix"
+                                />
+                                <feColorMatrix
+                                  in="SourceAlpha"
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                  result="hardAlpha"
+                                />
+                                <feOffset dy="4" />
+                                <feGaussianBlur stdDeviation="2" />
+                                <feComposite in2="hardAlpha" operator="out" />
+                                <feColorMatrix
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in2="BackgroundImageFix"
+                                  result="effect1_dropShadow_8546_318"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in="SourceGraphic"
+                                  in2="effect1_dropShadow_8546_318"
+                                  result="shape"
+                                />
+                              </filter>
+                            </defs>
+                          </svg>
                         </motion.button>
                       </motion.div>
                     </motion.div>

@@ -31,6 +31,7 @@ import TermsAndConditions from "./pages/Termsandconditions";
 import ResponsibleGamblingPage from "./pages/ResponsibleGamblingPage";
 import ProvablyFairPage from "./pages/ProvablyFairPage";
 import ContactUsPage from "./pages/Contactuspage.jsx";
+import ProductShowcase from "./components/Productshowcase.jsx";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -150,6 +151,7 @@ function App() {
             <Route path="betting-rules" element={<BettingRules />} />
             <Route path="privacy" element={<PrivacyPolicyPage />} />
             <Route path="contact" element={<ContactUsPage />} />
+            <Route path="product-data" element={<ProductShowcase />} />
             <Route
               path="terms-and-condition"
               element={<TermsAndConditions />}

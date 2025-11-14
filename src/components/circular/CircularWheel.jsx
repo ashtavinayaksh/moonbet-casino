@@ -8,6 +8,7 @@ const CircularWheel = () => {
   const [isMobile, setIsMobile] = useState(false);
   const wheelRef = useRef(null);
   const dragStartRotation = useRef(0);
+  const [showFocus, setShowFocus] = useState(false);
 
   const images = [
     "/images/honeypot-2.png",
@@ -73,6 +74,7 @@ const CircularWheel = () => {
     if (isAnimating) return;
 
     setIsAnimating(true);
+    setShowFocus(false); // hide overlay while rotating
 
     // Calculate the angle needed to bring this segment to the top (12 o'clock position)
     const targetRotation = -index * segmentAngle;
@@ -113,7 +115,10 @@ const CircularWheel = () => {
       duration: 0.3,
       ease: [0.4, 0, 0.2, 1],
       onUpdate: (value) => setRotation(value),
-      onComplete: () => setIsAnimating(false),
+      onComplete: () => {
+        setIsAnimating(false);
+        setShowFocus(true);
+      },
     });
   };
 
@@ -137,6 +142,7 @@ const CircularWheel = () => {
       duration: 0.3,
       ease: [0.4, 0, 0.2, 1],
       onUpdate: (value) => setRotation(value),
+      onComplete: () => setShowFocus(true),
     });
   };
 
@@ -256,14 +262,19 @@ const CircularWheel = () => {
     <div className="relative w-full flex items-center justify-center bg-black overflow-hidden -mb-40 md:-mb-60 ">
       {/* 🟣 NEW MASK CONTAINER */}
       <div className="wheel-mask">
-      {/* <img
+        {/* Focus overlay on active top segment */}
+        {showFocus && (
+          <img
             src="/chips/focus.png"
+            alt="Focus Highlight"
             className="focus-overlay"
             style={{
-              transform: `translate(-50%, -50%) rotate(0deg) rotate(30deg)`,
+              opacity: isAnimating ? 0 : 1,
+              transition: "opacity 0.3s ease",
             }}
-          /> */}
-      <img src="/chips/focus.png" className="focus-overlay" />
+          />
+        )}
+
         <motion.div
           ref={wheelRef}
           className="svg-wrapper"

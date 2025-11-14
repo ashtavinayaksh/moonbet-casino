@@ -146,14 +146,14 @@
 
 .focus-overlay {
   position: absolute;
-  top: 2%;        /* adjust until matches your screenshot */
+  top: 2%; /* adjust slightly if not aligned with top segment */
   left: 50%;
-  width: 34%;     /* your exact size */
-  transform: translateX(-50%);   /* stays perfectly centered */
-  pointer-events: none;
-  z-index: 9999;   /* always on top */
+  transform: translateX(-50%);
+  width: 34%; /* controls the size of the highlight overlay */
+  pointer-events: none; /* avoids interfering with wheel interactions */
+  z-index: 9999; /* ensures it stays on top of all layers */
+  transition: opacity 0.3s ease; /* smooth fade in/out */
 }
-
 
 /* Instructions */
 .instructions {

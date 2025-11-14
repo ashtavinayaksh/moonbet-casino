@@ -29,7 +29,7 @@ const Homepage = () => {
       <RecommendedSection />
       <SlotsSection />
       <LiveCasino />
-      <CircularWheel />
+      {/* <CircularWheel /> */}
       <ProvidersSection />
       <GameBetsSection />
       <HomeFAQSection />

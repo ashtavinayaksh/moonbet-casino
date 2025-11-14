@@ -9,53 +9,52 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
   const [favorite, setFavorite] = useState({});
 
   useEffect(() => {
-  const fetchGames = async () => {
-    setLoading(true);
-    try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const userId = user.id || "690b0290cb255ca66b14a529";
-      let apiUrl = "";
+    const fetchGames = async () => {
+      setLoading(true);
+      try {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const userId = user.id || "690b0290cb255ca66b14a529";
+        let apiUrl = "";
 
-      // 🔥 1. Recent Games
-      if (type === "recent") {
-        apiUrl = `/wallet-service/api/games?sortBy=recent&userId=${userId}`;
+        // 🔥 1. Recent Games
+        if (type === "recent") {
+          apiUrl = `/wallet-service/api/games?sortBy=recent&userId=${userId}`;
+        }
+
+        // 🔥 2. Favourite Games
+        else if (type === "favorites") {
+          apiUrl = `/wallet-service/api/games?sortBy=favourite&userId=${userId}`;
+        }
+
+        // 🔥 3. All other categories
+        else {
+          const params = new URLSearchParams();
+
+          if (type && type !== "all") params.append("type", type);
+          if (filter) params.append("sortBy", filter);
+          if (searchTerm) params.append("name", searchTerm);
+
+          const query = params.toString() ? `?${params.toString()}` : "";
+          apiUrl = `/wallet-service/api/games${query}`;
+        }
+
+        console.log("🔗 FINAL GameGrid API:", apiUrl);
+
+        const { data } = await axios.get(apiUrl);
+
+        if (data?.success) setGames(data.data || []);
+        else if (Array.isArray(data?.data)) setGames(data.data);
+        else setGames([]);
+      } catch (err) {
+        console.error("❌ Error fetching games:", err);
+        setGames([]);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // 🔥 2. Favourite Games
-      else if (type === "favorites") {
-        apiUrl = `/wallet-service/api/games?sortBy=favourite&userId=${userId}`;
-      }
-
-      // 🔥 3. All other categories
-      else {
-        const params = new URLSearchParams();
-
-        if (type && type !== "all") params.append("type", type);
-        if (filter) params.append("sortBy", filter);
-        if (searchTerm) params.append("name", searchTerm);
-
-        const query = params.toString() ? `?${params.toString()}` : "";
-        apiUrl = `/wallet-service/api/games${query}`;
-      }
-
-      console.log("🔗 FINAL GameGrid API:", apiUrl);
-
-      const { data } = await axios.get(apiUrl);
-
-      if (data?.success) setGames(data.data || []);
-      else if (Array.isArray(data?.data)) setGames(data.data);
-      else setGames([]);
-
-    } catch (err) {
-      console.error("❌ Error fetching games:", err);
-      setGames([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchGames();
-}, [type, filter, searchTerm]);
+    fetchGames();
+  }, [type, filter, searchTerm]);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 48);
 
@@ -91,7 +90,13 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                   key={game.uuid || i}
                   variants={cardVariants}
                   custom={i}
-                  className="relative rounded-xl overflow-hidden border border-white/10 hover:border-[#F07730]/50 cursor-pointer group transition-all"
+                  className="relative rounded-xl overflow-hidden border border-white/10  cursor-pointer group transition-all"
+                  style={{
+                    boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
+                    borderRadius: "12px",
+                    background: "rgba(8, 8, 8, 0.30)",
+                    backdropFilter: "blur(2px)",
+                  }}
                 >
                   {/* Favorite Icon (Top Right) */}
                   <button
@@ -113,7 +118,11 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                       width="18"
                       height="16"
                       viewBox="0 0 18 16"
-                      fill={favorite?.[game.uuid] ? "#F07730" : "#7D7D7D"}
+                      fill={
+                        favorite?.[game.uuid]
+                          ? "rgba(209, 51, 51, 1)"
+                          : "#7D7D7D"
+                      }
                       className="transition-all duration-300"
                     >
                       <path d="M12.5107 0C13.9776 7.87092e-05 15.3563 0.572114 16.3936 1.60938C18.5348 3.75068 18.5349 7.23458 16.3936 9.37598L10.3721 15.3984C10.0067 15.7637 9.51929 15.9648 9 15.9648C8.48071 15.9648 7.99326 15.7636 7.62793 15.3984L1.60547 9.37598C-0.53553 7.23467 -0.535317 3.75066 1.60547 1.60938C2.64272 0.572084 4.02233 4.57993e-05 5.48926 0C6.78661 0 8.01573 0.44767 9 1.26855C9.98434 0.44767 11.2133 0 12.5107 0Z" />
@@ -127,10 +136,63 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                     />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
                       <motion.button
-                        className="px-4 py-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full text-white font-semibold text-sm"
+                        className="px-4 py-2 rounded-full text-white font-semibold text-sm"
                         whileTap={{ scale: 0.9 }}
                       >
-                        PLAY NOW
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="54"
+                          height="59"
+                          viewBox="0 0 54 59"
+                          fill="none"
+                        >
+                          <g filter="url(#filter0_d_8546_318)">
+                            <path
+                              d="M12.1624 1.12451C7.65462 -1.51293 4 0.647693 4 5.94654V45.0497C4 50.3539 7.65462 52.5117 12.1624 49.8767L45.6704 30.2758C50.1797 27.6374 50.1797 23.3629 45.6704 20.7251L12.1624 1.12451Z"
+                              fill="#E1E1E1"
+                            />
+                          </g>
+                          <defs>
+                            <filter
+                              id="filter0_d_8546_318"
+                              x="0"
+                              y="0"
+                              width="53.0522"
+                              height="59.0001"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset dy="4" />
+                              <feGaussianBlur stdDeviation="2" />
+                              <feComposite in2="hardAlpha" operator="out" />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="BackgroundImageFix"
+                                result="effect1_dropShadow_8546_318"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="effect1_dropShadow_8546_318"
+                                result="shape"
+                              />
+                            </filter>
+                          </defs>
+                        </svg>
                       </motion.button>
                     </div>
                   </div>

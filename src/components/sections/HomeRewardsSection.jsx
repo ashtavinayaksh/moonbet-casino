@@ -105,7 +105,7 @@ const HomeRewardsSection = () => {
       ref={sectionRef}
       className="w-full py-16 md:py-10 relative overflow-hidden"
     >
-      <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4">
+      <div className="relative z-10 w-full max-w-[1280px] mx-auto ">
         {/* Cards Container */}
         <div
           className="rewards-scroll-container overflow-x-auto lg:overflow-visible scrollbar-hide"
