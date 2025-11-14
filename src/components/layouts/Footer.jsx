@@ -83,7 +83,7 @@ const Footer = () => {
     aboutUs: [
       { label: "Affiliate", path: "/affiliate" },
       { label: "Privacy Policy", path: "/privacy" },
-      { label: "Terms & Conditions", path: "/terms" },
+      { label: "Terms & Conditions", path: "/terms-and-condition" },
       { label: "Responsible Gambling", path: "/responsible-gambling" },
       { label: "Contact Us", path: "/contact" },
     ],

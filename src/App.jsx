@@ -24,6 +24,12 @@ import TidioChatButton from "./components/TidioChatButton";
 import Blackjack from "./pages/Blackjack";
 import Casino from "./pages/Casino";
 import ProvidersPage from "./pages/ProvidersPage";
+import AffiliateLandingPage from "./pages/Affiliatelandingpage";
+import BettingRules from "./pages/Bettingrules";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsAndConditions from "./pages/Termsandconditions";
+import ResponsibleGamblingPage from "./pages/ResponsibleGamblingPage";
+import ProvablyFairPage from "./pages/ProvablyFairPage";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -139,6 +145,18 @@ function App() {
             <Route path="casino" element={<Casino />} />
             <Route path="casino/:category" element={<Casino />} />
             <Route path="providers" element={<ProvidersPage />} />
+            <Route path="affiliate" element={<AffiliateLandingPage />} />
+            <Route path="betting-rules" element={<BettingRules />} />
+            <Route path="privacy" element={<PrivacyPolicyPage />} />
+            <Route
+              path="terms-and-condition"
+              element={<TermsAndConditions />}
+            />
+            <Route
+              path="responsible-gambling"
+              element={<ResponsibleGamblingPage />}
+            />
+            <Route path="provably-fair" element={<ProvablyFairPage />} />
 
             {/* 🔒 PRIVATE ROUTES (require login) */}
             <Route
