@@ -49,6 +49,7 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   if (userId) {
+    console.log("Joining deposit room:", userId);
     socket.emit("joinDepositRoom", userId);
   }
 }, [isOpen, socket]);
@@ -60,23 +61,28 @@ useEffect(() => {
     console.log("🔥 Wallet deposit update:", msg);
 
     if (msg.status === "credited") {
+      console.log("Message status are:", msg.status);
       toast.success("🎉 Deposit credited!");
       refreshBalance();
     }
 
     if (msg.status === "finished") {
+      console.log("Message status are:", msg.status);
       toast.success("💸 Blockchain confirmations completed");
     }
 
     if (msg.status === "confirming") {
+      console.log("Message status are:", msg.status);
       toast.info("⏳ Confirming on blockchain…");
     }
 
     if (msg.status === "sending") {
+      console.log("Message status are:", msg.status);
       toast.info("📤 Processing via NOWPayments…");
     }
 
     if (msg.status === "waiting") {
+      console.log("Message status are:", msg.status);
       toast.info("💰 Payment detected — waiting confirmations");
     }
   };
