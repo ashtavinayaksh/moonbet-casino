@@ -30,7 +30,7 @@ const Layout = () => {
   // No localStorage loading - ensures consistent collapsed state on every page load
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0A0B0D]">
+    <div className="min-h-screen flex flex-col bg-[#000]">
       {/* Main Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Header with sidebar state management */}
@@ -55,7 +55,7 @@ const Layout = () => {
             paddingTop: 64, // Height of header
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="flex-1 pb-0 md:pb-16 lg:pb-0 min-h-[calc(100vh-64px)]"
+          className="flex-1 pb-0 md:pb-16 lg:pb-0"
         >
           {/* Glass morphism container for content */}
           <div className="bg-black">

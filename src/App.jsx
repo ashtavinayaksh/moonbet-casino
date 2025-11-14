@@ -23,6 +23,7 @@ import Leaderboard from "./pages/Leaderboard";
 import TidioChatButton from "./components/TidioChatButton";
 import Blackjack from "./pages/Blackjack";
 import Casino from "./pages/Casino";
+import ProvidersPage from "./pages/ProvidersPage";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -137,6 +138,7 @@ function App() {
             <Route path="blackjack" element={<Blackjack />} />
             <Route path="casino" element={<Casino />} />
             <Route path="casino/:category" element={<Casino />} />
+            <Route path="providers" element={<ProvidersPage />} />
 
             {/* 🔒 PRIVATE ROUTES (require login) */}
             <Route
