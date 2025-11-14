@@ -256,6 +256,14 @@ const CircularWheel = () => {
     <div className="relative w-full flex items-center justify-center bg-black overflow-hidden -mb-40 md:-mb-60 ">
       {/* 🟣 NEW MASK CONTAINER */}
       <div className="wheel-mask">
+      {/* <img
+            src="/chips/focus.png"
+            className="focus-overlay"
+            style={{
+              transform: `translate(-50%, -50%) rotate(0deg) rotate(30deg)`,
+            }}
+          /> */}
+      <img src="/chips/focus.png" className="focus-overlay" />
         <motion.div
           ref={wheelRef}
           className="svg-wrapper"
