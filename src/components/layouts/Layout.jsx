@@ -30,7 +30,7 @@ const Layout = () => {
   // No localStorage loading - ensures consistent collapsed state on every page load
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#000]">
+    <div className="min-h-screen flex flex-col bg-[#080808]">
       {/* Main Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Header with sidebar state management */}

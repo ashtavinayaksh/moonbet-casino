@@ -16,6 +16,18 @@ const RecentSection = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userId = user.id || "690b0290cb255ca66b14a529";
 
+  const GAME_QUERIES = [
+    "Aviamasters",
+    "Aviator",
+    "Bonanza",
+    "casino",
+    "Wild",
+    "Plinko",
+    "Gate of olympus",
+    "Live Blackjack",
+    "Le pharaoh",
+  ];
+
   // Check scroll position
   const checkScrollPosition = () => {
     const container = scrollContainerRef.current;
@@ -32,23 +44,43 @@ const RecentSection = () => {
   };
 
   useEffect(() => {
-    const fetchGames = async () => {
+    const fetchAllGames = async () => {
       try {
-        const { data } = await axios.get(
-          `/wallet-service/api/games?name=casino`
+        const requests = GAME_QUERIES.map((name) =>
+          axios.get(
+            `/wallet-service/api/games?name=${encodeURIComponent(name)}`
+          )
         );
 
-        // ✅ Compatible with both old and new API response formats
-        let fetchedGames = [];
+        const responses = await Promise.all(requests);
 
-        if (Array.isArray(data?.data)) {
-          // new API response (data.data)
-          fetchedGames = data.data;
-        } else if (Array.isArray(data?.games?.items)) {
-          // old API response (data.games.items)
-          fetchedGames = data.games.items;
-        }
-        setGames(fetchedGames);
+        let merged = [];
+
+        responses.forEach((res) => {
+          let list = [];
+
+          // Support both API formats
+          if (Array.isArray(res.data?.data)) {
+            list = res.data.data;
+          } else if (Array.isArray(res.data?.games?.items)) {
+            list = res.data.games.items;
+          }
+
+          merged = [...merged, ...list];
+        });
+
+        // Remove duplicates by UUID
+        const unique = merged.filter(
+          (v, i, arr) => arr.findIndex((x) => x.uuid === v.uuid) === i
+        );
+        const shuffleArray = (array) => {
+          return array
+            .map((item) => ({ item, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ item }) => item);
+        };
+
+        setGames(shuffleArray(unique));
       } catch (error) {
         console.error("❌ Error fetching games:", error);
         toast.error(
@@ -59,7 +91,7 @@ const RecentSection = () => {
       }
     };
 
-    fetchGames();
+    fetchAllGames();
   }, []);
 
   // Add scroll position check after games are loaded

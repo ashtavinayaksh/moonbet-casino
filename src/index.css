@@ -45,11 +45,7 @@
     @apply bg-casino-dark text-white;
     margin: 0;
     padding: 0;
-    background: linear-gradient(
-      to bottom right,
-      var(--color-casino-dark),
-      var(--color-casino-darker)
-    );
+    background: #080808;
     min-height: 100vh;
     font-family: "Neue Plak", sans-serif;
     -webkit-font-smoothing: antialiased;
