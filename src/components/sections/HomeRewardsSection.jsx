@@ -13,7 +13,7 @@ const HomeRewardsSection = () => {
       {
         id: 1,
         badge: "Bonus",
-        titleLine1: "Upto 560%",
+        titleLine1: "Upto $20000",
         titleLine2: "Bonus",
         description1: "Elite Status, Stellar",
         description2: "Awards",
@@ -26,7 +26,7 @@ const HomeRewardsSection = () => {
         titleLine2: "RTP Games",
         description1: "Odds out of this",
         description2: "world.",
-        img: "/rewards/rewards2.png",
+        img: "/rewards/rewards.png",
       },
       {
         id: 3,

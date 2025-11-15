@@ -6,6 +6,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BegambleawareIcon, ContactIcon } from "../ui-elements/svg-img";
+import CryptoPaymentSection from "../sections/CryptoPaymentSection";
+import TrustBadgesFinal from "../sections/TrustBadges";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -100,206 +102,189 @@ const Footer = () => {
   };
 
   return (
-    <footer
-      className="customborder-footer relative w-full bg-black overflow-hidden min-h-[600px] md:min-h-[700px] lg:min-h-[800px]"
-      style={{
-        paddingTop: "clamp(30px, 8vw, 100px)",
-      }}
-    >
-      {/* Background Image */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <img
-          src="/home-assets/footer-bg-2.png"
-          alt="footer background"
-          className="w-full h-full object-cover object-center opacity-100"
-        />
-        <div className="absolute inset-0 bg-no-repeat bg-center filter blur-[2px] pointer-events-none" />
-      </div>
-
-      {/* Footer Content */}
-      <motion.div
-        className="relative z-10 py-6 md:py-8 flex flex-col min-h-[600px] md:min-h-[700px] lg:min-h-[800px]"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={containerVariants}
+    <>
+      <footer
+        className="customborder-footer relative w-full bg-black overflow-hidden"
+        style={{
+          paddingTop: "clamp(30px, 8vw, 100px)",
+        }}
       >
-        <div className="max-w-[1366px] mx-auto px-4 sm:px-10 w-full flex flex-col h-full pt-6">
-          {/* ================= TOP LOGO ROW ================= */}
-          <div className="flex items-center justify-center md:justify-between w-full mb-6">
-            {/* Logo */}
-            <img
-              src="/icons/logo.svg"
-              alt="MoonBet Logo"
-              className="w-40 sm:w-48 md:w-52 lg:w-56 object-contain"
-            />
+        {/* Footer Content */}
+        <motion.div
+          className="relative z-10 py-6 md:py-8 flex flex-col"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={containerVariants}
+        >
+          <div className="max-w-[1366px] mx-auto px-4 sm:px-10 w-full flex flex-col h-full pt-6">
+            {/* ================= TOP LOGO ROW ================= */}
+            <div className="flex items-center justify-center md:justify-between w-full mb-6">
+              {/* Logo */}
+              <img
+                src="/icons/logo.svg"
+                alt="MoonBet Logo"
+                className="w-40 sm:w-48 md:w-52 lg:w-56 object-contain"
+              />
 
-            {/* Back to top button */}
-            <motion.button
-              className="flex items-center gap-2 text-white/90 text-xs sm:text-sm md:text-base font-medium hover:text-orange-400 transition-all duration-300 
+              {/* Back to top button */}
+              <motion.button
+                className="flex items-center gap-2 text-white/90 text-xs sm:text-sm md:text-base font-medium hover:text-orange-400 transition-all duration-300 
                     absolute right-10 sm:static"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-              <span className="hidden sm:inline">Back to top</span>
-              <motion.span
-                className="p-1 flex items-center justify-center rounded-md bg-white/10 border border-white/20"
-                whileHover={{ boxShadow: "0 0 12px rgba(255, 107, 0, 0.5)" }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 25 25"
-                  fill="none"
+                <span className="hidden sm:inline">Back to top</span>
+                <motion.span
+                  className="p-1 flex items-center justify-center rounded-md bg-white/10 border border-white/20"
+                  whileHover={{ boxShadow: "0 0 12px rgba(255, 107, 0, 0.5)" }}
                 >
-                  <path
-                    d="M13.7071 1.29289C13.3166 0.902369 12.6834 0.902369 12.2929 1.29289L5.92893 7.65685C5.53841 8.04738 5.53841 8.68054 5.92893 9.07107C6.31946 9.46159 6.95262 9.46159 7.34315 9.07107L13 3.41421L18.6569 9.07107C19.0474 9.46159 19.6805 9.46159 20.0711 9.07107C20.4616 8.68054 20.4616 8.04738 20.0711 7.65685L13.7071 1.29289ZM13 24L14 24L14 2L13 2L12 2L12 24L13 24Z"
-                    fill="white"
-                  />
-                </svg>
-              </motion.span>
-            </motion.button>
-          </div>
-
-          {/* ================= MAIN CONTENT GRID ================= */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_2fr] gap-8 md:gap-12 pt-2">
-            {/* Left: Description, Email, Social Links */}
-            <motion.div
-              className="flex flex-col justify-start lg:pr-10 text-center lg:text-left items-center lg:items-start space-y-6 md:space-y-8"
-              variants={itemVariants}
-            >
-              {/* Description */}
-              <p className="text-xs sm:text-sm leading-relaxed text-white/70 max-w-[320px] lg:pt-[20px]">
-                Moonbet operates as a decentralized crypto casino on the Solana
-                blockchain. Built by crypto natives for players 18+.
-              </p>
-
-              {/* Email */}
-              <motion.div
-                className="flex items-center gap-2 mt-2"
-                whileHover={{ scale: 1.05 }}
-              >
-                <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-orange-500 transition-all duration-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.5)]">
-                  ✉
-                </span>
-
-                <a
-                  href="mailto:support@moonbet.games"
-                  className="text-xs sm:text-sm text-white/80 hover:text-orange-500 transition-colors duration-300"
-                >
-                  support@moonbet.games
-                </a>
-              </motion.div>
-
-              {/* Social Links */}
-              <div className="flex gap-3 sm:gap-4 mt-3">
-                {socialIcons.map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 transition-all duration-300 hover:text-white"
-                    variants={glowVariants}
-                    initial="initial"
-                    whileHover="hover"
-                    whileTap={{ scale: 0.95 }}
-                    aria-label={social.name}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 25 25"
+                    fill="none"
                   >
-                    <div className="scale-75 sm:scale-100">{social.icon}</div>
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Right: Footer Links (About / Support / Moonbet) */}
-            <div className="grid grid-cols-2  justify-items-center sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 lg:pt-[20px]">
-              {/* About Us */}
-              <motion.div
-                className="flex flex-col gap-3 md:gap-3 text-left"
-                variants={itemVariants}
-              >
-                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
-                  About Us
-                </p>
-                <ul className="flex flex-col gap-2 md:gap-3">
-                  {footerLinks.aboutUs.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        to={link.path}
-                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Support */}
-              <motion.div
-                className="flex flex-col gap-3 md:gap-3 text-left"
-                variants={itemVariants}
-              >
-                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
-                  Support
-                </p>
-                <ul className="flex flex-col gap-2 md:gap-3">
-                  {footerLinks.support.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        to={link.path}
-                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Moonbet */}
-              <motion.div
-                className="hidden md:block  flex-col gap-3 md:gap-3 text-left"
-                variants={itemVariants}
-              >
-                <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
-                  Moonbet
-                </p>
-                <ul className="flex flex-col gap-2 md:gap-3">
-                  {footerLinks.moonbet.map((link, index) => (
-                    <li key={index}>
-                      <Link
-                        to={link.path}
-                        className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+                    <path
+                      d="M13.7071 1.29289C13.3166 0.902369 12.6834 0.902369 12.2929 1.29289L5.92893 7.65685C5.53841 8.04738 5.53841 8.68054 5.92893 9.07107C6.31946 9.46159 6.95262 9.46159 7.34315 9.07107L13 3.41421L18.6569 9.07107C19.0474 9.46159 19.6805 9.46159 20.0711 9.07107C20.4616 8.68054 20.4616 8.04738 20.0711 7.65685L13.7071 1.29289ZM13 24L14 24L14 2L13 2L12 2L12 24L13 24Z"
+                      fill="white"
+                    />
+                  </svg>
+                </motion.span>
+              </motion.button>
             </div>
-          </div>
 
-          {/* Spacer for astronauts - Responsive Heights */}
-          <div className="flex-1 min-h-[100px] sm:min-h-[150px] md:min-h-[200px] lg:min-h-[300px]" />
+            {/* ================= MAIN CONTENT GRID ================= */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_2fr] gap-8 md:gap-12 pt-2">
+              {/* Left: Description, Email, Social Links */}
+              <motion.div
+                className="flex flex-col justify-start lg:pr-10 text-center lg:text-left items-center lg:items-start space-y-6 md:space-y-8"
+                variants={itemVariants}
+              >
+                {/* Description */}
+                <p className="text-xs sm:text-sm leading-relaxed text-white/70 max-w-[320px] lg:pt-[20px]">
+                  Moonbet operates as a decentralized crypto casino on the
+                  Solana blockchain. Built by crypto natives for players 18+.
+                </p>
 
-          {/* ================= BOTTOM SECTION ================= */}
-          <motion.div
-            className="flex justify-center items-center py-6 md:py-8 mb-20 sm:mb-16 md:mb-12 lg:mb-0"
-            variants={itemVariants}
-          >
-            {/* Centered Copyright */}
+                {/* Email */}
+                <motion.div
+                  className="flex items-center gap-2 mt-2"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-orange-500 transition-all duration-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.5)]">
+                    ✉
+                  </span>
+
+                  <a
+                    href="mailto:support@moonbet.games"
+                    className="text-xs sm:text-sm text-white/80 hover:text-orange-500 transition-colors duration-300"
+                  >
+                    support@moonbet.games
+                  </a>
+                </motion.div>
+
+                {/* Social Links */}
+                <div className="flex gap-3 sm:gap-4 mt-3">
+                  {socialIcons.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-white/70 transition-all duration-300 hover:text-white"
+                      variants={glowVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap={{ scale: 0.95 }}
+                      aria-label={social.name}
+                    >
+                      <div className="scale-75 sm:scale-100">{social.icon}</div>
+                    </motion.a>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Right: Footer Links (About / Support / Moonbet) */}
+              <div className="grid grid-cols-2  justify-items-center sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 lg:pt-[20px]">
+                {/* About Us */}
+                <motion.div
+                  className="flex flex-col gap-3 md:gap-3 text-left"
+                  variants={itemVariants}
+                >
+                  <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                    About Us
+                  </p>
+                  <ul className="flex flex-col gap-2 md:gap-3">
+                    {footerLinks.aboutUs.map((link, index) => (
+                      <li key={index}>
+                        <Link
+                          to={link.path}
+                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+
+                {/* Support */}
+                <motion.div
+                  className="flex flex-col gap-3 md:gap-3 text-left"
+                  variants={itemVariants}
+                >
+                  <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                    Support
+                  </p>
+                  <ul className="flex flex-col gap-2 md:gap-3">
+                    {footerLinks.support.map((link, index) => (
+                      <li key={index}>
+                        <Link
+                          to={link.path}
+                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+
+                {/* Moonbet */}
+                <motion.div
+                  className="hidden md:block  flex-col gap-3 md:gap-3 text-left"
+                  variants={itemVariants}
+                >
+                  <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
+                    Moonbet
+                  </p>
+                  <ul className="flex flex-col gap-2 md:gap-3">
+                    {footerLinks.moonbet.map((link, index) => (
+                      <li key={index}>
+                        <Link
+                          to={link.path}
+                          className="text-xs sm:text-sm text-white/70 hover:text-orange-500 transition-all duration-300 inline-block hover:translate-x-1"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            </div>
+            <CryptoPaymentSection />
+            <TrustBadgesFinal />
             <div className="text-xs sm:text-sm text-white/60 text-center">
               © MoonBet {new Date().getFullYear()}
             </div>
-          </motion.div>
-        </div>
-      </motion.div>
-    </footer>
+          </div>
+        </motion.div>
+      </footer>
+    </>
   );
 };
 

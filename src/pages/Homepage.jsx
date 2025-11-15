@@ -16,12 +16,20 @@ import SlotsSection from "../components/sections/SlotsSection";
 import LiveCasino from "../components/sections/LiveCasino";
 import RecommendedSection from "../components/sections/RecommendedSection";
 import RecentSection from "../components/sections/RecentSection";
+import CasinoGamesSection from "../components/sections/CasinoCategorySection";
+import BrandSection from "../components/sections/brandSection";
+import AwardSection from "../components/sections/awardSection";
+import TruestedSection from "../components/sections/TrustedSection";
+import CasinoCategorySection from "../components/sections/CasinoCategorySection";
+import CasinoGameCards from "../components/sections/Casinogamecards";
 
 const Homepage = () => {
   return (
     <div className="min-h-screen bg-black">
       <HomeRewardsSection />
       <HeroSection />
+      {/* <CasinoCategorySection /> */}
+      <CasinoGameCards />
       {/* <RecommendedSection />
       <SlotsSection />
       <LiveCasino /> */}
@@ -31,10 +39,11 @@ const Homepage = () => {
       <LiveCasino />
       {/* <CircularWheel /> */}
       <ProvidersSection />
+      <BrandSection />
       <GameBetsSection />
       <HomeFAQSection />
-      <CryptoPaymentSection />
-      <TrustBadges />
+      <AwardSection />
+      <TruestedSection />
     </div>
   );
 };

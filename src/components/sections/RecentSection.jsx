@@ -242,7 +242,7 @@ const RecentSection = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              RECENT
+              High RTP Games
             </motion.h3>
           </div>
 
