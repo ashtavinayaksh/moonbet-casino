@@ -19,7 +19,7 @@ const CasinoGameCards = () => {
       id: 2,
       title: "SLOTS",
       description: "Dive into our in-house games, live casino and slots",
-      img: "/rewards/rewards2.png",
+      //   img: "/rewards/rewards2.png",
       background:
         "linear-gradient(107deg, rgba(10, 43, 188, 0.10) 0%, rgba(10, 43, 188, 0.30) 100%)",
       borderGradient: "from-blue-500/50 to-blue-700/50",
@@ -31,7 +31,7 @@ const CasinoGameCards = () => {
       id: 3,
       title: "GAME SHOWS",
       description: "Dive into our in-house games, live casino and slots",
-      img: "/rewards/rewards3.png",
+      //   img: "/rewards/rewards3.png",
       background:
         "linear-gradient(107deg, rgba(240, 119, 48, 0.10) 0%, rgba(240, 119, 48, 0.30) 100%)",
       borderGradient: "from-orange-500/50 to-orange-700/50",
@@ -86,7 +86,15 @@ const CasinoGameCards = () => {
           <div className="relative z-10 h-full p-6 flex">
             {/* Left side - Text Content */}
             <div className="flex-1 flex flex-col justify-center">
-              <h3 className="text-2xl md:text-xl font-bold text-white mb-3 uppercase tracking-wider">
+              <h3
+                className="text-xl md:text-xl text-[#E5EAF2] mb-3 uppercase tracking-wider"
+                style={{
+                  fontFamily: "Neue Plak",
+                  fontsize: "20px",
+                  fontStyle: "normal",
+                  fontWeight: "400",
+                }}
+              >
                 {card.title}
               </h3>
               <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-xs">
@@ -102,7 +110,7 @@ const CasinoGameCards = () => {
                   alt={card.title}
                   className="w-full h-auto object-contain filter drop-shadow-2xl"
                 />
-                {/* Image glow effect */}
+
                 <div className="absolute inset-0 blur-2xl opacity-30">
                   <img
                     src={card.img}

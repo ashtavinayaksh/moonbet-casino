@@ -69,7 +69,7 @@ const TruestedSection = () => {
 
   return (
     <section className="w-full py-8 relative">
-      <div className="container max-w-7xl mx-auto px-4">
+      <div className="container max-w-7xl mx-auto ">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

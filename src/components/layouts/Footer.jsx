@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { BegambleawareIcon, ContactIcon } from "../ui-elements/svg-img";
 import CryptoPaymentSection from "../sections/CryptoPaymentSection";
 import TrustBadgesFinal from "../sections/TrustBadges";
+import TruestedSection from "../sections/TrustedSection";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -109,6 +110,7 @@ const Footer = () => {
           paddingTop: "clamp(30px, 8vw, 100px)",
         }}
       >
+        <TruestedSection />
         {/* Footer Content */}
         <motion.div
           className="relative z-10 py-6 md:py-8 flex flex-col"

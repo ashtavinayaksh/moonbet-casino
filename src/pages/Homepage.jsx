@@ -42,8 +42,7 @@ const Homepage = () => {
       <BrandSection />
       <GameBetsSection />
       <HomeFAQSection />
-      <AwardSection />
-      <TruestedSection />
+      {/* <AwardSection /> */}
     </div>
   );
 };
