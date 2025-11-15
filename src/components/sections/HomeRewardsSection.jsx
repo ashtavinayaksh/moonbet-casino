@@ -17,7 +17,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Bonus",
         description1: "Elite Status, Stellar",
         description2: "Awards",
-        img: "/rewards/rewards1.png",
+        img: "/rewards/rewards5.png",
       },
       {
         id: 2,
@@ -26,7 +26,7 @@ const HomeRewardsSection = () => {
         titleLine2: "RTP Games",
         description1: "Odds out of this",
         description2: "world.",
-        img: "/rewards/rewards.png",
+        img: "/rewards/rewards4.png",
       },
       {
         id: 3,
@@ -35,7 +35,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Game",
         description1: "Best out of all Crash",
         description2: "games out there.",
-        img: "/rewards/rewards3.png",
+        img: "/rewards/rewards6.png",
       },
     ],
     []
@@ -138,7 +138,7 @@ const HomeRewardsSection = () => {
                 }}
               >
                 <div
-                  className="relative rounded-[15px] overflow-hidden group cursor-pointer will-change-transform"
+                  className="relative rounded-[15px] group cursor-pointer will-change-transform overflow-visible"
                   style={{
                     width: "100%",
                     height: "195px",
@@ -203,7 +203,7 @@ const HomeRewardsSection = () => {
                   </div>
 
                   {/* Image - Right Side (Fixed Size) */}
-                  <div className="absolute right-0 top-0 bottom-0 rounded-r-[15px] flex items-center justify-center">
+                  <div className="absolute right-0 top-1/2 -translate-y-[58%] w-[52%] overflow-visible pointer-events-none">
                     {/* Background Box */}
                     <div className="flex items-center justify-center ">
                       {/* Image */}
@@ -211,7 +211,7 @@ const HomeRewardsSection = () => {
                         src={imageErrors[reward.id] || reward.img}
                         alt={reward.titleLine2}
                         loading="lazy"
-                        className="relative"
+                        className="w-full h-auto object-contain drop-shadow-2xl"
                         onError={(e) => {
                           e.target.onerror = null;
                           handleImageError(reward.id, reward.fallbackImg);
