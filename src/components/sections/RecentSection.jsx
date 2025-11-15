@@ -35,7 +35,7 @@ const RecentSection = () => {
     const fetchGames = async () => {
       try {
         const { data } = await axios.get(
-          `/wallet-service/api/games?sortBy=recent&userId=${userId}`
+          `/wallet-service/api/games?name=casino`
         );
 
         // ✅ Compatible with both old and new API response formats

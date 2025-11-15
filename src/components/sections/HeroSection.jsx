@@ -455,13 +455,7 @@ const HeroSection = () => {
     <section className="w-full relative md:h-[200] bg-black">
       {/* Recent Wins Section - Dark background strip */}
       <div className="absolute top-0 left-0 right-0 z-20 flex justify-center">
-        <div
-          className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-[12px]"
-          style={{
-            background:
-              "linear-gradient(0deg, rgb(30 30 30 / 55%) 0%, rgb(75 75 75 / 35%) 100%)",
-          }}
-        >
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-4 py-2 sm:py-3 rounded-[12px]">
           {/* Recent Wins Label positioned above cards */}
           <motion.div
             className="absolute flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2 "

@@ -45,52 +45,52 @@ const WalletModal = ({ isOpen, onClose }) => {
   const socket = useWalletSocket();
 
   useEffect(() => {
-  if (!isOpen || !socket) return;
+    if (!isOpen || !socket) return;
 
-  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-  if (userId) {
-    console.log("Joining deposit room:", userId);
-    socket.emit("joinDepositRoom", userId);
-  }
-}, [isOpen, socket]);
-
-useEffect(() => {
-  if (!socket) return;
-
-  const handler = (msg) => {
-    console.log("🔥 Wallet deposit update:", msg);
-
-    if (msg.status === "credited") {
-      console.log("Message status are:", msg.status);
-      toast.success("🎉 Deposit credited!");
-      refreshBalance();
+    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+    if (userId) {
+      console.log("Joining deposit room:", userId);
+      socket.emit("joinDepositRoom", userId);
     }
+  }, [isOpen, socket]);
 
-    if (msg.status === "finished") {
-      console.log("Message status are:", msg.status);
-      toast.success("💸 Blockchain confirmations completed");
-    }
+  useEffect(() => {
+    if (!socket) return;
 
-    if (msg.status === "confirming") {
-      console.log("Message status are:", msg.status);
-      toast.info("⏳ Confirming on blockchain…");
-    }
+    const handler = (msg) => {
+      console.log("🔥 Wallet deposit update:", msg);
 
-    if (msg.status === "sending") {
-      console.log("Message status are:", msg.status);
-      toast.info("📤 Processing via NOWPayments…");
-    }
+      if (msg.status === "credited") {
+        console.log("Message status are:", msg.status);
+        toast.success("🎉 Deposit credited!");
+        refreshBalance();
+      }
 
-    if (msg.status === "waiting") {
-      console.log("Message status are:", msg.status);
-      toast.info("💰 Payment detected — waiting confirmations");
-    }
-  };
+      if (msg.status === "finished") {
+        console.log("Message status are:", msg.status);
+        toast.success("💸 Blockchain confirmations completed");
+      }
 
-  socket.on("deposit_status", handler);
+      if (msg.status === "confirming") {
+        console.log("Message status are:", msg.status);
+        toast.info("⏳ Confirming on blockchain…");
+      }
 
-  return () => socket.off("deposit_status", handler);
-}, [socket]);
+      if (msg.status === "sending") {
+        console.log("Message status are:", msg.status);
+        toast.info("📤 Processing via NOWPayments…");
+      }
+
+      if (msg.status === "waiting") {
+        console.log("Message status are:", msg.status);
+        toast.info("💰 Payment detected — waiting confirmations");
+      }
+    };
+
+    socket.on("deposit_status", handler);
+
+    return () => socket.off("deposit_status", handler);
+  }, [socket]);
 
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
@@ -202,17 +202,16 @@ useEffect(() => {
   }, [walletAddress]);
 
   const refreshBalance = async () => {
-  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-  const token = localStorage.getItem("token");
+    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+    const token = localStorage.getItem("token");
 
-  axios
-    .get(`/wallet-service/api/wallet/${userId}/balance`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(({ data }) => setWalletBalance(data))
-    .catch(console.error);
-};
-
+    axios
+      .get(`/wallet-service/api/wallet/${userId}/balance`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(({ data }) => setWalletBalance(data))
+      .catch(console.error);
+  };
 
   const cryptoCurrencies = [
     {
@@ -292,56 +291,57 @@ useEffect(() => {
   };
 
   // Step 1: Submit Withdraw Request
-const handleWithdraw = async () => {
-  if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
-    toast.error("Please fill all fields");
-    return;
-  }
+  const handleWithdraw = async () => {
+    if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-  const payload = {
-    currency: selectedWithdrawCoin.symbol.toUpperCase(),
-    amount: parseFloat(withdrawAmount),
-    address: withdrawAddress,
+    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+    const payload = {
+      currency: selectedWithdrawCoin.symbol.toUpperCase(),
+      amount: parseFloat(withdrawAmount),
+      address: withdrawAddress,
+    };
+
+    try {
+      const { data } = await axios.post(
+        `/wallet-service/api/wallet/${userId}/withdraw`,
+        payload
+      );
+
+      if (data.requestId) {
+        setOtpRequestId(data.requestId);
+        toast.success("Withdrawal request created successfully!");
+        setShowWithdrawConfirmation(true);
+      } else {
+        toast.error("Unexpected response from server");
+      }
+    } catch (err) {
+      console.error("❌ Withdraw error:", err);
+      toast.error(err.response?.data?.message || "Withdrawal request failed");
+    }
   };
 
-  try {
-    const { data } = await axios.post(
-      `/wallet-service/api/wallet/${userId}/withdraw`,
-      payload
-    );
+  // Step 2: Confirm Withdraw (execute API)
+  const handleConfirmWithdraw = async (requestId) => {
+    try {
+      const { data } = await axios.post(
+        `/wallet-service/api/wallet/withdraw/execute/${requestId}`
+      );
 
-    if (data.requestId) {
-      setOtpRequestId(data.requestId);
-      toast.success("Withdrawal request created successfully!");
-      setShowWithdrawConfirmation(true);
-    } else {
-      toast.error("Unexpected response from server");
+      toast.success("✅ Withdrawal executed successfully!");
+      setShowWithdrawConfirmation(false);
+      setShowWithdrawModal(false);
+      setWithdrawAmount("");
+      setWithdrawAddress("");
+    } catch (err) {
+      console.error("❌ Execute withdraw error:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to execute withdrawal"
+      );
     }
-  } catch (err) {
-    console.error("❌ Withdraw error:", err);
-    toast.error(err.response?.data?.message || "Withdrawal request failed");
-  }
-};
-
-// Step 2: Confirm Withdraw (execute API)
-const handleConfirmWithdraw = async (requestId) => {
-  try {
-    const { data } = await axios.post(
-      `/wallet-service/api/wallet/withdraw/execute/${requestId}`
-    );
-
-    toast.success("✅ Withdrawal executed successfully!");
-    setShowWithdrawConfirmation(false);
-    setShowWithdrawModal(false);
-    setWithdrawAmount("");
-    setWithdrawAddress("");
-  } catch (err) {
-    console.error("❌ Execute withdraw error:", err);
-    toast.error(err.response?.data?.message || "Failed to execute withdrawal");
-  }
-};
-
+  };
 
   // const handleConfirmWithdraw = async (otpCode) => {
   //   if (!otpCode || !otpRequestId) {
@@ -426,7 +426,16 @@ const handleConfirmWithdraw = async (requestId) => {
             exit="exit"
             className="fixed inset-0 flex items-center justify-center z-[103] p-4"
           >
-            <div className="bg-[#1A1D24] rounded-xl w-full max-w-lg shadow-2xl border border-white/10">
+            <div
+              className="bg-[#1A1D24] rounded-xl w-full max-w-lg shadow-2xl border border-white/10"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                backdropFilter: "blur(30px)",
+                WebkitBackdropFilter: "blur(30px)",
+                borderRadius: "6px",
+              }}
+            >
               <div className="flex items-center gap-3 p-6 border-b border-white/10">
                 <button
                   onClick={() => setShowDepositModal(false)}
@@ -501,20 +510,26 @@ const handleConfirmWithdraw = async (requestId) => {
                     className="bg-[#0F1116] rounded-lg p-2 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all border border-white/10"
                   >
                     <div className="flex items-center gap-3">
-  {selectedDepositCoin ? (
-    <>
-      <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
-        {selectedDepositCoin.symbol.charAt(0)}
-      </div>
-      <div>
-        <div className="text-white font-bold">{selectedDepositCoin.symbol}</div>
-        <div className="text-gray-400 text-sm">{selectedDepositCoin.name}</div>
-      </div>
-    </>
-  ) : (
-    <div className="text-gray-400 text-sm">Select Currency</div>
-  )}
-</div>
+                      {selectedDepositCoin ? (
+                        <>
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold">
+                            {selectedDepositCoin.symbol.charAt(0)}
+                          </div>
+                          <div>
+                            <div className="text-white font-bold">
+                              {selectedDepositCoin.symbol}
+                            </div>
+                            <div className="text-gray-400 text-sm">
+                              {selectedDepositCoin.name}
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-gray-400 text-sm">
+                          Select Currency
+                        </div>
+                      )}
+                    </div>
                     <svg
                       className={`w-5 h-5 text-gray-400 transition-transform ${
                         showDepositDropdown ? "rotate-180" : ""
@@ -681,7 +696,16 @@ const handleConfirmWithdraw = async (requestId) => {
             exit="exit"
             className="fixed inset-0 flex items-center justify-center z-[103] p-4"
           >
-            <div className="bg-[#1A1D24] rounded-xl w-full max-w-lg shadow-2xl border border-white/10">
+            <div
+              className=" rounded-xl w-full max-w-lg shadow-2xl border border-white/10"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+                backdropFilter: "blur(30px)",
+                WebkitBackdropFilter: "blur(30px)",
+                borderRadius: "6px",
+              }}
+            >
               <div className="flex items-center gap-3 p-6 border-b border-white/10">
                 <button
                   onClick={() => setShowWithdrawModal(false)}
@@ -893,7 +917,7 @@ const handleConfirmWithdraw = async (requestId) => {
             onClick={onClose}
           />
 
-            <motion.div
+          <motion.div
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -901,20 +925,18 @@ const handleConfirmWithdraw = async (requestId) => {
             className="fixed inset-0 flex items-center justify-center z-[101] p-4"
           >
             <div
-              className="bg-[#000] rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100"
+              className=" rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-100"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
                 backdropFilter: "blur(30px)",
                 WebkitBackdropFilter: "blur(30px)",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                boxShadow:
-                  "0 25px 70px rgba(0, 0, 0, 0.6), 0 0 120px rgba(240, 119, 48, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1)",
+                borderRadius: "6px",
               }}
             >
               {/* Header with enhanced glass effect */}
               <div
-                className="flex items-center justify-between p-4 border-b border-white/10"
+                className="flex items-center justify-between p-4"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)",
@@ -924,7 +946,7 @@ const handleConfirmWithdraw = async (requestId) => {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg flex items-center justify-center shadow-lg shadow-[#F07730]/30">
                     <svg
-                      className="w-5 h-5 text-black"
+                      className="wallet-btn2 w-5 h-5 text-black"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -963,7 +985,7 @@ const handleConfirmWithdraw = async (requestId) => {
 
               {/* Tab Navigation with glass effect */}
               <div
-                className="flex gap-4 p-6 border-b border-white/10"
+                className="flex gap-4 p-4 border-b border-white/10"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(15, 17, 22, 0.8) 0%, rgba(15, 17, 22, 0.4) 100%)",
@@ -1014,7 +1036,7 @@ const handleConfirmWithdraw = async (requestId) => {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6"
+                    className="p-4"
                   >
                     {/* Balance Section with glass card */}
                     <div
@@ -1026,12 +1048,19 @@ const handleConfirmWithdraw = async (requestId) => {
                         border: "1px solid rgba(255, 255, 255, 0.1)",
                       }}
                     >
-                      <h3 className="text-gray-400 text-sm mb-2">Balance</h3>
-                      <div className="flex items-center gap-3">
-                        <span className="text-4xl font-bold text-white drop-shadow-lg">
-                          ${walletBalance?.totalUsd?.toFixed(2) || "0.00"}
-                        </span>
-                        <div className="w-8 h-8 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg shadow-[#F07730]/30">
+                      <div className="flex items-center justify-between gap-4 bg-black/30 px-4 py-3 rounded-xl border border-white/10">
+                        {/* Left side: Label and Balance */}
+                        <div className="flex flex-col">
+                          <h3 className="text-sm text-gray-400 font-medium tracking-wide">
+                            Balance
+                          </h3>
+                          <span className="text-4xl font-bold text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]">
+                            ${walletBalance?.totalUsd?.toFixed(2) || "0.00"}
+                          </span>
+                        </div>
+
+                        {/* Right side: Gradient Icon */}
+                        <div className="w-10 h-10 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-full flex items-center justify-center text-black font-extrabold text-lg shadow-[0_0_12px_rgba(240,119,48,0.4)]">
                           $
                         </div>
                       </div>
@@ -1056,11 +1085,10 @@ const handleConfirmWithdraw = async (requestId) => {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center justify-between py-4 px-3 mb-2 rounded-lg transition-all"
+                            className="flex items-center justify-between py-2 px-3 mb-2 rounded-lg transition-all"
                             style={{
                               background: "rgba(255, 255, 255, 0.03)",
                               backdropFilter: "blur(10px)",
-                              border: "1px solid rgba(255, 255, 255, 0.05)",
                             }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.background =
@@ -1512,12 +1540,11 @@ const handleConfirmWithdraw = async (requestId) => {
             userEmail={emailId} // Pass actual user email
           />
           <WithdrawalConfirmationPopup
-          isOpen={showWithdrawConfirmation}
-          onClose={() => setShowWithdrawConfirmation(false)}
-          requestId={otpRequestId}
-          onConfirm={handleConfirmWithdraw}
+            isOpen={showWithdrawConfirmation}
+            onClose={() => setShowWithdrawConfirmation(false)}
+            requestId={otpRequestId}
+            onConfirm={handleConfirmWithdraw}
           />
-
 
           {renderDepositModal()}
           {renderWithdrawModal()}
