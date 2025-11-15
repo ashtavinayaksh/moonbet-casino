@@ -7,7 +7,7 @@ const CasinoGameCards = () => {
       id: 1,
       title: "CASINO",
       description: "Dive into our in-house games, live casino and slots",
-      img: "/rewards/rewards1.png",
+      img: "/rewards/rewards4.png",
       background:
         "linear-gradient(95deg, rgba(220, 31, 255, 0.10) 0.58%, rgba(220, 31, 255, 0.30) 99.42%)",
       borderGradient: "from-purple-500/50 to-purple-700/50",
@@ -43,7 +43,7 @@ const CasinoGameCards = () => {
       id: 4,
       title: "GAME SHOWS",
       description: "Dive into our in-house games, live casino and slots",
-      img: "/rewards/rewards2.png",
+      img: "/rewards/rewards5.png",
 
       background:
         "linear-gradient(97deg, rgba(240, 119, 48, 0.10) 1.02%, rgba(240, 119, 48, 0.30) 98.68%)",
@@ -56,7 +56,7 @@ const CasinoGameCards = () => {
       id: 5,
       title: "LIVE CASINO",
       description: "Dive into our in-house games, live casino and slots",
-      img: "/rewards/rewards1.png",
+      img: "/rewards/rewards6.png",
       background:
         "linear-gradient(157deg, rgba(255, 255, 255, 0.40) 2.12%, rgba(255, 255, 255, 0.00) 39%, rgba(255, 255, 255, 0.00) 54.33%, rgba(255, 255, 255, 0.10) 93.02%)",
       borderGradient: "from-cyan-500/50 to-teal-700/50",
