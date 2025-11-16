@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import api from "../../api/axios";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import bs58 from "bs58";
 
 // Icon Components
 const GoogleIcon = () => (
@@ -249,6 +250,79 @@ const LoginSignup = ({
 
   if (!isOpen) return null;
 
+  const handleWalletLogin = async () => {
+  try {
+    const provider = window.phantom?.solana || window.backpack?.solana;
+
+    if (!provider) {
+      toast.error("No Solana wallet detected.");
+      return;
+    }
+
+    // 1️⃣ REQUEST WALLET CONNECTION
+    const resp = await provider.connect();
+    const walletAddress = resp.publicKey.toString();
+    console.log("🔌 Wallet connected:", walletAddress);
+
+    // 2️⃣ GET NONCE FROM BACKEND
+    const { data: nonceRes } = await axios.post(
+      "/auth-service/api/auth/wallet/nonce",
+      { walletAddress }
+    );
+
+    if (!nonceRes.success) {
+      toast.error("Failed to get nonce");
+      return;
+    }
+
+    const message = nonceRes.message;
+
+    // 3️⃣ SIGN MESSAGE
+    const encoded = new TextEncoder().encode(message);
+    const signed = await provider.signMessage(encoded, "utf8");
+    const signature = bs58.encode(signed.signature);
+
+    // 4️⃣ VERIFY SIGNATURE IN BACKEND
+    const { data: verifyRes } = await axios.post(
+      "/auth-service/api/auth/wallet/verify",
+      {
+        walletAddress,
+        signature,
+        message,
+        walletType: "solana",
+      }
+    );
+
+    if (!verifyRes.success) {
+      toast.error(verifyRes.message || "Wallet verification failed");
+      return;
+    }
+
+    // 5️⃣ LOGIN SUCCESS
+    const { user, token } = verifyRes.data;
+
+    localStorage.setItem("token", token);
+    window.dispatchEvent(new Event("tokenChanged"));
+
+    if (user) {
+  const { _id, username, email, kycStatus } = user;
+  const id = _id; // rename _id → id
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({ id, username, email, kycStatus })
+  );
+}
+    toast.success("Wallet connected successfully!");
+    onClose();
+    if (onLoginSuccess) onLoginSuccess(verifyRes.data);
+
+  } catch (err) {
+    console.error("Wallet login error:", err);
+    toast.error(err?.response?.data?.message || "Wallet login failed.");
+  }
+};
+
   return (
     <div
       className="fixed inset-0 z-[99999] p-4 h-screen"
@@ -481,8 +555,21 @@ const LoginSignup = ({
                           />
                         </div>
                       </div>
+                      <div
+                        className="flex items-center justify-center w-full  py-2"
+                        style={{
+                          borderRadius: "40px",
+                        }}
+                      >
+                        <button
+  onClick={handleWalletLogin}
+  className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
+>
+  <WalletIcon />
+  <span className="text-white text-sm font-medium">Wallet Connect</span>
+</button>
+                      </div>
                     </div>
-
                     <div className="mt-6 text-center text-white/80 text-sm">
                       Don’t have an account?{" "}
                       <button
@@ -630,6 +717,13 @@ const LoginSignup = ({
                             useOneTap
                           />
                         </div>
+                        <button
+  onClick={handleWalletLogin}
+  className="flex items-center justify-center gap-2 mb-4 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
+>
+  <WalletIcon />
+  <span className="text-white text-sm font-medium">Wallet Connect</span>
+</button>
                       </button>
                       {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
