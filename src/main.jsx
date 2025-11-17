@@ -6,14 +6,20 @@ import "./theme/moonbet-theme.css";
 import { AuthProvider } from "./store/useAuthStore";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { WalletSocketProvider } from "./context/WalletSocketContext.jsx";
+import { LoaderProvider } from "./context/LoaderContext.jsx";
+import { BrowserRouter as Router } from "react-router-dom";   // ✅ FIX HERE
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-    <WalletSocketProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <WalletSocketProvider>
+        <AuthProvider>
+          <LoaderProvider>
+            <Router>
+              <App />
+            </Router>
+          </LoaderProvider>
+        </AuthProvider>
       </WalletSocketProvider>
     </GoogleOAuthProvider>
   </StrictMode>

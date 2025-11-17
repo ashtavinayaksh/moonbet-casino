@@ -1,11 +1,11 @@
 // src/App.jsx
 import React, { useState, useEffect } from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
   useSearchParams,
+  useLocation,
 } from "react-router-dom";
 import Layout from "./components/layouts/Layout";
 import Homepage from "./pages/Homepage";
@@ -32,6 +32,8 @@ import ResponsibleGamblingPage from "./pages/ResponsibleGamblingPage";
 import ProvablyFairPage from "./pages/ProvablyFairPage";
 import ContactUsPage from "./pages/Contactuspage.jsx";
 import ProductShowcase from "./components/Productshowcase.jsx";
+import { useLoader } from "./context/LoaderContext";
+import GlobalLoader from "./components/GlobalLoader";
 
 // Placeholder pages
 const HoneypotPage = () => (
@@ -128,9 +130,23 @@ const AuthModalHandler = ({ children }) => {
 // 🧭 APP ROUTES
 //
 function App() {
+  const location = useLocation();
+const { loading, setLoading } = useLoader();
+
+useEffect(() => {
+  setLoading(true);
+
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 600); // small delay for smoothness
+
+  return () => clearTimeout(timer);
+}, [location]);
+
   return (
-    <Router>
       <AuthModalHandler>
+      <>
+      {loading && <GlobalLoader />}
         <Routes>
           <Route path="/" element={<Layout />}>
             {/* ✅ PUBLIC ROUTES */}
@@ -208,7 +224,6 @@ function App() {
             />
           </Route>
         </Routes>
-      </AuthModalHandler>
 
       {/* ✅ Toast + Tidio Global */}
       <ToastContainer
@@ -225,7 +240,8 @@ function App() {
         closeButton
       />
       <TidioChatButton />
-    </Router>
+    </>
+    </AuthModalHandler>
   );
 }
 
