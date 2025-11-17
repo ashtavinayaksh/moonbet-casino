@@ -586,7 +586,7 @@ const WalletModal = ({ isOpen, onClose }) => {
     </AnimatePresence>
   );
 const selectedBalanceObj = walletBalance?.balances?.find(
-  (b) => b.currency === selectedWithdrawCoin?.symbol
+  (b) => b.currency?.toUpperCase() === selectedWithdrawCoin?.symbol?.toUpperCase()
 );
 
 const availableBalance = selectedBalanceObj ? Number(selectedBalanceObj.amount) : null;
@@ -794,7 +794,7 @@ if (noCurrencyFound) {
                     <span className="text-white font-bold">
                       {walletBalance?.balances
                         ?.find(
-                          (b) => b.currency === selectedWithdrawCoin?.symbol
+                          (b) => b.currency?.toUpperCase() === selectedWithdrawCoin?.symbol?.toUpperCase()
                         )
                         ?.amount.toFixed(8) || "0.00000000"}
                     </span>
