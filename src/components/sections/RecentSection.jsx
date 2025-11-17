@@ -226,7 +226,7 @@ const RecentSection = () => {
 
   return (
     <motion.section
-      className="w-full relative bg-black pt-5"
+      className="w-full relative bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

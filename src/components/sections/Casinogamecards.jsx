@@ -160,7 +160,7 @@ const CasinoGameCards = () => {
     <section className="w-full px-4 py-8">
       <div className="max-w-7xl mx-auto">
         {/* DESKTOP - 1280px and above */}
-        <div className="hidden xl:grid gap-4 grid-cols-[590px_322px_321px] auto-rows-[180px] md:px-6">
+        <div className="hidden xl:grid gap-4 grid-cols-[590px_322px_321px] auto-rows-[180px] md:px-6 pt-10">
           {/* ROW 1 */}
           <GameCard card={gameCards[0]} />
           <GameCard card={gameCards[1]} />
