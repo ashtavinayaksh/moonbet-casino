@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import QRCode from "qrcode";
-// import WithdrawalConfirmationPopup from "./WithdrawalConfirmationPopup";
-import WithdrawalConfirmationPopup from "./settings/WithdrawalConfirmationPopup";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
 import { useWalletSocket } from "../context/WalletSocketContext";
+import WithdrawProcessingPopup from "./settings/WithdrawProcessingPopup";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -38,6 +37,8 @@ const WalletModal = ({ isOpen, onClose }) => {
   const [showWithdrawDropdown, setShowWithdrawDropdown] = useState(false);
   const [withdrawAddress, setWithdrawAddress] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [showProcessingPopup, setShowProcessingPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const [showWithdrawConfirmation, setShowWithdrawConfirmation] =
     useState(false);
@@ -290,102 +291,10 @@ const WalletModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // Step 1: Submit Withdraw Request
-  const handleWithdraw = async () => {
-    if (!withdrawAddress || !withdrawAmount || !selectedWithdrawCoin) {
-      toast.error("Please fill all fields");
-      return;
-    }
-
-    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-    const payload = {
-      currency: selectedWithdrawCoin.symbol.toUpperCase(),
-      amount: parseFloat(withdrawAmount),
-      address: withdrawAddress,
-    };
-
-    try {
-      const { data } = await axios.post(
-        `/wallet-service/api/wallet/${userId}/withdraw`,
-        payload
-      );
-
-      if (data.requestId) {
-        setOtpRequestId(data.requestId);
-        toast.success("Withdrawal request created successfully!");
-        setShowWithdrawConfirmation(true);
-      } else {
-        toast.error("Unexpected response from server");
-      }
-    } catch (err) {
-      console.error("❌ Withdraw error:", err);
-      toast.error(err.response?.data?.message || "Withdrawal request failed");
-    }
-  };
-
-  // Step 2: Confirm Withdraw (execute API)
-  const handleConfirmWithdraw = async (requestId) => {
-    try {
-      const { data } = await axios.post(
-        `/wallet-service/api/wallet/withdraw/execute/${requestId}`
-      );
-
-      toast.success("✅ Withdrawal executed successfully!");
-      setShowWithdrawConfirmation(false);
-      setShowWithdrawModal(false);
-      setWithdrawAmount("");
-      setWithdrawAddress("");
-    } catch (err) {
-      console.error("❌ Execute withdraw error:", err);
-      toast.error(
-        err.response?.data?.message || "Failed to execute withdrawal"
-      );
-    }
-  };
-
-  // const handleConfirmWithdraw = async (otpCode) => {
-  //   if (!otpCode || !otpRequestId) {
-  //     toast.error("Missing OTP or request ID");
-  //     return;
-  //   }
-
-  //   const userId =
-  //     JSON.parse(localStorage.getItem("user") || "{}").id ||
-  //     "68eb94c22a7983ea19b0bd6a";
-
-  //   try {
-  //     // Step 1: Verify OTP
-  //     await axios.post(`/wallet-service/api/wallet/verify-otp`, {
-  //       requestId: otpRequestId,
-  //       otp: otpCode,
-  //     });
-
-  //     toast.success("✅ OTP verified successfully. Processing withdrawal...");
-
-  //     // Step 2: Proceed with actual withdrawal
-  //     const withdrawData = {
-  //       currency: selectedWithdrawCoin.symbol.toUpperCase(),
-  //       address: withdrawAddress,
-  //       amount: parseFloat(withdrawAmount),
-  //     };
-
-  //     await axios.post(
-  //       `/wallet-service/api/wallet/${userId}/withdraw`,
-  //       withdrawData
-  //     );
-
-  //     toast.success("💸 Withdrawal request submitted successfully!");
-  //     setShowWithdrawConfirmation(false);
-  //     setShowWithdrawModal(false);
-  //     setWithdrawAddress("");
-  //     setWithdrawAmount("");
-  //   } catch (err) {
-  //     console.error("❌ Withdrawal verification error:", err);
-  //     toast.error(
-  //       err.response?.data?.message || "Failed to verify OTP or withdraw funds."
-  //     );
-  //   }
-  // };
+  const handleWithdrawClick = () => {
+  setShowWithdrawModal(false);
+  setShowProcessingPopup(true);  // open processing popup
+};
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -676,6 +585,26 @@ const WalletModal = ({ isOpen, onClose }) => {
       )}
     </AnimatePresence>
   );
+const selectedBalanceObj = walletBalance?.balances?.find(
+  (b) => b.currency === selectedWithdrawCoin?.symbol
+);
+
+const availableBalance = selectedBalanceObj ? Number(selectedBalanceObj.amount) : null;
+const minWithdraw = 0.0001;
+
+const noCurrencyFound = availableBalance === null; // currency not in wallet
+
+const isWithdrawDisabled =
+  noCurrencyFound ||
+  !withdrawAmount ||
+  withdrawAmount <= 0 ||
+  Number(withdrawAmount) < minWithdraw ||
+  (availableBalance !== null && withdrawAmount > availableBalance) ||
+  withdrawAddress.trim().length === 0;
+
+  const dynamicInsufficientMessage = noCurrencyFound
+  ? `You don’t have ${selectedWithdrawCoin?.symbol || ""} in your wallet`
+  : "Insufficient Balance";
 
   const renderWithdrawModal = () => (
     <AnimatePresence>
@@ -887,15 +816,22 @@ const WalletModal = ({ isOpen, onClose }) => {
                     </p>
                   </div>
                 </div>
-
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleWithdraw}
-                  className="w-full bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black py-4 px-6 rounded-lg font-bold transition-all"
-                >
-                  Confirm Withdrawal
-                </motion.button>
+  whileHover={!isWithdrawDisabled ? { scale: 1.02 } : {}}
+  whileTap={!isWithdrawDisabled ? { scale: 0.98 } : {}}
+  onClick={!isWithdrawDisabled ? handleWithdrawClick : null}
+  disabled={isWithdrawDisabled}
+  className={`w-full py-4 px-6 rounded-lg font-bold transition-all
+    ${isWithdrawDisabled 
+      ? "bg-gray-500 text-gray-300 cursor-not-allowed opacity-50" 
+      : "bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black"}
+  `}
+>
+  {isWithdrawDisabled 
+  ? dynamicInsufficientMessage 
+  : "Confirm Withdrawal"}
+</motion.button>
+
               </div>
             </div>
           </motion.div>
@@ -1528,23 +1464,26 @@ const WalletModal = ({ isOpen, onClose }) => {
               </div>
             </div>
           </motion.div>
-          <WithdrawalConfirmationPopup
-            isOpen={showWithdrawConfirmation}
-            onClose={() => setShowWithdrawConfirmation(false)}
-            onConfirm={handleConfirmWithdraw}
-            withdrawalData={{
-              amount: withdrawAmount,
-              currency: selectedWithdrawCoin?.symbol?.toUpperCase() || "SOL",
-              address: withdrawAddress,
-            }}
-            userEmail={emailId} // Pass actual user email
-          />
-          <WithdrawalConfirmationPopup
-            isOpen={showWithdrawConfirmation}
-            onClose={() => setShowWithdrawConfirmation(false)}
-            requestId={otpRequestId}
-            onConfirm={handleConfirmWithdraw}
-          />
+          
+          <WithdrawProcessingPopup
+  isOpen={showProcessingPopup}
+  onClose={() => setShowProcessingPopup(false)}
+  withdrawalData={{
+    amount: withdrawAmount,
+    currency: selectedWithdrawCoin?.symbol?.toUpperCase(),
+    address: withdrawAddress,
+  }}
+  userId={userId}
+/>
+{/* {withdrawAmount > availableBalance && (
+  <p className="text-red-400 text-sm mt-1">Amount exceeds your balance.</p>
+)}
+{withdrawAmount < minWithdraw && withdrawAmount > 0 && (
+  <p className="text-red-400 text-sm mt-1">
+    Minimum withdrawal is {minWithdraw} {selectedWithdrawCoin?.symbol}
+  </p>
+)} */}
+
 
           {renderDepositModal()}
           {renderWithdrawModal()}
