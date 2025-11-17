@@ -602,9 +602,13 @@ const isWithdrawDisabled =
   (availableBalance !== null && withdrawAmount > availableBalance) ||
   withdrawAddress.trim().length === 0;
 
-  const dynamicInsufficientMessage = noCurrencyFound
-  ? `You don’t have ${selectedWithdrawCoin?.symbol || ""} in your wallet`
-  : "Insufficient Balance";
+  let dynamicInsufficientMessage = "Enter a valid amount";
+
+if (noCurrencyFound) {
+  dynamicInsufficientMessage = `You don’t have ${selectedWithdrawCoin?.symbol || ""} in your wallet`;
+} else if (withdrawAmount > availableBalance) {
+  dynamicInsufficientMessage = "Amount exceeds available balance";
+}
 
   const renderWithdrawModal = () => (
     <AnimatePresence>
