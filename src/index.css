@@ -812,7 +812,7 @@
 .customborder-footer:before {
   content: "";
   position: absolute;
-  top: 10% !important;
+  top: 2% !important;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
