@@ -147,7 +147,10 @@ function App() {
             <Route path="casino" element={<Casino />} />
             <Route path="casino/:category" element={<Casino />} />
             <Route path="providers" element={<ProvidersPage />} />
-            <Route path="affiliate" element={<AffiliateLandingPage />} />
+            <Route
+              path="affiliate-program"
+              element={<AffiliateLandingPage />}
+            />
             <Route path="betting-rules" element={<BettingRules />} />
             <Route path="privacy" element={<PrivacyPolicyPage />} />
             <Route path="contact" element={<ContactUsPage />} />

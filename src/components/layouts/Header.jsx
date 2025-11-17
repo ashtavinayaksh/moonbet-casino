@@ -389,14 +389,14 @@ const Header = ({
       label: "Favourites",
       icon: "/icons/favourites.svg",
       activeIcon: "/active-menu/favourites-active.svg", // Single variable for both states
-      path: "/favourites",
+      path: "/casino/favourites",
     },
     {
       id: "recommended",
-      label: "Recommended",
+      label: "Trending",
       icon: "/icons/recommended.svg",
       activeIcon: "/active-menu/recommended-active.svg", // Single variable for both states
-      path: "/recommended",
+      path: "/casino/trending",
     },
   ];
 
@@ -413,36 +413,65 @@ const Header = ({
           label: "Blackjack",
           icon: "/icons/blackjack.svg",
         },
-        { path: "#", label: "Roulette", icon: "/icons/roulette.svg" },
-        { path: "#", label: "Bacarrat", icon: "/icons/bacarrat-menu.svg" },
-        { path: "#", label: "Game Shows", icon: "/icons/game-shows.svg" },
-        { path: "#", label: "Live Casino", icon: "/icons/live-casino.svg" },
+        {
+          path: "/casino/roulette",
+          label: "Roulette",
+          icon: "/icons/roulette.svg",
+        },
+        {
+          path: "/casino/bacarrat",
+          label: "Bacarrat",
+          icon: "/icons/bacarrat-menu.svg",
+        },
+        {
+          path: "/casino/game-shows",
+          label: "Game Shows",
+          icon: "/icons/game-shows.svg",
+        },
+        {
+          path: "/casino/live-casino",
+          label: "Live Casino",
+          icon: "/icons/live-casino.svg",
+        },
       ],
     },
     {
       id: "originals",
       label: "Originals",
       icon: "/icons/originals.svg",
-      activeIcon: "/active-menu/originals-active.svg", // Single variable
+      activeIcon: "/active-menu/originals-active.svg",
       submenu: [
-        { path: "/game/dice", label: "Dices", icon: "/icons/dices.svg" },
         {
-          path: "/game/honeypot",
+          path: "#",
+          label: "Dices",
+          icon: "/icons/dices.svg",
+          comingSoon: true,
+        },
+        {
+          path: "#",
           label: "HoneyPot",
           icon: "/icons/honeyPot.svg",
+          comingSoon: true,
         },
         {
-          path: "/game/blackjack",
+          path: "#",
           label: "Blackjack",
           icon: "/icons/blackjack.svg",
+          comingSoon: true,
         },
-        { path: "/game/67", label: "67", icon: "/icons/67.svg" },
+        { path: "#", label: "67", icon: "/icons/67.svg", comingSoon: true },
         {
-          path: "/game/bacarrat",
+          path: "#",
           label: "Bacarrat",
           icon: "/icons/bacarrat-menu.svg",
+          comingSoon: true,
         },
-        { path: "/game/mines", label: "Mines", icon: "/icons/mines.svg" },
+        {
+          path: "#",
+          label: "Mines",
+          icon: "/icons/mines.svg",
+          comingSoon: true,
+        },
       ],
     },
     {
@@ -476,6 +505,7 @@ const Header = ({
       label: "Rewards",
       icon: "/icons/rewards.svg",
       activeIcon: "/active-menu/rewards-active.svg", // Single variable
+      comingSoon: true,
     },
     {
       path: "",
@@ -685,12 +715,12 @@ const Header = ({
                 {/* Wallet Dropdown */}
                 {walletDropdownOpen && (
                   <div
-                    className="custom-header absolute left-[80%] sm:left-1/2 md:left-[65%]  -translate-x-1/2 mt-10 w-[90vw] sm:w-80 rounded-[24px]  shadow-2xl overflow-hidden z-50"
+                    className="custom-header absolute left-[80%] sm:left-1/2 md:left-[65%]  -translate-x-1/2 mt-10 w-[90vw] sm:w-80 rounded-[24px]  shadow-2xl overflow-hidden z-50 backdrop-blur-md"
                     style={{
                       background:
-                        "linear-gradient(rgb(80, 84, 91) 0%, rgb(60, 64, 70) 100%)",
-                      backdropFilter: "blur(135.5px)",
-                      WebkitBackdropFilter: "blur(135.5px)", // Safari support
+                        "linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(255, 255, 255, 0.10)",
+                      backdropFilter: "blur(67.5px)",
+                      WebkitBackdropFilter: "blur(67.5px)", // Safari support
                       boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8)",
                     }}
                   >
@@ -1328,6 +1358,22 @@ const Header = ({
                                       >
                                         {subItem.label}
                                       </span>
+                                      {/* ⭐ COMING SOON BADGE (Only for Originals submenu) */}
+                                      {item.id === "originals" &&
+                                        subItem.comingSoon && (
+                                          <span
+                                            className="
+        text-[10px] font-semibold 
+        px-2 py-0.5 rounded-full 
+        bg-[#F07730]/20 text-[#F07730] 
+        border border-[#F07730]/30
+        whitespace-nowrap 
+        tracking-wide
+      "
+                                          >
+                                            Coming Soon
+                                          </span>
+                                        )}
                                     </Link>
                                   ))}
                                 </div>
@@ -1762,6 +1808,22 @@ const Header = ({
                                       <span className="text-gray-300 text-sm">
                                         {subItem.label}
                                       </span>
+                                      {/* ⭐ COMING SOON BADGE (Only for Originals submenu) */}
+                                      {item.id === "originals" &&
+                                        subItem.comingSoon && (
+                                          <span
+                                            className="
+        text-[10px] font-semibold 
+        px-2 py-0.5 rounded-full 
+        bg-[#F07730]/20 text-[#F07730] 
+        border border-[#F07730]/30
+        whitespace-nowrap 
+        tracking-wide
+      "
+                                          >
+                                            Coming Soon
+                                          </span>
+                                        )}
                                     </Link>
                                   ))}
                                 </div>

@@ -35,31 +35,54 @@ const TidioChatButton = () => {
 
   return (
     <button
-      className="chat-button"
       onClick={handleChatOpen}
       style={{
         position: "fixed",
         bottom: "24px",
         right: "24px",
-
-        color: "#fff",
-        padding: "12px 20px",
-        borderRadius: "50px",
         border: "none",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+        background: "transparent",
+        padding: 0,
         cursor: "pointer",
         zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
       }}
     >
-      {/* ✅ Chat Icon */}
-      <img
-        src="/icons/chat-icon.svg"
-        alt="Chat Icon"
-        style={{ width: "20px", height: "20px", display: "block" }}
-      />
+      <div
+        style={{
+          position: "relative",
+          width: "60px",
+          height: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {/* ⭐ Glow Behind Icon */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "50%",
+            background: "#E5EAF2",
+            filter: "blur(20px)",
+            opacity: 0.7,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* ⭐ Chat Icon */}
+        <img
+          src="/icons/chat-icon.svg"
+          alt="Chat Icon"
+          style={{
+            width: "60px",
+            height: "60px",
+            display: "block",
+            position: "relative",
+            zIndex: 10,
+          }}
+        />
+      </div>
     </button>
   );
 };

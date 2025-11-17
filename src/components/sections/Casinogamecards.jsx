@@ -85,14 +85,14 @@ const CasinoGameCards = () => {
           {/* Content Container */}
           <div className="relative z-10 h-full p-6 flex">
             {/* Left side - Text Content */}
-            <div className="flex-1 flex flex-col justify-center">
+            <div className="flex-1 flex flex-col ">
               <h3
                 className="text-xl md:text-xl text-[#E5EAF2] mb-3 uppercase tracking-wider"
                 style={{
                   fontFamily: "Neue Plak",
                   fontsize: "20px",
                   fontStyle: "normal",
-                  fontWeight: "400",
+                  fontWeight: "600",
                 }}
               >
                 {card.title}
