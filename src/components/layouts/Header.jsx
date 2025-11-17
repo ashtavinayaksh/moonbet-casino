@@ -409,7 +409,7 @@ const Header = ({
       submenu: [
         { path: "/casino/slots", label: "Slots", icon: "/icons/slots.svg" },
         {
-          path: "/casino/roulette",
+          path: "/casino/blackjack",
           label: "Blackjack",
           icon: "/icons/blackjack.svg",
         },
@@ -504,7 +504,7 @@ const Header = ({
       path: "#",
       label: "Rewards",
       icon: "/icons/rewards.svg",
-      activeIcon: "/active-menu/rewards-active.svg", // Single variable
+      activeIcon: "/active-menu/rewards-active.svg",
       comingSoon: true,
     },
     {
@@ -982,7 +982,6 @@ const Header = ({
         >
           <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#3a3a3a] scrollbar-track-transparent pr-1">
             {/* Main Menu */}
-            {/* Main Menu */}
             <div className="py-3">
               <div className="space-y-1">
                 {menuItems.map((item) => {
@@ -1358,20 +1357,11 @@ const Header = ({
                                       >
                                         {subItem.label}
                                       </span>
-                                      {/* ⭐ COMING SOON BADGE (Only for Originals submenu) */}
+                                      {/* ⭐ Auditing BADGE (Only for Originals submenu) */}
                                       {item.id === "originals" &&
                                         subItem.comingSoon && (
-                                          <span
-                                            className="
-        text-[10px] font-semibold 
-        px-2 py-0.5 rounded-full 
-        bg-[#F07730]/20 text-[#F07730] 
-        border border-[#F07730]/30
-        whitespace-nowrap 
-        tracking-wide
-      "
-                                          >
-                                            Coming Soon
+                                          <span className="text-[8px] font-semibold px-2 py-0.5 rounded-full  bg-[#F07730]/20 text-[#F07730] border border-[#F07730]/30 whitespace-nowrap tracking-wide">
+                                            Auditing
                                           </span>
                                         )}
                                     </Link>
@@ -1466,27 +1456,33 @@ const Header = ({
                 {accountItems.map((item) => {
                   const isActive = location.pathname === item.path;
 
+                  const isLiveSupport = item.label === "Live Support";
+
                   return (
                     <motion.div
-                      key={item.path}
+                      key={item.path || item.label}
                       whileHover={{ scale: sidebarCollapsed ? 1.05 : 1.01 }}
                       className="relative group"
                     >
-                      <Link
-                        to={item.path}
-                        className={`flex items-center ${
-                          sidebarCollapsed ? "justify-center" : "gap-3"
-                        } px-3 py-2 rounded-[8px] transition-all duration-200 
-                          ${getMenuLinkClass(
-                            item,
-                            location.pathname,
-                            sidebarCollapsed
-                          )}`}
-                        onClick={closeSidebar}
-                      >
-                        <span className="text-lg flex items-center justify-center">
-                          {typeof item.icon === "string" &&
-                          item.icon.startsWith("/") ? (
+                      {/* ⭐ LIVE SUPPORT BUTTON (opens Tidio) */}
+                      {isLiveSupport ? (
+                        <button
+                          onClick={() => {
+                            closeSidebar();
+                            if (window.tidioChatApi) {
+                              window.tidioChatApi.show();
+                              window.tidioChatApi.open();
+                            } else {
+                              console.warn("Tidio not ready");
+                            }
+                          }}
+                          className={`flex items-center ${
+                            sidebarCollapsed ? "justify-center" : "gap-3"
+                          } w-full px-3 py-2 rounded-[8px] transition-all duration-200
+                ${getMenuLinkClass(item, location.pathname, sidebarCollapsed)}
+              `}
+                        >
+                          <span className="text-lg flex items-center justify-center">
                             <img
                               src={getMenuIcon(
                                 item,
@@ -1499,44 +1495,113 @@ const Header = ({
                                 location.pathname,
                                 sidebarCollapsed
                               )}
-                              key={`${item.path}-${isActive}-${sidebarCollapsed}`} // Force re-render
                             />
-                          ) : (
-                            item.icon
-                          )}
-                        </span>
-                        <AnimatePresence>
-                          {!sidebarCollapsed && (
-                            <motion.span
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: -20 }}
-                              className="text-base font-normal font-['Neue_Plak'] leading-6"
-                              style={{
-                                textShadow:
-                                  "0 0 10px rgba(255, 255, 255, 0.25)",
-                              }}
-                            >
+                          </span>
+
+                          {/* Label when expanded */}
+                          <AnimatePresence>
+                            {!sidebarCollapsed && (
+                              <motion.span
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="text-base font-normal font-['Neue_Plak'] leading-6 text-white"
+                                style={{
+                                  textShadow: "0 0 10px rgba(255,255,255,0.25)",
+                                }}
+                              >
+                                {item.label}
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+
+                          {/* Tooltip */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                               {item.label}
-                            </motion.span>
+                            </div>
                           )}
-                        </AnimatePresence>
+                        </button>
+                      ) : (
+                        /* ⭐ ALL OTHER NORMAL LINK ITEMS */
+                        <Link
+                          to={item.path}
+                          className={`flex items-center ${
+                            sidebarCollapsed ? "justify-center" : "gap-3"
+                          } px-3 py-2 rounded-[8px] transition-all duration-200 
+                ${getMenuLinkClass(item, location.pathname, sidebarCollapsed)}
+              `}
+                          onClick={closeSidebar}
+                        >
+                          <span className="text-lg flex items-center justify-center">
+                            <img
+                              src={getMenuIcon(
+                                item,
+                                location.pathname,
+                                sidebarCollapsed
+                              )}
+                              alt={item.label}
+                              className={getMenuIconClass(
+                                item,
+                                location.pathname,
+                                sidebarCollapsed
+                              )}
+                            />
+                          </span>
 
-                        {/* Active indicator bar */}
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r"
-                          />
-                        )}
+                          <AnimatePresence>
+                            {!sidebarCollapsed && (
+                              <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="flex items-center justify-between w-full"
+                              >
+                                {/* Label */}
+                                <span
+                                  className="text-base font-normal font-['Neue_Plak'] leading-6 text-white"
+                                  style={{
+                                    textShadow:
+                                      "0 0 10px rgba(255,255,255,0.25)",
+                                  }}
+                                >
+                                  {item.label}
+                                </span>
 
-                        {/* Tooltip for collapsed state */}
-                        {sidebarCollapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                            {item.label}
-                          </div>
-                        )}
-                      </Link>
+                                {/* ⭐ Auditing Badge */}
+                                {item.comingSoon && (
+                                  <span
+                                    className="
+                          text-[10px] font-semibold 
+                          px-2 py-0.5 rounded-full 
+                          bg-[#F07730]/20 text-[#F07730]
+                          border border-[#F07730]/30
+                          whitespace-nowrap tracking-wide
+                        "
+                                  >
+                                    Auditing
+                                  </span>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+
+                          {/* Active indicator bar */}
+                          {isActive && (
+                            <motion.div
+                              layoutId="activeIndicator"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r"
+                            />
+                          )}
+
+                          {/* Tooltip */}
+                          {sidebarCollapsed && (
+                            <div className="absolute left-full ml-2 px-2 py-1 bg-[#1A1B23] border border-gray-800 rounded text-xs text-[#A8A8A8] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                              {item.label}
+                            </div>
+                          )}
+                        </Link>
+                      )}
                     </motion.div>
                   );
                 })}
@@ -1808,22 +1873,6 @@ const Header = ({
                                       <span className="text-gray-300 text-sm">
                                         {subItem.label}
                                       </span>
-                                      {/* ⭐ COMING SOON BADGE (Only for Originals submenu) */}
-                                      {item.id === "originals" &&
-                                        subItem.comingSoon && (
-                                          <span
-                                            className="
-        text-[10px] font-semibold 
-        px-2 py-0.5 rounded-full 
-        bg-[#F07730]/20 text-[#F07730] 
-        border border-[#F07730]/30
-        whitespace-nowrap 
-        tracking-wide
-      "
-                                          >
-                                            Coming Soon
-                                          </span>
-                                        )}
                                     </Link>
                                   ))}
                                 </div>

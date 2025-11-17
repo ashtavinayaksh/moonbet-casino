@@ -1,26 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const TidioChatButton = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   useEffect(() => {
     const onTidioChatApiReady = () => {
-      // Hide the chat widget initially
+      // Hide default widget
       window.tidioChatApi.hide();
+      window.tidioChatApi.hideDefaultWidget?.();
+      window.tidioChatApi.hideWidget?.();
 
-      // Re-hide it after chat closes
+      // When chat opens → hide button
+      window.tidioChatApi.on("open", () => {
+        setIsChatOpen(true);
+      });
+
+      // When chat closes → show button again
       window.tidioChatApi.on("close", () => {
+        setIsChatOpen(false);
         window.tidioChatApi.hide();
+        window.tidioChatApi.hideDefaultWidget?.();
+        window.tidioChatApi.hideWidget?.();
       });
     };
 
-    // Case 1: API already loaded
     if (window.tidioChatApi) {
       window.tidioChatApi.on("ready", onTidioChatApiReady);
     } else {
-      // Case 2: Wait for Tidio to finish loading
       document.addEventListener("tidioChat-ready", onTidioChatApiReady);
     }
 
-    // Cleanup on unmount
     return () => {
       document.removeEventListener("tidioChat-ready", onTidioChatApiReady);
     };
@@ -32,6 +41,9 @@ const TidioChatButton = () => {
       window.tidioChatApi.open();
     }
   };
+
+  // ⭐ If chat is open → hide the button
+  if (isChatOpen) return null;
 
   return (
     <button
@@ -57,7 +69,7 @@ const TidioChatButton = () => {
           justifyContent: "center",
         }}
       >
-        {/* ⭐ Glow Behind Icon */}
+        {/* Glow */}
         <div
           style={{
             position: "absolute",
@@ -70,7 +82,7 @@ const TidioChatButton = () => {
           }}
         />
 
-        {/* ⭐ Chat Icon */}
+        {/* Chat Icon */}
         <img
           src="/icons/chat-icon.svg"
           alt="Chat Icon"
