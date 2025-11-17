@@ -386,7 +386,7 @@ const Header = ({
     },
     {
       id: "favourites",
-      label: "Favourites",
+      label: "Favorites",
       icon: "/icons/favourites.svg",
       activeIcon: "/active-menu/favourites-active.svg", // Single variable for both states
       path: "/casino/favourites",
@@ -420,7 +420,7 @@ const Header = ({
         },
         {
           path: "/casino/bacarrat",
-          label: "Bacarrat",
+          label: "Baccarat",
           icon: "/icons/bacarrat-menu.svg",
         },
         {
@@ -443,7 +443,7 @@ const Header = ({
       submenu: [
         {
           path: "#",
-          label: "Dices",
+          label: "Dice",
           icon: "/icons/dices.svg",
           comingSoon: true,
         },
@@ -462,7 +462,7 @@ const Header = ({
         { path: "#", label: "67", icon: "/icons/67.svg", comingSoon: true },
         {
           path: "#",
-          label: "Bacarrat",
+          label: "Baccarat",
           icon: "/icons/bacarrat-menu.svg",
           comingSoon: true,
         },

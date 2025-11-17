@@ -27,16 +27,16 @@ const CircularWheel = () => {
 
   const segmentLabels = [
     "67",
-    "BACARRAT",
+    "BACCARAT",
     "BLACKJACK",
     "HONEYPOT",
-    "DICES",
+    "DICE",
     "MINES",
     "67",
-    "BACARRAT",
+    "BACCARAT",
     "BLACKJACK",
     "HONEYPOT",
-    "DICES",
+    "DICE",
     "MINES",
   ];
 
