@@ -55,7 +55,7 @@ const CasinoGameCards = () => {
 
   const GameCard = ({ card, className, responsive = false }) => (
     <motion.div
-      className={`rounded-2xl relative flex overflow-hidden group ${
+      className={`reward_btn rounded-2xl relative flex overflow-hidden group ${
         className || ""
       }`}
       initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const CasinoGameCards = () => {
 
       <div className="flex flex-col justify-between p-4 sm:p-6 z-10 w-1/2 space-y-3">
         {/* Title with Icon */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           {/* Animated Icon */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
@@ -89,7 +89,7 @@ const CasinoGameCards = () => {
                 width: "18px",
                 height: "20px",
               }}
-              className="object-contain"
+              className="object-contain md:mt-[0.2rem]"
               whileHover={{ scale: 1.2 }}
               transition={{ type: "spring", stiffness: 300 }}
             />
@@ -127,7 +127,7 @@ const CasinoGameCards = () => {
 
       {/* Main Image */}
       <motion.div
-        className="flex items-center justify-center w-1/2 z-10 p-2"
+        className="flex items-center justify-center w-1/2 z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}

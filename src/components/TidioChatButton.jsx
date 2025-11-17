@@ -87,8 +87,8 @@ const TidioChatButton = () => {
           src="/icons/chat-icon.svg"
           alt="Chat Icon"
           style={{
-            width: "60px",
-            height: "60px",
+            width: "40px",
+            height: "40px",
             display: "block",
             position: "relative",
             zIndex: 10,
