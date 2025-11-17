@@ -1360,7 +1360,7 @@ const Header = ({
                                       {/* ⭐ Auditing BADGE (Only for Originals submenu) */}
                                       {item.id === "originals" &&
                                         subItem.comingSoon && (
-                                          <span className="text-[8px] font-semibold px-2 py-0.5 rounded-full  bg-[#F07730]/20 text-[#F07730] border border-[#F07730]/30 whitespace-nowrap tracking-wide">
+                                          <span className="text-[8px] font-semibold px-2 py-0.5 rounded-full  bg-[#f7f7f7]/20 text-[#C1C1C1] border border-[#ccc]/30 whitespace-nowrap tracking-wide">
                                             Auditing
                                           </span>
                                         )}
@@ -1570,15 +1570,7 @@ const Header = ({
 
                                 {/* ⭐ Auditing Badge */}
                                 {item.comingSoon && (
-                                  <span
-                                    className="
-                          text-[10px] font-semibold 
-                          px-2 py-0.5 rounded-full 
-                          bg-[#F07730]/20 text-[#F07730]
-                          border border-[#F07730]/30
-                          whitespace-nowrap tracking-wide
-                        "
-                                  >
+                                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full  bg-[#f7f7f7]/20 text-[#C1C1C1] border border-[#ccc]/30 whitespace-nowrap tracking-wide ">
                                     Auditing
                                   </span>
                                 )}
