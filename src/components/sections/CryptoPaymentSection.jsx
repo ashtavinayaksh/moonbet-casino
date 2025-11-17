@@ -34,9 +34,9 @@ const CryptoPaymentSection = () => {
       >
         {/* LEFT — Desktop left, Mobile center */}
         <div className="flex sm:justify-start justify-center">
-          <p className="font-extrabold text-white text-2xl sm:text-3xl">
+          <p className=" text-white text-2xl sm:text-2xl">
             <span className="text-[#00FF7F]">300%</span>{" "}
-            <span className="text-white">Deposit Bonus</span>
+            <span className="text-white/70">Deposit Bonus</span>
           </p>
         </div>
 
