@@ -17,7 +17,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Bonus",
         description1: "Elite Status, Stellar",
         description2: "Awards",
-        img: "/rewards/rewards5.png",
+        img: "/rewards/rewards7.png",
       },
       {
         id: 2,
@@ -26,7 +26,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Games",
         description1: "Odds out of this",
         description2: "world.",
-        img: "/rewards/rewards4.png",
+        img: "/rewards/rewards8.png",
       },
       {
         id: 3,
@@ -35,7 +35,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Leaderboard",
         description1: "Best out of all Crash",
         description2: "games out there.",
-        img: "/rewards/rewards6.png",
+        img: "/rewards/rewards9.png",
       },
     ],
     []
@@ -138,11 +138,10 @@ const HomeRewardsSection = () => {
                 }}
               >
                 <div
-                  className="relative rounded-[15px] group cursor-pointer will-change-transform overflow-visible"
+                  className="reward_btn relative rounded-[15px] group cursor-pointer will-change-transform overflow-visible"
                   style={{
                     width: "100%",
                     height: "195px",
-                    border: "1px solid rgba(255, 255, 255, 0.20)",
                     background: "#2A2A2A",
                     boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
                     backdropFilter: "blur(2px)",
@@ -203,7 +202,7 @@ const HomeRewardsSection = () => {
                   </div>
 
                   {/* Image - Right Side (Fixed Size) */}
-                  <div className="absolute right-0 top-1/2 -translate-y-[58%] w-[52%] overflow-visible pointer-events-none">
+                  <div className="absolute right-0 top-1/2 -translate-y-[58%] w-[52%] overflow-visible pointer-events-none z-20">
                     {/* Background Box */}
                     <div className="flex items-center justify-center ">
                       {/* Image */}
