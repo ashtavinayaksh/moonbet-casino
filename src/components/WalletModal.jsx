@@ -7,6 +7,7 @@ import api from "../api/axios";
 import axios from "axios";
 import { useWalletSocket } from "../context/WalletSocketContext";
 import WithdrawProcessingPopup from "./settings/WithdrawProcessingPopup";
+import WithdrawSuccessPopup from "./settings/WithdrawSuccessPopup";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -46,15 +47,14 @@ const WalletModal = ({ isOpen, onClose }) => {
   const socket = useWalletSocket();
 
   useEffect(() => {
-  if (!isOpen || !socket) return;
+    if (!isOpen || !socket) return;
 
-  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-  if (!userId) return;
+    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+    if (!userId) return;
 
-  socket.emit("joinDepositRoom", userId);
-  socket.emit("joinWithdrawRoom", userId);
-
-}, [isOpen, socket]);
+    socket.emit("joinDepositRoom", userId);
+    socket.emit("joinWithdrawRoom", userId);
+  }, [isOpen, socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -103,14 +103,22 @@ const WalletModal = ({ isOpen, onClose }) => {
     if (msg.status === "confirming") toast.info("⏳ Withdrawal confirming…");
     if (msg.status === "sending") toast.info("📤 Broadcasting transaction…");
     if (msg.status === "finished") toast.success("💸 Withdrawal finalized!");
+
     if (msg.status === "completed") {
       toast.success("🎉 Withdrawal completed!");
+
+      // CLOSE PROCESSING POPUP
+      setShowProcessingPopup(false);
+
+      // REFRESH BALANCE
       refreshBalance();
+
+      // SHOW SUCCESS POPUP
+      setShowSuccessPopup(true);
     }
   };
 
   socket.on("withdraw_status", handleWithdrawStatus);
-
   return () => socket.off("withdraw_status", handleWithdrawStatus);
 }, [socket]);
 
@@ -313,9 +321,10 @@ const WalletModal = ({ isOpen, onClose }) => {
   };
 
   const handleWithdrawClick = () => {
-    setShowWithdrawModal(false);
-    setShowProcessingPopup(true); // open processing popup
-  };
+  setShowWithdrawModal(false);
+  setShowProcessingPopup(true);
+  setShowSuccessPopup(false);
+};
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -1508,14 +1517,12 @@ const WalletModal = ({ isOpen, onClose }) => {
             }}
             userId={userId}
           />
-          {/* {withdrawAmount > availableBalance && (
-  <p className="text-red-400 text-sm mt-1">Amount exceeds your balance.</p>
+          {showSuccessPopup && (
+  <WithdrawSuccessPopup
+    isOpen={showSuccessPopup}
+    onClose={() => setShowSuccessPopup(false)}
+  />
 )}
-{withdrawAmount < minWithdraw && withdrawAmount > 0 && (
-  <p className="text-red-400 text-sm mt-1">
-    Minimum withdrawal is {minWithdraw} {selectedWithdrawCoin?.symbol}
-  </p>
-)} */}
 
           {renderDepositModal()}
           {renderWithdrawModal()}

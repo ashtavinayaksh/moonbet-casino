@@ -30,33 +30,40 @@ const WithdrawProcessingPopup = ({
 
   // Listen for NOWPayments status updates through websocket
   useEffect(() => {
-    if (!socket || !isOpen) return;
+  if (!socket || !isOpen) return;
 
-    socket.on("withdraw_status", (msg) => {
-      console.log("🔥 Withdraw update:", msg);
+  const handler = (msg) => {
+    console.log("🔥 Withdraw update:", msg);
 
-      if (msg.status === "confirming") {
-        setStatusText("⏳ Confirming transaction...");
-        setProgress(40);
-      }
+    if (msg.status === "confirming") {
+      setStatusText("⏳ Confirming transaction...");
+      setProgress(40);
+    }
 
-      if (msg.status === "sending") {
-        setStatusText("📤 Sending to blockchain...");
-        setProgress(60);
-      }
+    if (msg.status === "sending") {
+      setStatusText("📤 Sending to blockchain...");
+      setProgress(60);
+    }
 
-      if (msg.status === "finished") {
-        setStatusText("💸 Finalizing withdrawal...");
-        setProgress(85);
-      }
+    if (msg.status === "finished") {
+      setStatusText("💸 Finalizing withdrawal...");
+      setProgress(85);
+    }
 
-      if (msg.status === "completed") {
-        setStatusText("🎉 Withdrawal completed!");
-        setProgress(100);
-      }
-    });
-    return () => socket.off("withdraw_status");
-  }, [socket, isOpen]);
+    if (msg.status === "completed") {
+      setStatusText("🎉 Withdrawal completed!");
+      setProgress(100);
+
+      setTimeout(() => {
+        onClose();                   // closes processing popup
+        setShowSuccessPopup(true);   // triggers success popup
+      }, 800);
+    }
+  };
+
+  socket.on("withdraw_status", handler);
+  return () => socket.off("withdraw_status", handler);
+}, [socket, isOpen]);
 
   const handleConfirm = async () => {
     setLoading(true);
