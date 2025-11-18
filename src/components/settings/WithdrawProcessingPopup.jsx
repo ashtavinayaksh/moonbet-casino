@@ -55,7 +55,6 @@ const WithdrawProcessingPopup = ({
         setProgress(100);
       }
     });
-
     return () => socket.off("withdraw_status");
   }, [socket, isOpen]);
 

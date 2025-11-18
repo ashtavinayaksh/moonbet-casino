@@ -46,14 +46,15 @@ const WalletModal = ({ isOpen, onClose }) => {
   const socket = useWalletSocket();
 
   useEffect(() => {
-    if (!isOpen || !socket) return;
+  if (!isOpen || !socket) return;
 
-    const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
-    if (userId) {
-      console.log("Joining deposit room:", userId);
-      socket.emit("joinDepositRoom", userId);
-    }
-  }, [isOpen, socket]);
+  const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  if (!userId) return;
+
+  socket.emit("joinDepositRoom", userId);
+  socket.emit("joinWithdrawRoom", userId);
+
+}, [isOpen, socket]);
 
   useEffect(() => {
     if (!socket) return;
@@ -92,6 +93,26 @@ const WalletModal = ({ isOpen, onClose }) => {
 
     return () => socket.off("deposit_status", handler);
   }, [socket]);
+
+  useEffect(() => {
+  if (!socket) return;
+
+  const handleWithdrawStatus = (msg) => {
+    console.log("🔥 Wallet withdraw update:", msg);
+
+    if (msg.status === "confirming") toast.info("⏳ Withdrawal confirming…");
+    if (msg.status === "sending") toast.info("📤 Broadcasting transaction…");
+    if (msg.status === "finished") toast.success("💸 Withdrawal finalized!");
+    if (msg.status === "completed") {
+      toast.success("🎉 Withdrawal completed!");
+      refreshBalance();
+    }
+  };
+
+  socket.on("withdraw_status", handleWithdrawStatus);
+
+  return () => socket.off("withdraw_status", handleWithdrawStatus);
+}, [socket]);
 
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
