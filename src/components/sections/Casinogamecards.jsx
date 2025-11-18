@@ -157,10 +157,15 @@ const CasinoGameCards = () => {
   );
 
   return (
-    <section className="w-full px-4 py-8">
-      <div className="max-w-7xl mx-auto">
+    <section className="w-full">
+      <div
+        className="max-w-7xl mx-auto p-6 md:p-2"
+        style={{
+          marginTop: "50px",
+        }}
+      >
         {/* DESKTOP - 1280px and above */}
-        <div className="hidden xl:grid gap-4 grid-cols-[590px_322px_321px] auto-rows-[180px] md:px-6 pt-10">
+        <div className="hidden xl:grid gap-4 grid-cols-[584px_320px_311px] auto-rows-[180px]">
           {/* ROW 1 */}
           <GameCard card={gameCards[0]} />
           <GameCard card={gameCards[1]} />

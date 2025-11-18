@@ -622,7 +622,7 @@ const Header = ({
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 h-16 bg-[rgba(20,20,20,0.80)]shadow-[2px_2px_4px_rgba(0,0,0,0.25)]backdrop-blur-[2px]border-b border-white/10 z-50"
+        className="fixed top-0 left-0 right-0 h-16 bg-[rgba(20,20,20,0.80)] shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]border-b border-white/10 z-50"
       >
         <div className="h-full px-4 lg:px-4 flex items-center justify-between">
           {/* Left Section - Logo & Hamburger */}
@@ -816,25 +816,22 @@ const Header = ({
                      bg-white/5 hover:bg-white/10 rounded-lg transition-all text-xs sm:text-sm"
                       >
                         <svg
-                          className="w-4 h-4 text-gray-400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="13"
+                          viewBox="0 0 14 13"
                           fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
                         >
                           <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            d="M11.2502 0C11.6646 8.01163e-05 12.0001 0.349384 12.0001 0.779852C12.0001 1.21036 11.6647 1.55962 11.2502 1.5597H1.9999C1.72445 1.55975 1.49979 1.79287 1.49975 2.07985C1.49975 2.36686 1.72443 2.59996 1.9999 2.6H12.75C13.439 2.6 14 3.18293 14 3.9V5.2H11.4999C10.1215 5.20008 8.9999 6.36642 8.9999 7.8C8.99996 9.23353 10.1215 10.3999 11.4999 10.4H14V11.7C13.9999 12.417 13.4389 13 12.75 13H1.9999C0.897011 13 0.000151205 12.0671 0 10.9201C0 10.9201 0 2.08765 0 2.07985C3.95682e-05 0.932801 0.896942 4.11503e-05 1.9999 0H11.2502Z"
+                            fill="#E1E1E1"
                           />
                           <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            d="M14 9.3597H11.4999C10.6715 9.35963 10.0003 8.66153 10.0002 7.8C10.0002 6.93842 10.6715 6.23963 11.4999 6.23956H14V9.3597Z"
+                            fill="#E1E1E1"
                           />
                         </svg>
-                        <span className="text-gray-300">Wallet Settings</span>
+                        <span className="text-[#E1E1E1]">Wallet Settings</span>
                       </button>
                     </div>
                   </div>

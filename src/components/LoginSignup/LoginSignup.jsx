@@ -1,4 +1,4 @@
-// src/components/LoginSignup/LoginSignup.jsx - Updated with Forgot Password
+// src/components/LoginSignup/LoginSignup.jsx - Final Updated Version
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -369,8 +369,6 @@ const LoginSignup = ({
     setForgotPasswordData({ email: "" });
   };
 
-  if (!isOpen) return null;
-
   const handleWalletLogin = async (provider) => {
     try {
       if (!provider) {
@@ -461,426 +459,453 @@ const LoginSignup = ({
     handleWalletLogin(provider);
   };
 
+  if (!isOpen) return null;
+
   return (
     <div
-      className="fixed inset-0 z-[99999] p-4 h-screen"
-      style={{
-        backgroundColor: "rgba(0, 0, 0, 0.90)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-      }}
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md"
       onClick={onClose}
     >
-      {/* Centering wrapper */}
+      {/* Main Container - Responsive */}
       <div
-        className="flex items-center justify-center min-h-full"
+        className="relative  rounded-lg overflow-hidden shadow-2xl w-full"
         style={{
-          background: "rgba(8, 8, 8, 0.30)",
-          backdropFilter: "blur(25px)",
-          WebkitBackdropFilter: "blur(25px)", // ✅ for Safari
+          maxWidth: "804px",
+          width: "100%",
+          height: "auto",
+          minHeight: "535px",
+          maxHeight: "90vh",
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-[900px] rounded-2xl overflow-y-auto overflow-x-hidden shadow-2xl max-h-[95vh] scrollbar-thin scrollbar-thumb-[#F07730]/40 scrollbar-track-transparent"
-          onClick={(e) => e.stopPropagation()}
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all"
         >
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center transition-all duration-200 group"
+          <svg
+            className="w-4 h-4 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
           >
-            <svg
-              className="w-5 h-5 text-white/70 group-hover:text-white transition-colors"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-            >
-              <path
-                d="M6 18L18 6M6 6l12 12"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <path
+              d="M6 18L18 6M6 6l12 12"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
 
-          <div className="flex flex-col lg:flex-row w-full h-full">
-            {/* Left Side - Banner */}
-            <div
-              className="hidden lg:flex w-[45%] h-[690px] relative"
-              style={{
-                backgroundImage: "url('/home-assets/login-bg.svg')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                borderTopLeftRadius: "18px",
-                borderBottomLeftRadius: "18px",
-              }}
-            ></div>
+        {/* Split Layout - Responsive */}
+        <div className="flex flex-col md:flex-row h-full min-h-[535px] ">
+          {/* Left Side - Image Background (Hidden on mobile) */}
+          <div
+            className="hidden md:block md:w-[340px] relative bg-gradient-to-br from-blue-600/30 to-purple-600/30"
+            style={{
+              backgroundImage: "url('/home-assets/login-bg.svg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundBlendMode: "overlay",
+            }}
+          >
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-            {/* Right Side - Form */}
+            {/* Logo at the top left of the image */}
+            <div className="absolute top-8 left-8">
+              <Link to="/" className="flex gap-2">
+                <span className="flex gap-2 text-xl font-bold text-white tracking-wider">
+                  {/* Desktop Logo */}
+                  <img
+                    src="/icons/logo.svg"
+                    alt="Moonbet Logo"
+                    className="w-32 h-auto object-contain hidden md:block md:mx-1"
+                  />
+                  {/* Mobile Logo */}
+                  <img
+                    src="/home-assets/mobile-logo.svg"
+                    alt="Moonbet Logo Mobile"
+                    className="w-28 h-auto object-contain block md:hidden"
+                  />
+                </span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Side - Form with specified background */}
+          <div
+            className="flex-1 p-6 sm:p-8 md:p-10 flex flex-col justify-center relative overflow-hidden"
+            style={{
+              borderRadius: "0 12px 12px 0",
+              background: "rgba(255, 255, 255, 0.15)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              boxShadow: `
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 20px 10px rgba(255, 255, 255, 0.1)
+    `,
+            }}
+          >
+            {/* Top gradient line */}
             <div
-              className="w-full lg:w-[55%] h-[690px] p-10 flex flex-col"
               style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                borderTopRightRadius: "18px",
-                borderBottomRightRadius: "18px",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "1px",
+                background:
+                  "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)",
               }}
-            >
-              <div className="mb-6 flex ">
-                <Link to="/" className="flex gap-2">
-                  <span className="flex gap-2 text-xl font-bold text-white tracking-wider">
-                    {/* Desktop Logo */}
-                    <img
-                      src="/icons/logo.svg"
-                      alt="Moonbet Logo"
-                      className="w-32 h-auto object-contain hidden md:block md:mx-1"
-                    />
-                    {/* Mobile Logo */}
-                    <img
-                      src="/home-assets/mobile-logo.svg"
-                      alt="Moonbet Logo Mobile"
-                      className="w-28 h-auto object-contain block md:hidden"
-                    />
-                  </span>
-                </Link>
+            />
+
+            {/* Left gradient line */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "1px",
+                height: "100%",
+                background:
+                  "linear-gradient(180deg, rgba(255, 255, 255, 0.8), transparent, rgba(255, 255, 255, 0.3))",
+              }}
+            />
+            {/* Mobile Logo (shown only on mobile) */}
+            <div className="block md:hidden mb-6">
+              <h1 className="text-2xl font-bold text-white tracking-wider text-center">
+                MOONBET
+              </h1>
+            </div>
+
+            {/* Tabs */}
+            {activeTab !== "forgot" && (
+              <div className="flex mb-6 md:mb-8 border-b border-white/10">
+                <button
+                  onClick={() => setActiveTab("login")}
+                  className={`flex-1 pb-3 font-medium transition-all relative ${
+                    activeTab === "login"
+                      ? "text-[#E1E1E1]"
+                      : "text-gray-400 hover:text-gray-300"
+                  }`}
+                >
+                  Login
+                  {activeTab === "login" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F07730]"></div>
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab("register")}
+                  className={`flex-1 pb-3 font-medium transition-all relative ${
+                    activeTab === "register"
+                      ? "text-[#E1E1E1]"
+                      : "text-gray-400 hover:text-gray-300"
+                  }`}
+                >
+                  Register
+                  {activeTab === "register" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F07730]"></div>
+                  )}
+                </button>
               </div>
-              {/* Tabs - Hide when on forgot password */}
-              {activeTab !== "forgot" && (
-                <div className="flex gap-2 mb-6 p-1 bg-white/5 rounded-xl">
-                  <button
-                    onClick={() => setActiveTab("login")}
-                    className={`flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                      activeTab === "login"
-                        ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-white shadow-lg"
-                        : "text-gray-400 hover:text-white"
-                    }`}
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("register")}
-                    className={`flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all duration-200 ${
-                      activeTab === "register"
-                        ? "bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-white shadow-lg"
-                        : "text-gray-400 hover:text-white"
-                    }`}
-                  >
-                    Register
-                  </button>
-                </div>
-              )}
+            )}
 
-              {/* Content */}
-              <AnimatePresence mode="wait">
-                {activeTab === "login" ? (
-                  <motion.div
-                    key="login"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <div className="space-y-5 mt-6">
-                      {/* EMAIL */}
-                      <div>
-                        <label className="text-sm text-white/80 font-semibold mb-1 block">
-                          Email Address
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Email Address"
-                          value={loginData.email}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
-       bg-white/10 border border-white/20 focus:border-[#F07730]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-sm text-white/80 font-semibold mb-1 block">
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          value={loginData.password}
-                          onChange={handleLoginChange}
-                          className="w-full px-4 py-3 rounded-[12px] text-white placeholder-white/30
-      bg-white/10 border border-white/20 focus:border-[#F07730]"
-                        />
-                      </div>
-
-                      <div className="flex justify-end">
-                        <button
-                          onClick={() => setActiveTab("forgot")}
-                          className="text-sm text-white/70 hover:text-[#F07730]"
-                        >
-                          Forgot Password?
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={handleLoginSubmit}
-                        className="w-full py-3 rounded-[12px] font-semibold text-black 
-    bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl"
-                      >
-                        Sign In
-                      </button>
-                    </div>
-
-                    <div className="relative my-3">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/15" />
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="px-3 text-sm text-white/50 bg-transparent">
-                          OR
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Social Buttons */}
-                    <div className="flex justify-center mb-6">
-                      <div
-                        className="flex items-center justify-center w-full  py-2"
-                        style={{
-                          borderRadius: "40px",
-                          background: "#fff",
-                        }}
-                      >
-                        <div className="google_Auth">
-                          <GoogleLogin
-                            className="google_Auth"
-                            onSuccess={async (credentialResponse) => {
-                              try {
-                                const { credential } = credentialResponse;
-                                const decoded = jwtDecode(credential);
-                                console.log("✅ Google user:", decoded);
-
-                                const { data } = await axios.post(
-                                  "/auth-service/api/auth/google",
-                                  { token: credential }
-                                );
-
-                                if (data?.token) {
-                                  localStorage.setItem("token", data.token);
-                                  localStorage.setItem(
-                                    "user",
-                                    JSON.stringify(data.user)
-                                  );
-                                  window.dispatchEvent(
-                                    new Event("tokenChanged")
-                                  );
-                                  toast.success("Signed in with Google!");
-                                  if (onLoginSuccess) onLoginSuccess(data);
-                                }
-                              } catch (err) {
-                                console.error("Google login failed:", err);
-                                toast.error("Google login failed");
-                              }
-                            }}
-                            onError={() => toast.error("Google Sign-In failed")}
-                            useOneTap
-                          />
-                        </div>
-                      </div>
-                      <div
-                        className="flex items-center justify-center w-full  py-2"
-                        style={{
-                          borderRadius: "40px",
-                        }}
-                      >
-                        <button
-                          onClick={() => setWalletModalOpen(true)}
-                          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
-                        >
-                          <WalletIcon />
-                          <span className="text-white text-sm font-medium">
-                            Connect Wallet
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="mt-6 text-center text-white/80 text-sm">
-                      Don’t have an account?{" "}
-                      <button
-                        onClick={() => setActiveTab("register")}
-                        className="text-[#F07730] font-semibold hover:text-[#EFD28E]"
-                      >
-                        Register Now
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : activeTab === "register" ? (
-                  <motion.div
-                    key="register"
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <div className="space-y-3">
+            {/* Content */}
+            <AnimatePresence mode="wait">
+              {activeTab === "login" ? (
+                <motion.div
+                  key="login"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <div className="space-y-4">
+                    {/* Email Address Field */}
+                    <div>
+                      <label className="text-xs text-[#f7f7f7] tracking-wider mb-2 block">
+                        Email Address
+                      </label>
                       <input
                         type="email"
                         name="email"
-                        placeholder="Email address"
-                        value={signupData.email}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] overflow-y-auto transition-all"
+                        placeholder="Email Address"
+                        value={loginData.email}
+                        onChange={handleLoginChange}
+                        className="w-full px-4 py-3 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all"
                       />
+                    </div>
 
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        value={signupData.username}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
+                    {/* Password Field */}
+                    <div>
+                      <label className="text-xs text-[#f7f7f7] tracking-wider mb-2 block">
+                        Password
+                      </label>
                       <input
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={signupData.password}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                        value={loginData.password}
+                        onChange={handleLoginChange}
+                        className="w-full px-4 py-3 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all"
                       />
+                    </div>
 
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm password"
-                        value={signupData.confirmPassword}
-                        onChange={handleSignupChange}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                      />
-
-                      <div className="space-y-2 pt-2">
-                        <label className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="agreeTerms"
-                            checked={signupData.agreeTerms}
-                            onChange={handleSignupChange}
-                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
-                          />
-                          <span className="text-xs text-gray-300">
-                            I agree to the{" "}
-                            <a
-                              href="#"
-                              className="text-[#F07730] hover:underline"
-                            >
-                              Terms
-                            </a>{" "}
-                            and confirm I'm 18+
-                          </span>
-                        </label>
-
-                        <label className="flex items-start gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="agreeMarketing"
-                            checked={signupData.agreeMarketing}
-                            onChange={handleSignupChange}
-                            className="mt-0.5 w-4 h-4 rounded bg-white/5 border-white/20 cursor-pointer accent-[#F07730]"
-                          />
-                          <span className="text-xs text-gray-300">
-                            Send me promotions
-                          </span>
-                        </label>
-                      </div>
-
+                    {/* Forgot Password Link */}
+                    <div className="text-right">
                       <button
-                        onClick={handleSignupSubmit}
-                        className="w-full py-3 mt-2 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
+                        onClick={() => setActiveTab("forgot")}
+                        className="text-sm text-gray-400 hover:text-[#F07730] transition-colors"
                       >
-                        Create Account
+                        Forgot Password?
                       </button>
                     </div>
 
+                    {/* Sign In Button with gradient */}
+                    <button
+                      onClick={handleLoginSubmit}
+                      className="w-full py-3 rounded-[12px] font-semibold text-black bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl transition-all"
+                    >
+                      Sign In
+                    </button>
+
+                    {/* OR Divider */}
                     <div className="relative my-6">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10" />
+                        <div className="w-full border-t border-[#3a3d4a]" />
                       </div>
                       <div className="relative flex justify-center">
-                        <span className="px-3 text-xs text-white-500 bg-[#7D7D7D;]">
+                        <span className="px-3 text-xs uppercase text-gray-500 bg-transparent tracking-wider">
                           OR
                         </span>
                       </div>
                     </div>
 
-                    {/* Social Buttons */}
-                    <div className="grid grid-cols-2 gap-3 mb-2">
-                      <button className="col-span-2 flex items-center justify-center gap-2 py-2.5 px-4 transition-all">
-                        <div className="col-span-2 flex justify-center mb-4">
-                          <GoogleLogin
-                            onSuccess={async (credentialResponse) => {
-                              try {
-                                const { credential } = credentialResponse;
-                                const decoded = jwtDecode(credential);
-                                console.log("✅ Google user:", decoded);
+                    {/* Social Login Buttons - Stack on mobile, side by side on desktop */}
+                    <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
+                      {/* Google Login */}
+                      <div className="flex justify-center">
+                        <GoogleLogin
+                          onSuccess={async (credentialResponse) => {
+                            try {
+                              const { credential } = credentialResponse;
+                              const decoded = jwtDecode(credential);
+                              console.log("✅ Google user:", decoded);
 
-                                const { data } = await axios.post(
-                                  "/auth-service/api/auth/google",
-                                  { token: credential }
+                              const { data } = await axios.post(
+                                "/auth-service/api/auth/google",
+                                { token: credential }
+                              );
+
+                              if (data?.token) {
+                                localStorage.setItem("token", data.token);
+                                localStorage.setItem(
+                                  "user",
+                                  JSON.stringify(data.user)
                                 );
-
-                                if (data?.token) {
-                                  localStorage.setItem("token", data.token);
-                                  localStorage.setItem(
-                                    "user",
-                                    JSON.stringify(data.user)
-                                  );
-                                  window.dispatchEvent(
-                                    new Event("tokenChanged")
-                                  );
-
-                                  toast.success("Signed in with Google!");
-                                  if (onLoginSuccess) onLoginSuccess(data);
-                                }
-                              } catch (err) {
-                                console.error("Google login failed:", err);
-                                toast.error("Google login failed");
+                                window.dispatchEvent(new Event("tokenChanged"));
+                                toast.success("Signed in with Google!");
+                                if (onLoginSuccess) onLoginSuccess(data);
                               }
-                            }}
-                            onError={() => toast.error("Google Sign-In failed")}
-                            useOneTap
-                          />
-                        </div>
-                        <button
-                          onClick={() => setWalletModalOpen(true)}
-                          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
-                        >
-                          <WalletIcon />
-                          <span className="text-white text-sm font-medium">
-                            Connect Wallet
-                          </span>
-                        </button>
-                      </button>
-                      {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                            } catch (err) {
+                              console.error("Google login failed:", err);
+                              toast.error("Google login failed");
+                            }
+                          }}
+                          onError={() => toast.error("Google Sign-In failed")}
+                          useOneTap
+                          theme="filled_black"
+                          width="100%"
+                        />
+                      </div>
+
+                      {/* Connect Wallet Button */}
+                      <button
+                        onClick={() => setWalletModalOpen(true)}
+                        className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#1e2029] hover:bg-[#2a2d3a] border border-[#3a3d4a] rounded-lg transition-all w-full"
+                      >
                         <WalletIcon />
                         <span className="text-white text-sm font-medium">
-                          Wallet
+                          Connect Wallet
                         </span>
-                      </button> */}
+                      </button>
                     </div>
 
-                    {/* Referral Code */}
+                    {/* Register Link */}
+                    <div className="text-center pt-4">
+                      <span className="text-sm text-gray-400">
+                        Don't have an account?{" "}
+                      </span>
+                      <button
+                        onClick={() => setActiveTab("register")}
+                        className="text-sm text-[#E1E1E1] hover:text-[#E06620] font-medium"
+                      >
+                        Register Now
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : activeTab === "register" ? (
+                <motion.div
+                  key="register"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.15 }}
+                  className="max-h-[calc(90vh-200px)] overflow-y-auto scrollbar-thin scrollbar-thumb-[#F07730]/40"
+                >
+                  <div className="space-y-3">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email address"
+                      value={signupData.email}
+                      onChange={handleSignupChange}
+                      className="w-full px-4 py-2.5 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all text-sm"
+                    />
+
+                    <input
+                      type="text"
+                      name="username"
+                      placeholder="Username"
+                      value={signupData.username}
+                      onChange={handleSignupChange}
+                      className="w-full px-4 py-2.5 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all text-sm"
+                    />
+
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      value={signupData.password}
+                      onChange={handleSignupChange}
+                      className="w-full px-4 py-2.5 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all text-sm"
+                    />
+
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm password"
+                      value={signupData.confirmPassword}
+                      onChange={handleSignupChange}
+                      className="w-full px-4 py-2.5 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all text-sm"
+                    />
+
+                    <div className="space-y-2 pt-1">
+                      <label className="flex items-start gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="agreeTerms"
+                          checked={signupData.agreeTerms}
+                          onChange={handleSignupChange}
+                          className="mt-0.5 w-4 h-4 rounded bg-[#1e2029] border-[#3a3d4a] accent-[#F07730]"
+                        />
+                        <span className="text-xs text-gray-400">
+                          I agree to the{" "}
+                          <a
+                            href="#"
+                            className="text-[#F07730] hover:underline"
+                          >
+                            Terms
+                          </a>{" "}
+                          and confirm I'm 18+
+                        </span>
+                      </label>
+
+                      <label className="flex items-start gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="agreeMarketing"
+                          checked={signupData.agreeMarketing}
+                          onChange={handleSignupChange}
+                          className="mt-0.5 w-4 h-4 rounded bg-[#1e2029] border-[#3a3d4a] accent-[#F07730]"
+                        />
+                        <span className="text-xs text-gray-400">
+                          Send me promotions
+                        </span>
+                      </label>
+                    </div>
+
+                    {/* Create Account Button with gradient */}
+                    <button
+                      onClick={handleSignupSubmit}
+                      className="w-full py-3 mt-2 rounded-[12px] font-semibold text-black bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl transition-all"
+                    >
+                      Create Account
+                    </button>
+
+                    {/* OR Divider */}
+                    <div className="relative my-4">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-[#3a3d4a]" />
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="px-3 text-xs uppercase text-gray-500 bg-transparent tracking-wider">
+                          OR
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Social Login - Stack on mobile */}
+                    <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-3">
+                      <div className="flex justify-center">
+                        <GoogleLogin
+                          onSuccess={async (credentialResponse) => {
+                            try {
+                              const { credential } = credentialResponse;
+                              const decoded = jwtDecode(credential);
+                              console.log("✅ Google user:", decoded);
+
+                              const { data } = await axios.post(
+                                "/auth-service/api/auth/google",
+                                { token: credential }
+                              );
+
+                              if (data?.token) {
+                                localStorage.setItem("token", data.token);
+                                localStorage.setItem(
+                                  "user",
+                                  JSON.stringify(data.user)
+                                );
+                                window.dispatchEvent(new Event("tokenChanged"));
+                                toast.success("Signed in with Google!");
+                                if (onLoginSuccess) onLoginSuccess(data);
+                              }
+                            } catch (err) {
+                              console.error("Google login failed:", err);
+                              toast.error("Google login failed");
+                            }
+                          }}
+                          onError={() => toast.error("Google Sign-In failed")}
+                          useOneTap
+                          theme="filled_black"
+                          width="100%"
+                        />
+                      </div>
+
+                      {/* Connect Wallet Button */}
+                      <button
+                        onClick={() => setWalletModalOpen(true)}
+                        className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#1e2029] hover:bg-[#2a2d3a] border border-[#3a3d4a] rounded-lg transition-all w-full"
+                      >
+                        <WalletIcon />
+                        <span className="text-white text-sm font-medium">
+                          Connect Wallet
+                        </span>
+                      </button>
+                    </div>
+
+                    {/* Referral Code (Optional) */}
                     {/* <button
                       onClick={() => setShowReferralCode(!showReferralCode)}
-                      className="w-full flex items-center justify-between py-2.5 px-4 mb-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
+                      className="w-full flex items-center justify-between py-2.5 px-4 bg-[#1e2029] hover:bg-[#2a2d3a] border border-[#3a3d4a] rounded-lg transition-all"
                     >
-                      <span className="text-gray-300 text-sm">
+                      <span className="text-gray-400 text-sm">
                         Have a referral code?
                       </span>
                       <svg
@@ -896,137 +921,139 @@ const LoginSignup = ({
                       </svg>
                     </button> */}
 
-                    {showReferralCode && (
-                      <div className="mb-4">
+                    {/* {showReferralCode && (
+                      <div>
                         <input
                           type="text"
                           name="referralCode"
                           placeholder="Enter referral code"
                           value={signupData.referralCode}
                           onChange={handleSignupChange}
-                          className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-[#d7d7d7] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
+                          className="w-full px-4 py-2.5 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all text-sm"
                         />
                       </div>
-                    )}
+                    )} */}
 
-                    <div className="text-center">
-                      <span className="text-gray-400 text-sm">
+                    <div className="text-center pt-2">
+                      <span className="text-sm text-gray-400">
                         Already have an account?{" "}
                       </span>
                       <button
                         onClick={() => setActiveTab("login")}
-                        className="text-[#F07730] hover:text-[#EFD28E] font-semibold text-sm"
+                        className="text-sm text-[#F07730] hover:text-[#E06620] font-medium"
                       >
                         Sign in
                       </button>
                     </div>
-                  </motion.div>
-                ) : (
-                  // Forgot Password Form
-                  <motion.div
-                    key="forgot"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-white mb-1">
-                        Recover Account
-                      </h3>
-                      <p className="text-gray-400 text-sm">
-                        {recoverySent
-                          ? "Check your email for recovery instructions"
-                          : "Enter your email to reset your password"}
-                      </p>
-                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                // Forgot Password Form
+                <motion.div
+                  key="forgot"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <div className="mb-6">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                      Recover Account
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      {recoverySent
+                        ? "Check your email for recovery instructions"
+                        : "Enter your email to reset your password"}
+                    </p>
+                  </div>
 
-                    {!recoverySent ? (
-                      <>
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-sm text-gray-400 mb-2">
-                              Username or Email
-                            </label>
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Enter your email address"
-                              value={forgotPasswordData.email}
-                              onChange={handleForgotPasswordChange}
-                              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-[#E1E1E1] placeholder-[#fff] focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all"
-                            />
-                          </div>
-
-                          <button
-                            onClick={handleForgotPasswordSubmit}
-                            className="w-full py-3 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
-                          >
-                            Recover Account
-                          </button>
-                        </div>
-
-                        <div className="mt-6 text-center">
-                          <button
-                            onClick={handleBackToLogin}
-                            className="text-sm text-[#F07730] hover:text-[#EFD28E] transition-colors"
-                          >
-                            Return to Login
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {/* Success State */}
-                        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                              <svg
-                                className="w-6 h-6 text-green-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                strokeWidth="2"
-                              >
-                                <path
-                                  d="M5 13l4 4L19 7"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                            <div>
-                              <div className="text-green-400 font-semibold mb-1">
-                                Success!
-                              </div>
-                              <div className="text-sm text-gray-300">
-                                Password recovery email has been sent to{" "}
-                                {forgotPasswordData.email}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="space-y-3 text-sm text-gray-400">
-                          <p>Please check your email inbox and spam folder.</p>
-                          <p>The recovery link will expire in 24 hours.</p>
+                  {!recoverySent ? (
+                    <>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-xs text-gray-400 tracking-wider mb-2 block">
+                            Username or Email
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            value={forgotPasswordData.email}
+                            onChange={handleForgotPasswordChange}
+                            className="w-full px-4 py-3 rounded-md bg-[#1e2029] border border-[#3a3d4a] text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] transition-all"
+                          />
                         </div>
 
                         <button
+                          onClick={handleForgotPasswordSubmit}
+                          className="w-full py-3 rounded-[12px] font-semibold text-black bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl transition-all"
+                        >
+                          Recover Account
+                        </button>
+                      </div>
+
+                      <div className="mt-6 text-center">
+                        <button
                           onClick={handleBackToLogin}
-                          className="w-full py-3 mt-6 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg text-white font-bold hover:shadow-lg hover:shadow-[#F07730]/30 transition-all"
+                          className="text-sm text-[#F07730] hover:text-[#E06620] transition-colors"
                         >
                           Return to Login
                         </button>
-                      </>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Success State */}
+                      <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                            <svg
+                              className="w-6 h-6 text-green-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              strokeWidth="2"
+                            >
+                              <path
+                                d="M5 13l4 4L19 7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="text-green-400 font-semibold mb-1">
+                              Success!
+                            </div>
+                            <div className="text-sm text-gray-300">
+                              Password recovery email has been sent to{" "}
+                              {forgotPasswordData.email}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3 text-sm text-gray-400">
+                        <p>Please check your email inbox and spam folder.</p>
+                        <p>The recovery link will expire in 24 hours.</p>
+                      </div>
+
+                      <button
+                        onClick={handleBackToLogin}
+                        className="w-full py-3 mt-6 rounded-[12px] font-semibold text-black bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl transition-all"
+                      >
+                        Return to Login
+                      </button>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </motion.div>
+        </div>
       </div>
+
+      {/* Wallet Selection Modal */}
       <WalletSelectModal
         open={walletModalOpen}
         onClose={() => setWalletModalOpen(false)}
