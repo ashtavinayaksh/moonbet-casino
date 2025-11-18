@@ -9,6 +9,7 @@ import WalletModal from "../WalletModal";
 import LoginTrigger from "../LoginSignup/LoginTrigger";
 import axios from "axios";
 import { toast } from "react-toastify";
+import WalletDropdownCenter from "../Navbar/WalletDropdownCenter";
 
 // 3D Rotating Coin Component
 const RotatingCoin = () => {
@@ -662,202 +663,20 @@ const Header = ({
             </Link>
           </div>
 
-          {/* Right Section - Balance, Coins, and Profile */}
           {/* Center Section - Balance and Coins */}
-          {hasToken && (
-            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
-              {/* Balance Display with Dropdown */}
-              <div
-                className="relative flex justify-center sm:justify-start"
-                ref={walletDropdownRef}
-              >
-                {/* Wallet Button */}
-                <button
-                  onClick={() => setWalletDropdownOpen(!walletDropdownOpen)}
-                  className="wallet-btn relative flex items-center gap-2 px-3 sm:px-4 py-2 -mt-2 sm:py-2.5 rounded-[8px]  border-[rgba(255,255,255,0.4)] bg-[linear-gradient(180deg,rgba(75,75,75,0.3)_0%,rgba(244,116,251,0.3)_100%)] shadow-[1px_2px_1px_rgba(0,0,0,0.4)] backdrop-blur-[1.5px]  text-white transition-all duration-300 max-w-[150px] sm:max-w-none"
-                >
-                  {/* Coin logo */}
-                  <img
-                    src={
-                      selectedCurrency
-                        ? selectedCurrency.iconPath
-                        : "/icons/default-coin.svg"
-                    }
-                    alt={selectedCurrency?.name || "Currency"}
-                    className="w-4 h-4 sm:w-5 sm:h-5 object-contain"
-                  />
 
-                  {/* Balance text */}
-                  <span className="text-white text-xs sm:text-sm font-semibold tracking-wide truncate">
-                    {selectedCurrency
-                      ? `${selectedCurrency.icon || ""} ${walletBalance}`
-                      : walletBalance}
-                  </span>
-
-                  {/* Dropdown arrow */}
-                  <svg
-                    className={`w-3 sm:w-4 h-3 sm:h-4 text-white/70 transition-transform duration-200 ${
-                      walletDropdownOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {/* Wallet Dropdown */}
-                {walletDropdownOpen && (
-                  <div
-                    className="custom-header absolute left-[80%] sm:left-1/2 md:left-[65%]  -translate-x-1/2 mt-10 w-[90vw] sm:w-80 rounded-[24px]  shadow-2xl overflow-hidden z-50 backdrop-blur-md"
-                    style={{
-                      background:
-                        "linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(255, 255, 255, 0.10)",
-                      backdropFilter: "blur(67.5px)",
-                      WebkitBackdropFilter: "blur(67.5px)", // Safari support
-                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.8)",
-                    }}
-                  >
-                    <div className="p-3 sm:p-4 border-b border-white/10">
-                      <div className="relative">
-                        <svg
-                          className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                        <input
-                          type="text"
-                          placeholder="Search Currencies"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 
-  rounded-lg focus:outline-none focus:border-green-500/50 
-  text-xs sm:text-sm text-white placeholder-gray-400"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="max-h-60 sm:max-h-80 overflow-y-auto wallet-scrollbar">
-                      {currencies
-                        .filter(
-                          (currency) =>
-                            currency.name
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase()) ||
-                            currency.symbol
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase())
-                        )
-                        .map((currency) => (
-                          <div
-                            key={currency.symbol}
-                            onClick={() => {
-                              handleCurrencySelect(currency);
-                              setWalletDropdownOpen(false);
-                            }}
-                            className={`flex items-center justify-between p-2 sm:p-3 cursor-pointer transition-all rounded-lg
-        ${
-          selectedCurrency?.symbol === currency.symbol
-            ? "bg-gradient-to-r from-green-500/20 to-emerald-500/10 border border-green-500/30 shadow-inner"
-            : "hover:bg-white/5 border border-transparent"
-        }`}
-                          >
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div
-                                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${currency.color} flex items-center justify-center`}
-                              >
-                                <img
-                                  src={currency.iconPath}
-                                  alt={currency.name}
-                                  className="w-5 h-5 object-contain"
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = "/icons/default-coin.svg";
-                                  }}
-                                />
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-white font-medium text-xs sm:text-sm">
-                                  {currency.name}
-                                </span>
-                                <span className="text-gray-400 text-[11px] sm:text-xs">
-                                  {currency.symbol}
-                                </span>
-                              </div>
-                            </div>
-                            <span className="text-gray-400 font-mono text-xs sm:text-sm">
-                              {currency.balance}
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-
-                    <div className="p-2 sm:p-3 border-t border-white/10">
-                      <button
-                        onClick={() => {
-                          setWalletDropdownOpen(false);
-                          setWalletSettingsOpen(true);
-                        }}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 
-                     bg-white/5 hover:bg-white/10 rounded-lg transition-all text-xs sm:text-sm"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="13"
-                          viewBox="0 0 14 13"
-                          fill="none"
-                        >
-                          <path
-                            d="M11.2502 0C11.6646 8.01163e-05 12.0001 0.349384 12.0001 0.779852C12.0001 1.21036 11.6647 1.55962 11.2502 1.5597H1.9999C1.72445 1.55975 1.49979 1.79287 1.49975 2.07985C1.49975 2.36686 1.72443 2.59996 1.9999 2.6H12.75C13.439 2.6 14 3.18293 14 3.9V5.2H11.4999C10.1215 5.20008 8.9999 6.36642 8.9999 7.8C8.99996 9.23353 10.1215 10.3999 11.4999 10.4H14V11.7C13.9999 12.417 13.4389 13 12.75 13H1.9999C0.897011 13 0.000151205 12.0671 0 10.9201C0 10.9201 0 2.08765 0 2.07985C3.95682e-05 0.932801 0.896942 4.11503e-05 1.9999 0H11.2502Z"
-                            fill="#E1E1E1"
-                          />
-                          <path
-                            d="M14 9.3597H11.4999C10.6715 9.35963 10.0003 8.66153 10.0002 7.8C10.0002 6.93842 10.6715 6.23963 11.4999 6.23956H14V9.3597Z"
-                            fill="#E1E1E1"
-                          />
-                        </svg>
-                        <span className="text-[#E1E1E1]">Wallet Settings</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Coins/Chips Display - Wallet Button */}
-
-              <button
-                onClick={() => setWalletModalOpen(true)}
-                className="wallet-btn2 relative flex items-center gap-2 px-3 py-1.5 -mt-2 rounded-[8px]  border-[rgba(255,255,255,0.40)] transition-all hover:scale-[1.02] backdrop-blur-[1.5px] shadow-[1px_2px_1px_rgba(0,0,0,0.40)]"
-                style={{
-                  background:
-                    "linear-gradient(0deg, rgba(240, 119, 48, 0.60) 0%, rgba(240, 119, 48, 0.00) 100%)",
-                }}
-              >
-                <span className="text-xl">
-                  <img
-                    src="/icons/wallet.svg" // 👈 your image path
-                    alt="Wallet Icon"
-                    className="w-6 h-6 object-contain"
-                  />
-                </span>
-              </button>
-            </div>
-          )}
+          <WalletDropdownCenter
+            hasToken={hasToken}
+            userId={userId}
+            walletBalance={walletBalance}
+            setWalletBalance={setWalletBalance}
+            currencies={currencies}
+            setCurrencies={setCurrencies}
+            selectedCurrency={selectedCurrency}
+            setSelectedCurrency={setSelectedCurrency}
+            setWalletModalOpen={setWalletModalOpen}
+            setWalletSettingsOpen={setWalletSettingsOpen}
+          />
 
           {/* Right Section - Profile and Actions */}
           <div className="flex items-center gap-2">
@@ -974,10 +793,10 @@ const Header = ({
             x: 0,
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`fixed left-0 top-16 bottom-0 bg-[rgba(20,20,20,0.80) shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]border-r border-white/10 z-[99999] px-2
+          className={`fixed left-0 top-16 bottom-0 bg-[rgba(20,20,20,0.80) shadow-[2px_2px_4px_rgba(0,0,0,0.25)] backdrop-blur-[2px]border-r border-white/10 z-[99999] px-2 
 `}
         >
-          <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#3a3a3a] scrollbar-track-transparent pr-1">
+          <div className="h-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-[#3a3a3a] scrollbar-track-transparent pr-1">
             {/* Main Menu */}
             <div className="py-3">
               <div className="space-y-1">

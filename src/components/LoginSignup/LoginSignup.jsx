@@ -463,7 +463,12 @@ const LoginSignup = ({
 
   return (
     <div
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+      }}
       onClick={onClose}
     >
       {/* Main Container - Responsive */}
@@ -481,7 +486,7 @@ const LoginSignup = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all"
+          className="absolute top-2 right-2  z-50 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all"
         >
           <svg
             className="w-4 h-4 text-white"
