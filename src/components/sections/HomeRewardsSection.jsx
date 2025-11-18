@@ -35,7 +35,7 @@ const HomeRewardsSection = () => {
         titleLine2: "Leaderboard",
         description1: "Best out of all Crash",
         description2: "games out there.",
-        img: "/rewards/rewards9.png",
+        img: "/rewards/rewards10.png",
       },
     ],
     []
