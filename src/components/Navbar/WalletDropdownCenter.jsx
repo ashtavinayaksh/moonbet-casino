@@ -204,7 +204,7 @@ const WalletDropdownCenter = ({
                       handleCurrencySelect(currency);
                       setWalletDropdownOpen(false);
                     }}
-                    className={`wallet-item group flex items-center pr-3 my-2.5 rounded-full relative cursor-pointer transition-all duration-250 hover:scale-[1.01]
+                    className={`wallet-item group flex items-center pr-3 my-2.5 rounded-full relative cursor-pointer transition-all duration-250 
                       ${
                         selectedCurrency?.symbol === currency.symbol
                           ? "selected-currency"
