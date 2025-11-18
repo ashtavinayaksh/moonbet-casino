@@ -168,7 +168,7 @@ const BettingRules = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808]">
       {/* Hero Section */}
       <section className="relative py-16 px-4 border-b border-white/10">
         <div className="absolute inset-0 bg-gradient-to-br from-[#F07730]/10 via-transparent to-[#EFD28E]/10" />
@@ -193,7 +193,7 @@ const BettingRules = () => {
       </section>
 
       {/* Sticky Navigation */}
-      <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/10">
+      <div className="sticky top-0 z-40 bg-[#080808]/95 backdrop-blur-md border-b border-white/10">
         <div className="container max-w-7xl mx-auto px-4 py-4">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             {sections.map((section) => (

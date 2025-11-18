@@ -241,27 +241,30 @@ const Blackjack = () => {
   }, [state, dealerHand, playerHands, outcomes, currentHandIndex]);
 
   useEffect(() => {
-  if (uiOutcome) {
-    setShowResultPopup(true);
+    if (uiOutcome) {
+      setShowResultPopup(true);
 
-    const timer = setTimeout(() => {
-      setShowResultPopup(false);
-      useBlackjackStore.setState({
-        uiOutcome: null,
-        gameState: { ...useBlackjackStore.getState().gameState, state: "waiting" }, // ✅ force waiting
-      });
+      const timer = setTimeout(() => {
+        setShowResultPopup(false);
+        useBlackjackStore.setState({
+          uiOutcome: null,
+          gameState: {
+            ...useBlackjackStore.getState().gameState,
+            state: "waiting",
+          }, // ✅ force waiting
+        });
 
-      // ✅ reset visuals
-      setDealerCards([]);
-      setPlayerCards([]);
-      flyKeys.current.clear();
-      setDealStage(0);
-      setHasBetStarted(false);
-    }, 2500);
+        // ✅ reset visuals
+        setDealerCards([]);
+        setPlayerCards([]);
+        flyKeys.current.clear();
+        setDealStage(0);
+        setHasBetStarted(false);
+      }, 2500);
 
-    return () => clearTimeout(timer);
-  }
-}, [uiOutcome]);
+      return () => clearTimeout(timer);
+    }
+  }, [uiOutcome]);
 
   // =============================================================
   // 🪄 Helper: compute flight vector from deck → target zone
@@ -464,7 +467,7 @@ const Blackjack = () => {
           type="video/mp4"
         />
       </video>
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-[1.5px]" />
+      <div className="absolute inset-0 bg-[#080808]/50 backdrop-blur-[1.5px]" />
 
       {/* ==================== TABLE ==================== */}
       <div className="relative w-full max-w-[1366px] h-[500px] sm:h-[501px] rounded-[24px] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col p-4 md:p-6 bg-transparent mt-5 overflow-visible">
@@ -514,10 +517,10 @@ const Blackjack = () => {
             {/* Always show two dealer cards: first real, second back image if hidden */}
             {renderDealerCard(dealerHand.cards?.[0], 0, false)}
             {dealerHand.hidden && hasBetStarted
-  ? renderDealerCard(null, 1, true) // ✅ show back only after first bet
-  : !dealerHand.hidden && dealerHand.cards?.[1]
-  ? renderDealerCard(dealerHand.cards?.[1], 1, false)
-  : null}
+              ? renderDealerCard(null, 1, true) // ✅ show back only after first bet
+              : !dealerHand.hidden && dealerHand.cards?.[1]
+              ? renderDealerCard(dealerHand.cards?.[1], 1, false)
+              : null}
           </div>
 
           {dealStage >= 1 && (
@@ -557,16 +560,16 @@ const Blackjack = () => {
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
           {["double", "stand", "hit", "split"].map((action) => {
             const enabled =
-  availableActions.includes(action) &&
-  !(action === "double" && gameState?.hasDoubled);
+              availableActions.includes(action) &&
+              !(action === "double" && gameState?.hasDoubled);
             const base =
               "flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-[8px] border text-xs sm:text-sm font-medium w-[110px] sm:w-[124px] h-[36px] sm:h-[38px]";
             const active =
               action === "double"
                 ? "border-[#27b35f] bg-[rgba(30,60,30,0.6)] text-[#baf6d3]"
-                : "border-white/10 bg-black/40 text-[#d2d8e8] hover:bg-white/10";
+                : "border-white/10 bg-[#080808]/40 text-[#d2d8e8] hover:bg-white/10";
             const disabled =
-              "border-white/5 bg-black/30 text-[#555] cursor-not-allowed opacity-50";
+              "border-white/5 bg-[#080808]/30 text-[#555] cursor-not-allowed opacity-50";
             const onClick = () => {
               if (!enabled) return;
               if (action === "hit") hit();

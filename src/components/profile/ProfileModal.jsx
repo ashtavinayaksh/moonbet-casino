@@ -39,55 +39,57 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
     }
   }, [isOpen, userData]);
 
-const fetchProfileData = async () => {
-  try {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = userData?._id || storedUser.id;
-    const token = localStorage.getItem("token");
+  const fetchProfileData = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = userData?._id || storedUser.id;
+      const token = localStorage.getItem("token");
 
-    if (!userId || !token) {
-      console.warn("⚠️ No userId or token found — user not logged in");
-      toast.info("Please log in to view profile");
-      return;
+      if (!userId || !token) {
+        console.warn("⚠️ No userId or token found — user not logged in");
+        toast.info("Please log in to view profile");
+        return;
+      }
+
+      // ✅ Fetch profile data securely
+      const { data } = await axios.get(
+        `/auth-service/api/auth/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // ✅ Set formatted profile data
+      setProfileData({
+        username: data.username || "Guest User",
+        publicId: data._id?.toUpperCase() || "",
+        memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+        rank: "Unranked", // static for now
+        nextRank: "Bronze I",
+        remainingToNextRank: 0,
+        totalToNextRank: 5000,
+        totalBets: 0,
+        totalWagered: 0,
+        avatarLevel: Math.floor(Math.random() * 10) + 1,
+        email: data.email,
+        displayName: data.displayName,
+        kycStatus: data.kycStatus,
+        roles: data.roles,
+        emailVerified: data.emailVerified,
+      });
+    } catch (error) {
+      console.error("❌ Failed to fetch profile data:", error);
+      toast.error(
+        error.response?.data?.message || "Unable to load profile data"
+      );
     }
-
-    // ✅ Fetch profile data securely
-    const { data } = await axios.get(`/auth-service/api/auth/profile/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // ✅ Set formatted profile data
-    setProfileData({
-      username: data.username || "Guest User",
-      publicId: data._id?.toUpperCase() || "",
-      memberSince: new Date(data.createdAt).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      }),
-      rank: "Unranked", // static for now
-      nextRank: "Bronze I",
-      remainingToNextRank: 0,
-      totalToNextRank: 5000,
-      totalBets: 0,
-      totalWagered: 0,
-      avatarLevel: Math.floor(Math.random() * 10) + 1,
-      email: data.email,
-      displayName: data.displayName,
-      kycStatus: data.kycStatus,
-      roles: data.roles,
-      emailVerified: data.emailVerified,
-    });
-  } catch (error) {
-    console.error("❌ Failed to fetch profile data:", error);
-    toast.error(
-      error.response?.data?.message || "Unable to load profile data"
-    );
-  }
-};
-
+  };
 
   const progressPercentage =
     ((profileData.totalToNextRank - profileData.remainingToNextRank) /
@@ -113,7 +115,7 @@ const fetchProfileData = async () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#080808]/80 backdrop-blur-sm"
           />
 
           {/* Modal Container - Responsive */}
@@ -209,11 +211,13 @@ const fetchProfileData = async () => {
                       {profileData.username}
                     </h3>
                     <p className="text-gray-400 text-xs sm:text-sm">
-  {profileData.emailVerified ? "✅ Verified" : "❌ Not Verified"}
-</p>
-<p className="text-gray-400 text-xs sm:text-sm">
-  KYC Status: {profileData.kycStatus}
-</p>
+                      {profileData.emailVerified
+                        ? "✅ Verified"
+                        : "❌ Not Verified"}
+                    </p>
+                    <p className="text-gray-400 text-xs sm:text-sm">
+                      KYC Status: {profileData.kycStatus}
+                    </p>
 
                     <p className="text-gray-400 text-xs sm:text-sm">
                       Member since: {profileData.memberSince}
@@ -318,16 +322,15 @@ const fetchProfileData = async () => {
                     View Full Stats
                   </button>
                   <button
-  onClick={(e) => {
-    e.stopPropagation();     
-    onClose?.();          
-    navigate("/settings");      
-  }}
-  className="flex-1 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
->
-  Edit Profile
-</button>
-
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onClose?.();
+                      navigate("/settings");
+                    }}
+                    className="flex-1 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
+                  >
+                    Edit Profile
+                  </button>
                 </div>
               </div>
             </div>

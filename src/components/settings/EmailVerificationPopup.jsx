@@ -118,49 +118,48 @@ const EmailVerificationPopup = ({
     }
   };
 
-const handleVerify = async () => {
-  const otpString = otp.join("");
+  const handleVerify = async () => {
+    const otpString = otp.join("");
 
-  if (otpString.length !== 6) {
-    toast.error("Please enter a complete 6-digit OTP");
-    return;
-  }
-
-  setIsLoading(true);
-
-  try {
-    const email =
-      userEmail ||
-      JSON.parse(localStorage.getItem("user") || "{}").email ||
-      localStorage.getItem("email");
-
-    if (!email) {
-      toast.error("Email not found. Please log in again.");
-      setIsLoading(false);
+    if (otpString.length !== 6) {
+      toast.error("Please enter a complete 6-digit OTP");
       return;
     }
 
-    // ✅ Call backend verify-email API via Axios
-    const { data } = await axios.post("/auth-service/api/auth/verify-email", {
-      email,
-      otp: parseInt(otpString, 10),
-    });
+    setIsLoading(true);
 
-    toast.success(data.message || "Email verified successfully!");
-    handleClose();
+    try {
+      const email =
+        userEmail ||
+        JSON.parse(localStorage.getItem("user") || "{}").email ||
+        localStorage.getItem("email");
 
-    // ✅ Refresh user data or reload page after short delay
-    setTimeout(() => window.location.reload(), 1000);
-  } catch (error) {
-    console.error("❌ Verification error:", error);
-    toast.error(
-      error.response?.data?.message || "Invalid OTP. Please try again."
-    );
-  } finally {
-    setIsLoading(false);
-  }
-};
+      if (!email) {
+        toast.error("Email not found. Please log in again.");
+        setIsLoading(false);
+        return;
+      }
 
+      // ✅ Call backend verify-email API via Axios
+      const { data } = await axios.post("/auth-service/api/auth/verify-email", {
+        email,
+        otp: parseInt(otpString, 10),
+      });
+
+      toast.success(data.message || "Email verified successfully!");
+      handleClose();
+
+      // ✅ Refresh user data or reload page after short delay
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      console.error("❌ Verification error:", error);
+      toast.error(
+        error.response?.data?.message || "Invalid OTP. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleResendOtp = async () => {
     setIsResending(true);
@@ -200,7 +199,7 @@ const handleVerify = async () => {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 bg-[#080808]/80 backdrop-blur-md"
           style={{ zIndex: 9998 }}
           onClick={handleClose}
         />

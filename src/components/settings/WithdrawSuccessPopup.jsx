@@ -10,7 +10,7 @@ const WithdrawSuccessPopup = ({ isOpen, onClose, amount, currency }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[1000] flex items-center justify-center"
+        className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm z-[1000] flex items-center justify-center"
       >
         <motion.div
           initial={{ scale: 0.8 }}
@@ -18,7 +18,9 @@ const WithdrawSuccessPopup = ({ isOpen, onClose, amount, currency }) => {
           exit={{ scale: 0.8 }}
           className="bg-[#1A1D24] border border-white/10 rounded-xl p-6 w-full max-w-md shadow-xl text-center"
         >
-          <h2 className="text-2xl font-bold text-white mb-3">🎉 Congratulations!</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">
+            🎉 Congratulations!
+          </h2>
 
           <p className="text-gray-300 text-lg">
             {amount} {currency} withdrawal processed and will be deposited ASAP.

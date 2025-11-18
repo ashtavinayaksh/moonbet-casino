@@ -964,7 +964,7 @@ const Header = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-[#080808]/50 backdrop-blur-sm z-40 lg:hidden"
             onClick={closeSidebar}
           />
         )}
@@ -1748,7 +1748,7 @@ const Header = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-[#080808]/50 backdrop-blur-sm z-40"
               onClick={closeMobileSidebar}
             />
           )}
@@ -1847,7 +1847,7 @@ const Header = ({
                                 exit={{ opacity: 0, height: 0 }}
                                 className="ml-4 mr-0 mt-1 overflow-hidden"
                               >
-                                <div className="p-2 space-y-1 bg-black/40 backdrop-blur-md rounded-xl">
+                                <div className="p-2 space-y-1 bg-[#080808]/40 backdrop-blur-md rounded-xl">
                                   {item.submenu.map((subItem) => (
                                     <Link
                                       key={subItem.path}

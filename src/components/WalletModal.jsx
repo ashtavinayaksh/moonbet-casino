@@ -292,9 +292,9 @@ const WalletModal = ({ isOpen, onClose }) => {
   };
 
   const handleWithdrawClick = () => {
-  setShowWithdrawModal(false);
-  setShowProcessingPopup(true);  // open processing popup
-};
+    setShowWithdrawModal(false);
+    setShowProcessingPopup(true); // open processing popup
+  };
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -325,7 +325,7 @@ const WalletModal = ({ isOpen, onClose }) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[102]"
+            className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm z-[102]"
             onClick={() => setShowDepositModal(false)}
           />
           <motion.div
@@ -585,30 +585,35 @@ const WalletModal = ({ isOpen, onClose }) => {
       )}
     </AnimatePresence>
   );
-const selectedBalanceObj = walletBalance?.balances?.find(
-  (b) => b.currency?.toUpperCase() === selectedWithdrawCoin?.symbol?.toUpperCase()
-);
+  const selectedBalanceObj = walletBalance?.balances?.find(
+    (b) =>
+      b.currency?.toUpperCase() === selectedWithdrawCoin?.symbol?.toUpperCase()
+  );
 
-const availableBalance = selectedBalanceObj ? Number(selectedBalanceObj.amount) : null;
-const minWithdraw = 0.0001;
+  const availableBalance = selectedBalanceObj
+    ? Number(selectedBalanceObj.amount)
+    : null;
+  const minWithdraw = 0.0001;
 
-const noCurrencyFound = availableBalance === null; // currency not in wallet
+  const noCurrencyFound = availableBalance === null; // currency not in wallet
 
-const isWithdrawDisabled =
-  noCurrencyFound ||
-  !withdrawAmount ||
-  withdrawAmount <= 0 ||
-  Number(withdrawAmount) < minWithdraw ||
-  (availableBalance !== null && withdrawAmount > availableBalance) ||
-  withdrawAddress.trim().length === 0;
+  const isWithdrawDisabled =
+    noCurrencyFound ||
+    !withdrawAmount ||
+    withdrawAmount <= 0 ||
+    Number(withdrawAmount) < minWithdraw ||
+    (availableBalance !== null && withdrawAmount > availableBalance) ||
+    withdrawAddress.trim().length === 0;
 
   let dynamicInsufficientMessage = "Enter a valid amount";
 
-if (noCurrencyFound) {
-  dynamicInsufficientMessage = `You don’t have ${selectedWithdrawCoin?.symbol || ""} in your wallet`;
-} else if (withdrawAmount > availableBalance) {
-  dynamicInsufficientMessage = "Amount exceeds available balance";
-}
+  if (noCurrencyFound) {
+    dynamicInsufficientMessage = `You don’t have ${
+      selectedWithdrawCoin?.symbol || ""
+    } in your wallet`;
+  } else if (withdrawAmount > availableBalance) {
+    dynamicInsufficientMessage = "Amount exceeds available balance";
+  }
 
   const renderWithdrawModal = () => (
     <AnimatePresence>
@@ -619,7 +624,7 @@ if (noCurrencyFound) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[102]"
+            className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm z-[102]"
             onClick={() => setShowWithdrawModal(false)}
           />
           <motion.div
@@ -794,7 +799,9 @@ if (noCurrencyFound) {
                     <span className="text-white font-bold">
                       {walletBalance?.balances
                         ?.find(
-                          (b) => b.currency?.toUpperCase() === selectedWithdrawCoin?.symbol?.toUpperCase()
+                          (b) =>
+                            b.currency?.toUpperCase() ===
+                            selectedWithdrawCoin?.symbol?.toUpperCase()
                         )
                         ?.amount.toFixed(8) || "0.00000000"}
                     </span>
@@ -821,21 +828,22 @@ if (noCurrencyFound) {
                   </div>
                 </div>
                 <motion.button
-  whileHover={!isWithdrawDisabled ? { scale: 1.02 } : {}}
-  whileTap={!isWithdrawDisabled ? { scale: 0.98 } : {}}
-  onClick={!isWithdrawDisabled ? handleWithdrawClick : null}
-  disabled={isWithdrawDisabled}
-  className={`w-full py-4 px-6 rounded-lg font-bold transition-all
-    ${isWithdrawDisabled 
-      ? "bg-gray-500 text-gray-300 cursor-not-allowed opacity-50" 
-      : "bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black"}
+                  whileHover={!isWithdrawDisabled ? { scale: 1.02 } : {}}
+                  whileTap={!isWithdrawDisabled ? { scale: 0.98 } : {}}
+                  onClick={!isWithdrawDisabled ? handleWithdrawClick : null}
+                  disabled={isWithdrawDisabled}
+                  className={`w-full py-4 px-6 rounded-lg font-bold transition-all
+    ${
+      isWithdrawDisabled
+        ? "bg-gray-500 text-gray-300 cursor-not-allowed opacity-50"
+        : "bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 text-black"
+    }
   `}
->
-  {isWithdrawDisabled 
-  ? dynamicInsufficientMessage 
-  : "Confirm Withdrawal"}
-</motion.button>
-
+                >
+                  {isWithdrawDisabled
+                    ? dynamicInsufficientMessage
+                    : "Confirm Withdrawal"}
+                </motion.button>
               </div>
             </div>
           </motion.div>
@@ -853,7 +861,7 @@ if (noCurrencyFound) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm z-[100]"
             onClick={onClose}
           />
 
@@ -988,7 +996,7 @@ if (noCurrencyFound) {
                         border: "1px solid rgba(255, 255, 255, 0.1)",
                       }}
                     >
-                      <div className="flex items-center justify-between gap-4 bg-black/30 px-4 py-3 rounded-xl border border-white/10">
+                      <div className="flex items-center justify-between gap-4 bg-[#080808]/30 px-4 py-3 rounded-xl border border-white/10">
                         {/* Left side: Label and Balance */}
                         <div className="flex flex-col">
                           <h3 className="text-sm text-gray-400 font-medium tracking-wide">
@@ -1468,18 +1476,18 @@ if (noCurrencyFound) {
               </div>
             </div>
           </motion.div>
-          
+
           <WithdrawProcessingPopup
-  isOpen={showProcessingPopup}
-  onClose={() => setShowProcessingPopup(false)}
-  withdrawalData={{
-    amount: withdrawAmount,
-    currency: selectedWithdrawCoin?.symbol?.toUpperCase(),
-    address: withdrawAddress,
-  }}
-  userId={userId}
-/>
-{/* {withdrawAmount > availableBalance && (
+            isOpen={showProcessingPopup}
+            onClose={() => setShowProcessingPopup(false)}
+            withdrawalData={{
+              amount: withdrawAmount,
+              currency: selectedWithdrawCoin?.symbol?.toUpperCase(),
+              address: withdrawAddress,
+            }}
+            userId={userId}
+          />
+          {/* {withdrawAmount > availableBalance && (
   <p className="text-red-400 text-sm mt-1">Amount exceeds your balance.</p>
 )}
 {withdrawAmount < minWithdraw && withdrawAmount > 0 && (
@@ -1487,7 +1495,6 @@ if (noCurrencyFound) {
     Minimum withdrawal is {minWithdraw} {selectedWithdrawCoin?.symbol}
   </p>
 )} */}
-
 
           {renderDepositModal()}
           {renderWithdrawModal()}

@@ -187,7 +187,7 @@ const ResponsibleGambling = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#080808]">
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="absolute inset-0 bg-gradient-to-br from-[#F07730]/10 via-transparent to-[#EFD28E]/10" />

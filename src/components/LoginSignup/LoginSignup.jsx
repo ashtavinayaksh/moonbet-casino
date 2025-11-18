@@ -84,123 +84,124 @@ const LoginSignup = ({
   }, [isOpen]);
 
   const signMessageUnified = async (provider, message) => {
-  const encoded = new TextEncoder().encode(message);
+    const encoded = new TextEncoder().encode(message);
 
-  // 1️⃣ Backpack
-  if (provider.isBackpack && provider.signMessage) {
-    const result = await provider.signMessage(encoded);
+    // 1️⃣ Backpack
+    if (provider.isBackpack && provider.signMessage) {
+      const result = await provider.signMessage(encoded);
 
-    const bytes =
-      result?.signature || // Backpack returns { signature: Uint8Array }
-      result;              // Fallback
+      const bytes =
+        result?.signature || // Backpack returns { signature: Uint8Array }
+        result; // Fallback
 
-    if (!(bytes instanceof Uint8Array)) {
-      throw new Error("Backpack: Invalid signature format");
+      if (!(bytes instanceof Uint8Array)) {
+        throw new Error("Backpack: Invalid signature format");
+      }
+
+      return bs58.encode(bytes);
     }
 
-    return bs58.encode(bytes);
-  }
+    // 2️⃣ Phantom (returns { signature: Uint8Array })
+    if (provider.isPhantom && provider.signMessage) {
+      const signed = await provider.signMessage(encoded, "utf8");
+      return bs58.encode(signed.signature);
+    }
 
-  // 2️⃣ Phantom (returns { signature: Uint8Array })
-  if (provider.isPhantom && provider.signMessage) {
-    const signed = await provider.signMessage(encoded, "utf8");
-    return bs58.encode(signed.signature);
-  }
+    // 3️⃣ Solflare (returns Uint8Array)
+    if (provider.isSolflare && provider.signMessage) {
+      const signed = await provider.signMessage(encoded);
+      return bs58.encode(signed);
+    }
 
-  // 3️⃣ Solflare (returns Uint8Array)
-  if (provider.isSolflare && provider.signMessage) {
-    const signed = await provider.signMessage(encoded);
-    return bs58.encode(signed);
-  }
+    throw new Error("Wallet does not support message signing");
+  };
 
-  throw new Error("Wallet does not support message signing");
-};
+  const getWalletAddress = (provider) => {
+    if (!provider.publicKey) throw new Error("Wallet has no public key");
 
-const getWalletAddress = (provider) => {
-  if (!provider.publicKey) throw new Error("Wallet has no public key");
+    // Backpack → publicKey is already a string
+    if (typeof provider.publicKey === "string") {
+      return provider.publicKey;
+    }
 
-  // Backpack → publicKey is already a string
-  if (typeof provider.publicKey === "string") {
-    return provider.publicKey;
-  }
+    // Phantom/Solflare → PublicKey object
+    return provider.publicKey.toString();
+  };
 
-  // Phantom/Solflare → PublicKey object
-  return provider.publicKey.toString();
-};
+  const detectAvailableWallets = () => {
+    const wallets = [];
 
-const detectAvailableWallets = () => {
-  const wallets = [];
+    if (window.phantom?.solana?.isPhantom) wallets.push("phantom");
+    if (window.backpack?.solana?.isBackpack) wallets.push("backpack");
+    if (window.solflare?.isSolflare) wallets.push("solflare");
 
-  if (window.phantom?.solana?.isPhantom) wallets.push("phantom");
-  if (window.backpack?.solana?.isBackpack) wallets.push("backpack");
-  if (window.solflare?.isSolflare) wallets.push("solflare");
-
-  return wallets;
-};
+    return wallets;
+  };
 
   const WalletSelectModal = ({ open, onClose, onSelect }) => {
-  if (!open) return null;
+    if (!open) return null;
 
-  const wallets = [
-  window.phantom?.solana?.isPhantom && {
-    id: "phantom",
-    name: "Phantom",
-    icon: "/wallets/phantom.svg"
-  },
-  window.backpack?.solana?.isBackpack && {
-    id: "backpack",
-    name: "Backpack",
-    icon: "/wallets/backpack.svg"
-  },
-  window.solflare && {
-    id: "solflare",
-    name: "Solflare",
-    icon: "/wallets/solflare.svg"
-  }
-].filter(Boolean);
+    const wallets = [
+      window.phantom?.solana?.isPhantom && {
+        id: "phantom",
+        name: "Phantom",
+        icon: "/wallets/phantom.svg",
+      },
+      window.backpack?.solana?.isBackpack && {
+        id: "backpack",
+        name: "Backpack",
+        icon: "/wallets/backpack.svg",
+      },
+      window.solflare && {
+        id: "solflare",
+        name: "Solflare",
+        icon: "/wallets/solflare.svg",
+      },
+    ].filter(Boolean);
 
-  return (
-    <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[999999]"
-      onClick={onClose}
-    >
+    return (
       <div
-        className="bg-[#1a1a1a] p-6 rounded-xl w-[340px] shadow-lg"
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm flex justify-center items-center z-[999999]"
+        onClick={onClose}
       >
-        <h2 className="text-white text-lg font-semibold mb-4">Select Wallet</h2>
-
-        <div className="flex flex-col gap-3">
-          {wallets.map((w) => (
-            <button
-              key={w.id}
-              onClick={() => onSelect(w.id)}
-              className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
-            >
-              <img src={w.icon} alt={w.name} className="w-7 h-7" />
-              <span className="text-white font-medium">{w.name}</span>
-            </button>
-          ))}
-        </div>
-
-        <button
-          className="mt-4 w-full py-2 bg-white/10 rounded-lg text-white hover:bg-white/20"
-          onClick={onClose}
+        <div
+          className="bg-[#1a1a1a] p-6 rounded-xl w-[340px] shadow-lg"
+          onClick={(e) => e.stopPropagation()}
         >
-          Cancel
-        </button>
+          <h2 className="text-white text-lg font-semibold mb-4">
+            Select Wallet
+          </h2>
+
+          <div className="flex flex-col gap-3">
+            {wallets.map((w) => (
+              <button
+                key={w.id}
+                onClick={() => onSelect(w.id)}
+                className="flex items-center gap-3 p-3 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+              >
+                <img src={w.icon} alt={w.name} className="w-7 h-7" />
+                <span className="text-white font-medium">{w.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <button
+            className="mt-4 w-full py-2 bg-white/10 rounded-lg text-white hover:bg-white/20"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
-useEffect(() => {
-  if (walletModalOpen) {
-    const available = detectAvailableWallets();
-    console.log("Detected wallets:", available);
-  }
-}, [walletModalOpen]);
-
+  useEffect(() => {
+    if (walletModalOpen) {
+      const available = detectAvailableWallets();
+      console.log("Detected wallets:", available);
+    }
+  }, [walletModalOpen]);
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
@@ -371,93 +372,94 @@ useEffect(() => {
   if (!isOpen) return null;
 
   const handleWalletLogin = async (provider) => {
-  try {
-    if (!provider) {
-      toast.error("No Solana wallet detected.");
-      return;
-    }
-
-    // Connect wallet
-    const resp = await provider.connect();
-    const walletAddress = getWalletAddress(provider);
-    console.log("🔌 Wallet connected:", walletAddress);
-
-    // 1️⃣ Get nonce
-    const { data: nonceRes } = await axios.post(
-      "/auth-service/api/auth/wallet/nonce",
-      { walletAddress }
-    );
-
-    if (!nonceRes.success) {
-      toast.error("Failed to get nonce");
-      return;
-    }
-
-    const message = nonceRes.message;
-
-    // 2️⃣ Sign message (Phantom / Backpack / Solflare)
-    const signature = await signMessageUnified(provider, message);
-
-    // 3️⃣ Verify in backend
-    const { data: verifyRes } = await axios.post(
-      "/auth-service/api/auth/wallet/verify",
-      {
-        walletAddress,
-        signature,
-        message,
-        walletType: "solana",
+    try {
+      if (!provider) {
+        toast.error("No Solana wallet detected.");
+        return;
       }
-    );
 
-    if (!verifyRes.success) {
-      toast.error(verifyRes.message || "Wallet verification failed");
+      // Connect wallet
+      const resp = await provider.connect();
+      const walletAddress = getWalletAddress(provider);
+      console.log("🔌 Wallet connected:", walletAddress);
+
+      // 1️⃣ Get nonce
+      const { data: nonceRes } = await axios.post(
+        "/auth-service/api/auth/wallet/nonce",
+        { walletAddress }
+      );
+
+      if (!nonceRes.success) {
+        toast.error("Failed to get nonce");
+        return;
+      }
+
+      const message = nonceRes.message;
+
+      // 2️⃣ Sign message (Phantom / Backpack / Solflare)
+      const signature = await signMessageUnified(provider, message);
+
+      // 3️⃣ Verify in backend
+      const { data: verifyRes } = await axios.post(
+        "/auth-service/api/auth/wallet/verify",
+        {
+          walletAddress,
+          signature,
+          message,
+          walletType: "solana",
+        }
+      );
+
+      if (!verifyRes.success) {
+        toast.error(verifyRes.message || "Wallet verification failed");
+        return;
+      }
+
+      // 4️⃣ Save user
+      const { user, token } = verifyRes.data;
+
+      localStorage.setItem("token", token);
+      window.dispatchEvent(new Event("tokenChanged"));
+
+      const id = user._id;
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id,
+          username: user.username,
+          email: user.email,
+          kycStatus: user.kycStatus,
+        })
+      );
+
+      toast.success("Wallet connected successfully!");
+      onClose();
+      if (onLoginSuccess) onLoginSuccess(verifyRes.data);
+    } catch (err) {
+      console.error("Wallet login error:", err);
+      toast.error(
+        err?.response?.data?.message || err.message || "Wallet login failed."
+      );
+    }
+  };
+
+  const handleWalletProviderSelect = async (walletId) => {
+    setWalletModalOpen(false);
+
+    let provider = null;
+
+    if (walletId === "phantom") provider = window.phantom?.solana;
+    if (walletId === "backpack") provider = window.backpack?.solana;
+    if (walletId === "solflare") provider = window.solflare;
+
+    if (!provider) {
+      toast.error("Wallet not installed.");
       return;
     }
 
-    // 4️⃣ Save user
-    const { user, token } = verifyRes.data;
-
-    localStorage.setItem("token", token);
-    window.dispatchEvent(new Event("tokenChanged"));
-
-    const id = user._id;
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        id,
-        username: user.username,
-        email: user.email,
-        kycStatus: user.kycStatus,
-      })
-    );
-
-    toast.success("Wallet connected successfully!");
-    onClose();
-    if (onLoginSuccess) onLoginSuccess(verifyRes.data);
-
-  } catch (err) {
-    console.error("Wallet login error:", err);
-    toast.error(err?.response?.data?.message || err.message || "Wallet login failed.");
-  }
-};
-
-const handleWalletProviderSelect = async (walletId) => {
-  setWalletModalOpen(false);
-
-  let provider = null;
-
-  if (walletId === "phantom") provider = window.phantom?.solana;
-  if (walletId === "backpack") provider = window.backpack?.solana;
-  if (walletId === "solflare") provider = window.solflare;
-
-  if (!provider) {
-    toast.error("Wallet not installed.");
-    return;
-  }
-
-  handleWalletLogin(provider);
-};
+    handleWalletLogin(provider);
+  };
 
   return (
     <div
@@ -698,12 +700,14 @@ const handleWalletProviderSelect = async (walletId) => {
                         }}
                       >
                         <button
-  onClick={() => setWalletModalOpen(true)}
-  className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
->
-  <WalletIcon />
-  <span className="text-white text-sm font-medium">Connect Wallet</span>
-</button>
+                          onClick={() => setWalletModalOpen(true)}
+                          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
+                        >
+                          <WalletIcon />
+                          <span className="text-white text-sm font-medium">
+                            Connect Wallet
+                          </span>
+                        </button>
                       </div>
                     </div>
                     <div className="mt-6 text-center text-white/80 text-sm">
@@ -854,12 +858,14 @@ const handleWalletProviderSelect = async (walletId) => {
                           />
                         </div>
                         <button
-  onClick={() => setWalletModalOpen(true)}
-  className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
->
-  <WalletIcon />
-  <span className="text-white text-sm font-medium">Connect Wallet</span>
-</button>
+                          onClick={() => setWalletModalOpen(true)}
+                          className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
+                        >
+                          <WalletIcon />
+                          <span className="text-white text-sm font-medium">
+                            Connect Wallet
+                          </span>
+                        </button>
                       </button>
                       {/* <button className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
                         <WalletIcon />
@@ -1022,10 +1028,10 @@ const handleWalletProviderSelect = async (walletId) => {
         </motion.div>
       </div>
       <WalletSelectModal
-  open={walletModalOpen}
-  onClose={() => setWalletModalOpen(false)}
-  onSelect={handleWalletProviderSelect}
-/>
+        open={walletModalOpen}
+        onClose={() => setWalletModalOpen(false)}
+        onSelect={handleWalletProviderSelect}
+      />
     </div>
   );
 };

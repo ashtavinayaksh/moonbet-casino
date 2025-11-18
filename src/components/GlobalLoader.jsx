@@ -2,7 +2,7 @@ import React from "react";
 
 const GlobalLoader = () => {
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-[9999]">
+    <div className="fixed inset-0 bg-[#080808]/80 backdrop-blur-sm flex flex-col items-center justify-center z-[9999]">
       <img
         src="/icons/logo.svg"
         alt="Loading..."

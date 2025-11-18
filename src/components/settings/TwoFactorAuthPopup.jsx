@@ -17,7 +17,7 @@ const TwoFactorAuthPopup = ({
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  console.log("userId for this qr:", userId)
+  console.log("userId for this qr:", userId);
 
   /** Fetch QR + Secret when opened */
   useEffect(() => {
@@ -36,36 +36,37 @@ const TwoFactorAuthPopup = ({
    *  STEP 1: Enable 2FA -> get QR + secret
    *  ----------------------------- */
   const fetchTwoFactorData = async () => {
-  try {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    const { data } = await axios.post("/auth-service/api/auth/enable-2fa", { userId });
+      const { data } = await axios.post("/auth-service/api/auth/enable-2fa", {
+        userId,
+      });
 
-    console.log("Backend 2FA Response:", data);
+      console.log("Backend 2FA Response:", data);
 
-    // ✅ These are the actual fields returned by your backend
-    const qrDataUrl = data.qrCodeDataUrl;
-    const secret = data.secret;
+      // ✅ These are the actual fields returned by your backend
+      const qrDataUrl = data.qrCodeDataUrl;
+      const secret = data.secret;
 
-    if (!qrDataUrl || !secret) {
-      throw new Error("Missing QR code or secret in backend response");
+      if (!qrDataUrl || !secret) {
+        throw new Error("Missing QR code or secret in backend response");
+      }
+
+      // ✅ Set them directly
+      setQrCodeUrl(qrDataUrl);
+      setSecretKey(secret);
+
+      console.log("✅ QR Loaded:", qrDataUrl.substring(0, 60) + "...");
+      toast.success("Scan this QR code with your Authenticator app!");
+    } catch (err) {
+      console.error("❌ 2FA setup error:", err);
+      toast.error("Failed to generate Two-Factor QR code");
+      onClose();
+    } finally {
+      setIsLoading(false);
     }
-
-    // ✅ Set them directly
-    setQrCodeUrl(qrDataUrl);
-    setSecretKey(secret);
-
-    console.log("✅ QR Loaded:", qrDataUrl.substring(0, 60) + "...");
-    toast.success("Scan this QR code with your Authenticator app!");
-  } catch (err) {
-    console.error("❌ 2FA setup error:", err);
-    toast.error("Failed to generate Two-Factor QR code");
-    onClose();
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   /** -----------------------------
    *  STEP 2: Verify token
@@ -78,13 +79,10 @@ const TwoFactorAuthPopup = ({
 
     setIsLoading(true);
     try {
-      const { data } = await axios.post(
-        "/auth-service/api/auth/verify-2fa",
-        {
-          userId,
-          token: Number(verificationCode),
-        }
-      );
+      const { data } = await axios.post("/auth-service/api/auth/verify-2fa", {
+        userId,
+        token: Number(verificationCode),
+      });
 
       if (data?.success) {
         toast.success("Two-Factor Authentication enabled successfully!");
@@ -127,7 +125,7 @@ const TwoFactorAuthPopup = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9998]"
+        className="fixed inset-0 bg-[#080808]/80 backdrop-blur-sm z-[9998]"
         onClick={handleClose}
       />
 

@@ -9,7 +9,7 @@ const WithdrawProcessingPopup = ({
   isOpen,
   onClose,
   withdrawalData,
-  userId
+  userId,
 }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -86,7 +86,6 @@ const WithdrawProcessingPopup = ({
         onClose();
         setShowSuccessPopup(true);
       }, 1200);
-      
     } catch (err) {
       toast.error(err.response?.data?.message || "Withdrawal failed");
       setLoading(false);
@@ -101,7 +100,7 @@ const WithdrawProcessingPopup = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[999] flex items-center justify-center"
+        className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm z-[999] flex items-center justify-center"
       >
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}

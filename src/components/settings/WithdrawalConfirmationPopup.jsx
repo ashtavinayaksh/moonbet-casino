@@ -2,7 +2,12 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const WithdrawalConfirmationPopup = ({ isOpen, onClose, requestId, onConfirm }) => {
+const WithdrawalConfirmationPopup = ({
+  isOpen,
+  onClose,
+  requestId,
+  onConfirm,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -11,7 +16,7 @@ const WithdrawalConfirmationPopup = ({ isOpen, onClose, requestId, onConfirm }) 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[200]"
+        className="fixed inset-0 bg-[#080808]/70 backdrop-blur-sm flex items-center justify-center z-[200]"
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
@@ -19,10 +24,14 @@ const WithdrawalConfirmationPopup = ({ isOpen, onClose, requestId, onConfirm }) 
           exit={{ scale: 0.9, opacity: 0 }}
           className="bg-[#1A1D24] border border-white/10 rounded-xl p-6 w-full max-w-md text-center shadow-2xl"
         >
-          <h2 className="text-xl font-bold text-white mb-4">Withdrawal Processing</h2>
+          <h2 className="text-xl font-bold text-white mb-4">
+            Withdrawal Processing
+          </h2>
 
           <p className="text-gray-300 mb-2">Your request ID:</p>
-          <p className="text-[#F07730] font-mono mb-6 break-words">{requestId}</p>
+          <p className="text-[#F07730] font-mono mb-6 break-words">
+            {requestId}
+          </p>
 
           <div className="flex gap-3 justify-center">
             <motion.button

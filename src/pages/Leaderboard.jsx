@@ -8,8 +8,8 @@ const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("daily");
   const [currentPage, setCurrentPage] = useState(1);
   const [topWinners, setTopWinners] = useState([]);
-const [leaderboardData, setLeaderboardData] = useState([]);
-const [loading, setLoading] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Tab options
   const tabs = [
@@ -19,65 +19,64 @@ const [loading, setLoading] = useState(false);
     { id: "all-time", label: "All Time" },
   ];
 
-
   // Leaderboard data
 
   const totalPages = 11;
 
   useEffect(() => {
-  const fetchLeaderboard = async () => {
-    try {
-      setLoading(true);
+    const fetchLeaderboard = async () => {
+      try {
+        setLoading(true);
 
-      // ✅ Fetch leaderboard data from backend
-      const response = await axios.get(
-        `/referral-service/api/leaderboard/top/all-time`
-      );
+        // ✅ Fetch leaderboard data from backend
+        const response = await axios.get(
+          `/referral-service/api/leaderboard/top/all-time`
+        );
 
-      let leaderboard = [];
-      if (response.data?.success) {
-        leaderboard = response.data.data || [];
+        let leaderboard = [];
+        if (response.data?.success) {
+          leaderboard = response.data.data || [];
+        }
+
+        // 🧩 Add static UI fields to each dynamic user
+        const enrichedLeaderboard = leaderboard.map((item, index) => ({
+          ...item,
+          prize: "Prize",
+          avatar: `/leaderboard-assets/astro-profile${(index % 5) + 1}.svg`,
+          profileInner: `/leaderboard-assets/profile${(index % 5) + 1}.svg`,
+          icon: `/leaderboard-assets/group${(index % 5) + 1}.svg`,
+          earned: `${Math.floor(item.points / 4) || 50}+ points`,
+          position:
+            index % 3 === 0 ? "left" : index % 3 === 1 ? "center" : "right",
+          bgColor:
+            index % 2 === 0
+              ? "from-gray-400 to-gray-600"
+              : "from-yellow-400 to-yellow-600",
+        }));
+
+        // 🥇 Split top 3 for podium and others for table
+        const topThree = enrichedLeaderboard.slice(0, 3);
+        const others = enrichedLeaderboard.slice(3);
+
+        // 🧭 Assign final positions for podium winners
+        const positions = ["left", "center", "right"];
+        const formattedTop = topThree.map((item, i) => ({
+          ...item,
+          position: positions[i] || "center",
+          isWinner: i === 1, // Center winner
+        }));
+
+        setTopWinners(formattedTop);
+        setLeaderboardData(others);
+      } catch (error) {
+        console.error("❌ Error fetching leaderboard:", error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // 🧩 Add static UI fields to each dynamic user
-      const enrichedLeaderboard = leaderboard.map((item, index) => ({
-        ...item,
-        prize: "Prize",
-        avatar: `/leaderboard-assets/astro-profile${(index % 5) + 1}.svg`,
-        profileInner: `/leaderboard-assets/profile${(index % 5) + 1}.svg`,
-        icon: `/leaderboard-assets/group${(index % 5) + 1}.svg`,
-        earned: `${Math.floor(item.points / 4) || 50}+ points`,
-        position: index % 3 === 0 ? "left" : index % 3 === 1 ? "center" : "right",
-        bgColor:
-          index % 2 === 0
-            ? "from-gray-400 to-gray-600"
-            : "from-yellow-400 to-yellow-600",
-      }));
-
-      // 🥇 Split top 3 for podium and others for table
-      const topThree = enrichedLeaderboard.slice(0, 3);
-      const others = enrichedLeaderboard.slice(3);
-
-      // 🧭 Assign final positions for podium winners
-      const positions = ["left", "center", "right"];
-      const formattedTop = topThree.map((item, i) => ({
-        ...item,
-        position: positions[i] || "center",
-        isWinner: i === 1, // Center winner
-      }));
-
-      setTopWinners(formattedTop);
-      setLeaderboardData(others);
-    } catch (error) {
-      console.error("❌ Error fetching leaderboard:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchLeaderboard();
-}, [activeTab]);
-
+    fetchLeaderboard();
+  }, [activeTab]);
 
   // Podium card component with fixed dimensions
   const PodiumCard = ({ winner }) => {
@@ -133,7 +132,7 @@ const [loading, setLoading] = useState(false);
           <div className="relative w-40 h-40">
             {/* Astronaut Helmet Background */}
             <img
-              src='/leaderboard-assets/astro-profile1.svg'
+              src="/leaderboard-assets/astro-profile1.svg"
               alt="Astronaut Helmet"
               className="absolute inset-0 w-full h-full"
             />
@@ -239,7 +238,7 @@ const [loading, setLoading] = useState(false);
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header Tabs */}
         <div className="flex justify-center mb-16">
-          <div className="inline-flex gap-1 p-1 rounded-full bg-black/50 backdrop-blur-sm border border-white/10">
+          <div className="inline-flex gap-1 p-1 rounded-full bg-[#080808]/50 backdrop-blur-sm border border-white/10">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -257,29 +256,31 @@ const [loading, setLoading] = useState(false);
         </div>
 
         {loading ? (
-  <div className="text-center text-gray-400 text-lg">Loading leaderboard...</div>
-) : (
-  <>
-        {/* Top 3 Podium Section - Fixed Width Container */}
-        <div className="flex justify-center mb-12">
-      <div className="flex items-end gap-8">
-        {topWinners.map((winner, i) => (
-          <PodiumCard key={i} winner={winner} />
-        ))}
-      </div>
-    </div>
-    </>
-    )}
+          <div className="text-center text-gray-400 text-lg">
+            Loading leaderboard...
+          </div>
+        ) : (
+          <>
+            {/* Top 3 Podium Section - Fixed Width Container */}
+            <div className="flex justify-center mb-12">
+              <div className="flex items-end gap-8">
+                {topWinners.map((winner, i) => (
+                  <PodiumCard key={i} winner={winner} />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Leaderboard Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="max-w-7xl mx-auto rounded-2xl overflow-hidden bg-black/30 backdrop-blur-sm border border-white/10"
+          className="max-w-7xl mx-auto rounded-2xl overflow-hidden bg-[#080808]/30 backdrop-blur-sm border border-white/10"
         >
           {/* Table Header */}
-          <div className="grid grid-cols-3 px-8 py-4 border-b border-white/10 bg-black/50">
+          <div className="grid grid-cols-3 px-8 py-4 border-b border-white/10 bg-[#080808]/50">
             <div className="text-gray-500 text-sm font-medium">Rank</div>
             <div className="text-gray-500 text-sm font-medium">User name</div>
             <div className="text-gray-500 text-sm font-medium text-right">
