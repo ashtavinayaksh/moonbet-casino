@@ -18,6 +18,27 @@ const WalletDropdownCenter = ({
   const [searchQuery, setSearchQuery] = useState("");
   const walletDropdownRef = useRef(null);
 
+  // ⭐ Replace icons based on EXACT CDN URLs
+  const imageFix = (url) => {
+    if (!url) return url;
+
+    if (url.includes("dogecoin.svg")) return "/wallet-icons/doge-coin.svg";
+
+    if (url.includes("usdttrc20.svg")) return "/wallet-icons/tether.svg";
+
+    if (url.includes("bnbmainnet.svg")) return "/wallet-icons/bnb.svg";
+
+    if (url.includes("maticmainnet.svg")) return "/wallet-icons/polygon.svg";
+
+    return url; // default (keep API icon)
+  };
+
+  // Apply auto replacement to all currencies
+  const finalCurrencies = currencies.map((c) => ({
+    ...c,
+    iconPath: imageFix(c.iconPath),
+  }));
+
   // Handle currency selection
   const handleCurrencySelect = async (currency) => {
     try {
@@ -186,7 +207,7 @@ const WalletDropdownCenter = ({
 
             {/* Currency List */}
             <div className="wallet-list flex-1 mt-2.5 max-h-[280px] overflow-y-auto pr-1.5 pb-2">
-              {currencies
+              {finalCurrencies
                 .filter(
                   (currency) =>
                     currency.name
@@ -203,20 +224,18 @@ const WalletDropdownCenter = ({
                       handleCurrencySelect(currency);
                       setWalletDropdownOpen(false);
                     }}
-                    className={`wallet-item group flex items-center pr-3 my-2.5 rounded-full relative cursor-pointer transition-all duration-250 
-                      ${
-                        selectedCurrency?.symbol === currency.symbol
-                          ? "selected-currency"
-                          : ""
-                      }`}
+                    className={`wallet-item group flex items-center pr-3 my-2.5 rounded-full relative cursor-pointer transition-all duration-250 ${
+                      selectedCurrency?.symbol === currency.symbol
+                        ? "selected-currency"
+                        : ""
+                    }`}
                   >
                     {/* Hover Background Effect */}
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/45 to-white/15 opacity-0 scale-[0.98] group-hover:opacity-100 group-hover:scale-100 transition-all duration-250 pointer-events-none" />
 
                     {/* Icon Wrapper */}
                     <div
-                      className={`icon-wrap w-9 h-9 rounded-full flex items-center justify-center transition-all duration-250 relative z-10 group-hover:bg-white/55 
-                      ${
+                      className={`icon-wrap w-9 h-9 rounded-full flex items-center justify-center transition-all duration-250 relative z-10 group-hover:bg-white/55 ${
                         selectedCurrency?.symbol === currency.symbol
                           ? "bg-white/30"
                           : ""
