@@ -36,7 +36,6 @@ import ProductShowcase from "./components/Productshowcase.jsx";
 import { useLoader } from "./context/LoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
 import AboutUs from "./pages/AboutUs.jsx";
-import ProviderGames from "./pages/ProviderGames.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -149,6 +148,7 @@ function App() {
             <Route path="casino/:category" element={<Casino />} />
 
             <Route path="providers" element={<ProvidersPage />} />
+            <Route path="providers/:slug" element={<ProvidersPage />} />
             <Route
               path="affiliate-program"
               element={<AffiliateLandingPage />}
@@ -158,7 +158,6 @@ function App() {
             <Route path="privacy" element={<PrivacyPolicyPage />} />
             <Route path="contact" element={<ContactUsPage />} />
             <Route path="product-data" element={<ProductShowcase />} />
-            <Route path="providers/:providerName" element={<ProviderGames />} />
             <Route
               path="about"
               element={

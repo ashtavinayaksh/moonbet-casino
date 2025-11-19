@@ -1,9 +1,8 @@
-// src/components/GameGrid.jsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
+const GameGrid = ({ type = "all", filter = "", searchTerm = "", provider = "" }) => {
   const [games, setGames] = useState([]);
   const [visibleCount, setVisibleCount] = useState(48);
   const [loading, setLoading] = useState(true);
@@ -17,35 +16,22 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
         const userId = user.id || "690b0290cb255ca66b14a529";
         let apiUrl = "";
 
-        // 🔥 Provider Games
-        if (type === "provider") {
-          const params = new URLSearchParams();
-          if (searchTerm) params.append("provider", searchTerm);
-          if (filter) params.append("sortBy", filter);
-          const query = params.toString() ? `?${params.toString()}` : "";
-          apiUrl = `/wallet-service/api/games${query}`;
-        }
+        // 🔥 If provider filter is active
+if (provider) {
+  apiUrl = `/wallet-service/api/games?provider=${provider}`;
+}
 
-        // 🔥 Favourite Games
-        else if (type === "favorites") {
-          apiUrl = `/wallet-service/api/games?sortBy=favourite&userId=${userId}`;
-        }
+// 🔥 Other categories
+else {
+  const params = new URLSearchParams();
 
-        // 🔥 Live Casino
-        else if (type === "live-casino") {
-          apiUrl = `/wallet-service/api/games?name=casino`;
-        }
+  if (type && type !== "all") params.append("type", type);
+  if (filter) params.append("sortBy", filter);
+  if (searchTerm) params.append("name", searchTerm);
 
-        // 🔥 All other categories
-        else {
-          const params = new URLSearchParams();
-          if (type && type !== "all") params.append("type", type);
-          if (filter) params.append("sortBy", filter);
-          if (searchTerm) params.append("name", searchTerm);
-
-          const query = params.toString() ? `?${params.toString()}` : "";
-          apiUrl = `/wallet-service/api/games${query}`;
-        }
+  const query = params.toString() ? `?${params.toString()}` : "";
+  apiUrl = `/wallet-service/api/games${query}`;
+}
 
         console.log("🔗 FINAL GameGrid API:", apiUrl);
 
@@ -63,7 +49,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
     };
 
     fetchGames();
-  }, [type, filter, searchTerm]);
+  }, [type, filter, searchTerm, provider]);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 48);
 
@@ -80,7 +66,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
     <section className="w-full bg-[#080808] py-10">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-[#CED5E3] font-['Neuropolitical'] text-xl mb-6 uppercase">
-          {type === "all" ? "ALL" : type.toUpperCase()} GAMES
+          {`${provider}`.toUpperCase()} GAMES
         </h2>
 
         {loading ? (
@@ -99,7 +85,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                   key={game.uuid || i}
                   variants={cardVariants}
                   custom={i}
-                  className="relative rounded-xl overflow-hidden border border-white/10 cursor-pointer group transition-all"
+                  className="relative rounded-xl overflow-hidden border border-white/10  cursor-pointer group transition-all"
                   style={{
                     boxShadow: "0 10px 30px rgba(240, 119, 48, 0.2)",
                     borderRadius: "12px",
@@ -107,19 +93,19 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                     backdropFilter: "blur(2px)",
                   }}
                 >
-                  {/* Favorite Icon */}
+                  {/* Favorite Icon (Top Right) */}
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
+                      e.stopPropagation(); // prevents PLAY NOW trigger
                       setFavorite((prev) => ({
                         ...prev,
                         [game.uuid]: !prev[game.uuid],
                       }));
                     }}
-                    className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-[8px] transition-all duration-300 z-50 ${
+                    className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-[8px]   transition-all duration-300 z-50 ${
                       favorite?.[game.uuid]
                         ? ""
-                        : "hover:bg-[rgba(240,119,48,0.10)]"
+                        : " hover:bg-[rgba(240,119,48,0.10)]"
                     }`}
                   >
                     <svg
@@ -137,8 +123,6 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                       <path d="M12.5107 0C13.9776 7.87092e-05 15.3563 0.572114 16.3936 1.60938C18.5348 3.75068 18.5349 7.23458 16.3936 9.37598L10.3721 15.3984C10.0067 15.7637 9.51929 15.9648 9 15.9648C8.48071 15.9648 7.99326 15.7636 7.62793 15.3984L1.60547 9.37598C-0.53553 7.23467 -0.535317 3.75066 1.60547 1.60938C2.64272 0.572084 4.02233 4.57993e-05 5.48926 0C6.78661 0 8.01573 0.44767 9 1.26855C9.98434 0.44767 11.2133 0 12.5107 0Z" />
                     </svg>
                   </button>
-
-                  {/* Game Art */}
                   <div className="relative aspect-[18/12] overflow-hidden rounded-xl">
                     <motion.img
                       src={game.image}
@@ -207,7 +191,6 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                       </motion.button>
                     </div>
                   </div>
-
                   <div className="mt-2">
                     <div className="text-sm font-semibold text-white truncate">
                       {game.name}
