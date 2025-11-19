@@ -415,7 +415,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
-              <div className="flex gap-2 p-4">
+              {/* <div className="flex gap-2 p-4">
                 <button
                   onClick={() => setDepositTab("crypto")}
                   className={`flex-1 py-3 px-4 rounded-full font-medium transition-all ${
@@ -436,10 +436,10 @@ const WalletModal = ({ isOpen, onClose }) => {
                 >
                   Local Currency
                 </button>
-              </div>
+              </div> */}
 
               <div className="px-6 pb-6">
-                <div className="mb-4 relative">
+                <div className="mb-4 mt-4 relative">
                   <label className="text-gray-400 text-sm mb-2 block">
                     Currency
                   </label>
@@ -533,7 +533,7 @@ const WalletModal = ({ isOpen, onClose }) => {
                   </label>
                   <div className="bg-[#0F1116] rounded-lg p-2 flex items-center gap-3 border border-white/10">
                     <span className="text-white text-sm font-mono flex-1 truncate">
-                      {depositAddress || "Fetching address..."}
+                      {depositAddress || "Please select currency..."}
                     </span>
                     <motion.button
                       whileTap={{ scale: 0.95 }}
