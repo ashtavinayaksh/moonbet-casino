@@ -10,6 +10,7 @@ import RecommendedSection from "../components/sections/RecommendedSection";
 import ProvidersSection from "../components/sections/ProvidersSection";
 import { LoginTrigger } from "../components/LoginSignup/LoginTrigger";
 import { useAuthStore } from "../store/useAuthStore";
+import GamesYouLike from "../components/sections/GamesYouLike";
 
 const GamePage = () => {
   const { gameId } = useParams(); // actually the game name
@@ -466,7 +467,7 @@ const GamePage = () => {
         </div>
       </div>
       <div className="bg-[#080808]">
-        <RecommendedSection />
+        <GamesYouLike provider={gameData?.provider} excludeGame={gameData?.name} />
         <ProvidersSection />
         <GameBetsSection />
       </div>
