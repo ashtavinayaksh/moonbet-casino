@@ -320,7 +320,7 @@ const GamePage = () => {
             ref={iframeRef}
             src={iframeUrl}
             title={gameData?.name || "Game"}
-            className="w-full h-[88vh] border-none pointer-events-auto"
+            className="w-full h-[80vh] border-none pointer-events-auto"
             allowFullScreen
           />
         </div>
@@ -331,6 +331,7 @@ const GamePage = () => {
           style={{
             height: "12vh",
             minHeight: "80px",
+            top: "-8%",
             background:
               "linear-gradient(135deg, rgba(30, 36, 51, 0.8) 0%, rgba(20, 25, 40, 0.9) 100%)",
             backdropFilter: "blur(20px)",
@@ -467,7 +468,10 @@ const GamePage = () => {
         </div>
       </div>
       <div className="bg-[#080808]">
-        <GamesYouLike provider={gameData?.provider} excludeGame={gameData?.name} />
+        <GamesYouLike
+          provider={gameData?.provider}
+          excludeGame={gameData?.name}
+        />
         <ProvidersSection />
         <GameBetsSection />
       </div>

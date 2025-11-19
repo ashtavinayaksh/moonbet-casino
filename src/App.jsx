@@ -36,6 +36,7 @@ import ProductShowcase from "./components/Productshowcase.jsx";
 import { useLoader } from "./context/LoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
 import AboutUs from "./pages/AboutUs.jsx";
+import RNGTestingPolicy from "./pages/RNGTestingPolicy.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -163,6 +164,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <AboutUs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="rng"
+              element={
+                <PrivateRoute>
+                  <RNGTestingPolicy />
                 </PrivateRoute>
               }
             />
