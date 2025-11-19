@@ -153,7 +153,6 @@ const WalletDropdownCenter = ({
     shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden "
             style={{
               padding: "0 12px",
-              border: "2px solid rgba(255, 255, 255, 0.05)",
               background:
                 "linear-gradient(rgb(80, 84, 91) 0%, rgb(60, 64, 70) 100%)",
               backdropFilter: "blur(67.5px)",
@@ -216,10 +215,10 @@ const WalletDropdownCenter = ({
 
                     {/* Icon Wrapper */}
                     <div
-                      className={`icon-wrap w-9 h-9 rounded-full flex items-center justify-center transition-all duration-250 relative z-10 group-hover:bg-white/55 group-hover:border group-hover:border-white/90
+                      className={`icon-wrap w-9 h-9 rounded-full flex items-center justify-center transition-all duration-250 relative z-10 group-hover:bg-white/55 
                       ${
                         selectedCurrency?.symbol === currency.symbol
-                          ? "bg-white/30 border border-white/50"
+                          ? "bg-white/30"
                           : ""
                       }`}
                     >
@@ -318,9 +317,9 @@ const WalletDropdownCenter = ({
         }
 
         /* Selected currency styling */
-        .selected-currency .icon-wrap {
+        .selected-currency {
           background: rgba(255, 255, 255, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.5);
+          // border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         /* Smooth transitions */
@@ -336,6 +335,26 @@ const WalletDropdownCenter = ({
         /* Additional glow effect on hover */
         .wallet-item:hover .coin-name {
           text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+        /* Make active item look like hover */
+        .selected-currency::before {
+          opacity: 1 !important;
+          transform: scale(1) !important;
+        }
+
+        .selected-currency .icon-wrap {
+          background: rgba(255, 255, 255, 0.55) !important;
+          border: 1px solid rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .selected-currency .coin-name,
+        .selected-currency .coin-symbol,
+        .selected-currency .coin-amount {
+          color: #fff !important;
+        }
+
+        .selected-currency .coin-name {
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
         }
       `}</style>
     </div>

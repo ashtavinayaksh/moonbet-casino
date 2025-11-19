@@ -267,7 +267,6 @@ export const LoginTrigger = ({
 
           .header-item:hover .header-icon-wrap {
             background: rgba(255, 255, 255, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.9);
           }
 
           .header-info {
