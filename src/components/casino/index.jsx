@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 
@@ -7,6 +8,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
   const [visibleCount, setVisibleCount] = useState(48);
   const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -58,6 +60,11 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
 
     fetchGames();
   }, [type, filter, searchTerm]);
+
+  const handlePlayNow = (gameName) => {
+    const gameSlug = encodeURIComponent(gameName);
+    navigate(`/game/${gameSlug}`);
+  };
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 48);
 
@@ -139,6 +146,7 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "" }) => {
                     />
                     <div className="absolute inset-0 bg-[#080808]/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
                       <motion.button
+                        onClick={() => handlePlayNow(game.name)}
                         className="px-4 py-2 rounded-full text-white font-semibold text-sm"
                         whileTap={{ scale: 0.9 }}
                       >
