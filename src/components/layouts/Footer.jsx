@@ -84,7 +84,7 @@ const Footer = () => {
 
   const footerLinks = {
     aboutUs: [
-      { label: "Affiliate", path: "/affiliate" },
+      { label: "Affiliate", path: "/affiliate-program" },
       { label: "Privacy Policy", path: "/privacy" },
       { label: "Terms & Conditions", path: "/terms-and-condition" },
       { label: "Responsible Gambling", path: "/responsible-gambling" },

@@ -329,7 +329,7 @@ const SidebarHeader = ({
                       </span>
                       {item.id === "originals" && subItem.comingSoon && (
                         <span className="text-[8px] font-semibold px-2 py-0.5 rounded-full bg-[#f7f7f7]/20 text-[#C1C1C1] border border-[#ccc]/30 whitespace-nowrap tracking-wide">
-                          Auditing
+                          coming soon
                         </span>
                       )}
                     </Link>

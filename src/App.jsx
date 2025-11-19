@@ -7,6 +7,7 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
+
 import Layout from "./components/layouts/Layout";
 import Homepage from "./pages/Homepage";
 import Settings from "./pages/Settings";
@@ -34,63 +35,46 @@ import ContactUsPage from "./pages/Contactuspage.jsx";
 import ProductShowcase from "./components/Productshowcase.jsx";
 import { useLoader } from "./context/LoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
+import AboutUs from "./pages/AboutUs.jsx";
+import ProviderGames from "./pages/ProviderGames.jsx";
 
-// Placeholder pages
-const HoneypotPage = () => (
+// Temporary pages
+const SimplePage = ({ title }) => (
   <div className="min-h-screen p-8 text-white">
-    <h1>Honeypot Game</h1>
+    <h1>{title}</h1>
   </div>
 );
-const CoinflipPage = () => (
-  <div className="min-h-screen p-8 text-white">
-    <h1>Coinflip Game</h1>
-  </div>
-);
-const PumpDumpPage = () => (
-  <div className="min-h-screen p-8 text-white">
-    <h1>Pump.Dump Game</h1>
-  </div>
-);
-const FuturesPage = () => (
-  <div className="min-h-screen p-8 text-white">
-    <h1>Futures Game</h1>
-  </div>
-);
-const ChatPage = () => (
-  <div className="min-h-screen p-8 text-white">
-    <h1>Chat</h1>
-  </div>
-);
+
+const HoneypotPage = () => <SimplePage title="Honeypot Game" />;
+const CoinflipPage = () => <SimplePage title="Coinflip Game" />;
+const PumpDumpPage = () => <SimplePage title="PumpDump Game" />;
+const FuturesPage = () => <SimplePage title="Futures Game" />;
+const ChatPage = () => <SimplePage title="Chat" />;
 
 //
-// 🔐 PRIVATE ROUTE WRAPPER
+// 🔐 PRIVATE ROUTE
 //
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   if (!token) {
-    // redirect to home with ?modal=auth to open login popup
     return <Navigate to="/?modal=auth&tab=login" replace />;
   }
   return children;
 };
 
 //
-// 🔓 AUTH MODAL HANDLER
+// 🔓 Auth Modal Wrapper
 //
 const AuthModalHandler = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [defaultTab, setDefaultTab] = useState("login");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   useEffect(() => {
     const modalParam = searchParams.get("modal");
     const tabParam = searchParams.get("tab");
+
     if (modalParam === "auth" && !isLoggedIn) {
       setIsAuthModalOpen(true);
       setDefaultTab(tabParam === "register" ? "register" : "login");
@@ -99,7 +83,7 @@ const AuthModalHandler = ({ children }) => {
     }
   }, [searchParams, isLoggedIn]);
 
-  const handleCloseAuthModal = () => {
+  const closeModal = () => {
     setIsAuthModalOpen(false);
     searchParams.delete("modal");
     searchParams.delete("tab");
@@ -108,7 +92,7 @@ const AuthModalHandler = ({ children }) => {
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
-    handleCloseAuthModal();
+    closeModal();
   };
 
   return (
@@ -117,7 +101,7 @@ const AuthModalHandler = ({ children }) => {
       {!isLoggedIn && (
         <LoginSignup
           isOpen={isAuthModalOpen}
-          onClose={handleCloseAuthModal}
+          onClose={closeModal}
           defaultTab={defaultTab}
           onLoginSuccess={handleLoginSuccess}
         />
@@ -127,120 +111,119 @@ const AuthModalHandler = ({ children }) => {
 };
 
 //
-// 🧭 APP ROUTES
+// 🧭 MAIN APP
 //
 function App() {
   const location = useLocation();
-const { loading, setLoading } = useLoader();
+  const { loading, setLoading } = useLoader();
 
-useEffect(() => {
-  setLoading(true);
-
-  const timer = setTimeout(() => {
-    setLoading(false);
-  }, 600); // small delay for smoothness
-
-  return () => clearTimeout(timer);
-}, [location]);
+  /* Global Loader on route change */
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, [location]);
 
   return (
-      <AuthModalHandler>
+    <AuthModalHandler>
       <>
-      {loading && <GlobalLoader />}
+        {loading && <GlobalLoader />}
+
         <Routes>
+          {/* ---------------- PUBLIC ROUTES inside Layout ---------------- */}
           <Route path="/" element={<Layout />}>
-            {/* ✅ PUBLIC ROUTES */}
             <Route index element={<Homepage />} />
             <Route path="game/honeypot" element={<HoneypotPage />} />
             <Route path="game/coinflip" element={<CoinflipPage />} />
             <Route path="game/pumpdump" element={<PumpDumpPage />} />
             <Route path="game/futures" element={<FuturesPage />} />
             <Route path="game/:gameId" element={<GamePage />} />
+
             <Route path="chat" element={<ChatPage />} />
             <Route path="authtest" element={<AuthTest />} />
+
             <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="blackjack" element={<Blackjack />} />
+
             <Route path="casino" element={<Casino />} />
             <Route path="casino/:category" element={<Casino />} />
+
             <Route path="providers" element={<ProvidersPage />} />
             <Route
               path="affiliate-program"
               element={<AffiliateLandingPage />}
             />
+
             <Route path="betting-rules" element={<BettingRules />} />
             <Route path="privacy" element={<PrivacyPolicyPage />} />
             <Route path="contact" element={<ContactUsPage />} />
             <Route path="product-data" element={<ProductShowcase />} />
+            <Route path="providers/:providerName" element={<ProviderGames />} />
             <Route
-              path="terms-and-condition"
-              element={<TermsAndConditions />}
-            />
-            <Route
-              path="responsible-gambling"
-              element={<ResponsibleGamblingPage />}
-            />
-            <Route path="provably-fair" element={<ProvablyFairPage />} />
-
-            {/* 🔒 PRIVATE ROUTES (require login) */}
-            <Route
-              path="settings"
+              path="about"
               element={
                 <PrivateRoute>
-                  <Settings />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="transactions"
-              element={
-                <PrivateRoute>
-                  <Transactions />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="bets"
-              element={
-                <PrivateRoute>
-                  <Bets />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="bet-history"
-              element={
-                <PrivateRoute>
-                  <Bets />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="affiliate"
-              element={
-                <PrivateRoute>
-                  <AffiliateProgram />
+                  <AboutUs />
                 </PrivateRoute>
               }
             />
           </Route>
+
+          {/* ---------------- PUBLIC ROUTES OUTSIDE LAYOUT ---------------- */}
+          <Route path="terms-and-condition" element={<TermsAndConditions />} />
+          <Route
+            path="responsible-gambling"
+            element={<ResponsibleGamblingPage />}
+          />
+          <Route path="provably-fair" element={<ProvablyFairPage />} />
+
+          {/* ---------------- PRIVATE ROUTES OUTSIDE LAYOUT ---------------- */}
+          <Route
+            path="settings"
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="transactions"
+            element={
+              <PrivateRoute>
+                <Transactions />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="bets"
+            element={
+              <PrivateRoute>
+                <Bets />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="bet-history"
+            element={
+              <PrivateRoute>
+                <Bets />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="affiliate"
+            element={
+              <PrivateRoute>
+                <AffiliateProgram />
+              </PrivateRoute>
+            }
+          />
         </Routes>
 
-      {/* ✅ Toast + Tidio Global */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        closeButton
-      />
-      <TidioChatButton />
-    </>
+        {/* Global UI */}
+        <ToastContainer theme="dark" />
+        <TidioChatButton />
+      </>
     </AuthModalHandler>
   );
 }
