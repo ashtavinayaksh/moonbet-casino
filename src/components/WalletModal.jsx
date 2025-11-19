@@ -992,7 +992,8 @@ const WalletModal = ({ isOpen, onClose }) => {
                   backdropFilter: "blur(15px)",
                 }}
               >
-                {["overview", "buycrypto", "settings"].map((tab) => (
+                {/* {["overview", "buycrypto", "settings"].map((tab) => ( */}
+                {["overview"].map((tab) => (
                   <motion.button
                     key={tab}
                     whileHover={{ scale: 1.05 }}
