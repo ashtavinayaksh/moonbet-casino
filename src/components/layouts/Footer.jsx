@@ -99,7 +99,7 @@ const Footer = () => {
       { label: "Betting Rules", path: "/betting-rules" },
       { label: "Provably Fair", path: "/provably-fair" },
       { label: "Responsible Gambling", path: "/responsible-gambling" },
-      { label: "RNG", path: "#" },
+      { label: "RNG", path: "/rng" },
     ],
   };
 

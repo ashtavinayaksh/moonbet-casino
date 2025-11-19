@@ -156,17 +156,6 @@ const BettingRules = () => {
     },
   ];
 
-  const scrollToSection = (sectionId) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const yOffset = -100;
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#080808]">
       {/* Hero Section */}
