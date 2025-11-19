@@ -84,10 +84,10 @@ const Footer = () => {
 
   const footerLinks = {
     aboutUs: [
+      { label: "About", path: "/about" },
       { label: "Affiliate", path: "/affiliate-program" },
       { label: "Privacy Policy", path: "/privacy" },
       { label: "Terms & Conditions", path: "/terms-and-condition" },
-      { label: "Responsible Gambling", path: "/responsible-gambling" },
       { label: "Contact Us", path: "/contact" },
     ],
     support: [
@@ -98,6 +98,7 @@ const Footer = () => {
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },
       { label: "Provably Fair", path: "/provably-fair" },
+      { label: "Responsible Gambling", path: "/responsible-gambling" },
       { label: "RNG", path: "#" },
     ],
   };

@@ -166,58 +166,61 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="terms-and-condition"
+              element={<TermsAndConditions />}
+            />
+            <Route
+              path="responsible-gambling"
+              element={<ResponsibleGamblingPage />}
+            />
+            <Route path="provably-fair" element={<ProvablyFairPage />} />
           </Route>
 
           {/* ---------------- PUBLIC ROUTES OUTSIDE LAYOUT ---------------- */}
-          <Route path="terms-and-condition" element={<TermsAndConditions />} />
-          <Route
-            path="responsible-gambling"
-            element={<ResponsibleGamblingPage />}
-          />
-          <Route path="provably-fair" element={<ProvablyFairPage />} />
 
           {/* ---------------- PRIVATE ROUTES OUTSIDE LAYOUT ---------------- */}
           <Route path="/" element={<Layout />}>
-          <Route
-            path="settings"
-            element={
-              <PrivateRoute>
-                <Settings />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="transactions"
-            element={
-              <PrivateRoute>
-              <Transactions />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="bets"
-            element={
-              <PrivateRoute>
-                <Bets />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="bet-history"
-            element={
-              <PrivateRoute>
-                <Bets />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="affiliate"
-            element={
-              <PrivateRoute>
-                <AffiliateProgram />
-              </PrivateRoute>
-            }
-          />
+            <Route
+              path="settings"
+              element={
+                <PrivateRoute>
+                  <Settings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="transactions"
+              element={
+                <PrivateRoute>
+                  <Transactions />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="bets"
+              element={
+                <PrivateRoute>
+                  <Bets />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="bet-history"
+              element={
+                <PrivateRoute>
+                  <Bets />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="affiliate"
+              element={
+                <PrivateRoute>
+                  <AffiliateProgram />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
 
