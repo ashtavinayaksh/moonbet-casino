@@ -177,6 +177,7 @@ function App() {
           <Route path="provably-fair" element={<ProvablyFairPage />} />
 
           {/* ---------------- PRIVATE ROUTES OUTSIDE LAYOUT ---------------- */}
+          <Route path="/" element={<Layout />}>
           <Route
             path="settings"
             element={
@@ -189,7 +190,7 @@ function App() {
             path="transactions"
             element={
               <PrivateRoute>
-                <Transactions />
+              <Transactions />
               </PrivateRoute>
             }
           />
@@ -217,6 +218,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          </Route>
         </Routes>
 
         {/* Global UI */}
