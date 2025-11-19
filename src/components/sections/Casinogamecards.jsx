@@ -127,7 +127,7 @@ const CasinoGameCards = () => {
 
       {/* Main Image */}
       <motion.div
-        className="flex items-center justify-center w-1/2 z-10"
+        className="flex items-center justify-center w-full z-10"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
