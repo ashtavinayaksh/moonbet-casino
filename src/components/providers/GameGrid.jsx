@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const GameGrid = ({ type = "all", filter = "", searchTerm = "", provider = "" }) => {
+const GameGrid = ({
+  type = "all",
+  filter = "",
+  searchTerm = "",
+  provider = "",
+}) => {
   const [games, setGames] = useState([]);
   const [visibleCount, setVisibleCount] = useState(48);
   const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -17,21 +24,21 @@ const GameGrid = ({ type = "all", filter = "", searchTerm = "", provider = "" })
         let apiUrl = "";
 
         // 🔥 If provider filter is active
-if (provider) {
-  apiUrl = `/wallet-service/api/games?provider=${provider}`;
-}
+        if (provider) {
+          apiUrl = `/wallet-service/api/games?provider=${provider}`;
+        }
 
-// 🔥 Other categories
-else {
-  const params = new URLSearchParams();
+        // 🔥 Other categories
+        else {
+          const params = new URLSearchParams();
 
-  if (type && type !== "all") params.append("type", type);
-  if (filter) params.append("sortBy", filter);
-  if (searchTerm) params.append("name", searchTerm);
+          if (type && type !== "all") params.append("type", type);
+          if (filter) params.append("sortBy", filter);
+          if (searchTerm) params.append("name", searchTerm);
 
-  const query = params.toString() ? `?${params.toString()}` : "";
-  apiUrl = `/wallet-service/api/games${query}`;
-}
+          const query = params.toString() ? `?${params.toString()}` : "";
+          apiUrl = `/wallet-service/api/games${query}`;
+        }
 
         console.log("🔗 FINAL GameGrid API:", apiUrl);
 
@@ -50,6 +57,12 @@ else {
 
     fetchGames();
   }, [type, filter, searchTerm, provider]);
+
+  const handlePlayNow = (gameName) => {
+    // Replace spaces with dashes for clean URLs
+    const gameSlug = encodeURIComponent(gameName);
+    navigate(`/game/${gameSlug}`);
+  };
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 48);
 
@@ -131,6 +144,7 @@ else {
                     />
                     <div className="absolute inset-0 bg-[#080808]/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
                       <motion.button
+                        onClick={() => handlePlayNow(game.name)}
                         className="px-4 py-2 rounded-full text-white font-semibold text-sm"
                         whileTap={{ scale: 0.9 }}
                       >
