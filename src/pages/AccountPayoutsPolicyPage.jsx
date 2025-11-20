@@ -212,10 +212,6 @@ const AccountPayoutsPolicyPage = () => {
                 style={{
                   borderRadius: "8px",
                   border: "1px solid rgba(255, 255, 255, 0.20)",
-                  background:
-                    activeSection === section.id
-                      ? "rgba(255, 255, 255, 0.1)"
-                      : "rgba(40, 39, 83, 0.50)",
                 }}
               >
                 <span className="text-gray-400 mr-2">{section.id}.</span>{" "}
@@ -1275,23 +1271,6 @@ const AccountPayoutsPolicyPage = () => {
             </div>
           </PolicySection>
         </div>
-
-        {/* Scroll to Top Button */}
-        <motion.button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-8 right-8 p-4 text-white transition-all z-50"
-          style={{
-            borderRadius: "8px",
-            border: "1px solid rgba(255, 255, 255, 0.40)",
-          }}
-          whileHover={{
-            scale: 1.1,
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-          }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <span className="text-2xl">↑</span>
-        </motion.button>
       </div>
     </div>
   );
