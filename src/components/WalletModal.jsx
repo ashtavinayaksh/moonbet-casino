@@ -580,34 +580,17 @@ const WalletModal = ({ isOpen, onClose }) => {
                 <div className="flex justify-center mb-6">
   <div className="bg-white p-4 rounded-xl relative w-40 h-40 flex items-center justify-center">
 
-    {/* BLURRED QR */}
+    {/* QR (Blur until a coin is selected) */}
     {qrCodeData && (
       <img
         src={qrCodeData}
         alt="QR Code"
-        className={`w-36 h-36 transition-all duration-300 
-          ${!selectedDepositCoin ? "blur-md opacity-40" : "blur-0 opacity-100"}`}
+        className={`w-36 h-36 transition-all duration-300
+          ${!selectedDepositCoin ? "blur-sm opacity-60" : "blur-0 opacity-100"}`}
       />
     )}
 
-    {/* Small lock icon (simple, not dramatic) */}
-    {!selectedDepositCoin && (
-      <div className="absolute inset-0 flex items-center justify-center text-gray-600">
-        <svg
-          className="w-8 h-8 opacity-60"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16 11V7a4 4 0 10-8 0v4m-2 0h12v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8h12z"
-          />
-        </svg>
-      </div>
-    )}
+    {/* Remove lock - nothing else */}
   </div>
 </div>
 
