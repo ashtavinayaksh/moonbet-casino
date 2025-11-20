@@ -41,9 +41,9 @@ import CareersPage from "./pages/CareersPage.jsx";
 import MoonbetAccessibility from "./pages/MoonbetAccessibility.jsx";
 import AccountPayoutsPolicyPage from "./pages/AccountPayoutsPolicyPage.jsx";
 import ModernSlavery from "./pages/ModernSlavery.jsx";
-import NotFound from "./pages/NotFound.jsx";
 import MoonbetComplaintsPolicy from "./pages/MoonbetComplaintsPolicy.jsx";
 import KYCPolicyPage from "./pages/KYCPolicyPage.jsx";
+import Premium404 from "./pages/Premium404.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -248,7 +248,7 @@ function App() {
               }
             />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Premium404/>} />
         </Routes>
 
         {/* Global UI */}
