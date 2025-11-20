@@ -103,6 +103,12 @@ const Footer = () => {
       { label: "Provably Fair", path: "/provably-fair" },
       { label: "Responsible Gambling", path: "/responsible-gambling" },
       { label: "RNG", path: "/rng" },
+      { label: "KYC Policy", path: "/kyc-Policy" },
+      {
+        label: "Moonbet Complaints Policy",
+        path: "/moonbet-complaints-policy",
+      },
+
       {
         label: "Moonbet Accessibility",
         path: "/moonbet-accessibility-statement",

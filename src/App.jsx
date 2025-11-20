@@ -42,6 +42,8 @@ import MoonbetAccessibility from "./pages/MoonbetAccessibility.jsx";
 import AccountPayoutsPolicyPage from "./pages/AccountPayoutsPolicyPage.jsx";
 import ModernSlavery from "./pages/ModernSlavery.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import MoonbetComplaintsPolicy from "./pages/MoonbetComplaintsPolicy.jsx";
+import KYCPolicyPage from "./pages/KYCPolicyPage.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -188,6 +190,11 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/moonbet-complaints-policy"
+              element={<MoonbetComplaintsPolicy />}
+            />
+            <Route path="/kyc-Policy" element={<KYCPolicyPage />} />
             <Route
               path="terms-and-condition"
               element={<TermsAndConditions />}
