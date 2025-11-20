@@ -94,6 +94,11 @@ const Footer = () => {
       { label: "Help Center", path: "/help" },
       { label: "Gaming Helpline", path: "/gaming-helpline" },
       { label: "Live Support", path: "/live-support" },
+      { label: "Careers", path: "/careers" },
+      {
+        label: "Moonbet Accessibility",
+        path: "/moonbet-accessibility-statement",
+      },
     ],
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },

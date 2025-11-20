@@ -37,6 +37,8 @@ import { useLoader } from "./context/LoaderContext";
 import GlobalLoader from "./components/GlobalLoader";
 import AboutUs from "./pages/AboutUs.jsx";
 import RNGTestingPolicy from "./pages/RNGTestingPolicy.jsx";
+import CareersPage from "./pages/CareersPage.jsx";
+import MoonbetAccessibility from "./pages/MoonbetAccessibility.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -150,6 +152,11 @@ function App() {
 
             <Route path="providers" element={<ProvidersPage />} />
             <Route path="providers/:slug" element={<ProvidersPage />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route
+              path="/moonbet-accessibility-statement"
+              element={<MoonbetAccessibility />}
+            />
             <Route
               path="affiliate-program"
               element={<AffiliateLandingPage />}
