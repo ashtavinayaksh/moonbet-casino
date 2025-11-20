@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+const randomBetId = () => {
+  return Math.floor(Math.random() * 1000) + 1;
+};
+
 const BetDetailsModal = ({ isOpen, onClose, betData }) => {
   const [isVisible, setIsVisible] = useState(false);
+  console.log("betData is:", betData)
 
   useEffect(() => {
     if (isOpen) {

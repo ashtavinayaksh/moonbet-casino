@@ -435,6 +435,15 @@ const HeroSection = () => {
             username: item.user || "Player***XXX",
             icon: `/moon/moon${(index % 3) + 1}.svg`,
             timeAgo: item.timeAgo,
+            gameName: item.game || "Unknown Game",
+            provider: "Moonbet Games",
+            betId: `auto-${Date.now()}-${index}`,
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString(),
+            multiplier: "—",
+            payout: item.amount,
+            originalCurrency: item.amount,
+            isLive: false
           }));
           setRecentWinsData(mapped);
         }
@@ -475,13 +484,23 @@ const HeroSection = () => {
   // ✅ When backend sends full recentWins array
   socket.on("recentWins", (data) => {
     const formatted = data.map((item, index) => ({
-      id: `${item.user}-${index}`,
-      gameImage: `/slots/img${(index % 9) + 1}.svg`,
-      amount: parseAmount(item.amount),
-      username: item.user || "Player***XXX",
-      icon: `/moon/moon${(index % 3) + 1}.svg`,
-      timeAgo: item.timeAgo || "Just now",
-    }));
+    id: `${item.user}-${index}`,
+    gameImage: `/slots/img${(index % 9) + 1}.svg`,
+    amount: parseAmount(item.amount),
+    username: item.user || "Player***XXX",
+    icon: `/moon/moon${(index % 3) + 1}.svg`,
+    timeAgo: item.timeAgo,
+
+    gameName: item.game || "Unknown Game",
+    provider: "Moonbet Games",
+    betId: `socket-${Date.now()}-${index}`,
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    multiplier: "—",
+    payout: parseAmount(item.amount),
+    originalCurrency: item.amount,
+    isLive: true
+}));
 
     setRecentWinsData(formatted);
   });
@@ -491,13 +510,22 @@ const HeroSection = () => {
     const index = Math.floor(Math.random() * 9); // pick random image
 
     const formattedSingle = {
-      id: `${item.user}-${Date.now()}`,
-      gameImage: `/slots/img${(index % 9) + 1}.svg`,
-      icon: `/moon/moon${(index % 3) + 1}.svg`,
-      amount: parseAmount(item.amount),
-      username: item.user,
-      timeAgo: "Just now",
-    };
+    id: `${item.user}-${Date.now()}`,
+    gameImage: `/slots/img${(index % 9) + 1}.svg`,
+    icon: `/moon/moon${(index % 3) + 1}.svg`,
+    amount: parseAmount(item.amount),
+    username: item.user,
+
+    gameName: item.game || "Unknown Game",
+    provider: "Moonbet Games",
+    betId: `single-${Date.now()}`,
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    multiplier: "—",
+    payout: parseAmount(item.amount),
+    originalCurrency: item.amount,
+    isLive: true
+};
 
     setRecentWinsData((prev) => [
       formattedSingle,
