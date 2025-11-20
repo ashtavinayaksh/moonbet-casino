@@ -89,6 +89,18 @@ const Footer = () => {
       { label: "Privacy Policy", path: "/privacy" },
       { label: "Terms & Conditions", path: "/terms-and-condition" },
       { label: "Contact Us", path: "/contact" },
+      {
+        label: "Disclaimer",
+        path: "/disclaimer",
+      },
+      {
+        label: "Cookie Policy",
+        path: "/cookie-policy",
+      },
+      {
+        label: "Aml Policy",
+        path: "/aml-policy",
+      },
     ],
     support: [
       { label: "Gaming Helpline", path: "/gaming-helpline" },
@@ -100,6 +112,10 @@ const Footer = () => {
       {
         label: "Dispute Resolution Policy",
         path: "/dispute-resolution-policy",
+      },
+      {
+        label: "Self Exclusion Policy",
+        path: "/self-exclusion-policy",
       },
     ],
     moonbet: [

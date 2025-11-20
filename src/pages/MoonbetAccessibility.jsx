@@ -57,7 +57,7 @@ const MoonbetAccessibility = () => {
           {/* Left Sidebar - Desktop Only */}
           <div className="hidden lg:block">
             <div className="sticky top-24">
-              <div className="wallet-btn3 rounded-2xl p-6">
+              <div className=" rounded-2xl p-6">
                 <p className="text-lg font-bold text-white mb-4">
                   Quick Navigation
                 </p>
@@ -88,7 +88,7 @@ const MoonbetAccessibility = () => {
               id="commitment"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Our Commitment
@@ -149,7 +149,7 @@ const MoonbetAccessibility = () => {
               id="compatibility"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Website Compatibility
@@ -213,7 +213,7 @@ const MoonbetAccessibility = () => {
               id="content"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Accessible Content
@@ -309,7 +309,7 @@ const MoonbetAccessibility = () => {
               id="navigation"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Navigation and Usability
@@ -388,7 +388,7 @@ const MoonbetAccessibility = () => {
               id="web3"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Cryptocurrency and Web3 Accessibility
@@ -452,7 +452,7 @@ const MoonbetAccessibility = () => {
               id="testing"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 User Experience Testing
@@ -529,7 +529,7 @@ const MoonbetAccessibility = () => {
               id="accommodation"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Accommodation Requests and Support
@@ -598,7 +598,7 @@ const MoonbetAccessibility = () => {
               id="feedback"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Feedback and Issue Reporting
@@ -709,7 +709,7 @@ const MoonbetAccessibility = () => {
               id="thirdparty"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Third-Party Content
@@ -760,7 +760,7 @@ const MoonbetAccessibility = () => {
               id="technical"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Technical Documentation
@@ -806,7 +806,7 @@ const MoonbetAccessibility = () => {
               id="limitations"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Known Limitations
@@ -867,7 +867,7 @@ const MoonbetAccessibility = () => {
               id="improvement"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Our Commitment to Improvement
@@ -922,7 +922,7 @@ const MoonbetAccessibility = () => {
               id="legal"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Legal Compliance
@@ -944,7 +944,7 @@ const MoonbetAccessibility = () => {
               id="contact"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-2 md:p-8"
+              className=" rounded-2xl p-2 md:p-8"
             >
               <p className="text-3xl font-bold text-white mb-4">
                 Contact Information

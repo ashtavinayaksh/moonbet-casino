@@ -33,7 +33,7 @@ const ModernSlavery = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="wallet-btn3 rounded-2xl pb-6 text-left"
+          className=" rounded-2xl pb-6 text-left"
         >
           <div className="flex items-center gap-4 ">
             <PolicyIcon />
@@ -51,7 +51,7 @@ const ModernSlavery = () => {
           className="space-y-6"
         >
           {/* Introduction */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <p className="text-gray-300 leading-relaxed text-sm md:text-base">
               At Moonbet, we are committed to conducting business ethically and
               combating modern slavery in all its forms, including forced labor,
@@ -73,9 +73,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Supplier and Partner Vetting */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Supplier and Partner Vetting
@@ -89,9 +89,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Employee and Contractor Protections */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Employee and Contractor Protections
@@ -106,9 +106,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Staff Training */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Staff Training
@@ -122,9 +122,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Transaction Monitoring */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Transaction Monitoring
@@ -139,9 +139,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Grievance and Reporting Mechanisms */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Grievance and Reporting Mechanisms
@@ -161,9 +161,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Regular Reviews and Compliance */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Regular Reviews and Compliance
@@ -177,9 +177,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Cooperation with Authorities */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Cooperation with Authorities
@@ -193,7 +193,7 @@ const ModernSlavery = () => {
           </div>
 
           {/* Commitment */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <p className="text-gray-300 leading-relaxed text-sm md:text-base">
               We are committed to transparency in confronting this complex
               issue. We welcome feedback to continually improve our ability to
@@ -203,9 +203,9 @@ const ModernSlavery = () => {
           </div>
 
           {/* Contact Section */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-lg md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               For questions or to report suspected modern slavery:
@@ -232,7 +232,7 @@ const ModernSlavery = () => {
           </div>
 
           {/* Footer Note */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <p className="text-gray-400 text-sm md:text-base text-left">
               This statement is made pursuant to applicable federal and state
               laws and will be reviewed and updated annually.

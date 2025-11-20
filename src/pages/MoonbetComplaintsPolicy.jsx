@@ -33,7 +33,7 @@ const MoonbetComplaintsPolicy = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="wallet-btn3 rounded-2xl pb-6 text-left"
+          className="rounded-2xl pb-6 text-left"
         >
           <div className="flex items-center gap-4 ">
             <PolicyIcon />
@@ -51,7 +51,7 @@ const MoonbetComplaintsPolicy = () => {
           className="space-y-6"
         >
           {/* Introduction */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <p className="text-gray-300 leading-relaxed text-sm md:text-base">
               At Moonbet, we strive to provide exceptional service and
               satisfactory gaming experiences to all our customers. However, if
@@ -61,9 +61,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* How to Submit a Complaint */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               How to Submit a Complaint
@@ -140,9 +140,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Complaint Handling Process */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Complaint Handling Process
@@ -208,9 +208,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Types of Complaints We Handle */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Types of Complaints We Handle
@@ -278,9 +278,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* What We Need to Investigate */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               What We Need to Investigate
@@ -330,9 +330,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Complaint Records */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Complaint Records
@@ -346,9 +346,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Escalation and Appeals */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Escalation and Appeals
@@ -431,9 +431,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Blockchain Transaction Disputes */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Blockchain Transaction Disputes
@@ -483,9 +483,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Our Commitment */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Our Commitment
@@ -543,9 +543,9 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Contact Information */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <h2
-              className="text-xl md:text-2xl font-bold text-white mb-4"
+              className="text-xl md:text-xl font-bold text-white mb-4"
               style={{ fontFamily: "Neuropolitical, sans-serif" }}
             >
               Contact Information
@@ -586,7 +586,7 @@ const MoonbetComplaintsPolicy = () => {
           </div>
 
           {/* Footer Note */}
-          <div className="wallet-btn3 rounded-2xl">
+          <div className=" rounded-2xl">
             <p className="text-gray-300 text-sm md:text-base text-left">
               We welcome your feedback. If you have concerns about this
               Complaints Policy or suggestions for improvement, please contact

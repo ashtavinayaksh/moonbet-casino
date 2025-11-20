@@ -45,6 +45,10 @@ import MoonbetComplaintsPolicy from "./pages/MoonbetComplaintsPolicy.jsx";
 import KYCPolicyPage from "./pages/KYCPolicyPage.jsx";
 import Premium404 from "./pages/Premium404.jsx";
 import DisputeResolutionPolicyPage from "./pages/DisputeResolutionPolicyPage.jsx";
+import SelfExclusionPolicyPage from "./pages/SelfExclusionPolicyPage.jsx";
+import DisclaimerPage from "./pages/DisclaimerPage.jsx";
+import CookiePolicy from "./pages/PrivacyPolicyPage";
+import AmlPolicy from "./pages/AmlPolicy.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -205,9 +209,18 @@ function App() {
               element={<DisputeResolutionPolicyPage />}
             />
             <Route
+              path="/self-exclusion-policy"
+              element={<SelfExclusionPolicyPage />}
+            />
+            <Route path="/disclaimer" element={<DisclaimerPage />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
+
+            <Route
               path="responsible-gambling"
               element={<ResponsibleGamblingPage />}
             />
+            <Route path="aml-policy" element={<AmlPolicy />} />
+
             <Route path="provably-fair" element={<ProvablyFairPage />} />
           </Route>
           {/* ---------------- PRIVATE ROUTES OUTSIDE LAYOUT ---------------- */}
