@@ -91,20 +91,22 @@ const Footer = () => {
       { label: "Contact Us", path: "/contact" },
     ],
     support: [
-      { label: "Help Center", path: "/help" },
       { label: "Gaming Helpline", path: "/gaming-helpline" },
       { label: "Live Support", path: "/live-support" },
       { label: "Careers", path: "/careers" },
-      {
-        label: "Moonbet Accessibility",
-        path: "/moonbet-accessibility-statement",
-      },
+      { label: "Account Payouts Policy", path: "/account-payout-policy" },
+
+      { label: "ModernSlavery", path: "/modern-slavery" },
     ],
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },
       { label: "Provably Fair", path: "/provably-fair" },
       { label: "Responsible Gambling", path: "/responsible-gambling" },
       { label: "RNG", path: "/rng" },
+      {
+        label: "Moonbet Accessibility",
+        path: "/moonbet-accessibility-statement",
+      },
     ],
   };
 

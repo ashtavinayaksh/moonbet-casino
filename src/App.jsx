@@ -39,6 +39,8 @@ import AboutUs from "./pages/AboutUs.jsx";
 import RNGTestingPolicy from "./pages/RNGTestingPolicy.jsx";
 import CareersPage from "./pages/CareersPage.jsx";
 import MoonbetAccessibility from "./pages/MoonbetAccessibility.jsx";
+import AccountPayoutsPolicyPage from "./pages/AccountPayoutsPolicyPage.jsx";
+import ModernSlavery from "./pages/ModernSlavery.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -152,7 +154,22 @@ function App() {
 
             <Route path="providers" element={<ProvidersPage />} />
             <Route path="providers/:slug" element={<ProvidersPage />} />
+
+            <Route path="product-data" element={<ProductShowcase />} />
+          </Route>
+
+          {/* ---------------- PUBLIC ROUTES OUTSIDE LAYOUT ---------------- */}
+          <Route path="/" element={<Layout />}>
+            <Route path="betting-rules" element={<BettingRules />} />
+            <Route path="privacy" element={<PrivacyPolicyPage />} />
+            <Route path="contact" element={<ContactUsPage />} />
             <Route path="/careers" element={<CareersPage />} />
+            <Route
+              path="/account-payout-policy"
+              element={<AccountPayoutsPolicyPage />}
+            />
+            <Route path="/modern-slavery" element={<ModernSlavery />} />
+
             <Route
               path="/moonbet-accessibility-statement"
               element={<MoonbetAccessibility />}
@@ -161,19 +178,7 @@ function App() {
               path="affiliate-program"
               element={<AffiliateLandingPage />}
             />
-
-            <Route path="betting-rules" element={<BettingRules />} />
-            <Route path="privacy" element={<PrivacyPolicyPage />} />
-            <Route path="contact" element={<ContactUsPage />} />
-            <Route path="product-data" element={<ProductShowcase />} />
-            <Route
-              path="about"
-              element={
-                <PrivateRoute>
-                  <AboutUs />
-                </PrivateRoute>
-              }
-            />
+            <Route path="about" element={<AboutUs />} />
             <Route
               path="rng"
               element={
@@ -192,9 +197,6 @@ function App() {
             />
             <Route path="provably-fair" element={<ProvablyFairPage />} />
           </Route>
-
-          {/* ---------------- PUBLIC ROUTES OUTSIDE LAYOUT ---------------- */}
-
           {/* ---------------- PRIVATE ROUTES OUTSIDE LAYOUT ---------------- */}
           <Route path="/" element={<Layout />}>
             <Route
