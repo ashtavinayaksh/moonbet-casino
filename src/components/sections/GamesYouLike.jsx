@@ -6,7 +6,7 @@ import MoonBetButton from "../ui-elements/MoonBetButton";
 import api from "../../api/axios";
 import axios from "axios";
 
-const GamesYouLike = ({provider, excludeGame}) => {
+const GamesYouLike = ({ provider, excludeGame }) => {
   const scrollContainerRef = useRef(null);
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -230,7 +230,7 @@ const GamesYouLike = ({provider, excludeGame}) => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              Games You Like
+              Games You May Like
             </motion.h3>
           </div>
 

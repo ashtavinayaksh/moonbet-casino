@@ -6,6 +6,7 @@ const CasinoGameCards = () => {
     {
       id: 1,
       icon: "/icons/casino.svg",
+      href: "/casino",
       title: "CASINO",
       description: "Dive into our in-house games, live casino and slots",
       img: "/category/img8.png",
@@ -16,6 +17,7 @@ const CasinoGameCards = () => {
     {
       id: 2,
       icon: "/icons/slots.svg",
+      href: "/slots",
       title: "SLOTS",
       img: "/category/img10.png",
       bg: "linear-gradient(107deg, rgba(10,43,188,0.10) 0%, rgba(10,43,188,0.30) 100%)",
@@ -25,6 +27,7 @@ const CasinoGameCards = () => {
     {
       id: 3,
       icon: "/icons/game-shows.svg",
+      href: "/casino/gameshows",
       title: "GAME SHOWS",
       img: "/category/img3.png",
       bg: "linear-gradient(107deg, rgba(240,119,48,0.10) 0%, rgba(240,119,48,0.30) 100%)",
@@ -34,6 +37,7 @@ const CasinoGameCards = () => {
     {
       id: 4,
       icon: "/icons/blackjack.svg",
+      href: "/blackjack",
       title: "BLACKJACK",
       description: "Dive into our in-house games, live casino and slots",
       img: "/category/img11.png",
@@ -44,6 +48,7 @@ const CasinoGameCards = () => {
     {
       id: 5,
       icon: "/icons/bacarrat-menu.svg",
+      href: "/baccarat",
       title: "BACCARAT",
       description: "Dive into our in-house games, live casino and slots",
       img: "/category/img6.png",

@@ -306,7 +306,7 @@ const GamePage = () => {
 
   return (
     <>
-      <div className="h-screen bg-[#080808] flex flex-col">
+      <div className="h-full bg-[#080808] flex flex-col">
         <div
           className="iframe-wrapper"
           style={{
@@ -320,7 +320,7 @@ const GamePage = () => {
             ref={iframeRef}
             src={iframeUrl}
             title={gameData?.name || "Game"}
-            className="w-full h-[80vh] border-none pointer-events-auto"
+            className="w-full  h-[82vh] border-none pointer-events-auto md:px-[10%] px-[4%]"
             allowFullScreen
           />
         </div>
@@ -329,9 +329,8 @@ const GamePage = () => {
         <div
           className="relative bg-white/5 backdrop-blur-xl border-t border-white/20"
           style={{
-            height: "12vh",
-            minHeight: "80px",
-            top: "-8%",
+            height: "10vh",
+            minHeight: "30px",
             background:
               "linear-gradient(135deg, rgba(30, 36, 51, 0.8) 0%, rgba(20, 25, 40, 0.9) 100%)",
             backdropFilter: "blur(20px)",

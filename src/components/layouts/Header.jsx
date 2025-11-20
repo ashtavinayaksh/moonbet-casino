@@ -1502,6 +1502,9 @@ const Header = ({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="flex-1 flex items-center justify-center gap-2 px-3 py-3 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
+                        onClick={() =>
+                          window.open("https://x.com/moonbetgames", "_blank")
+                        }
                       >
                         <img
                           src="/icons/twitter.svg"
@@ -1513,6 +1516,12 @@ const Header = ({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="flex-1 flex items-center justify-center gap-2 px-3 py-3 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
+                        onClick={() =>
+                          window.open(
+                            "https://www.telegram.com/moonbet.games/",
+                            "_blank"
+                          )
+                        }
                       >
                         <img
                           src="/icons/telegram.svg"
@@ -1524,6 +1533,12 @@ const Header = ({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="flex-1 flex items-center justify-center gap-2 px-3 py-3 bg-white/5 border border-gray-800 rounded-lg hover:bg-white/10 transition-all duration-200"
+                        onClick={() =>
+                          window.open(
+                            "https://www.instagram.com/moonbet.games/",
+                            "_blank"
+                          )
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
