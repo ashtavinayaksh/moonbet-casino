@@ -1,10 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ProvidersSection = () => {
   const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const navigate = useNavigate();
 
   const providers = [
     { id: 1, name: "Pragmatic Play", logo: "/providers/vector1.svg" },
@@ -18,6 +21,14 @@ const ProvidersSection = () => {
     { id: 9, name: "3oaks", logo: "/providers/3oaks.svg" },
     { id: 10, name: "Nolimit", logo: "/providers/nolimit.svg" },
   ];
+
+  const toSlug = (name) =>
+    name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
+
+  const handleProviderClick = (providerName) => {
+    const slug = toSlug(providerName);
+    navigate(`/providers/${slug}`); // ✅ FINAL STEP
+  };
 
   const checkScrollPosition = () => {
     const container = scrollContainerRef.current;
@@ -156,6 +167,7 @@ const ProvidersSection = () => {
             {providers.map((provider, i) => (
               <motion.div
                 key={provider.id}
+                onClick={() => handleProviderClick(provider.name)}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
