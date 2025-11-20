@@ -147,7 +147,7 @@ const BettingRules = () => {
     {
       term: "Provable RNG",
       definition:
-        "Blockchain-based random number generation verifiable on-chain.",
+        "Blockchain‐based random number generation verifiable on-chain.",
     },
     {
       term: "Wagering Requirement",
@@ -155,6 +155,17 @@ const BettingRules = () => {
         "Multiplier on bonus funds before conversion to withdrawable balance.",
     },
   ];
+
+  const scrollToSection = (sectionId) => {
+    setActiveSection(sectionId);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const yOffset = -100;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#080808]">
@@ -175,43 +186,15 @@ const BettingRules = () => {
               transparent, provably fair, and protected by secure crypto
               protocols. This detailed guide outlines claim procedures, general
               principles, game-specific rules, payout mechanics, and responsible
-              gaming measures.
+              gaming measures. Each section spells out exactly how Moonbet
+              handles your bets so you can play with confidence.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Sticky Navigation */}
-      <div className="sticky top-0 z-40 bg-[#080808]/95 backdrop-blur-md border-b border-white/10">
-        <div className="container max-w-7xl mx-auto px-4 py-4">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            {sections.map((section) => (
-              <button
-                key={section.id}
-                onClick={() => scrollToSection(section.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-all
-                         ${
-                           activeSection === section.id
-                             ? "bg-gradient-to-r from-[#F07730]/30 to-[#EFD28E]/30 border border-[#F07730]/50"
-                             : "bg-white/5 border border-white/10 hover:bg-white/10"
-                         }`}
-              >
-                <span className="text-lg">
-                  {typeof section.icon === "string"
-                    ? section.icon
-                    : section.icon}
-                </span>
-                <span className="text-sm text-gray-300 hidden md:inline">
-                  {section.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="container max-w-7xl mx-auto px-4 py-12">
+      <div className="container max-w-7xl mx-auto px-2 md:px-4 py-6 md:py-12">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Sidebar - Desktop Only */}
           <div className="hidden lg:block">
@@ -247,10 +230,9 @@ const BettingRules = () => {
               id="claims"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <AlertCircle className="w-8 h-8 text-[#F07730]" />
+              <p className="text-3xl font-bold text-white mb-4">
                 1. Claims and Protests
               </p>
               <p className="text-gray-400 mb-6">
@@ -268,37 +250,17 @@ const BettingRules = () => {
                   >
                     support@moonbet.games
                   </a>
+                  . Include your account ID, transaction hash or bet reference,
+                  timestamped screenshot of the game result, and a concise
+                  explanation.
                 </p>
 
-                <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                  <h4 className="text-white font-bold mb-3">
-                    Include in your complaint:
-                  </h4>
-                  <ul className="space-y-2">
-                    {[
-                      "Your account ID",
-                      "Transaction hash or bet reference",
-                      "Timestamped screenshot of the game result",
-                      "A concise explanation",
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                        <span className="text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex items-center gap-4 p-4 bg-[#F07730]/10 rounded-xl">
-                  <Clock className="w-6 h-6 text-[#F07730]" />
-                  <div>
-                    <p className="text-white font-bold">Response Timeline</p>
-                    <p className="text-gray-300 text-sm">
-                      Acknowledgment within 48 hours • Resolution within 7
-                      business days
-                    </p>
-                  </div>
-                </div>
+                <p className="text-gray-300">
+                  Moonbet will acknowledge within 48 hours and resolve disputes,
+                  either approving a refund or providing a detailed response
+                  within 7 business days. Claims received after 14 days are
+                  automatically declined.
+                </p>
               </div>
             </motion.section>
 
@@ -307,10 +269,9 @@ const BettingRules = () => {
               id="general"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <Shield className="w-8 h-8 text-[#F07730]" />
+              <p className="text-3xl font-bold text-white mb-4">
                 2. General Betting Principles
               </p>
               <p className="text-gray-400 mb-6">
@@ -327,19 +288,17 @@ const BettingRules = () => {
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Once you confirm a wager, it is{" "}
-                        <span className="text-[#F07730] font-bold">
-                          irrevocable
-                        </span>
-                        . Always verify game type, stake, and settings before
-                        confirming.
+                        Once you confirm a wager, it is irrevocable. Always
+                        verify game type, stake, and settings (volatility, rows,
+                        bet size) before confirming.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
                         Moonbet may void or adjust wagers only for clear
-                        technical errors or rule violations.
+                        technical errors or rule violations (e.g., system
+                        malfunction).
                       </span>
                     </li>
                   </ul>
@@ -353,12 +312,9 @@ const BettingRules = () => {
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        All casino games use{" "}
-                        <span className="text-[#F07730] font-bold">
-                          blockchain-based RNG
-                        </span>{" "}
-                        with open shuffles or provable algorithms. Game results
-                        are publicly auditable on-chain.
+                        All casino games use blockchain-based RNG with open
+                        shuffles or provable algorithms. Game results are
+                        publicly auditable on-chain.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
@@ -387,7 +343,7 @@ const BettingRules = () => {
                     <li className="flex items-start gap-3">
                       <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        In rare cases of smart-contract malfunction, Moonbet
+                        In rare cases of smart‐contract malfunction, Moonbet
                         will issue refunds once the issue is verified and fixed.
                       </span>
                     </li>
@@ -401,10 +357,9 @@ const BettingRules = () => {
               id="games"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">🎮</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 3. Eligible Games and Bet Types
               </p>
               <p className="text-gray-400 mb-6">
@@ -412,81 +367,110 @@ const BettingRules = () => {
                 structures.
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <p className="text-lg font-bold text-white mb-3">
+              <div className="space-y-6">
+                <div>
+                  <p className="text-xl font-bold text-white mb-3">
                     3.1 Slot Games
                   </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Single Spin:
-                      </span>{" "}
-                      Stake per spin × paylines
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Single Spin Wager:
+                        </span>{" "}
+                        Stake per spin multiplied by the number of paylines.
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Bonus Rounds:
-                      </span>{" "}
-                      Follow same stake-per-line rule
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Bonus Rounds & Free Spins:
+                        </span>{" "}
+                        Bets placed during bonus features follow the same
+                        stake-per-line rule.
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Autoplay:
-                      </span>{" "}
-                      Must set loss limit
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <p className="text-lg font-bold text-white mb-3">
-                    3.2 Card & Live Games
-                  </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Table Bet:
-                      </span>{" "}
-                      Stake against dealer
-                    </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Side Bets:
-                      </span>{" "}
-                      Separate payout tables
-                    </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Time Limits:
-                      </span>{" "}
-                      Confirm before "no more bets"
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Autoplay Mode:
+                        </span>{" "}
+                        Automated spins at chosen stake; must set loss limit to
+                        prevent runaway bets.
+                      </span>
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <p className="text-lg font-bold text-white mb-3">
-                    3.3 Special Games
+                <div>
+                  <p className="text-xl font-bold text-white mb-3">
+                    3.2 Card Games & Live Dealer Titles
                   </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Ball Drop:
-                      </span>{" "}
-                      Stake per ball (Plinko)
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">Table Bet:</span>{" "}
+                        Stake placed against dealer on outcomes (e.g.,
+                        Player/Banker in baccarat).
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Volatility:
-                      </span>{" "}
-                      Low, Medium, High settings
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">Side Bets:</span>{" "}
+                        Optional wagers (e.g., pairs in blackjack) follow
+                        separate payout tables.
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Row Count:
-                      </span>{" "}
-                      8-16 rows adjust multipliers
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Time Limits:
+                        </span>{" "}
+                        Bets must be confirmed before dealer announces "no more
+                        bets." Late wagers are void.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-xl font-bold text-white mb-3">
+                    3.3 Special Games (Like Plinko)
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Ball Drop Wager:
+                        </span>{" "}
+                        Stake per ball. Players choose number of rows and
+                        volatility.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Volatility Settings:
+                        </span>{" "}
+                        Low, Medium, High alter multiplier distribution (see
+                        Section 6).
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">Row Count:</span>{" "}
+                        8–16 rows adjust maximum multiplier potential versus hit
+                        frequency.
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -498,10 +482,9 @@ const BettingRules = () => {
               id="limits"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <DollarSign className="w-8 h-8 text-[#F07730]" />
+              <p className="text-3xl font-bold text-white mb-4">
                 4. Stake Limits and Controls
               </p>
               <p className="text-gray-400 mb-6">
@@ -509,56 +492,48 @@ const BettingRules = () => {
                 stability.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-gradient-to-br from-[#F07730]/20 to-transparent rounded-xl p-6 border border-[#F07730]/30">
-                  <p className="text-lg font-bold text-white mb-4">
-                    Default Limits
-                  </p>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Minimum Stake:</span>
-                      <span className="text-[#F07730] font-bold">
-                        0.10 USDT
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Maximum Stake:</span>
-                      <span className="text-[#F07730] font-bold">100 USDT</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">VIP Maximum:</span>
-                      <span className="text-[#F07730] font-bold">
-                        1,000 USDT
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <p className="text-lg font-bold text-white mb-4">
-                    Player Controls
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Set personalized daily spend caps
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Configure loss limits in settings
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Dynamic caps based on VIP status
-                      </span>
-                    </li>
-                  </ul>
-                </div>
+              <div className="space-y-4">
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Default Minimum Stake:
+                      </span>{" "}
+                      0.10 USDT (or equivalent token).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Default Maximum Stake:
+                      </span>{" "}
+                      100 USDT per spin/drop; high‐roller tables and VIP games
+                      may allow up to 1,000 USDT.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Dynamic Caps:
+                      </span>{" "}
+                      Moonbet may adjust limits per account or game based on
+                      observed risk, suspicious activity, or VIP status.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Player Controls:
+                      </span>{" "}
+                      Users can set personalized daily spend and loss caps in
+                      their account settings.
+                    </span>
+                  </li>
+                </ul>
               </div>
             </motion.section>
 
@@ -567,10 +542,9 @@ const BettingRules = () => {
               id="settlement"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">💰</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 5. Settlement and Payout Mechanics
               </p>
               <p className="text-gray-400 mb-6">
@@ -582,19 +556,19 @@ const BettingRules = () => {
                   <p className="text-xl font-bold text-white mb-3">
                     5.1 Instant On-Chain Payouts
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     <li className="flex items-start gap-3">
-                      <ChevronRight className="w-5 h-5 text-[#F07730] mt-0.5" />
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Winnings disbursed immediately via the same wallet used
-                        for betting
+                        Winnings are disbursed immediately via the same wallet
+                        used for betting.
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <ChevronRight className="w-5 h-5 text-[#F07730] mt-0.5" />
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Payout transactions generate on-chain record for
-                        real-time verification
+                        Payout transactions generate an on-chain record you can
+                        verify in real time.
                       </span>
                     </li>
                   </ul>
@@ -604,39 +578,49 @@ const BettingRules = () => {
                   <p className="text-xl font-bold text-white mb-3">
                     5.2 Refunds and Voided Bets
                   </p>
-                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                    <p className="text-white font-bold mb-2">
-                      Voided Scenarios:
-                    </p>
-                    <ul className="grid md:grid-cols-2 gap-2">
-                      <li className="text-gray-300 text-sm">• Game crash</li>
-                      <li className="text-gray-300 text-sm">
-                        • Network failure
-                      </li>
-                      <li className="text-gray-300 text-sm">
-                        • Wager after window closed
-                      </li>
-                      <li className="text-gray-300 text-sm">
-                        • System malfunction
-                      </li>
-                    </ul>
-                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Voided Scenarios:
+                        </span>{" "}
+                        Game crash, network failure, or wager placed after
+                        betting window closed.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Refund Process:
+                        </span>{" "}
+                        Voided stakes return instantly. You should watch your
+                        wallet balance update on-chain.
+                      </span>
+                    </li>
+                  </ul>
                 </div>
 
                 <div>
                   <p className="text-xl font-bold text-white mb-3">
                     5.3 Transaction Fees
                   </p>
-                  <div className="flex items-center gap-4 p-4 bg-[#F07730]/10 rounded-xl">
-                    <DollarSign className="w-6 h-6 text-[#F07730]" />
-                    <div>
-                      <p className="text-white font-bold">Zero Platform Fees</p>
-                      <p className="text-gray-300 text-sm">
-                        Moonbet charges no withdrawal fees • Only blockchain
-                        network gas fees apply
-                      </p>
-                    </div>
-                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        Moonbet charges no platform withdrawal fees.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        Only blockchain network gas fees apply, and those are
+                        handled by your wallet provider.
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </motion.section>
@@ -646,10 +630,9 @@ const BettingRules = () => {
               id="volatility"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">📊</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 6. Payout Structures and Volatility
               </p>
               <p className="text-gray-400 mb-6">
@@ -658,64 +641,70 @@ const BettingRules = () => {
 
               <div className="space-y-6">
                 <div>
-                  <p className="text-xl font-bold text-white mb-4">
+                  <p className="text-xl font-bold text-white mb-3">
                     6.1 Plinko Multipliers
                   </p>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/30">
-                      <h4 className="text-green-400 font-bold mb-2">
-                        Low Volatility
-                      </h4>
-                      <p className="text-gray-300 text-sm">
-                        0.5× - 10× multipliers
-                      </p>
-                      <p className="text-gray-400 text-xs mt-1">
-                        Frequent small wins
-                      </p>
-                    </div>
-                    <div className="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/30">
-                      <h4 className="text-yellow-400 font-bold mb-2">
-                        Medium Volatility
-                      </h4>
-                      <p className="text-gray-300 text-sm">0.5× - 50× spread</p>
-                      <p className="text-gray-400 text-xs mt-1">
-                        Balanced risk/reward
-                      </p>
-                    </div>
-                    <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/30">
-                      <h4 className="text-red-400 font-bold mb-2">
-                        High Volatility
-                      </h4>
-                      <p className="text-gray-300 text-sm">
-                        0.2× - 1,000× range
-                      </p>
-                      <p className="text-gray-400 text-xs mt-1">
-                        Rare massive payouts
-                      </p>
-                    </div>
-                  </div>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Low Volatility:
+                        </span>{" "}
+                        Multipliers clustered between 0.5×–10× for frequent
+                        small wins.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Medium Volatility:
+                        </span>{" "}
+                        Spread 0.5×–50× balancing hits and occasional big
+                        rewards.
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          High Volatility:
+                        </span>{" "}
+                        Wide range 0.2×–1,000×; rare but massive potential
+                        payouts (&lt;0.002% chance for max).
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Row Impact:
+                        </span>{" "}
+                        More rows increase maximum multiplier but lower hit
+                        frequency; fewer rows boost consistency.
+                      </span>
+                    </li>
+                  </ul>
                 </div>
 
                 <div>
                   <p className="text-xl font-bold text-white mb-3">
                     6.2 Slot RTP Variance
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     <li className="flex items-start gap-3">
-                      <span className="text-[#F07730]">•</span>
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Each slot lists its{" "}
-                        <span className="text-[#F07730] font-bold">
-                          Return to Player (RTP)
-                        </span>{" "}
-                        percentage (90%-98%)
+                        Each slot lists its Return to Player (RTP) percentage
+                        (e.g., 90%–98%).
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="text-[#F07730]">•</span>
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Higher RTP games offer steadier returns; low-RTP titles
-                        may feature bigger jackpot potential
+                        Higher RTP games offer steadier returns; low‐RTP titles
+                        may feature bigger jackpot potential.
                       </span>
                     </li>
                   </ul>
@@ -725,18 +714,19 @@ const BettingRules = () => {
                   <p className="text-xl font-bold text-white mb-3">
                     6.3 Table & Live Dealer Payouts
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     <li className="flex items-start gap-3">
-                      <span className="text-[#F07730]">•</span>
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Standard pay tables displayed before each bet window
+                        Standard pay tables are displayed before each bet window
+                        (e.g., Blackjack pays 3:2 on naturals).
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
-                      <span className="text-[#F07730]">•</span>
+                      <span className="text-[#F07730] mt-1">•</span>
                       <span className="text-gray-300">
-                        Side bet odds clearly listed on game UI (e.g., Perfect
-                        Pairs 25:1)
+                        Side bet odds (e.g., Perfect Pairs 25:1) clearly listed
+                        on game UI.
                       </span>
                     </li>
                   </ul>
@@ -749,31 +739,38 @@ const BettingRules = () => {
               id="fairness"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <Shield className="w-8 h-8 text-[#F07730]" />
-                7. Smart-Contract and Provable Fairness Audits
+              <p className="text-3xl font-bold text-white mb-4">
+                7. Smart‐Contract and Provable Fairness Audits
               </p>
               <p className="text-gray-400 mb-6">
                 Transparency measures ensuring game integrity.
               </p>
 
-              <div className="space-y-4">
-                {[
-                  "All RNG logic and shuffle contracts are open-source",
-                  "Independent third-party audits conducted quarterly",
-                  "Reports published on Moonbet's Transparency page",
-                  "Players can verify individual game seeds and outcomes via on-chain proof tools",
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 p-4 bg-white/5 rounded-xl"
-                  >
-                    <CheckCircle className="w-6 h-6 text-[#F07730] mt-0.5" />
-                    <span className="text-gray-300">{item}</span>
-                  </div>
-                ))}
+              <div className="space-y-3">
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      All RNG logic and shuffle contracts are open-source.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      Independent third-party audits are conducted quarterly;
+                      reports published on Moonbet's Transparency page.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      Players can verify individual game seeds and outcomes via
+                      on-chain proof tools linked in the game lobby.
+                    </span>
+                  </li>
+                </ul>
               </div>
             </motion.section>
 
@@ -782,47 +779,61 @@ const BettingRules = () => {
               id="promos"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">🎁</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 8. Promotional Bet Conditions
               </p>
               <p className="text-gray-400 mb-6">
                 Rules for wagering bonuses, free spins, and rakeback.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-6">
                 <div>
-                  <p className="text-lg font-bold text-white mb-3">
-                    8.1 Bonus Wagering
+                  <p className="text-xl font-bold text-white mb-3">
+                    8.1 Bonus Wagering Requirements
                   </p>
-                  <ul className="space-y-2">
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Welcome Bonus:
-                      </span>{" "}
-                      Must wager on Plinko/slots before withdrawal
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Welcome Bonus:
+                        </span>{" "}
+                        Must wager the bonus amount on Plinko or slots before
+                        withdrawal.
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      <span className="text-[#F07730] font-bold">
-                        Free Spins:
-                      </span>{" "}
-                      Winnings convert to bonus with wagering requirements
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        <span className="text-white font-bold">
+                          Free Spins:
+                        </span>{" "}
+                        Winnings from free spins convert to bonus balance with
+                        certain wagering requirements.
+                      </span>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <p className="text-lg font-bold text-white mb-3">
-                    8.2 VIP Rakeback
+                  <p className="text-xl font-bold text-white mb-3">
+                    8.2 Rakeback for VIPs
                   </p>
-                  <ul className="space-y-2">
-                    <li className="text-gray-300">
-                      • Earn rakeback on net losses across all games
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        VIP players earn rakeback on net losses across all
+                        casino games.
+                      </span>
                     </li>
-                    <li className="text-gray-300">
-                      • Weekly credits as withdrawable funds
+                    <li className="flex items-start gap-3">
+                      <span className="text-[#F07730] mt-1">•</span>
+                      <span className="text-gray-300">
+                        Rakeback credited weekly as withdrawable funds.
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -834,34 +845,47 @@ const BettingRules = () => {
               id="fraud"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">🔒</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 9. Cancellation and Fraud Prevention
               </p>
               <p className="text-gray-400 mb-6">
                 How Moonbet handles suspicious activity and enforces rules.
               </p>
 
-              <div className="space-y-4">
-                <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/30">
-                  <p className="text-red-400 font-bold mb-2">
-                    Security Measures
-                  </p>
-                  <ul className="space-y-2 text-gray-300">
-                    <li>
-                      • KYC optional but required for bonuses or VIP status
-                    </li>
-                    <li>
-                      • Automated monitoring flags irregular play patterns
-                    </li>
-                    <li>• Accounts may be suspended pending review</li>
-                    <li>
-                      • Report wallet compromise immediately for account freeze
-                    </li>
-                  </ul>
-                </div>
+              <div className="space-y-3">
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Self‐Exclusion & Account Verification:
+                      </span>{" "}
+                      KYC optional but required for bonuses or VIP status.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Fraud Detection:
+                      </span>{" "}
+                      Automated monitoring flags irregular play patterns;
+                      accounts may be suspended pending review.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Unauthorised Transactions:
+                      </span>{" "}
+                      Report wallet compromise immediately; Moonbet will freeze
+                      account and transactions until resolved.
+                    </span>
+                  </li>
+                </ul>
               </div>
             </motion.section>
 
@@ -870,69 +894,57 @@ const BettingRules = () => {
               id="responsible"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">❤️</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 10. Responsible Gaming and Support
               </p>
               <p className="text-gray-400 mb-6">
                 Tools for safe play and where to seek help.
               </p>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-lg font-bold text-white mb-3">
-                    Player Protection Tools
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Deposit/Loss Limits (daily, weekly, monthly)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Time-Outs (24 hours to 30 days)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-[#F07730] mt-0.5" />
-                      <span className="text-gray-300">
-                        Self-Exclusion (permanent ban option)
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <p className="text-lg font-bold text-white mb-3">
-                    Support Channels
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <span className="text-[#F07730]">•</span>
-                      <span className="text-gray-300">
-                        24/7 live chat support
-                      </span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-[#F07730]">•</span>
+              <div className="space-y-3">
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Deposit/Loss Limits:
+                      </span>{" "}
+                      Set personal caps daily, weekly, or monthly.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">Time-Outs:</span>{" "}
+                      Temporary session breaks of 24 hours up to 30 days.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">
+                        Self-Exclusion:
+                      </span>{" "}
+                      Permanent ban option requiring identity confirmation.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-[#F07730] mt-1">•</span>
+                    <span className="text-gray-300">
+                      <span className="text-white font-bold">Support:</span>{" "}
+                      24/7 live chat, email at{" "}
                       <a
                         href="mailto:support@moonbet.games"
-                        className="text-gray-300 hover:text-[#F07730]"
+                        className="text-[#F07730] underline hover:text-[#EFD28E]"
                       >
                         support@moonbet.games
                       </a>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-[#F07730]">•</span>
-                      <span className="text-gray-300">Discord community</span>
-                    </li>
-                  </ul>
-                </div>
+                      , and Discord community for guidance and resources.
+                    </span>
+                  </li>
+                </ul>
               </div>
             </motion.section>
 
@@ -941,10 +953,9 @@ const BettingRules = () => {
               id="glossary"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="wallet-btn3 rounded-2xl p-8"
+              className="wallet-btn3 rounded-2xl p-2 md:p-8"
             >
-              <p className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
-                <span className="text-2xl">📖</span>
+              <p className="text-3xl font-bold text-white mb-4">
                 11. Glossary of Key Terms
               </p>
               <p className="text-gray-400 mb-6">
