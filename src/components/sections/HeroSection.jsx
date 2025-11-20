@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BetDetailsModal from "../ui-elements/BetDetailsModal";
+import { useWalletSocket } from "../../context/WalletSocketContext";
 import axios from "axios";
 
 const formatAmount = (amountStr) => {
@@ -27,6 +28,7 @@ const formatAmount = (amountStr) => {
 
 const HeroSection = () => {
   // State for modal
+  const socket = useWalletSocket();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBetData, setSelectedBetData] = useState(null);
 
@@ -445,31 +447,69 @@ const HeroSection = () => {
   }, [isPaused]);
 
   // Real-time recent wins via socket
-useEffect(() => {
-  recentWinsSocket.on("recentWins", (data) => {
-    setRecentWinsData(data);
+  useEffect(() => {
+  if (!socket) return;
+
+  const getCurrencySymbol = (currency) => {
+    switch (currency?.toUpperCase()) {
+      case "USD": return "$";
+      case "EUR": return "€";
+      case "GBP": return "£";
+      case "INR": return "₹";
+      case "JPY": return "¥";
+      case "BTC": return "₿";
+      case "ETH": return "Ξ";
+      case "SOL": return "◎";
+      default: return "";
+    }
+  };
+
+  const parseAmount = (amountStr) => {
+    if (!amountStr) return "$0.00";
+    const parts = amountStr.split(" ");
+    const amount = parseFloat(parts[0] || 0);
+    const currency = parts[1] || "USD";
+    return `${getCurrencySymbol(currency)}${amount.toFixed(2)}`;
+  };
+
+  // ✅ When backend sends full recentWins array
+  socket.on("recentWins", (data) => {
+    const formatted = data.map((item, index) => ({
+      id: `${item.user}-${index}`,
+      gameImage: `/slots/img${(index % 9) + 1}.svg`,
+      amount: parseAmount(item.amount),
+      username: item.user || "Player***XXX",
+      icon: `/moon/moon${(index % 3) + 1}.svg`,
+      timeAgo: item.timeAgo || "Just now",
+    }));
+
+    setRecentWinsData(formatted);
   });
 
-  recentWinsSocket.on("recentWins:new", (singleWin) => {
-  const safeWin = {
-    id: Date.now(),
-    gameImage: `/slots/img${Math.floor(Math.random() * 9) + 1}.svg`,
-    icon: `/moon/moon${Math.floor(Math.random() * 3) + 1}.svg`,
-    amount: formatAmount(singleWin.amount),
-    username: singleWin.user,
-    gameName: singleWin.game,
-    timeAgo: singleWin.timeAgo || "Just now",
-    isLive: true,
-  };
+  // ✅ When backend sends NEW SINGLE WIN
+  socket.on("recentWins:new", (item) => {
+    const index = Math.floor(Math.random() * 9); // pick random image
 
-  setRecentWinsData(prev => [safeWin, ...prev.slice(0, 19)]);
-});
+    const formattedSingle = {
+      id: `${item.user}-${Date.now()}`,
+      gameImage: `/slots/img${(index % 9) + 1}.svg`,
+      icon: `/moon/moon${(index % 3) + 1}.svg`,
+      amount: parseAmount(item.amount),
+      username: item.user,
+      timeAgo: "Just now",
+    };
+
+    setRecentWinsData((prev) => [
+      formattedSingle,
+      ...prev.slice(0, 19),
+    ]);
+  });
 
   return () => {
-    recentWinsSocket.off("recentWins");
-    recentWinsSocket.off("recentWins:new");
+    socket.off("recentWins");
+    socket.off("recentWins:new");
   };
-}, []);
+}, [socket]);
 
   // Mobile data (first 7)
   const mobileWinsData = recentWinsData.slice(0, 7);
