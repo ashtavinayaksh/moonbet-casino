@@ -297,7 +297,7 @@ const Footer = () => {
                   <p className="text-sm sm:text-base font-semibold text-white mb-1 md:mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent uppercase text-[#E2E2E2]">
                     Moonbet
                   </p>
-                  <ul className="flex flex-col gap-2 md:gap-3">
+                  <ul className="flex flex-col gap-2 md:gap-3 mt-5">
                     {footerLinks.moonbet.map((link, index) => (
                       <li key={index}>
                         <Link
