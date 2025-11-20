@@ -44,6 +44,7 @@ import ModernSlavery from "./pages/ModernSlavery.jsx";
 import MoonbetComplaintsPolicy from "./pages/MoonbetComplaintsPolicy.jsx";
 import KYCPolicyPage from "./pages/KYCPolicyPage.jsx";
 import Premium404 from "./pages/Premium404.jsx";
+import DisputeResolutionPolicyPage from "./pages/DisputeResolutionPolicyPage.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -200,6 +201,10 @@ function App() {
               element={<TermsAndConditions />}
             />
             <Route
+              path="/dispute-resolution-policy"
+              element={<DisputeResolutionPolicyPage />}
+            />
+            <Route
               path="responsible-gambling"
               element={<ResponsibleGamblingPage />}
             />
@@ -248,7 +253,7 @@ function App() {
               }
             />
           </Route>
-          <Route path="*" element={<Premium404/>} />
+          <Route path="*" element={<Premium404 />} />
         </Routes>
 
         {/* Global UI */}

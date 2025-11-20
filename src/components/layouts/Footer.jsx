@@ -97,6 +97,10 @@ const Footer = () => {
       { label: "Account Payouts Policy", path: "/account-payout-policy" },
 
       { label: "ModernSlavery", path: "/modern-slavery" },
+      {
+        label: "Dispute Resolution Policy",
+        path: "/dispute-resolution-policy",
+      },
     ],
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },
