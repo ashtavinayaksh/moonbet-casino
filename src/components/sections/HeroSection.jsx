@@ -4,6 +4,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import BetDetailsModal from "../ui-elements/BetDetailsModal";
 import axios from "axios";
 
+const formatAmount = (amountStr) => {
+  if (!amountStr) return "$0.00";
+
+  const parts = amountStr.split(" ");
+  const amt = parseFloat(parts[0] || 0);
+  const currency = parts[1] || "USD";
+
+  const symbols = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    INR: "₹",
+    JPY: "¥",
+    BTC: "₿",
+    ETH: "Ξ",
+    SOL: "◎",
+  };
+
+  return `${symbols[currency] || ""}${amt.toFixed(2)}`;
+};
+
 const HeroSection = () => {
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -420,14 +441,35 @@ const HeroSection = () => {
       }
     };
 
-    // initial fetch
-    fetchRecentWins();
-
-    // refresh every 5 seconds
-    interval = setInterval(fetchRecentWins, 5000);
-
     return () => clearInterval(interval);
   }, [isPaused]);
+
+  // Real-time recent wins via socket
+useEffect(() => {
+  recentWinsSocket.on("recentWins", (data) => {
+    setRecentWinsData(data);
+  });
+
+  recentWinsSocket.on("recentWins:new", (singleWin) => {
+  const safeWin = {
+    id: Date.now(),
+    gameImage: `/slots/img${Math.floor(Math.random() * 9) + 1}.svg`,
+    icon: `/moon/moon${Math.floor(Math.random() * 3) + 1}.svg`,
+    amount: formatAmount(singleWin.amount),
+    username: singleWin.user,
+    gameName: singleWin.game,
+    timeAgo: singleWin.timeAgo || "Just now",
+    isLive: true,
+  };
+
+  setRecentWinsData(prev => [safeWin, ...prev.slice(0, 19)]);
+});
+
+  return () => {
+    recentWinsSocket.off("recentWins");
+    recentWinsSocket.off("recentWins:new");
+  };
+}, []);
 
   // Mobile data (first 7)
   const mobileWinsData = recentWinsData.slice(0, 7);
