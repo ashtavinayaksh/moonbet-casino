@@ -357,10 +357,38 @@ const LoginSignup = ({
     }
   };
 
-  const handleForgotPasswordSubmit = () => {
-    console.log("Forgot Password:", forgotPasswordData);
-    setRecoverySent(true);
-    if (onForgotPasswordSuccess) onForgotPasswordSuccess(forgotPasswordData);
+  const handleForgotPasswordSubmit = async () => {
+    const { email } = forgotPasswordData;
+
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    try {
+      // Disable button while sending
+      setRecoverySent("loading");
+
+      const { data } = await axios.post(
+        "/auth-service/api/auth/forgot-password",
+        { email }
+      );
+
+      toast.success(data.message || "Recovery email sent");
+
+      // Show success block
+      setRecoverySent(true);
+
+      if (onForgotPasswordSuccess) onForgotPasswordSuccess(data);
+    } catch (err) {
+      console.error("Forgot Password Error:", err);
+
+      toast.error(
+        err.response?.data?.error || "Unable to send recovery email. Try again."
+      );
+
+      setRecoverySent(false);
+    }
   };
 
   const handleBackToLogin = () => {
@@ -991,9 +1019,20 @@ const LoginSignup = ({
 
                         <button
                           onClick={handleForgotPasswordSubmit}
-                          className="w-full py-3 rounded-[12px] font-semibold text-black bg-gradient-to-r from-[#F07730] to-[#EFD28E] hover:opacity-90 shadow-xl transition-all"
+                          disabled={recoverySent === "loading"}
+                          className={`w-full py-3 rounded-[12px] font-semibold text-black 
+    bg-gradient-to-r from-[#F07730] to-[#EFD28E] 
+    shadow-xl transition-all
+    ${
+      recoverySent === "loading"
+        ? "opacity-60 cursor-not-allowed"
+        : "hover:opacity-90"
+    }
+  `}
                         >
-                          Recover Account
+                          {recoverySent === "loading"
+                            ? "Sending..."
+                            : "Recover Account"}
                         </button>
                       </div>
 
