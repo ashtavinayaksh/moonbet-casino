@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const randomBetId = () => {
@@ -6,8 +7,9 @@ const randomBetId = () => {
 };
 
 const BetDetailsModal = ({ isOpen, onClose, betData }) => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
-  console.log("betData is:", betData)
+  console.log("betData is:", betData);
 
   useEffect(() => {
     if (isOpen) {
@@ -42,6 +44,8 @@ const BetDetailsModal = ({ isOpen, onClose, betData }) => {
   };
 
   if (!isOpen && !isVisible) return null;
+  const makeSlug = (name) =>
+    encodeURIComponent(name?.toLowerCase().replace(/\s+/g, "-"));
 
   return (
     <AnimatePresence>
@@ -297,9 +301,14 @@ const BetDetailsModal = ({ isOpen, onClose, betData }) => {
                 {/* Play Button */}
                 <motion.button
                   onClick={() => {
-                    // Handle play game action
-                    console.log("Play game:", betData?.gameName);
+                    const slug = makeSlug(betData?.gameName);
+
                     handleClose();
+
+                    // Navigate after closing animation completes
+                    setTimeout(() => {
+                      navigate(`/game/${slug}`);
+                    }, 250);
                   }}
                   className="w-full py-4 bg-gradient-to-r from-[#F07730] to-[#EFD28E] text-[#000] font-[600] text-[16px] rounded-lg shadow-md transition-all duration-300 hover:from-[#F07730]/90 hover:to-[#EFD28E]/90 flex items-center justify-center "
                   whileHover={{
