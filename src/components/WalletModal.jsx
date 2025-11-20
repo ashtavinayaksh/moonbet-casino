@@ -95,32 +95,32 @@ const WalletModal = ({ isOpen, onClose }) => {
   }, [socket]);
 
   useEffect(() => {
-  if (!socket) return;
+    if (!socket) return;
 
-  const handleWithdrawStatus = (msg) => {
-    console.log("🔥 Wallet withdraw update:", msg);
+    const handleWithdrawStatus = (msg) => {
+      console.log("🔥 Wallet withdraw update:", msg);
 
-    if (msg.status === "confirming") toast.info("⏳ Withdrawal confirming…");
-    if (msg.status === "sending") toast.info("📤 Broadcasting transaction…");
-    if (msg.status === "finished") toast.success("💸 Withdrawal finalized!");
+      if (msg.status === "confirming") toast.info("⏳ Withdrawal confirming…");
+      if (msg.status === "sending") toast.info("📤 Broadcasting transaction…");
+      if (msg.status === "finished") toast.success("💸 Withdrawal finalized!");
 
-    if (msg.status === "completed") {
-      toast.success("🎉 Withdrawal completed!");
+      if (msg.status === "completed") {
+        toast.success("🎉 Withdrawal completed!");
 
-      // CLOSE PROCESSING POPUP
-      setShowProcessingPopup(false);
+        // CLOSE PROCESSING POPUP
+        setShowProcessingPopup(false);
 
-      // REFRESH BALANCE
-      refreshBalance();
+        // REFRESH BALANCE
+        refreshBalance();
 
-      // SHOW SUCCESS POPUP
-      setShowSuccessPopup(true);
-    }
-  };
+        // SHOW SUCCESS POPUP
+        setShowSuccessPopup(true);
+      }
+    };
 
-  socket.on("withdraw_status", handleWithdrawStatus);
-  return () => socket.off("withdraw_status", handleWithdrawStatus);
-}, [socket]);
+    socket.on("withdraw_status", handleWithdrawStatus);
+    return () => socket.off("withdraw_status", handleWithdrawStatus);
+  }, [socket]);
 
   const userId = JSON.parse(localStorage.getItem("user") || "{}").id;
   const emailId = JSON.parse(localStorage.getItem("user") || "{}").email;
@@ -321,10 +321,10 @@ const WalletModal = ({ isOpen, onClose }) => {
   };
 
   const handleWithdrawClick = () => {
-  setShowWithdrawModal(false);
-  setShowProcessingPopup(true);
-  setShowSuccessPopup(false);
-};
+    setShowWithdrawModal(false);
+    setShowProcessingPopup(true);
+    setShowSuccessPopup(false);
+  };
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -578,21 +578,22 @@ const WalletModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="flex justify-center mb-6">
-  <div className="bg-white p-4 rounded-xl relative w-40 h-40 flex items-center justify-center">
+                  <div className="bg-white p-4 rounded-xl relative w-40 h-40 flex items-center justify-center">
+                    {/* QR (Blur until a coin is selected) */}
+                    {qrCodeData && (
+                      <img
+                        src={qrCodeData}
+                        alt="QR Code"
+                        className={`w-36 h-36 transition-all duration-300
+          ${
+            !selectedDepositCoin ? "blur-sm opacity-60" : "blur-0 opacity-100"
+          }`}
+                      />
+                    )}
 
-    {/* QR (Blur until a coin is selected) */}
-    {qrCodeData && (
-      <img
-        src={qrCodeData}
-        alt="QR Code"
-        className={`w-36 h-36 transition-all duration-300
-          ${!selectedDepositCoin ? "blur-sm opacity-60" : "blur-0 opacity-100"}`}
-      />
-    )}
-
-    {/* Remove lock - nothing else */}
-  </div>
-</div>
+                    {/* Remove lock - nothing else */}
+                  </div>
+                </div>
 
                 <div className="text-center text-gray-400 mb-4">Or</div>
 
@@ -1524,11 +1525,11 @@ const WalletModal = ({ isOpen, onClose }) => {
             userId={userId}
           />
           {showSuccessPopup && (
-  <WithdrawSuccessPopup
-    isOpen={showSuccessPopup}
-    onClose={() => setShowSuccessPopup(false)}
-  />
-)}
+            <WithdrawSuccessPopup
+              isOpen={showSuccessPopup}
+              onClose={() => setShowSuccessPopup(false)}
+            />
+          )}
 
           {renderDepositModal()}
           {renderWithdrawModal()}
