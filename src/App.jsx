@@ -41,6 +41,7 @@ import CareersPage from "./pages/CareersPage.jsx";
 import MoonbetAccessibility from "./pages/MoonbetAccessibility.jsx";
 import AccountPayoutsPolicyPage from "./pages/AccountPayoutsPolicyPage.jsx";
 import ModernSlavery from "./pages/ModernSlavery.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -240,6 +241,7 @@ function App() {
               }
             />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         {/* Global UI */}
