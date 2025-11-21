@@ -273,16 +273,12 @@ const Header = ({
       if (res.data?.success && res.data.data) {
         const { balances, betCurrency, preferredCurrency, rate } =
           res.data.data;
-        const match = balances.find(
-          (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
-        );
-
-        const amount = match ? Number(match.amount).toFixed(2) : "0.00";
+        const amount = res.data.data.convertedAmount.toFixed(2);
 
         // ✅ Store in localStorage to persist across reloads
-        localStorage.setItem("convertedValue", amount);
+        localStorage.setItem("convertedValue", convertedAmount);
         localStorage.setItem("preferredCurrency", preferredCurrency);
-        localStorage.setItem("gameCurrency", betCurrency);
+        localStorage.setItem("gameCurrency", toCur);
         localStorage.setItem("conversionRate", rate);
 
         setWalletBalance(`${amount} ${betCurrency}`);
