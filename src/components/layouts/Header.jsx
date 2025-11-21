@@ -276,7 +276,7 @@ const Header = ({
         const amount = res.data.data.convertedAmount.toFixed(2);
 
         // ✅ Store in localStorage to persist across reloads
-        localStorage.setItem("convertedValue", convertedAmount);
+        localStorage.setItem("convertedValue", amount);
         localStorage.setItem("preferredCurrency", preferredCurrency);
         localStorage.setItem("gameCurrency", toCur);
         localStorage.setItem("conversionRate", rate);

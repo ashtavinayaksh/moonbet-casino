@@ -81,7 +81,7 @@ const GameBetsSection = () => {
     }
   };
 
-  const displayedBets = showAll ? bets : bets.slice(0, 6);
+  const displayedBets = showAll ? bets : bets.slice(0, 15);
 
   return (
     <section className="w-full py-12 sm:py-16 md:py-20">
@@ -226,7 +226,7 @@ const GameBetsSection = () => {
         </motion.div>
 
         {/* View More */}
-        {bets.length > 10 && (
+        {/* {bets.length > 10 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -241,7 +241,7 @@ const GameBetsSection = () => {
               {showAll ? "Show Less Bets" : "View More Bets"}
             </button>
           </motion.div>
-        )}
+        )} */}
       </div>
     </section>
   );
