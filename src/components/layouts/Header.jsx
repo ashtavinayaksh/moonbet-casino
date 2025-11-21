@@ -273,9 +273,8 @@ const Header = ({
       if (res.data?.success && res.data.data) {
         const { balances, betCurrency, preferredCurrency, rate } =
           res.data.data;
-        const amount = res.data.data.convertedAmount.toFixed(2);
+        const amount = Number(res.data.data.convertedAmount).toFixed(2);
         console.log("amount are:", amount);
-        console.log("convertedValue are:", convertedValue);
 
         // ✅ Store in localStorage to persist across reloads
         localStorage.setItem("convertedValue", amount);
@@ -674,6 +673,7 @@ const Header = ({
             setSelectedCurrency={setSelectedCurrency}
             setWalletModalOpen={setWalletModalOpen}
             setWalletSettingsOpen={setWalletSettingsOpen}
+            handleCurrencySelect={handleCurrencySelect}
           />
 
           {/* Right Section - Profile and Actions */}

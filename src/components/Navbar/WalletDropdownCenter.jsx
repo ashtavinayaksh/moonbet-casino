@@ -13,6 +13,7 @@ const WalletDropdownCenter = ({
   setSelectedCurrency,
   setWalletModalOpen,
   setWalletSettingsOpen,
+  handleCurrencySelect
 }) => {
   const [walletDropdownOpen, setWalletDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,63 +39,6 @@ const WalletDropdownCenter = ({
     ...c,
     iconPath: imageFix(c.iconPath),
   }));
-
-  // Handle currency selection
-  const handleCurrencySelect = async (currency) => {
-    try {
-      setSelectedCurrency(currency);
-      localStorage.setItem("preferredCurrency", currency.symbol);
-
-      let gameCurrency = localStorage.getItem("gameCurrency") || "USD";
-      localStorage.setItem("gameCurrency", gameCurrency);
-
-      if (!userId) {
-        console.error("❌ No user ID found");
-        setWalletBalance("0.00");
-        return;
-      }
-
-      setWalletBalance("Updating...");
-
-      const res = await axios.put(
-        `/wallet-service/api/games/convert/${userId}`,
-        {
-          preferredCurrency: currency.symbol,
-          gameCurrency: gameCurrency,
-        }
-      );
-
-      if (res.data?.success && res.data.data) {
-        const { balances, betCurrency, preferredCurrency, rate } =
-          res.data.data;
-        const match = balances.find(
-          (b) => b.currency.toUpperCase() === betCurrency.toUpperCase()
-        );
-
-        const amount = match ? Number(match.amount).toFixed(2) : "0.00";
-
-        localStorage.setItem("convertedValue", amount);
-        localStorage.setItem("preferredCurrency", preferredCurrency);
-        localStorage.setItem("gameCurrency", betCurrency);
-        localStorage.setItem("conversionRate", rate);
-
-        setWalletBalance(`${amount} ${betCurrency}`);
-        window.dispatchEvent(new Event("preferredCurrencyUpdated"));
-
-        console.log(
-          `💱 Converted ${preferredCurrency} → ${betCurrency} @ rate ${rate}`
-        );
-      } else {
-        console.warn("⚠️ Conversion API failed:", res.data?.message);
-        setWalletBalance("0.00");
-      }
-    } catch (err) {
-      console.error("❌ Currency conversion failed:", err.message);
-      setWalletBalance("0.00");
-    } finally {
-      setWalletDropdownOpen(false);
-    }
-  };
 
   // Handle click outside for wallet dropdown
   useEffect(() => {
