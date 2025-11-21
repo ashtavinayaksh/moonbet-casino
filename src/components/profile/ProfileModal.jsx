@@ -125,7 +125,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: "spring", duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[50%] sm:max-w-md md:max-w-lg mx-auto max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent
+            className="relative w-full max-w-[90%] sm:max-w-[80%] lg:max-w-[55%]  xl:max-w-[30%] mx-auto max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent
 "
           >
             {/* Glassmorphism Card */}
