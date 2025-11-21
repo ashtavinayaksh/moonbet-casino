@@ -274,6 +274,8 @@ const Header = ({
         const { balances, betCurrency, preferredCurrency, rate } =
           res.data.data;
         const amount = res.data.data.convertedAmount.toFixed(2);
+        console.log("amount are:", amount);
+        console.log("convertedValue are:", convertedValue);
 
         // ✅ Store in localStorage to persist across reloads
         localStorage.setItem("convertedValue", amount);
