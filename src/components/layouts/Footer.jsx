@@ -117,6 +117,10 @@ const Footer = () => {
         label: "Self Exclusion Policy",
         path: "/self-exclusion-policy",
       },
+      {
+        label: "editorial-policy",
+        path: "/Editorial-policy",
+      },
     ],
     moonbet: [
       { label: "Betting Rules", path: "/betting-rules" },

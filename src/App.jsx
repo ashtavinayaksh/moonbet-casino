@@ -49,6 +49,7 @@ import SelfExclusionPolicyPage from "./pages/SelfExclusionPolicyPage.jsx";
 import DisclaimerPage from "./pages/DisclaimerPage.jsx";
 import CookiePolicy from "./pages/PrivacyPolicyPage";
 import AmlPolicy from "./pages/AmlPolicy.jsx";
+import EditorialPolicy from "./pages/EditorialPolicy.jsx";
 
 // Temporary pages
 const SimplePage = ({ title }) => (
@@ -220,6 +221,7 @@ function App() {
               element={<ResponsibleGamblingPage />}
             />
             <Route path="aml-policy" element={<AmlPolicy />} />
+            <Route path="editorial-policy" element={<EditorialPolicy />} />
 
             <Route path="provably-fair" element={<ProvablyFairPage />} />
           </Route>
