@@ -10,14 +10,13 @@ const AccountSection = ({ userData, onUpdate }) => {
   });
   // console.log("user data tech are:",userData);
   useEffect(() => {
-  if (userData) {
-    setFormData({
-      username: userData.username || "",
-      email: userData.email || "",
-    });
-  }
-}, [userData]);
-
+    if (userData) {
+      setFormData({
+        username: userData.username || "",
+        email: userData.email || "",
+      });
+    }
+  }, [userData]);
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -55,7 +54,7 @@ const AccountSection = ({ userData, onUpdate }) => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-white">Account Information</h2>
+          <p className="text-xl font-bold text-white">Account Information</p>
         </div>
         {!isEditing ? (
           <button

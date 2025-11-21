@@ -32,25 +32,25 @@ const SecuritySection = ({
 
   // Handle 2FA toggle with API call
   const handle2FAToggle = async () => {
-  // User is turning 2FA ON
-  if (!enable2FA) {
-    setShowTwoFactorPopup(true);
-    return; // Wait until user finishes the popup flow
-  }
+    // User is turning 2FA ON
+    if (!enable2FA) {
+      setShowTwoFactorPopup(true);
+      return; // Wait until user finishes the popup flow
+    }
 
-  // User is turning 2FA OFF
-  setIs2FAUpdating(true);
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    setEnable2FA(false);
-    toast.info("Two-Factor Authentication disabled");
-  } catch (error) {
-    console.error("Failed to disable 2FA:", error);
-    toast.error("Failed to disable 2FA. Please try again.");
-  } finally {
-    setIs2FAUpdating(false);
-  }
-};
+    // User is turning 2FA OFF
+    setIs2FAUpdating(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setEnable2FA(false);
+      toast.info("Two-Factor Authentication disabled");
+    } catch (error) {
+      console.error("Failed to disable 2FA:", error);
+      toast.error("Failed to disable 2FA. Please try again.");
+    } finally {
+      setIs2FAUpdating(false);
+    }
+  };
 
   // Toggle Switch Component
   const ToggleSwitch = ({
@@ -263,59 +263,82 @@ const SecuritySection = ({
     }
   };
 
-
-const PasswordField = React.memo(function PasswordField({
-  name,
-  label,
-  value,
-  showPassword,
-  setShowPassword,
-  onChange,
-}) {
-  return (
-    <div onMouseDown={(e) => e.stopPropagation()}>
-      <label className="block text-sm text-gray-400 mb-2">{label}</label>
-      <div className="relative">
-        <input
-          key={name}                       // ✅ stable identity
-          type={showPassword ? "text" : "password"}
-          name={name}
-          value={value}
-          onChange={onChange}              // ✅ passed down (stable)
-          className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
-          placeholder={label}
-          autoComplete={
-            name === "currentPassword"
-              ? "current-password"
-              : name === "newPassword"
-              ? "new-password"
-              : "new-password"
-          }
-          autoCapitalize="off"
-          autoCorrect="off"
-          spellCheck={false}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
-        >
-          {showPassword ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-            </svg>
-          )}
-        </button>
+  const PasswordField = React.memo(function PasswordField({
+    name,
+    label,
+    value,
+    showPassword,
+    setShowPassword,
+    onChange,
+  }) {
+    return (
+      <div onMouseDown={(e) => e.stopPropagation()}>
+        <label className="block text-sm text-gray-400 mb-2">{label}</label>
+        <div className="relative">
+          <input
+            key={name} // ✅ stable identity
+            type={showPassword ? "text" : "password"}
+            name={name}
+            value={value}
+            onChange={onChange} // ✅ passed down (stable)
+            className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
+            placeholder={label}
+            autoComplete={
+              name === "currentPassword"
+                ? "current-password"
+                : name === "newPassword"
+                ? "new-password"
+                : "new-password"
+            }
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+          >
+            {showPassword ? (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
-    </div>
-  );
-});
-
+    );
+  });
 
   return (
     <motion.div
@@ -340,7 +363,7 @@ const PasswordField = React.memo(function PasswordField({
             />
           </svg>
         </div>
-        <h2 className="text-xl font-bold text-white">Security</h2>
+        <p className="text-xl font-bold text-white">Security</p>
       </div>
 
       <div className="space-y-4">
@@ -348,7 +371,7 @@ const PasswordField = React.memo(function PasswordField({
         <div className="p-4 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
             <div className="flex-1">
-              <h3 className="text-white font-semibold mb-1">Verify Email</h3>
+              <p className="text-white font-semibold mb-1">Verify Email</p>
               {emailVerified ? (
                 <span className="inline-block px-2 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded">
                   Verified
@@ -401,140 +424,145 @@ const PasswordField = React.memo(function PasswordField({
 
         {/* Update Password */}
         {/* Update Password */}
-<div className="p-4 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
-  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
-    <div className="flex-1">
-      <h3 className="text-white font-semibold mb-1">Update Password</h3>
-    </div>
-    <button
-      onClick={() => {
-        setShowPasswordForm((prev) => !prev);
-        setPasswordData({
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
-        });
-      }}
-      className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white font-semibold transition-all text-sm whitespace-nowrap"
-    >
-      {showPasswordForm ? "Cancel" : "Update Password"}
-    </button>
-  </div>
+        <div className="p-4 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
+            <div className="flex-1">
+              <p className="text-white font-semibold mb-1">Update Password</p>
+            </div>
+            <button
+              onClick={() => {
+                setShowPasswordForm((prev) => !prev);
+                setPasswordData({
+                  currentPassword: "",
+                  newPassword: "",
+                  confirmPassword: "",
+                });
+              }}
+              className="w-full sm:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white font-semibold transition-all text-sm whitespace-nowrap"
+            >
+              {showPasswordForm ? "Cancel" : "Update Password"}
+            </button>
+          </div>
 
-  {!showPasswordForm && (
-    <p className="text-sm text-gray-400 leading-relaxed">
-      Update your password to improve account security
-    </p>
-  )}
+          {!showPasswordForm && (
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Update your password to improve account security
+            </p>
+          )}
 
-  {showPasswordForm && (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handlePasswordSubmit();
-      }}
-      className="mt-4 space-y-4"
-      autoComplete="off"
-    >
-      {/* Current Password */}
-      <div>
-        <label className="block text-sm text-gray-400 mb-2">Current Password</label>
-        <div className="relative">
-          <input
-            type={showCurrentPassword ? "text" : "password"}
-            name="currentPassword"
-            value={passwordData.currentPassword}
-            onChange={handlePasswordChange}
-            autoComplete="current-password"
-            className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
-            placeholder="Current Password"
-          />
-          <button
-            type="button"
-            onClick={() => setShowCurrentPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
-          >
-            {showCurrentPassword ? "🙈" : "👁️"}
-          </button>
+          {showPasswordForm && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handlePasswordSubmit();
+              }}
+              className="mt-4 space-y-4"
+              autoComplete="off"
+            >
+              {/* Current Password */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">
+                  Current Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    name="currentPassword"
+                    value={passwordData.currentPassword}
+                    onChange={handlePasswordChange}
+                    autoComplete="current-password"
+                    className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
+                    placeholder="Current Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+                  >
+                    {showCurrentPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+              </div>
+
+              {/* New Password */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    name="newPassword"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordChange}
+                    autoComplete="new-password"
+                    className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
+                    placeholder="New Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+                  >
+                    {showNewPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={passwordData.confirmPassword}
+                    onChange={handlePasswordChange}
+                    autoComplete="new-password"
+                    className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
+                    placeholder="Confirm Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
+                  >
+                    {showConfirmPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isUpdatingPassword}
+                className="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-green-500/30"
+              >
+                {isUpdatingPassword ? "Updating..." : "Save Changes"}
+              </button>
+            </form>
+          )}
         </div>
-      </div>
-
-      {/* New Password */}
-      <div>
-        <label className="block text-sm text-gray-400 mb-2">New Password</label>
-        <div className="relative">
-          <input
-            type={showNewPassword ? "text" : "password"}
-            name="newPassword"
-            value={passwordData.newPassword}
-            onChange={handlePasswordChange}
-            autoComplete="new-password"
-            className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
-            placeholder="New Password"
-          />
-          <button
-            type="button"
-            onClick={() => setShowNewPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
-          >
-            {showNewPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
-      </div>
-
-      {/* Confirm Password */}
-      <div>
-        <label className="block text-sm text-gray-400 mb-2">Confirm Password</label>
-        <div className="relative">
-          <input
-            type={showConfirmPassword ? "text" : "password"}
-            name="confirmPassword"
-            value={passwordData.confirmPassword}
-            onChange={handlePasswordChange}
-            autoComplete="new-password"
-            className="w-full px-4 py-3 bg-[#1B2132] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#F07730] focus:ring-1 focus:ring-[#F07730] transition-all pr-12"
-            placeholder="Confirm Password"
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1"
-          >
-            {showConfirmPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={isUpdatingPassword}
-        className="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-green-500/30"
-      >
-        {isUpdatingPassword ? "Updating..." : "Save Changes"}
-      </button>
-    </form>
-  )}
-</div>
-
 
         {/* Enable 2FA */}
         <div className="p-4 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-white font-semibold mb-1">Enable 2FA</h3>
+              <p className="text-white font-semibold mb-1">Enable 2FA</p>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Two-Factor Authentication helps secure your account from
                 unauthorized access
               </p>
             </div>
             <ToggleSwitch
-  enabled={enable2FA}
-  onChange={() => {
-    if (!enable2FA) setShowTwoFactorPopup(true);
-    else handle2FAToggle();
-  }}
-  isLoading={is2FAUpdating}
-/>
+              enabled={enable2FA}
+              onChange={() => {
+                if (!enable2FA) setShowTwoFactorPopup(true);
+                else handle2FAToggle();
+              }}
+              isLoading={is2FAUpdating}
+            />
           </div>
         </div>
       </div>
@@ -548,19 +576,18 @@ const PasswordField = React.memo(function PasswordField({
         resendCooldown={60}
       />
       {/* Two Factor Auth Popup */}
-<TwoFactorAuthPopup
-  isOpen={showTwoFactorPopup}
-  onClose={() => setShowTwoFactorPopup(false)}
-  onComplete={(success) => {
-    if (success) {
-      setEnable2FA(true);
-      setShowTwoFactorPopup(false);
-    }
-  }}
-  userEmail={userData?.email}
-  userId={userData?.id?.toLowerCase()}
-/>
-
+      <TwoFactorAuthPopup
+        isOpen={showTwoFactorPopup}
+        onClose={() => setShowTwoFactorPopup(false)}
+        onComplete={(success) => {
+          if (success) {
+            setEnable2FA(true);
+            setShowTwoFactorPopup(false);
+          }
+        }}
+        userEmail={userData?.email}
+        userId={userData?.id?.toLowerCase()}
+      />
     </motion.div>
   );
 };

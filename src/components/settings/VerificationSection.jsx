@@ -71,7 +71,7 @@ const VerificationSection = () => {
             />
           </svg>
         </div>
-        <h2 className="text-xl font-bold text-white">Verification</h2>
+        <p className="text-xl font-bold text-white">Verification</p>
       </div>
 
       <div className="space-y-3">
@@ -102,9 +102,9 @@ const VerificationSection = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <h3 className="text-white font-semibold text-sm group-hover:text-[#F07730] transition-colors">
+                  <p className="text-white font-semibold text-sm group-hover:text-[#F07730] transition-colors">
                     {level.title}
-                  </h3>
+                  </p>
                 </div>
               </div>
               <svg

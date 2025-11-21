@@ -128,7 +128,7 @@ const ActivityPreferencesSection = ({
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-white">Activity Visibility</h2>
+          <p className="text-xl font-bold text-white">Activity Visibility</p>
         </div>
 
         <div className="space-y-6">
@@ -156,9 +156,9 @@ const ActivityPreferencesSection = ({
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-white font-semibold mb-1">
+                <p className="text-white font-semibold mb-1">
                   Show Bets Publicly
-                </h3>
+                </p>
                 <p className="text-sm text-gray-400 leading-relaxed">
                   Show your username on bets you make in the live feed and
                   recent wins feed
@@ -191,9 +191,9 @@ const ActivityPreferencesSection = ({
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-white font-semibold mb-1">
+                <p className="text-white font-semibold mb-1">
                   Display Statistics on Profile
-                </h3>
+                </p>
                 <p className="text-sm text-gray-400 leading-relaxed">
                   Display your total bet statistics on your profile for other
                   players to see
@@ -223,7 +223,7 @@ const ActivityPreferencesSection = ({
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-white">Preferences</h2>
+          <p className="text-xl font-bold text-white">Preferences</p>
         </div>
 
         <div className="flex items-start justify-between gap-4">

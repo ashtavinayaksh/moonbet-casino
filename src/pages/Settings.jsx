@@ -10,6 +10,7 @@ import LoginSignup from "../components/LoginSignup/LoginSignup";
 import { toast } from "react-toastify";
 import api from "../api/axios";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Settings = () => {
   // Loading state
@@ -46,11 +47,14 @@ const Settings = () => {
       try {
         setIsLoading(true);
 
-        const { data } = await axios.get(`/auth-service/api/auth/profile/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const { data } = await axios.get(
+          `/auth-service/api/auth/profile/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         console.log("User profile:", data);
 
@@ -143,19 +147,19 @@ const Settings = () => {
     );
   }
 
-//   if (showLoginModal) {
-//   return (
-//     <LoginSignup
-//       isOpen={true}
-//       onClose={() => setShowLoginModal(false)}
-//       defaultTab="login"
-//       onLoginSuccess={() => {
-//         setShowLoginModal(false);
-//         window.location.reload(); // refresh after successful login
-//       }}
-//     />
-//   );
-// }
+  //   if (showLoginModal) {
+  //   return (
+  //     <LoginSignup
+  //       isOpen={true}
+  //       onClose={() => setShowLoginModal(false)}
+  //       defaultTab="login"
+  //       onLoginSuccess={() => {
+  //         setShowLoginModal(false);
+  //         window.location.reload(); // refresh after successful login
+  //       }}
+  //     />
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-[#0A0B0D] pt-20 md:pt-24 pb-8 px-4 lg:px-8">
@@ -166,42 +170,28 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8"
         >
-          <h1 className="text-3xl lg:text-4xl font-bold text-white">
+          <h1 className="text-2xl lg:text-4xl font-bold text-white">
             Settings
           </h1>
           <div className="flex flex-wrap gap-3">
-            <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all flex items-center gap-2 text-sm">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              Affiliates
-            </button>
-            <button className="px-4 py-2 bg-gradient-to-r from-[#00A6FB] to-[#00D4FF] rounded-lg text-white hover:scale-105 transition-all flex items-center gap-2 text-sm font-semibold">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
-              Vault
-            </button>
+            <Link to="/affiliate">
+              <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all flex items-center gap-2 text-sm">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+                Affiliates
+              </button>
+            </Link>
           </div>
         </motion.div>
 

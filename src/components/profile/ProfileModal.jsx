@@ -212,7 +212,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                   {/* Avatar + Profile Overlay */}
                   {/* Avatar + Level Overlay */}
-                  <div className="relative w-24 h-24 sm:w-22 sm:h-22 md:w-20 md:h-20 flex items-center justify-center mx-auto sm:mx-0 ">
+                  <div className="relative w-24 h-24 sm:w-22 sm:h-22 md:w-20 md:h-20 flex items-center justify-center mx-auto sm:mx-0 -mt-2">
                     {/* Astronaut Image with fixed responsive sizing */}
                     <img
                       src="/leaderboard-assets/astro-profile1.svg"
