@@ -125,7 +125,8 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: "spring", duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[95%] sm:max-w-md md:max-w-lg mx-auto max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+            className="relative w-full max-w-[50%] sm:max-w-md md:max-w-lg mx-auto max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent
+"
           >
             {/* Glassmorphism Card */}
             <div
@@ -230,9 +231,6 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                         ? "✅ Verified"
                         : "❌ Not Verified"}
                     </p>
-                    <p className="text-gray-400 text-xs sm:text-sm">
-                      KYC Status: {profileData.kycStatus}
-                    </p>
 
                     <p className="text-gray-400 text-xs sm:text-sm">
                       Member since: {profileData.memberSince}
@@ -277,7 +275,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                 {/* Stats Grid - Responsive */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {/* Total Bets */}
-                  <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
+                  {/* <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
                       <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-lg flex items-center justify-center">
                         <svg
@@ -301,10 +299,10 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                     <p className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                       {profileData.totalBets.toLocaleString()}
                     </p>
-                  </div>
+                  </div> */}
 
                   {/* Total Wagered */}
-                  <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
+                  {/* <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
                       <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg flex items-center justify-center">
                         <svg
@@ -328,7 +326,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                     <p className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                       ${profileData.totalWagered.toLocaleString()}
                     </p>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Action Buttons - Responsive */}
