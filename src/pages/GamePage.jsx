@@ -330,6 +330,8 @@ const GamePage = () => {
           className="relative bg-white/5 backdrop-blur-xl border-t border-white/20"
           style={{
             height: "10vh",
+            width: "80%",
+            margin: "auto",
             minHeight: "30px",
             background:
               "linear-gradient(135deg, rgba(30, 36, 51, 0.8) 0%, rgba(20, 25, 40, 0.9) 100%)",
@@ -342,7 +344,7 @@ const GamePage = () => {
           {/* Glass overlay effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 pointer-events-none"></div>
 
-          <div className="relative h-full flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
+          <div className="relative h-full flex items-center justify-between px-4 sm:px-6 md:px-8 lg:px-4">
             {/* Left Side - Game Info with 80px margin */}
             <div className="flex items-center gap-3 sm:gap-4 md:gap-6 ml-0 sm:ml-10 md:ml-16 lg:ml-20">
               {/* 80px margin: ml-20 = 80px on large screens, scales down on smaller screens */}
