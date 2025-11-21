@@ -128,7 +128,22 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
             className="relative w-full max-w-[95%] sm:max-w-md md:max-w-lg mx-auto max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
           >
             {/* Glassmorphism Card */}
-            <div className="relative bg-gradient-to-br from-[#1a1d24]/95 to-[#13161F]/95 backdrop-blur-2xl rounded-xl sm:rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+            <div
+              className="relative bg-gradient-to-br from-[#1a1d24]/95 to-[#13161F]/95 backdrop-blur-2xl rounded-xl sm:rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: "20px",
+                border: "1px solid rgba(255,255,255,0.3)",
+                boxShadow: `
+      0 8px 32px rgba(0,0,0,0.20),
+      inset 0 1px 0 rgba(255,255,255,0.5),
+      inset 0 -1px 0 rgba(255,255,255,0.1),
+      inset 0 0 20px 6px rgba(255,255,255,0.15)
+    `,
+              }}
+            >
               {/* Glow Effects */}
               <div className="absolute -top-20 -left-20 w-32 sm:w-40 h-32 sm:h-40 bg-[#F07730]/20 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute -bottom-20 -right-20 w-32 sm:w-40 h-32 sm:h-40 bg-[#EFD28E]/20 rounded-full blur-3xl pointer-events-none" />
@@ -318,9 +333,6 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
 
                 {/* Action Buttons - Responsive */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
-                  <button className="flex-1 py-2.5 sm:py-3 bg-gradient-to-r from-[#F07730] to-[#EFD28E] rounded-lg sm:rounded-xl text-black font-bold text-sm sm:text-base hover:shadow-lg hover:shadow-[#F07730]/30 transition-all">
-                    View Full Stats
-                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

@@ -200,7 +200,7 @@ const Footer = () => {
             <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_2fr] gap-8 md:gap-12 pt-2">
               {/* Left: Description, Email, Social Links */}
               <motion.div
-                className="flex flex-col justify-start lg:pr-10 text-center lg:text-left items-center lg:items-start space-y-6 md:space-y-8"
+                className="flex flex-col justify-start lg:pr-10 text-center lg:text-left items-center lg:items-start space-y-6 md:space-y-6"
                 variants={itemVariants}
               >
                 {/* Description */}
@@ -211,7 +211,7 @@ const Footer = () => {
 
                 {/* Email */}
                 <motion.div
-                  className="flex items-center gap-2 mt-2"
+                  className="flex items-center gap-2"
                   whileHover={{ scale: 1.05 }}
                 >
                   <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-orange-500 transition-all duration-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.5)]">
@@ -223,6 +223,23 @@ const Footer = () => {
                     className="text-xs sm:text-sm text-white/80 hover:text-orange-500 transition-colors duration-300"
                   >
                     support@moonbet.games
+                  </a>
+                </motion.div>
+
+                {/* Email */}
+                <motion.div
+                  className="flex items-center gap-2"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-orange-500 transition-all duration-300 hover:text-white hover:shadow-[0_0_15px_rgba(255,107,0,0.5)]">
+                    ✉
+                  </span>
+
+                  <a
+                    href="mailto:feedback@moonbet.games"
+                    className="text-xs sm:text-sm text-white/80 hover:text-orange-500 transition-colors duration-300"
+                  >
+                    feedback@moonbet.games
                   </a>
                 </motion.div>
 
