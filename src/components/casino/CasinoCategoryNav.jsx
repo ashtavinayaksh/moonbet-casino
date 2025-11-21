@@ -285,28 +285,42 @@ const ICON_PATH = {
 
   default: "M2 2H18V18H2V2Z",
 };
+const ICON_VIEWBOX = {
+  recent: "0 0 18 18",
+  favorites: "0 0 18 16", 
+  live: "0.5 0 18 20",
+  crash: "0.5 0 20 20",
+  slots: "0 0 18 17",
+  roulette: "0.5 0 20 20",
+  blackjack: "0.5 0 20 20",
+  baccarat: "0.5 0 20 20",
+  gameshows: "0.5 0 20 20",
+  all: "0 0 18 18",
+  Arcade: "0.5 0 18 18",
+  default: "0 0 20 20"
+};
 
 const DynamicIcon = ({ id, active }) => {
   const [isHovered, setIsHovered] = useState(false);
   const path = ICON_PATH[id];
+  const viewBox = ICON_VIEWBOX[id] || "0 0 20 20";
 
   if (!path) return null;
 
   const size = id === "favorites" ? 16 : 18;
 
-  // === FINAL COLOR LOGIC ===
   const fillColor = active
-    ? "#F07730" // ACTIVE = SOLID ORANGE
+    ? "#F07730"
     : isHovered
-    ? "url(#hoverGradient)" // HOVER = GRADIENT
-    : "#7D7D7D"; // DEFAULT = GRAY
+    ? "url(#hoverGradient)"
+    : "#7D7D7D";
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 18 18"
+      viewBox={viewBox}
       fill="none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -318,11 +332,48 @@ const DynamicIcon = ({ id, active }) => {
           <stop offset="100%" stopColor="#F07730" />
         </linearGradient>
       </defs>
-
       <path d={path} fill={fillColor} />
     </svg>
   );
 };
+
+// const DynamicIcon = ({ id, active }) => {
+//   const [isHovered, setIsHovered] = useState(false);
+//   const path = ICON_PATH[id];
+
+//   if (!path) return null;
+
+//   const size = id === "favorites" ? 16 : 18;
+
+//   // === FINAL COLOR LOGIC ===
+//   const fillColor = active
+//     ? "#F07730" // ACTIVE = SOLID ORANGE
+//     : isHovered
+//     ? "url(#hoverGradient)" // HOVER = GRADIENT
+//     : "#7D7D7D"; // DEFAULT = GRAY
+
+//   return (
+//     <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       width={size}
+//       height={size}
+//       viewBox="0 0 18 18"
+//       fill="none"
+//       onMouseEnter={() => setIsHovered(true)}
+//       onMouseLeave={() => setIsHovered(false)}
+//       style={{ transition: "0.2s ease-in-out" }}
+//     >
+//       <defs>
+//         <linearGradient id="hoverGradient" x1="0" y1="0" x2="1" y2="1">
+//           <stop offset="0%" stopColor="#FFBF9A" />
+//           <stop offset="100%" stopColor="#F07730" />
+//         </linearGradient>
+//       </defs>
+
+//       <path d={path} fill={fillColor} />
+//     </svg>
+//   );
+// };
 
 const CasinoCategoryNav = ({
   selectedCategory,
