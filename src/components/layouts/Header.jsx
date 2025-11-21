@@ -278,7 +278,7 @@ const Header = ({
         // ✅ Store in localStorage to persist across reloads
         localStorage.setItem("convertedValue", amount);
         localStorage.setItem("preferredCurrency", preferredCurrency);
-        localStorage.setItem("gameCurrency", toCur);
+        localStorage.setItem("gameCurrency", betCurrency);
         localStorage.setItem("conversionRate", rate);
 
         setWalletBalance(`${amount} ${betCurrency}`);
