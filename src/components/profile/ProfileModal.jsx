@@ -176,7 +176,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                 </div>
 
                 {/* Public ID - Responsive */}
-                <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center gap-2">
+                <div className="view_btn mt-3 sm:mt-4 flex flex-col sm:flex-row  p-2 rounded-lg sm:items-center gap-2">
                   <span className="text-gray-400 text-xs sm:text-sm">
                     Public ID:
                   </span>
@@ -210,22 +210,29 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
               <div className="relative p-4 sm:p-5 md:p-6">
                 {/* User Info Section - Responsive */}
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
-                  {/* Avatar */}
-                  <div className="relative">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-[#F07730]/20 to-[#EFD28E]/20 rounded-xl border-2 border-[#F07730]/30 flex items-center justify-center">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#F07730] to-[#EFD28E] rounded-lg flex items-center justify-center transform rotate-45">
-                        <span className="text-black font-bold text-lg sm:text-xl transform -rotate-45">
-                          {profileData.avatarLevel}
-                        </span>
-                      </div>
+                  {/* Avatar + Profile Overlay */}
+                  {/* Avatar + Level Overlay */}
+                  <div className="relative w-24 h-24 sm:w-22 sm:h-22 md:w-20 md:h-20 flex items-center justify-center mx-auto sm:mx-0 ">
+                    {/* Astronaut Image with fixed responsive sizing */}
+                    <img
+                      src="/leaderboard-assets/astro-profile1.svg"
+                      alt="Profile Avatar"
+                      className="w-full h-full object-contain pointer-events-none select-none"
+                    />
+
+                    {/* LEVEL TEXT INSIDE THE HELMET */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="text-white font-bold text-sm sm:text-base md:text-lg drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]">
+                        {profileData.avatarLevel}
+                      </span>
                     </div>
                   </div>
 
                   {/* User Details - Centered on mobile */}
                   <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-1">
+                    <p className="text-lg sm:text-xl font-bold text-white uppercase mb-1">
                       {profileData.username}
-                    </h3>
+                    </p>
                     <p className="text-gray-400 text-xs sm:text-sm">
                       {profileData.emailVerified
                         ? "✅ Verified"
@@ -272,63 +279,6 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                   </div>
                 </div>
 
-                {/* Stats Grid - Responsive */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  {/* Total Bets */}
-                  {/* <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-lg flex items-center justify-center">
-                        <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-gray-400 text-xs sm:text-sm">
-                        Total Bets
-                      </span>
-                    </div>
-                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-                      {profileData.totalBets.toLocaleString()}
-                    </p>
-                  </div> */}
-
-                  {/* Total Wagered */}
-                  {/* <div className="bg-white/5 backdrop-blur-lg rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-lg flex items-center justify-center">
-                        <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 text-green-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-gray-400 text-xs sm:text-sm">
-                        Total Wagered
-                      </span>
-                    </div>
-                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-                      ${profileData.totalWagered.toLocaleString()}
-                    </p>
-                  </div> */}
-                </div>
-
                 {/* Action Buttons - Responsive */}
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-6">
                   <button
@@ -337,7 +287,7 @@ const ProfileModal = ({ isOpen, onClose, userData }) => {
                       onClose?.();
                       navigate("/settings");
                     }}
-                    className="flex-1 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
+                    className="flex-1 py-2.5 sm:py-3 bg-gradient-to-br from-[#F07730] to-[#EFD28E]  hover:bg-white/20 rounded-lg sm:rounded-xl text-white font-bold text-sm sm:text-base transition-all border border-white/10"
                   >
                     Edit Profile
                   </button>
